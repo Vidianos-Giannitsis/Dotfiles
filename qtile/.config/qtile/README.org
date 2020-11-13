@@ -244,7 +244,7 @@ widget_defaults = dict(
     font='sans',
     fontsize=11,
     padding=2,
-    background="#073642",
+    background="#002b36",
     foreground="#fdf6e3",
 )
 extension_defaults = widget_defaults.copy()

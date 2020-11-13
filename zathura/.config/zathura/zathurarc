@@ -1,6 +1,7 @@
 set selection-clipboard clipboard
 set first-page-column 1:1
 set default-bg "#073642"
+set-default-fg "93a1a1"
 set recolor true
-set recolor-darkcolor "#073642"
-set recolor-lightcolor "#fdf6e3"
+set recolor-lightcolor "#073642"
+set recolor-darkcolor "#93a1a1"

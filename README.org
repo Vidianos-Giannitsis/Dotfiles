@@ -8,15 +8,17 @@ Welcome to my dotfile repository. This was made both for me to use as a backup f
 For anyone wondering, I manage my dotfiles using GNU Stow, and write all my READMEs in Emacs's Org-mode (like the file you are reading right now :D). This is the simplest way I have found for doing this.
 
 * Structure
-I currently have 7 directories in this git repository as these are the programs I consider configured enough to be worth of putting here. They are explained below.
+I currently have 8 directories in this git repository as these are the programs I consider configured enough to be worth of putting here. They are explained below.
 
 I only have specific READMEs for i3, qtile and emacs (the latter two being literate config files of those programs) as the others dont need much of a description. Everything you need for them is explained in this file.
+
+Lastly, since its an important part of my config, but not included in my dotfiles, I should mention that my GTK theme is SolArc-Dark and my icon theme Solarized-Deluxe-Iconpack.
 
 ** Bashrc
 I have my .bashrc, which albeit not being heavily configured, has some things I want to have by default in my shell so I keep it here.
 
 ** Zathura
-Zathura is the pdf viewer I use currently. Its a great minimal vim-like (yes, I am an emacs user, but I love the vim keybindings and use them wherever I can. My emacs has evil mode by default cause I prefer it to default emacs) pdf viewer. My config doesn't include much. I just change some colours to the solarized theme (its a common  theme between my applications as you will see as I love it). The background is solarized dark while the pages in the pdf are solarized-light (I love dark themes, but for my pdf viewer, a light background just works better) which is a light theme, but one that isn't so painful to your eyes. Outside of these changes, there isnt much to say about it.
+Zathura is the pdf viewer I use currently. Its a great minimal vim-like (yes, I am an emacs user, but I love the vim keybindings and use them wherever I can. My emacs has evil mode by default cause I prefer it to default emacs) pdf viewer. My config doesn't include much. I just change its colours to the solarized theme (its a common  theme between my applications as you will see as I love it). I love its look like this.
 
 ** Alacritty
 Alacritty is my preferred terminal emulator. The changes I have done are not big, but they are definitely very impactful. There isnt much more than defaults and changing the color scheme to solarized-dark, but still worth keeping
@@ -40,4 +42,12 @@ The repo, has quite a few things, as its my entire /.emacs.d. Outside of README 
 For the rest refer to Emacs's README, have fun!
 
 ** Picom
-Picom is my compositor currently. The main things I want to set in it, is slightly transparent windows (opacity at 80%) and a small fading effect. These arent the biggest of changes but they add a little bit of eye candy to my desktop which I like. Its nothing big, but certainly worth keeping.
+   Picom is my compositor currently. The main things I want to set in it, is slightly transparent windows (opacity at 80%) and a small fading effect. These arent the biggest of changes but they add a little bit of eye candy to my desktop which I like. Its nothing big, but certainly worth keeping.
+
+** Brave
+   While not a dotfile in the general sense, I have some configurations for brave which I want in this repository. Inside the "brave" folder, there is the configuration for my brave start page. By default, Brave wont allow you to change the start page, but by using the Custom New Tab URL addon for chromium browsers and linking to the html file inside that folder, that file will become your new start page.
+
+   The start page is a customised version of the start page inside this github repo [[https://github.com/0-Tikaro/minimum-viable-startpage]] personalised for me. It looks like this
+   [[~/Pictures/Ricing/start_page.png]]
+
+   Outside of this, I use Vimium and Darkreader for Chromium plugins and it matches my GTK theme for coloring outside of that.
