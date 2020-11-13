@@ -1,0 +1,43 @@
+#+TITLE: AuroraDraco's Dotfiles
+#+INFOJS_OPT: view:t toc:t ltoc:t mouse:underline buttons:0 path:http://thomasf.github.io/solarized-css/org-info.min.js
+#+HTML_HEAD: <link rel="stylesheet" type="text/css" href="http://thomasf.github.io/solarized-css/solarized-dark.min.css" />
+
+* Introduction
+Welcome to my dotfile repository. This was made both for me to use as a backup for my most important dotfiles, but also to share them to the community so anyone can use any part of my configuration they like. 
+
+For anyone wondering, I manage my dotfiles using GNU Stow, and write all my READMEs in Emacs's Org-mode (like the file you are reading right now :D). This is the simplest way I have found for doing this.
+
+* Structure
+I currently have 7 directories in this git repository as these are the programs I consider configured enough to be worth of putting here. They are explained below.
+
+I only have specific READMEs for i3, qtile and emacs (the latter two being literate config files of those programs) as the others dont need much of a description. Everything you need for them is explained in this file.
+
+** Bashrc
+I have my .bashrc, which albeit not being heavily configured, has some things I want to have by default in my shell so I keep it here.
+
+** Zathura
+Zathura is the pdf viewer I use currently. Its a great minimal vim-like (yes, I am an emacs user, but I love the vim keybindings and use them wherever I can. My emacs has evil mode by default cause I prefer it to default emacs) pdf viewer. My config doesn't include much. I just change some colours to the solarized theme (its a common  theme between my applications as you will see as I love it). The background is solarized dark while the pages in the pdf are solarized-light (I love dark themes, but for my pdf viewer, a light background just works better) which is a light theme, but one that isn't so painful to your eyes. Outside of these changes, there isnt much to say about it.
+
+** Alacritty
+Alacritty is my preferred terminal emulator. The changes I have done are not big, but they are definitely very impactful. There isnt much more than defaults and changing the color scheme to solarized-dark, but still worth keeping
+
+** i3
+i3, together with qtile, are currently my two favourite tiling window managers. They are configured specifically to my liking, but feel free to take the ideas and maybe change the specifics. i3 was the first tiling window manager I got into, because of its ease of use and I would definitely recommend it for anyone else new to programming and tiling window managers.
+
+Inside the repo, you will find a README file explaining some things about the config file (I dont have a literate config for it as its formatting is so easy I never considered it important, but there are some things I would like to explain), the i3 folder, which contains my i3 config file and a folder for i3blocks, with which I customise all the widgets in my i3bar.
+
+** Qtile
+Qtile, is my other heavily configured tiling window manager and actually the one I use as my daily driver for the most part. This one is configured in python in a format not as simple as i3's, so its README file is a literate config file, so looking at that instead of config.py is heavily encouraged. Together with the config, is a shell script which I use to autostart certain applications (things like picom and network manager are included there). Outside of this, there isn't much else to say about this, everything is included in the README file. 
+
+** Emacs
+Lastly, we get to Emacs, which is slowly becoming my absolute favourite program. I was a spacemacs user for a good while before switching to this config, so it is reminiscent to that in a lot of ways. Note that this is still heavily WIP as I recently started it. Of course, as you can expect, this is also a literate config file inside the README of the repo which documents very well everything that happens inside it, although there is not much yet there (check back in a month and it will be even better, I promise!!). 
+
+The repo, has quite a few things, as its my entire /.emacs.d. Outside of README and init.el, other places of importance are: 
++ /libs where I have my load-path for packages not installed through MELPA
++ /snippets where I have my collection of snippets. It mostly has snippets for org-mode to simplify me writing Latex equations inside org. They could be much better but I am kinda lazy, I will make them better eventually. 
++ The last place I would consider interesting is /spaceinit.el. This is the spacemacs init file. Its here, as while transitioning (which took way less than I thought really, like 3 days) from Spacemacs to GNU Emacs I needed a way to have both init files inside .emacs.d. I changed their names to trick emacs into launching init.el with the correct configuration framework. I have kept this inside this directory, just in case I need Spacemacs for something else.
+
+For the rest refer to Emacs's README, have fun!
+
+** Picom
+Picom is my compositor currently. The main things I want to set in it, is slightly transparent windows (opacity at 80%) and a small fading effect. These arent the biggest of changes but they add a little bit of eye candy to my desktop which I like. Its nothing big, but certainly worth keeping.

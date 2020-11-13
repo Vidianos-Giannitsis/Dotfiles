@@ -1,0 +1,215 @@
+# My i3 config, personalised for my own needs.
+
+# -- Setting up important utilities and variables --
+
+# Setting the super key as mod
+set $mod Mod4
+
+# Setting the wallpaper
+exec --no-startup-id nitrogen --set-scaled ~/Pictures/aurora.jpg
+
+# Starting picom
+exec --no-startup-id picom --config ~/.config/picom.conf
+
+# Setting some useful variables
+set $editor emacs
+set $browser brave
+
+# Setting the used font
+font pango:Mononoki Nerd Font 8
+
+# xss-lock grabs a logind suspend inhibit lock and will use i3lock to lock the
+# screen before suspend. Use loginctl lock-session to lock your screen.
+exec --no-startup-id xss-lock --transfer-sleep-lock -- i3lock --nofork
+
+# NetworkManager is the most popular way to manage wireless networks on Linux,
+# and nm-applet is a desktop environment-independent system tray GUI for it.
+exec --no-startup-id nm-applet
+
+# Language changer Greek-English
+exec_always "setxkbmap -model pc104 -layout us,gr -variant ,, -option grp:alt_shift_toggle"
+
+# Pulse Audio Volume Control
+bindsym XF86AudioRaiseVolume exec amixer -q -D pulse sset Master 5%+ unmute && pkill -RTMIN+1 i3blocks 
+bindsym XF86AudioLowerVolume exec amixer -q -D pulse sset Master 5%- unmute && pkill -RTMIN+1 i3blocks
+bindsym XF86AudioMute exec amixer -q -D pulse sset Master toggle && pkill -RTMIN+1 i3blocks
+
+# -- Base i3 utilities --
+# Use Mouse+$mod to drag floating windows to their wanted position
+floating_modifier $mod
+# kill focused window
+bindsym $mod+Control+x kill
+# start dmenu
+bindsym $mod+d exec dmenu_run -i -fn 'Mononoki Nerd Font 8'
+
+# Language changer Greek-English
+exec_always "setxkbmap -model pc104 -layout us,gr -variant ,, -option grp:alt_shift_toggle"
+
+# reload the configuration file
+bindsym $mod+Shift+c reload
+# restart i3 inplace (preserves your layout/session, can be used to upgrade i3)
+bindsym $mod+Shift+r restart
+# exit i3 (logs you out of your X session)
+bindsym $mod+Shift+e exec "i3-nagbar -t warning -m 'You pressed the exit shortcut. Do you really want to exit i3? This will end your X session.' -B 'Yes, exit i3' 'i3-msg exit'"
+
+# Scratchpad utilities
+bindsym $mod+a scratchpad show
+bindsym $mod+Shift+a move scratchpad
+
+# Screenshots
+bindsym Print exec --no-startup-id flameshot gui
+bindsym $mod+Print exec --no-startup-id flameshot screen -p ~/Pictures/Screenshots
+
+# change focus
+bindsym $mod+Left focus left
+bindsym $mod+Right focus right
+bindsym $mod+Up focus up
+bindsym $mod+Down focus down
+# Move around windows
+bindsym $mod+Shift+Left move left
+bindsym $mod+Shift+Down move down
+bindsym $mod+Shift+Up move up
+bindsym $mod+Shift+Right move right
+
+# split in horizontal orientation
+bindsym $mod+h split h
+# split in vertical orientation
+bindsym $mod+v split v
+# enter fullscreen mode for the focused container
+bindsym $mod+f fullscreen toggle
+
+# change container layout (stacked, tabbed, toggle split)
+bindsym $mod+s layout stacking
+bindsym $mod+w layout tabbed
+bindsym $mod+e layout toggle split
+
+# Brightness control
+bindsym XF86MonBrightnessUp exec xbacklight -inc 10
+bindsym XF86MonBrightnessDown exec xbacklight -dec 10
+
+# toggle tiling / floating
+bindsym $mod+t floating toggle
+
+# -- Workspaces --
+# Workspace names
+set $ws1 "1"
+set $ws2 "2"
+set $ws3 "3"
+set $ws4 "4"
+set $ws5 "5"
+set $ws6 "6"
+set $ws7 "7"
+set $ws8 "8"
+set $ws9 "9"
+set $ws10 "10"
+# switch to workspace
+bindsym $mod+1 workspace $ws1
+bindsym $mod+2 workspace $ws2
+bindsym $mod+3 workspace $ws3
+bindsym $mod+4 workspace $ws4
+bindsym $mod+5 workspace $ws5
+bindsym $mod+6 workspace $ws6
+bindsym $mod+7 workspace $ws7
+bindsym $mod+8 workspace $ws8
+bindsym $mod+9 workspace $ws9
+bindsym $mod+0 workspace $ws10
+bindsym $mod+Tab workspace back_and_forth
+# move focused container to workspace
+bindsym $mod+Shift+1 move container to workspace $ws1
+bindsym $mod+Shift+2 move container to workspace $ws2
+bindsym $mod+Shift+3 move container to workspace $ws3
+bindsym $mod+Shift+4 move container to workspace $ws4
+bindsym $mod+Shift+5 move container to workspace $ws5
+bindsym $mod+Shift+6 move container to workspace $ws6
+bindsym $mod+Shift+7 move container to workspace $ws7
+bindsym $mod+Shift+8 move container to workspace $ws8
+bindsym $mod+Shift+9 move container to workspace $ws9
+bindsym $mod+Shift+0 move container to workspace $ws10
+
+# resize window (you can also use the mouse for that)
+mode "resize" {
+        # These bindings trigger as soon as you enter the resize mode
+
+        # Pressing left will shrink the window’s width.
+        # Pressing right will grow the window’s width.
+        # Pressing up will shrink the window’s height.
+        # Pressing down will grow the window’s height.
+        bindsym j resize shrink width 10 px or 10 ppt
+        bindsym k resize grow height 10 px or 10 ppt
+        bindsym i resize shrink height 10 px or 10 ppt
+        bindsym l resize grow width 10 px or 10 ppt
+
+        # same bindings, but for the arrow keys
+        bindsym Left resize shrink width 10 px or 10 ppt
+        bindsym Down resize grow height 10 px or 10 ppt
+        bindsym Up resize shrink height 10 px or 10 ppt
+        bindsym Right resize grow width 10 px or 10 ppt
+
+        # back to normal: Enter or Escape or $mod+r
+        bindsym Return mode "default"
+        bindsym Escape mode "default"
+        bindsym $mod+r mode "default"
+}
+
+bindsym $mod+r mode "resize"
+
+# -- Bar Config (i3bar with i3blocks) --
+bar {
+    status_command SCRIPT_DIR=~/.config/i3blocks/Scripts i3blocks
+    colors {
+        background #073642
+
+# First is border, then is background and last is text 
+	inactive_workspace #172347 #586e75 #d0d0d0
+	focused_workspace   #172347 #002b36 #d0d0d0
+	urgent_workspace   #172347 #f50606 #d0d0d0
+    }	
+}
+
+# -- Program Launchers --
+bindsym $mod+Control+b exec $browser
+bindsym $mod+Control+f exec thunar
+bindsym $mod+Control+l exec libreoffice
+bindsym $mod+Shift+l exec lutris
+bindsym $mod+Control+s exec spotify
+bindsym $mod+Shift+s exec steam
+bindsym $mod+Control+d exec discord
+bindsym $mod+Control+o exec octave --gui
+bindsym $mod+Control+c exec qalculate-gtk
+bindsym $mod+Control+e exec $editor
+bindsym $mod+Control+t exec thunderbird
+bindsym $mod+Control+a exec pavucontrol
+bindsym $mod+Return exec alacritty
+
+# -- Specific Window Rules --
+# Floating Calendar
+for_window [class="Yad"] floating enable
+# Floating Calculator
+for_window [title="Qalculate!"] floating enable
+# Move spotify to scratchpad when launched
+for_window [class="Spotify"] move scratchpad
+
+# -- Website Launcher --
+mode "$browser_links" {
+	bindsym p exec xdg-open "https://play.pokemonshowdown.com"
+	bindsym w exec xdg-open "https://www.wolframalpha.com"
+	bindsym y exec xdg-open "https://www.youtube.com"
+	bindsym i exec xdg-open "https://i3wm.org/docs/userguide.html"
+	bindsym c exec xdg-open "https://www.chemeng.ntua.gr"
+	bindsym m exec xdg-open "https://mycourses.ntua.gr"
+	bindsym g exec xdg-open "https://mail.google.com/mail/u/0/#inbox"
+	bindsym r exec xdg-open "https://www.reddit.com"
+	bindsym l exec xdg-open "https://lolchess.gg/profile/eune/auroradraco"
+	bindsym d exec xdg-open "https://www.dod.gr"
+  bindsym t exec xdg-open "https://www.twitch.tv"
+  bindsym Shift+g exec xdg-open "https://github.com"
+	bindsym Shift+p exec xdg-open "https://calc.pokemonshowdown.com"
+	bindsym Shift+c exec xdg-open "https://courses.chemeng.ntua.gr"
+  bindsym Shift+m exec xdg-open "https://www.messenger.com"
+  bindsym Shift+r exec xdg-open "https://royaleapi.com/clan/2VYUQ0PU"
+	bindsym Escape mode "default"
+}
+
+# Enter website launcher mode
+bindsym $mod+b mode "$browser_links"
+

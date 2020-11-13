@@ -1,0 +1,83 @@
+# My i3blocks configuration file, gives i3bar some useful blocklets
+# Needs $SCRIPT_DIR defined in i3's config and the Scripts folder in ~/.config/i3blocks which contains all the used scripts
+
+# Global properties
+separator=true
+separator_block_width=15
+
+[documentation]
+full_text=i3 Documentation
+website=https://i3wm.org/docs/userguide.html
+command=xdg-open "$website"
+
+[battery2]
+command=$SCRIPT_DIR/battery2
+markup=pango
+interval=30
+
+[calculator]
+full_text=Calculator
+command=i3-msg -q exec qalculate-gtk
+
+[mediaplayer]
+command=$SCRIPT_DIR/mediaplayer
+label=
+instance=spotify
+interval=5
+signal=10
+
+[calendar]
+command=$SCRIPT_DIR/calendar
+interval=1
+LABEL= 
+DATEFMT=+%H:%M:%S
+# SHORTFMT=+%H:%M:%S
+HEIGHT=260
+WIDTH=220
+
+[volume-pulseaudio]
+command=$SCRIPT_DIR/volume-pulseaudio
+label=
+interval=once
+signal=1
+#MIXER=[determined automatically]
+#SCONTROL=[determined automatically]
+##exposed format variables: ${SYMB}, ${VOL}, ${INDEX}, ${NAME}
+#LONG_FORMAT="${SYMB} ${VOL}% [${INDEX}:${NAME}]"
+#SHORT_FORMAT="${SYMB} ${VOL}% [${INDEX}]"
+#AUDIO_HIGH_SYMBOL='  '
+#AUDIO_MED_THRESH=50
+#AUDIO_MED_SYMBOL='  '
+#AUDIO_LOW_THRESH=0
+#AUDIO_LOW_SYMBOL='  '
+#AUDIO_DELTA=5
+#DEFAULT_COLOR="#ffffff"
+#MUTED_COLOR="#a0a0a0"
+#USE_ALSA_NAME=0
+#USE_DESCRIPTION=0
+## SUBSCRIBE=1 requires interval=persist and always uses LONG_FORMAT
+#SUBSCRIBE=0
+
+#[auto_clicker]
+#command=$SCRIPT_DIR/auto_clicker
+#full_text=Right Mouse auto-clicker
+
+[memory]
+command=$SCRIPT_DIR/memory
+label=MEM
+interval=30
+
+[cpu_usage]
+command=$SCRIPT_DIR/cpu_usage
+interval=10
+LABEL=CPU 
+#min_width=CPU: 100.00%
+#T_WARN=50
+#T_CRIT=80
+#DECIMALS=2
+
+[backlight]
+command=xbacklight | sed -r 's/\.w+$/%/'
+label=
+interval=1
+

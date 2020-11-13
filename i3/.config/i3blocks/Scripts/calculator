@@ -1,0 +1,4 @@
+#! /bin/sh
+#
+exec qalculate-gtk
+i3-msg -t for_window [title="qalculate-gtk"] resize set 400 150

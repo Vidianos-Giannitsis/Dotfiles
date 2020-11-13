@@ -1,0 +1,19 @@
+#+TITLE: i3 Config
+#+INFOJS_OPT: view:t toc:t ltoc:t mouse:underline buttons:0 path:http://thomasf.github.io/solarized-css/org-info.min.js
+#+HTML_HEAD: <link rel="stylesheet" type="text/css" href="http://thomasf.github.io/solarized-css/solarized-dark.min.css" />
+
+
+* About this config
+This is my i3 config. As mentioned in the initial README file, this is not a literate config file like my qtile and Emacs configs, but just a simple README file to explain some things about my config.
+
+i3's formatting is very easy, so most of these things are self explainable. But, there are some things which I would like to explain. These are things like:
++ Keys prefixed with XF86 are the so called f keys (in the top row of your keyboard). In most tiling window managers, things like changing volume or brightness doesnt come out of the box so you need to tell i3 what to do with them
++ $mod which is widely used inside the config is the Super key (aka Windows key). Its a key thats mostly useless otherwise so most tiling window managers use it for most of their tasks
++ The keybindings which I use for launching my favourite programs (in the Program Launchers section of the config) are unified. Their idea is Mod+Control+first letter of the program you want to launch (the same concept is also followed in my qtile config, as I consider this one of the simplest ways to bind your programs without overcomplicating things). If there is already a program in that keybinding I use Shift instead of Control
++ I mention something called the Scratchpad inside my config at one point, and I also always move spotify to that "scratchpad" when it is launched. The scratchpad is essentially a hidden workspace in which i3 hides windows when you tell it to. Mod+a brings up the windows inside that workspace as floating windows, cycling between them and at one point, also hiding all of them. It can be useful for some programs, so I like having its keybindings 
++ The window rules I have also have some interest. Yad, is the calendar program integrated in my bar. This basically makes it to when you click it it opens a floating calendar, which is handy. Qalculate is mu calculator which simply functions better as a tiling window imo. Lastly, when spotify is launched it goes to the scratchpad which for a music player, is incredibly useful as you rarely want it visible.
++ Last thing I want to talk about is this custom binding mode in the end of my config for "browser links". Mod+b enters this mode and a single button press launches a specific website, which list is my most used websites. as I concept I consider it very useful and something I would recommend to others
+
+* The i3 bar
+There are some mentions of the bar, inside the actual config (sets the background color of the bar and how each workspace will look like inside it. Also defines the SCRIPT_DIR variable used in i3blocks). But, the real work happens in i3 blocks. There is a scripts directory (the SCRIPT_DIR variable) which defines every widget in the bar for them to be called in the config file. Its launching i3docs, qalculate (both I usually open with keybindings, but I like having them in the bar). Its also got the most classic things in a bar, like memory and cpu usage, volume, brightness, battery usage and a calendar. Lastly, its got an excellent widget called media player which can control spotify from my bar. I can navigate between the tracks of the playlist thats playing (with the left and right clicks) and pause with the middle click. There is also a systray in the far right, but that doesnt need any definition.
+

@@ -1,0 +1,819 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<!-- 2020-11-08 Κυρ 19:32 -->
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Literate Qtile Config</title>
+<meta name="generator" content="Org mode" />
+<meta name="author" content="Vidianos" />
+<style type="text/css">
+ <!--/*--><![CDATA[/*><!--*/
+  .title  { text-align: center;
+             margin-bottom: .2em; }
+  .subtitle { text-align: center;
+              font-size: medium;
+              font-weight: bold;
+              margin-top:0; }
+  .todo   { font-family: monospace; color: red; }
+  .done   { font-family: monospace; color: green; }
+  .priority { font-family: monospace; color: orange; }
+  .tag    { background-color: #eee; font-family: monospace;
+            padding: 2px; font-size: 80%; font-weight: normal; }
+  .timestamp { color: #bebebe; }
+  .timestamp-kwd { color: #5f9ea0; }
+  .org-right  { margin-left: auto; margin-right: 0px;  text-align: right; }
+  .org-left   { margin-left: 0px;  margin-right: auto; text-align: left; }
+  .org-center { margin-left: auto; margin-right: auto; text-align: center; }
+  .underline { text-decoration: underline; }
+  #postamble p, #preamble p { font-size: 90%; margin: .2em; }
+  p.verse { margin-left: 3%; }
+  pre {
+    border: 1px solid #ccc;
+    box-shadow: 3px 3px 3px #eee;
+    padding: 8pt;
+    font-family: monospace;
+    overflow: auto;
+    margin: 1.2em;
+  }
+  pre.src {
+    position: relative;
+    overflow: visible;
+    padding-top: 1.2em;
+  }
+  pre.src:before {
+    display: none;
+    position: absolute;
+    background-color: white;
+    top: -10px;
+    right: 10px;
+    padding: 3px;
+    border: 1px solid black;
+  }
+  pre.src:hover:before { display: inline;}
+  /* Languages per Org manual */
+  pre.src-asymptote:before { content: 'Asymptote'; }
+  pre.src-awk:before { content: 'Awk'; }
+  pre.src-C:before { content: 'C'; }
+  /* pre.src-C++ doesn't work in CSS */
+  pre.src-clojure:before { content: 'Clojure'; }
+  pre.src-css:before { content: 'CSS'; }
+  pre.src-D:before { content: 'D'; }
+  pre.src-ditaa:before { content: 'ditaa'; }
+  pre.src-dot:before { content: 'Graphviz'; }
+  pre.src-calc:before { content: 'Emacs Calc'; }
+  pre.src-emacs-lisp:before { content: 'Emacs Lisp'; }
+  pre.src-fortran:before { content: 'Fortran'; }
+  pre.src-gnuplot:before { content: 'gnuplot'; }
+  pre.src-haskell:before { content: 'Haskell'; }
+  pre.src-hledger:before { content: 'hledger'; }
+  pre.src-java:before { content: 'Java'; }
+  pre.src-js:before { content: 'Javascript'; }
+  pre.src-latex:before { content: 'LaTeX'; }
+  pre.src-ledger:before { content: 'Ledger'; }
+  pre.src-lisp:before { content: 'Lisp'; }
+  pre.src-lilypond:before { content: 'Lilypond'; }
+  pre.src-lua:before { content: 'Lua'; }
+  pre.src-matlab:before { content: 'MATLAB'; }
+  pre.src-mscgen:before { content: 'Mscgen'; }
+  pre.src-ocaml:before { content: 'Objective Caml'; }
+  pre.src-octave:before { content: 'Octave'; }
+  pre.src-org:before { content: 'Org mode'; }
+  pre.src-oz:before { content: 'OZ'; }
+  pre.src-plantuml:before { content: 'Plantuml'; }
+  pre.src-processing:before { content: 'Processing.js'; }
+  pre.src-python:before { content: 'Python'; }
+  pre.src-R:before { content: 'R'; }
+  pre.src-ruby:before { content: 'Ruby'; }
+  pre.src-sass:before { content: 'Sass'; }
+  pre.src-scheme:before { content: 'Scheme'; }
+  pre.src-screen:before { content: 'Gnu Screen'; }
+  pre.src-sed:before { content: 'Sed'; }
+  pre.src-sh:before { content: 'shell'; }
+  pre.src-sql:before { content: 'SQL'; }
+  pre.src-sqlite:before { content: 'SQLite'; }
+  /* additional languages in org.el's org-babel-load-languages alist */
+  pre.src-forth:before { content: 'Forth'; }
+  pre.src-io:before { content: 'IO'; }
+  pre.src-J:before { content: 'J'; }
+  pre.src-makefile:before { content: 'Makefile'; }
+  pre.src-maxima:before { content: 'Maxima'; }
+  pre.src-perl:before { content: 'Perl'; }
+  pre.src-picolisp:before { content: 'Pico Lisp'; }
+  pre.src-scala:before { content: 'Scala'; }
+  pre.src-shell:before { content: 'Shell Script'; }
+  pre.src-ebnf2ps:before { content: 'ebfn2ps'; }
+  /* additional language identifiers per "defun org-babel-execute"
+       in ob-*.el */
+  pre.src-cpp:before  { content: 'C++'; }
+  pre.src-abc:before  { content: 'ABC'; }
+  pre.src-coq:before  { content: 'Coq'; }
+  pre.src-groovy:before  { content: 'Groovy'; }
+  /* additional language identifiers from org-babel-shell-names in
+     ob-shell.el: ob-shell is the only babel language using a lambda to put
+     the execution function name together. */
+  pre.src-bash:before  { content: 'bash'; }
+  pre.src-csh:before  { content: 'csh'; }
+  pre.src-ash:before  { content: 'ash'; }
+  pre.src-dash:before  { content: 'dash'; }
+  pre.src-ksh:before  { content: 'ksh'; }
+  pre.src-mksh:before  { content: 'mksh'; }
+  pre.src-posh:before  { content: 'posh'; }
+  /* Additional Emacs modes also supported by the LaTeX listings package */
+  pre.src-ada:before { content: 'Ada'; }
+  pre.src-asm:before { content: 'Assembler'; }
+  pre.src-caml:before { content: 'Caml'; }
+  pre.src-delphi:before { content: 'Delphi'; }
+  pre.src-html:before { content: 'HTML'; }
+  pre.src-idl:before { content: 'IDL'; }
+  pre.src-mercury:before { content: 'Mercury'; }
+  pre.src-metapost:before { content: 'MetaPost'; }
+  pre.src-modula-2:before { content: 'Modula-2'; }
+  pre.src-pascal:before { content: 'Pascal'; }
+  pre.src-ps:before { content: 'PostScript'; }
+  pre.src-prolog:before { content: 'Prolog'; }
+  pre.src-simula:before { content: 'Simula'; }
+  pre.src-tcl:before { content: 'tcl'; }
+  pre.src-tex:before { content: 'TeX'; }
+  pre.src-plain-tex:before { content: 'Plain TeX'; }
+  pre.src-verilog:before { content: 'Verilog'; }
+  pre.src-vhdl:before { content: 'VHDL'; }
+  pre.src-xml:before { content: 'XML'; }
+  pre.src-nxml:before { content: 'XML'; }
+  /* add a generic configuration mode; LaTeX export needs an additional
+     (add-to-list 'org-latex-listings-langs '(conf " ")) in .emacs */
+  pre.src-conf:before { content: 'Configuration File'; }
+
+  table { border-collapse:collapse; }
+  caption.t-above { caption-side: top; }
+  caption.t-bottom { caption-side: bottom; }
+  td, th { vertical-align:top;  }
+  th.org-right  { text-align: center;  }
+  th.org-left   { text-align: center;   }
+  th.org-center { text-align: center; }
+  td.org-right  { text-align: right;  }
+  td.org-left   { text-align: left;   }
+  td.org-center { text-align: center; }
+  dt { font-weight: bold; }
+  .footpara { display: inline; }
+  .footdef  { margin-bottom: 1em; }
+  .figure { padding: 1em; }
+  .figure p { text-align: center; }
+  .equation-container {
+    display: table;
+    text-align: center;
+    width: 100%;
+  }
+  .equation {
+    vertical-align: middle;
+  }
+  .equation-label {
+    display: table-cell;
+    text-align: right;
+    vertical-align: middle;
+  }
+  .inlinetask {
+    padding: 10px;
+    border: 2px solid gray;
+    margin: 10px;
+    background: #ffffcc;
+  }
+  #org-div-home-and-up
+   { text-align: right; font-size: 70%; white-space: nowrap; }
+  textarea { overflow-x: auto; }
+  .linenr { font-size: smaller }
+  .code-highlighted { background-color: #ffff00; }
+  .org-info-js_info-navigation { border-style: none; }
+  #org-info-js_console-label
+    { font-size: 10px; font-weight: bold; white-space: nowrap; }
+  .org-info-js_search-highlight
+    { background-color: #ffff00; color: #000000; font-weight: bold; }
+  .org-svg { width: 90%; }
+  /*]]>*/-->
+</style>
+<link rel="stylesheet" type="text/css" href="http://thomasf.github.io/solarized-css/solarized-dark.min.css" />
+
+<script type="text/javascript" src="http://thomasf.github.io/solarized-css/org-info.min.js">
+/**
+ *
+ * @source: http://thomasf.github.io/solarized-css/org-info.min.js
+ *
+ * @licstart  The following is the entire license notice for the
+ *  JavaScript code in http://thomasf.github.io/solarized-css/org-info.min.js.
+ *
+ * Copyright (C) 2012-2020 Free Software Foundation, Inc.
+ *
+ *
+ * The JavaScript code in this tag is free software: you can
+ * redistribute it and/or modify it under the terms of the GNU
+ * General Public License (GNU GPL) as published by the Free Software
+ * Foundation, either version 3 of the License, or (at your option)
+ * any later version.  The code is distributed WITHOUT ANY WARRANTY;
+ * without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE.  See the GNU GPL for more details.
+ *
+ * As additional permission under GNU GPL version 3 section 7, you
+ * may distribute non-source (e.g., minimized or compacted) forms of
+ * that code without the copy of the GNU GPL normally required by
+ * section 4, provided you include this license notice and a URL
+ * through which recipients can access the Corresponding Source.
+ *
+ * @licend  The above is the entire license notice
+ * for the JavaScript code in http://thomasf.github.io/solarized-css/org-info.min.js.
+ *
+ */
+</script>
+
+<script type="text/javascript">
+
+/*
+@licstart  The following is the entire license notice for the
+JavaScript code in this tag.
+
+Copyright (C) 2012-2020 Free Software Foundation, Inc.
+
+The JavaScript code in this tag is free software: you can
+redistribute it and/or modify it under the terms of the GNU
+General Public License (GNU GPL) as published by the Free Software
+Foundation, either version 3 of the License, or (at your option)
+any later version.  The code is distributed WITHOUT ANY WARRANTY;
+without even the implied warranty of MERCHANTABILITY or FITNESS
+FOR A PARTICULAR PURPOSE.  See the GNU GPL for more details.
+
+As additional permission under GNU GPL version 3 section 7, you
+may distribute non-source (e.g., minimized or compacted) forms of
+that code without the copy of the GNU GPL normally required by
+section 4, provided you include this license notice and a URL
+through which recipients can access the Corresponding Source.
+
+
+@licend  The above is the entire license notice
+for the JavaScript code in this tag.
+*/
+
+<!--/*--><![CDATA[/*><!--*/
+org_html_manager.set("TOC_DEPTH", "3");
+org_html_manager.set("LINK_HOME", "");
+org_html_manager.set("LINK_UP", "");
+org_html_manager.set("LOCAL_TOC", "1");
+org_html_manager.set("VIEW_BUTTONS", "0");
+org_html_manager.set("MOUSE_HINT", "underline");
+org_html_manager.set("FIXED_TOC", "0");
+org_html_manager.set("TOC", "1");
+org_html_manager.set("VIEW", "1");
+org_html_manager.setup();  // activate after the parameters are set
+/*]]>*///-->
+</script>
+<script type="text/javascript">
+/*
+@licstart  The following is the entire license notice for the
+JavaScript code in this tag.
+
+Copyright (C) 2012-2020 Free Software Foundation, Inc.
+
+The JavaScript code in this tag is free software: you can
+redistribute it and/or modify it under the terms of the GNU
+General Public License (GNU GPL) as published by the Free Software
+Foundation, either version 3 of the License, or (at your option)
+any later version.  The code is distributed WITHOUT ANY WARRANTY;
+without even the implied warranty of MERCHANTABILITY or FITNESS
+FOR A PARTICULAR PURPOSE.  See the GNU GPL for more details.
+
+As additional permission under GNU GPL version 3 section 7, you
+may distribute non-source (e.g., minimized or compacted) forms of
+that code without the copy of the GNU GPL normally required by
+section 4, provided you include this license notice and a URL
+through which recipients can access the Corresponding Source.
+
+
+@licend  The above is the entire license notice
+for the JavaScript code in this tag.
+*/
+<!--/*--><![CDATA[/*><!--*/
+ function CodeHighlightOn(elem, id)
+ {
+   var target = document.getElementById(id);
+   if(null != target) {
+     elem.cacheClassElem = elem.className;
+     elem.cacheClassTarget = target.className;
+     target.className = "code-highlighted";
+     elem.className   = "code-highlighted";
+   }
+ }
+ function CodeHighlightOff(elem, id)
+ {
+   var target = document.getElementById(id);
+   if(elem.cacheClassElem)
+     elem.className = elem.cacheClassElem;
+   if(elem.cacheClassTarget)
+     target.className = elem.cacheClassTarget;
+ }
+/*]]>*///-->
+</script>
+</head>
+<body>
+<div id="content">
+<h1 class="title">Literate Qtile Config</h1>
+<div id="table-of-contents">
+<h2>Table of Contents</h2>
+<div id="text-table-of-contents">
+<ul>
+<li><a href="#org902a686">1. Description</a></li>
+<li><a href="#org0cbb268">2. Imports</a></li>
+<li><a href="#orgc0fc7da">3. Variables</a></li>
+<li><a href="#org89317d5">4. Hooks</a></li>
+<li><a href="#org46e4214">5. Keybindings</a>
+<ul>
+<li><a href="#org46d2628">5.1. Layout manipulation</a></li>
+<li><a href="#org6e32426">5.2. Window and window manager manipulation</a></li>
+<li><a href="#org857509c">5.3. My favourite programs</a></li>
+<li><a href="#orgd93aff7">5.4. Multimedia Keys</a></li>
+</ul>
+</li>
+<li><a href="#org3241f7e">6. Workspaces</a></li>
+<li><a href="#orgfb9a65b">7. Layouts</a></li>
+<li><a href="#org6b046ca">8. Qtile Bar</a></li>
+<li><a href="#orgdbd4a08">9. Floating Windows</a></li>
+<li><a href="#orgae93be8">10. Others</a></li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-org902a686" class="outline-2">
+<h2 id="org902a686"><span class="section-number-2">1</span> Description</h2>
+<div class="outline-text-2" id="text-1">
+<p>
+Welcome to my literate qtile config. This was written in Emacs's org-mode with the purpose of documentating my configuration better than comments can. 
+</p>
+
+<p>
+Feel free to use any part you like in your own qtile configuration, for that is the reason for uploading this.
+</p>
+</div>
+</div>
+<div id="outline-container-org0cbb268" class="outline-2">
+<h2 id="org0cbb268"><span class="section-number-2">2</span> Imports</h2>
+<div class="outline-text-2" id="text-2">
+<p>
+Not much to say here, importing some necessary packages for qtile to have all the functionality I want. Some where here by default, while I added some others.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-python"><span style="color: #859900; font-weight: bold;">from</span> libqtile.command <span style="color: #859900; font-weight: bold;">import</span> lazy
+<span style="color: #859900; font-weight: bold;">from</span> typing <span style="color: #859900; font-weight: bold;">import</span> List  <span style="color: #586e75;"># </span><span style="color: #586e75;">noqa: F401</span>
+<span style="color: #859900; font-weight: bold;">from</span> libqtile <span style="color: #859900; font-weight: bold;">import</span> bar, layout, widget, hook
+<span style="color: #859900; font-weight: bold;">from</span> libqtile.config <span style="color: #859900; font-weight: bold;">import</span> Click, Drag, Group, Screen, Key, Match, Rule, ScratchPad, DropDown
+<span style="color: #859900; font-weight: bold;">from</span> libqtile.config <span style="color: #859900; font-weight: bold;">import</span> EzKey <span style="color: #859900; font-weight: bold;">as</span> Key2
+<span style="color: #859900; font-weight: bold;">from</span> libqtile.lazy <span style="color: #859900; font-weight: bold;">import</span> lazy
+<span style="color: #859900; font-weight: bold;">from</span> libqtile.utils <span style="color: #859900; font-weight: bold;">import</span> guess_terminal
+<span style="color: #859900; font-weight: bold;">import</span> os
+<span style="color: #859900; font-weight: bold;">import</span> subprocess
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-orgc0fc7da" class="outline-2">
+<h2 id="orgc0fc7da"><span class="section-number-2">3</span> Variables</h2>
+<div class="outline-text-2" id="text-3">
+<p>
+Here I define some variables, which are some of my programs. 
+Defining them here helps if I want to use them in multiple locations of my config file or am not sure if I want to keep them. 
+</p>
+
+<p>
+For example, I switch browsers often and I want the ability to open both a minimal browser and a fully featured "bloated" browser and its not rare that I switch browsers (going from brave to firefox for example).
+</p>
+
+<div class="org-src-container">
+<pre class="src src-python"><span style="color: #268bd2;">mod</span> = <span style="color: #2aa198;">"mod4"</span>
+<span style="color: #268bd2;">terminal</span> = guess_terminal()
+<span style="color: #268bd2;">editor</span> = <span style="color: #2aa198;">"emacs"</span>
+<span style="color: #268bd2;">min_browser</span> = <span style="color: #2aa198;">"qutebrowser"</span>
+<span style="color: #268bd2;">full_browser</span> = <span style="color: #2aa198;">"brave"</span>
+<span style="color: #268bd2;">office</span> = <span style="color: #2aa198;">"libreoffice"</span>
+<span style="color: #268bd2;">file_manager</span> = <span style="color: #2aa198;">"thunar"</span> <span style="color: #586e75;"># </span><span style="color: #586e75;">I mostly use dired inside emacs for file management, but this exists as a gui file manager in case I need it</span>
+<span style="color: #268bd2;">music_player</span> = <span style="color: #2aa198;">"spotify"</span>
+<span style="color: #268bd2;">calculator</span> = <span style="color: #2aa198;">"qalculate-gtk"</span>
+<span style="color: #268bd2;">pdf_reader</span> = <span style="color: #2aa198;">"zathura"</span>
+<span style="color: #268bd2;">screenshots</span> = <span style="color: #2aa198;">"flameshot gui"</span>
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org89317d5" class="outline-2">
+<h2 id="org89317d5"><span class="section-number-2">4</span> Hooks</h2>
+<div class="outline-text-2" id="text-4">
+<p>
+Defining two hooks I want for my config. The first is my autostart script (you can find it inside of this repo) which I want to be called the first time I login to qtile. It launches things like network manager and picom.
+</p>
+
+<p>
+The second hook is my favourite calculator program "Qalculate". I really find it inefficient to tile that specific window so I always set it to float when launched.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-python"><span style="color: #b58900;">@hook.subscribe.startup_once</span>
+<span style="color: #859900; font-weight: bold;">def</span> <span style="color: #268bd2;">autostart</span>():
+    <span style="color: #268bd2;">home</span> = os.path.expanduser(<span style="color: #2aa198;">'~/.config/qtile/autostart.sh'</span>)
+    subprocess.call([home])
+
+<span style="color: #b58900;">@hook.subscribe.client_new</span>
+<span style="color: #859900; font-weight: bold;">def</span> <span style="color: #268bd2;">floating_calc</span>(c):
+    <span style="color: #859900; font-weight: bold;">if</span> c.name == <span style="color: #2aa198;">"Qalculate!"</span>:
+        c.toggle_floating()
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org46e4214" class="outline-2">
+<h2 id="org46e4214"><span class="section-number-2">5</span> Keybindings</h2>
+<div class="outline-text-2" id="text-5">
+<p>
+My keybindings. This and the qtile bar are the two places that this config deviates itself the most from other (or the default) qtile config. These are easy to remember for me and what I consider suits my workflow the best. 
+</p>
+
+<p>
+A lot of them use one or more modifier keys (Mod, Control, Shift, Alt) and the first letter of the word they describe so they are easily memorable. 
+</p>
+
+<p>
+Note that I dont use the typical Key function but the Key2 function which (as can be seen in the Imports section of the config) is from the EzKey package I have imported. This allows me to enter my keybindings in this Emacs-like format which I like and find to be the best and fastest way to describe the keybinding. "M" is the Mod key, aka Super, or Windows key. "A" is the alt key, "C", the Control key, "S" the shift key, &lt;Return&gt; is Enter and the rest are probably self explanatory.
+</p>
+
+<p>
+Lastly, every keybinding has a description section to explain what it does.
+</p>
+</div>
+
+<div id="outline-container-org46d2628" class="outline-3">
+<h3 id="org46d2628"><span class="section-number-3">5.1</span> Layout manipulation</h3>
+<div class="outline-text-3" id="text-5-1">
+<p>
+This section is all about the ways you can manipulate your current layout, some work in every layout while others are specifically for a layout. For which layouts I have enabled and what each layout is, refer to the Layouts section of this config file.
+</p>
+
+<ul class="org-ul">
+<li>The first group of keybindings is about moving focus around your windows (which is done with M-the vim motion keys).</li>
+<li>Then is moving windows around the screen, or changing the visible window of a stack in the stack layout of qtile (with M-A-the vim motion keys)</li>
+<li>Next section is for changing the focus between the two windows visible in the stack layout or changing their position in the screen</li>
+<li>After that are some keybindings for the master&amp;stack layout known from many window managers (known as monadtall/monadwide in qtile depending on if the original split is vertical or horizontal). These are increasing and decreasing the size of the window with focus, setting it back to 50-50 (docs say this is how its done but I cant really get this part working, have kept it in the config though), maximizing the size of the window with focus (makes the other window very small, but useful if the other window is sth you can use even if its really small) and flipping the layout (puts the master window in the other side of the screen, by dfault its on the left)</li>
+<li>Lastly is the keybinding for switching between layouts which is M-Tab</li>
+</ul>
+<div class="org-src-container">
+<pre class="src src-python"><span style="color: #268bd2;">keys</span> = [
+    Key2(<span style="color: #2aa198;">"M-k"</span>, lazy.layout.down(),
+        desc=<span style="color: #2aa198;">"Move focus down in stack pane"</span>),
+    Key2(<span style="color: #2aa198;">"M-j"</span>, lazy.layout.up(),
+        desc=<span style="color: #2aa198;">"Move focus up in stack pane"</span>),
+    Key2(<span style="color: #2aa198;">"M-h"</span>, lazy.layout.left(),
+         desc=<span style="color: #2aa198;">"Move focus left in stack pane"</span>),
+    Key2(<span style="color: #2aa198;">"M-l"</span>, lazy.layout.left(),
+         desc=<span style="color: #2aa198;">"Move focus right in stack pane"</span>),
+
+    Key2(<span style="color: #2aa198;">"M-A-k"</span>, lazy.layout.shuffle_down(),
+        desc=<span style="color: #2aa198;">"Move window down in current stack "</span>),
+    Key2(<span style="color: #2aa198;">"M-A-j"</span>, lazy.layout.shuffle_up(),
+        desc=<span style="color: #2aa198;">"Move window up in current stack "</span>),
+    Key2(<span style="color: #2aa198;">"M-A-h"</span>, lazy.layout.shuffle_left(),
+        desc=<span style="color: #2aa198;">"Move window left in current stack "</span>),
+    Key2(<span style="color: #2aa198;">"M-A-l"</span>, lazy.layout.shuffle_right(),
+        desc=<span style="color: #2aa198;">"Move window right in current stack "</span>),
+
+    Key2(<span style="color: #2aa198;">"M-&lt;space&gt;"</span>, lazy.layout.<span style="color: #839496; font-weight: bold;">next</span>(),
+        desc=<span style="color: #2aa198;">"Switch window focus to other pane(s) of stack"</span>),
+    Key2(<span style="color: #2aa198;">"M-S-&lt;space&gt;"</span>, lazy.layout.rotate(),
+        desc=<span style="color: #2aa198;">"Swap panes of split stack"</span>),
+
+    Key2(<span style="color: #2aa198;">"M-i"</span>, lazy.layout.grow()),
+    Key2(<span style="color: #2aa198;">"M-d"</span>, lazy.layout.shrink()),
+    Key2(<span style="color: #2aa198;">"M-n"</span>, lazy.layout.normalize()),
+    Key2(<span style="color: #2aa198;">"M-m"</span>, lazy.layout.maximize()),
+    Key2(<span style="color: #2aa198;">"M-f"</span>, lazy.layout.flip()),
+
+    Key2(<span style="color: #2aa198;">"M-&lt;Tab&gt;"</span>, lazy.next_layout(), desc=<span style="color: #2aa198;">"Toggle between layouts"</span>),
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org6e32426" class="outline-3">
+<h3 id="org6e32426"><span class="section-number-3">5.2</span> Window and window manager manipulation</h3>
+<div class="outline-text-3" id="text-5-2">
+<p>
+Fairly simple section for making a window floating (a window also becomes floating when you move it with M-mouse left click), killing the focused window, killing the window manager which puts you back to your computers login manager (something like LightDM) and restarting qtile in-place which is mostly useful when hacking on qtile as for changes to take place you need to restart. 
+</p>
+
+<div class="org-src-container">
+<pre class="src src-python">Key2(<span style="color: #2aa198;">"M-S-f"</span>, lazy.window.toggle_floating, desc=<span style="color: #2aa198;">"Toggle Floating"</span>),
+Key2(<span style="color: #2aa198;">"M-C-x"</span>, lazy.window.kill(), desc=<span style="color: #2aa198;">"Kill focused window"</span>),
+Key2(<span style="color: #2aa198;">"M-S-r"</span>, lazy.restart(), desc=<span style="color: #2aa198;">"Restart qtile"</span>),
+Key2(<span style="color: #2aa198;">"M-S-e"</span>, lazy.shutdown(), desc=<span style="color: #2aa198;">"Shutdown qtile"</span>),
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org857509c" class="outline-3">
+<h3 id="org857509c"><span class="section-number-3">5.3</span> My favourite programs</h3>
+<div class="outline-text-3" id="text-5-3">
+<p>
+In this subsection of my keybindings, I define all the keybindings needed to launch my favourite programs.
+</p>
+
+<p>
+Some notes about them are:
+</p>
+<ul class="org-ul">
+<li>Most of them are bound as M-C-the first letter of the program I want to launch. Or if there is already a program in that letter, I use M-S-that letter</li>
+<li>Terminal is bound to M-&lt;Return&gt; because its a good keybinding and its what almost every twm user has for their terminal</li>
+<li>I currently use Qtile's built in prompt for a run prompt. Dmenu or rofi is probably better but I dont use them that often as I consider it more efficient to bind your favourite programs to specific keybindings for eacs</li>
+<li>For those that dont have a name in quotes but a variable, refer to the Variables section of this config for which program they are</li>
+<li>Last thing I want to note is the keybinding for "emacs ~/todo.org". This is something I have been trying to integrate in my workflow recently of having a todo file where I declare projects I want to work on and keep notes about them. I usually just navigate to this file through dired inside Emacs but having a specific keybinding for it is something I wanted to try and thats why I have it inside the config</li>
+</ul>
+
+<div class="org-src-container">
+<pre class="src src-python">Key2(<span style="color: #2aa198;">"M-&lt;Return&gt;"</span>, lazy.spawn(terminal), desc=<span style="color: #2aa198;">"Launch terminal"</span>),
+Key2(<span style="color: #2aa198;">"M-r"</span>, lazy.spawncmd(),
+    desc=<span style="color: #2aa198;">"Spawn a command using a prompt widget"</span>),
+Key2(<span style="color: #2aa198;">"M-C-b"</span>, lazy.spawn(min_browser), desc=<span style="color: #2aa198;">"Launch minimal browser"</span>),
+Key2(<span style="color: #2aa198;">"M-S-b"</span>, lazy.spawn(full_browser), desc=<span style="color: #2aa198;">"Launch full browser"</span>),
+Key2(<span style="color: #2aa198;">"M-C-f"</span>, lazy.spawn(file_manager), desc=<span style="color: #2aa198;">"Launch file manager"</span>),
+Key2(<span style="color: #2aa198;">"M-C-e"</span>, lazy.spawn(editor), desc=<span style="color: #2aa198;">"Launch Emacs"</span>),
+Key2(<span style="color: #2aa198;">"M-S-t"</span>, lazy.spawn(<span style="color: #2aa198;">"emacs ~/todo.org"</span>), desc=<span style="color: #2aa198;">"Open TODO org file"</span>),
+<span style="color: #586e75;"># </span><span style="color: #586e75;">Key2("M-C-s", lazy.spawn(music_player), desc="Play some music"),</span>
+Key2(<span style="color: #2aa198;">"M-C-l"</span>, lazy.spawn(office), desc=<span style="color: #2aa198;">"Launch an office suite"</span>),
+Key2(<span style="color: #2aa198;">"M-S-l"</span>, lazy.spawn(<span style="color: #2aa198;">"lutris"</span>), desc=<span style="color: #2aa198;">"Launch lutris"</span>),
+Key2(<span style="color: #2aa198;">"M-S-s"</span>, lazy.spawn(<span style="color: #2aa198;">"steam"</span>), desc=<span style="color: #2aa198;">"Launch steam"</span>),
+Key2(<span style="color: #2aa198;">"M-C-d"</span>, lazy.spawn(<span style="color: #2aa198;">"discord"</span>), desc=<span style="color: #2aa198;">"Launch discord"</span>),
+Key2(<span style="color: #2aa198;">"M-C-o"</span>, lazy.spawn(<span style="color: #2aa198;">"octave --gui"</span>), desc=<span style="color: #2aa198;">"Launch octave"</span>),
+Key2(<span style="color: #2aa198;">"M-C-c"</span>, lazy.spawn(calculator), desc=<span style="color: #2aa198;">"Launch calculator"</span>),
+Key2(<span style="color: #2aa198;">"M-C-t"</span>, lazy.spawn(<span style="color: #2aa198;">"thunderbird"</span>), desc=<span style="color: #2aa198;">"Launch email client"</span>),
+Key2(<span style="color: #2aa198;">"M-C-a"</span>, lazy.spawn(<span style="color: #2aa198;">"pavucontrol"</span>), desc=<span style="color: #2aa198;">"Launch audio control"</span>),
+Key2(<span style="color: #2aa198;">"M-C-g"</span>, lazy.spawn(<span style="color: #2aa198;">"geogebra"</span>), desc=<span style="color: #2aa198;">"Launch geogebra"</span>),
+Key2(<span style="color: #2aa198;">"M-C-i"</span>, lazy.spawn(<span style="color: #2aa198;">"inkscape"</span>), desc=<span style="color: #2aa198;">"Launch inkscape"</span>),
+Key2(<span style="color: #2aa198;">"M-C-z"</span>, lazy.spawn(pdf_reader), desc=<span style="color: #2aa198;">"Launch pdf reader"</span>),
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-orgd93aff7" class="outline-3">
+<h3 id="orgd93aff7"><span class="section-number-3">5.4</span> Multimedia Keys</h3>
+<div class="outline-text-3" id="text-5-4">
+<p>
+By default in a tiling window manager alot of the multimedia keys of your keyboard wont work as intended. These are the keys in the top row of your keyboard which are usually reffered to as f keys. These include volume and brightness control as well as the PrintScreen button (usually denoted as PrtSc) launching my screenshot utility program.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-python">    Key2(<span style="color: #2aa198;">"&lt;XF86AudioRaiseVolume&gt;"</span>, lazy.spawn(<span style="color: #2aa198;">"amixer set Master 5%+ unmute"</span>), desc=<span style="color: #2aa198;">"Raise Volume and unmute if muted"</span>),
+    Key2(<span style="color: #2aa198;">"&lt;XF86AudioLowerVolume&gt;"</span>, lazy.spawn(<span style="color: #2aa198;">"amixer set Master 5%- unmute"</span>), desc=<span style="color: #2aa198;">"Lower Volume and unmute if muted"</span>),
+    Key2(<span style="color: #2aa198;">"&lt;XF86AudioMute&gt;"</span>, lazy.spawn(<span style="color: #2aa198;">"amixer set Master toggle"</span>), desc=<span style="color: #2aa198;">"Mute audio"</span>),
+    Key2(<span style="color: #2aa198;">"&lt;XF86MonBrightnessUp&gt;"</span>, lazy.spawn(<span style="color: #2aa198;">"xbacklight -inc 10"</span>), desc=<span style="color: #2aa198;">"Raise Brightness"</span>),
+    Key2(<span style="color: #2aa198;">"&lt;XF86MonBrightnessDown&gt;"</span>, lazy.spawn(<span style="color: #2aa198;">"xbacklight -dec 10"</span>), desc=<span style="color: #2aa198;">"Lower Brightness"</span>),
+    Key2(<span style="color: #2aa198;">"&lt;Print&gt;"</span>, lazy.spawn(screenshots), desc=<span style="color: #2aa198;">"Screenshot util"</span>),
+]
+</pre>
+</div>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org3241f7e" class="outline-2">
+<h2 id="org3241f7e"><span class="section-number-2">6</span> Workspaces</h2>
+<div class="outline-text-2" id="text-6">
+<p>
+This is where all the workspace magic happens. The first section defines the names of my workspaces. I dont want something big that takes up a significant portion of my bar for the workspace names so they are simply named 1-9.
+</p>
+
+<p>
+I also define the Scratchpad workspace here, a hidden workspace for scratchpad windows. A scratchpad, is esentially a floating windows which disappears when it loses focus. This finds great usability in things like your terminal or music player. I also set up keybindings to launch said programs. When pressed the program appears on your current workspace and when it loses focus it goes back to the Scratchpad workspace.
+</p>
+
+<p>
+I also bind Mod+any number from 1-9 to switch to that workspace and Mod-Shift-(1-9) to move the window with focus to that workspace.
+</p>
+
+<p>
+Lastly, I make the default layout in each workspace but Scratchpad (as Scratchpad isnt visible) to monadtall, which is my favourite layout.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-python"><span style="color: #268bd2;">groups</span> = [
+    ScratchPad(<span style="color: #2aa198;">"scratchpad"</span>, [
+        DropDown(<span style="color: #2aa198;">"music"</span>, <span style="color: #2aa198;">"spotify"</span>, opacity=0.7),
+        DropDown(<span style="color: #2aa198;">"term"</span>, <span style="color: #2aa198;">"alacritty"</span>, opacity=0.7) ]),
+    Group(<span style="color: #2aa198;">"1"</span>),
+    Group(<span style="color: #2aa198;">"2"</span>),
+    Group(<span style="color: #2aa198;">"3"</span>),
+    Group(<span style="color: #2aa198;">"4"</span>),
+    Group(<span style="color: #2aa198;">"5"</span>),
+    Group(<span style="color: #2aa198;">"6"</span>),
+    Group(<span style="color: #2aa198;">"7"</span>),
+    Group(<span style="color: #2aa198;">"8"</span>),
+    Group(<span style="color: #2aa198;">"9"</span>),
+]
+
+<span style="color: #859900; font-weight: bold;">for</span> i <span style="color: #859900; font-weight: bold;">in</span> <span style="color: #2aa198;">"123456789"</span>:
+    keys.extend([
+        <span style="color: #586e75;"># </span><span style="color: #586e75;">mod1 + letter of group = switch to group</span>
+        Key([mod], i, lazy.group[i].toscreen(),
+            desc=<span style="color: #2aa198;">"Switch to group {}"</span>.<span style="color: #839496; font-weight: bold;">format</span>(i)),
+
+        <span style="color: #586e75;"># </span><span style="color: #586e75;">mod1 + shift + letter of group = switch to &amp; move focused window to group</span>
+        Key([mod, <span style="color: #2aa198;">"shift"</span>], i, lazy.window.togroup(i, switch_group=<span style="color: #268bd2; font-weight: bold;">False</span>),
+            desc=<span style="color: #2aa198;">"Switch to &amp; move focused window to group {}"</span>.<span style="color: #839496; font-weight: bold;">format</span>(i)),
+        <span style="color: #586e75;"># </span><span style="color: #586e75;">Or, use below if you prefer not to switch to that group.</span>
+        <span style="color: #586e75;"># </span><span style="color: #586e75;"># mod1 + shift + letter of group = move focused window to group</span>
+        <span style="color: #586e75;"># </span><span style="color: #586e75;">Key2([mod, "shift"], i.name, lazy.window.togroup(i.name),</span>
+        <span style="color: #586e75;">#     </span><span style="color: #586e75;">desc="move focused window to group {}".format(i.name)),</span>
+    ])
+
+keys.extend([Key2(<span style="color: #2aa198;">"M-C-s"</span>, lazy.group[<span style="color: #2aa198;">'scratchpad'</span>].dropdown_toggle(<span style="color: #2aa198;">'music'</span>)),
+             Key2(<span style="color: #2aa198;">"M-S-&lt;Return&gt;"</span>, lazy.group[<span style="color: #2aa198;">'scratchpad'</span>].dropdown_toggle(<span style="color: #2aa198;">'term'</span>)),
+             ]
+            )
+
+<span style="color: #859900; font-weight: bold;">for</span> i <span style="color: #859900; font-weight: bold;">in</span> <span style="color: #839496; font-weight: bold;">range</span>(10):
+    <span style="color: #859900; font-weight: bold;">if</span> i != 0:
+        groups[i]<span style="color: #268bd2;">.layout</span> = <span style="color: #2aa198;">"monadtall"</span>
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-orgfb9a65b" class="outline-2">
+<h2 id="orgfb9a65b"><span class="section-number-2">7</span> Layouts</h2>
+<div class="outline-text-2" id="text-7">
+<p>
+These are all the layouts I could find in the qtile documentation. I only have 4 uncommented as adding too many makes it annoying to switch between them. Also I use this config in a small laptop screen so some layouts could be useful but the windows are too small for my screen.
+</p>
+
+<p>
+MonadTall is my default layout which is the well known master and stack layout used in many tiling window managers. Its behaviour is, 1 window = full screen, 2 windows, split horizontally and every window beyond that, splits vertically with the left window (as mentioned above there is a keybinding to flip this behaviour into vertically spliting the window stack in the right). I also change the border focus colour to a nice tint of blue which fits my solarized theme and the non-focus colour to a dark grey colour because white or black is too intrusive. This last setting applies to every layout of mine, except Max which doesnt have borders.
+</p>
+
+<p>
+Max is the full screen layout of qtile (can also act as tabbed layout if multiple windows are open) which finds usability when I want to have multiple things open in a single workspace but only look at one of them.
+</p>
+
+<p>
+The stack layout is a niche layout which needs a num<sub>stacks</sub> variable defined. This is how many windows are visible in the screen. At num<sub>stacks</sub>=2, its behaviour is the same as monadtall for 2 windows, but every other window, is hidden under one of the two visible windows. This is esentially a layout for split screen but with "tabs" integrated in it. At num<sub>stacks</sub>=1 its identical to max and at num<sub>stacks</sub>&gt;2 it splits the screen in more columns, which for my screen is not usable. Note that, in this layout, as its configured here, a single window open in a workspace will only take up half of it.
+</p>
+
+<p>
+MonadWide is the same as monadtall with the only difference being that 2 windows are split vertically and every ither window splits horizontally with the bottom window.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-python"><span style="color: #586e75;"># </span><span style="color: #586e75;">Layouts</span>
+<span style="color: #268bd2;">layouts</span> = [
+    layout.MonadTall(border_focus = <span style="color: #2aa198;">"#005858"</span>, border_normal = <span style="color: #2aa198;">"#002525"</span>),
+    <span style="color: #586e75;"># </span><span style="color: #586e75;">layout.Columns(),</span>
+    <span style="color: #586e75;"># </span><span style="color: #586e75;">layout.Bsp(),</span>
+    layout.Max(),
+    layout.Stack(num_stacks=2, border_focus = <span style="color: #2aa198;">"#005858"</span>, border_normal = <span style="color: #2aa198;">"#002525"</span>),
+    <span style="color: #586e75;"># </span><span style="color: #586e75;">layout.Matrix(),</span>
+    layout.MonadWide(border_focus = <span style="color: #2aa198;">"#005858"</span>, border_normal = <span style="color: #2aa198;">"#002525"</span>),
+    <span style="color: #586e75;"># </span><span style="color: #586e75;">layout.RatioTile(),</span>
+    <span style="color: #586e75;"># </span><span style="color: #586e75;">layout.Tile(border_focus = "#005858", border_normal = "#002525", border_width ="2"),</span>
+    <span style="color: #586e75;"># </span><span style="color: #586e75;">layout.TreeTab(),</span>
+    <span style="color: #586e75;"># </span><span style="color: #586e75;">layout.VerticalTile(),</span>
+    <span style="color: #586e75;"># </span><span style="color: #586e75;">layout.Zoomy(),</span>
+]
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org6b046ca" class="outline-2">
+<h2 id="org6b046ca"><span class="section-number-2">8</span> Qtile Bar</h2>
+<div class="outline-text-2" id="text-8">
+<div class="org-src-container">
+<pre class="src src-python"><span style="color: #268bd2;">widget_defaults</span> = <span style="color: #839496; font-weight: bold;">dict</span>(
+    font=<span style="color: #2aa198;">'sans'</span>,
+    fontsize=11,
+    padding=2,
+    background=<span style="color: #2aa198;">"#073642"</span>,
+    foreground=<span style="color: #2aa198;">"#fdf6e3"</span>,
+)
+<span style="color: #268bd2;">extension_defaults</span> = widget_defaults.copy()
+
+<span style="color: #268bd2;">screens</span> = [
+    Screen(
+        bottom=bar.Bar(
+            [
+                widget.CurrentLayout(background=<span style="color: #2aa198;">"074231"</span>),
+                widget.Sep(foreground=<span style="color: #2aa198;">"#421307"</span>, size_percent=100),
+                widget.GroupBox(),
+                widget.Prompt(),
+                widget.WindowName(),
+                widget.Sep(foreground=<span style="color: #2aa198;">"#421307"</span>, size_percent=100),
+                widget.TextBox(<span style="color: #2aa198;">"RAM: "</span>, background=<span style="color: #2aa198;">"#074231"</span>),
+                widget.Memory(background=<span style="color: #2aa198;">"#074231"</span>),
+                widget.TextBox(<span style="color: #2aa198;">","</span>, background=<span style="color: #2aa198;">"#074231"</span>),
+                widget.CPU(background=<span style="color: #2aa198;">"#074231"</span>),
+                widget.TextBox(<span style="color: #2aa198;">"Volume: "</span>, background=<span style="color: #2aa198;">"071942"</span>),
+                widget.PulseVolume(background=<span style="color: #2aa198;">"071942"</span>),
+                widget.TextBox(<span style="color: #2aa198;">"Battery: "</span>, background=<span style="color: #2aa198;">"#074231"</span>),
+                widget.Battery(low_percentage = 0.2,
+                               notify_below = 0.15,
+                               update_interval = 30,
+                               discharge_char = <span style="color: #2aa198;">'&#8595;'</span>,
+                               charge_char = <span style="color: #2aa198;">'&#8593;'</span>,
+                               background=<span style="color: #2aa198;">"#074231"</span>,
+                               ),
+                widget.TextBox(<span style="color: #2aa198;">""</span>, background=<span style="color: #2aa198;">"071942"</span>),
+                widget.Clock(<span style="color: #839496; font-weight: bold;">format</span>=<span style="color: #2aa198;">'%a %d-%m-%Y %I:%M %p'</span>, background=<span style="color: #2aa198;">"071942"</span>),
+                widget.Sep(foreground=<span style="color: #2aa198;">"#421307"</span>, size_percent=100),
+                widget.Systray(),
+            ],
+            24,
+        ),
+    ),
+]
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-orgdbd4a08" class="outline-2">
+<h2 id="orgdbd4a08"><span class="section-number-2">9</span> Floating Windows</h2>
+<div class="outline-text-2" id="text-9">
+<p>
+Some settings for floating windows on moving and resizing them and which things to consider floating windows. This was already the default behaviour of the qtile window manager and I didnt feel the need to change them as they work very well for the most part.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-python"><span style="color: #268bd2;">mouse</span> = [
+    Drag([mod], <span style="color: #2aa198;">"Button1"</span>, lazy.window.set_position_floating(),
+         start=lazy.window.get_position()),
+    Drag([mod], <span style="color: #2aa198;">"Button3"</span>, lazy.window.set_size_floating(),
+         start=lazy.window.get_size()),
+    Click([mod], <span style="color: #2aa198;">"Button2"</span>, lazy.window.bring_to_front())
+]
+
+<span style="color: #268bd2;">floating_layout</span> = layout.Floating(float_rules=[
+    <span style="color: #586e75;"># </span><span style="color: #586e75;">Run the utility of `xprop` to see the wm class and name of an X client.</span>
+    {<span style="color: #2aa198;">'wmclass'</span>: <span style="color: #2aa198;">'confirm'</span>},
+    {<span style="color: #2aa198;">'wmclass'</span>: <span style="color: #2aa198;">'dialog'</span>},
+    {<span style="color: #2aa198;">'wmclass'</span>: <span style="color: #2aa198;">'download'</span>},
+    {<span style="color: #2aa198;">'wmclass'</span>: <span style="color: #2aa198;">'error'</span>},
+    {<span style="color: #2aa198;">'wmclass'</span>: <span style="color: #2aa198;">'file_progress'</span>},
+    {<span style="color: #2aa198;">'wmclass'</span>: <span style="color: #2aa198;">'notification'</span>},
+    {<span style="color: #2aa198;">'wmclass'</span>: <span style="color: #2aa198;">'splash'</span>},
+    {<span style="color: #2aa198;">'wmclass'</span>: <span style="color: #2aa198;">'toolbar'</span>},
+    {<span style="color: #2aa198;">'wmclass'</span>: <span style="color: #2aa198;">'confirmreset'</span>},  <span style="color: #586e75;"># </span><span style="color: #586e75;">gitk</span>
+    {<span style="color: #2aa198;">'wmclass'</span>: <span style="color: #2aa198;">'makebranch'</span>},  <span style="color: #586e75;"># </span><span style="color: #586e75;">gitk</span>
+    {<span style="color: #2aa198;">'wmclass'</span>: <span style="color: #2aa198;">'maketag'</span>},  <span style="color: #586e75;"># </span><span style="color: #586e75;">gitk</span>
+    {<span style="color: #2aa198;">'wname'</span>: <span style="color: #2aa198;">'branchdialog'</span>},  <span style="color: #586e75;"># </span><span style="color: #586e75;">gitk</span>
+    {<span style="color: #2aa198;">'wname'</span>: <span style="color: #2aa198;">'pinentry'</span>},  <span style="color: #586e75;"># </span><span style="color: #586e75;">GPG key password entry</span>
+    {<span style="color: #2aa198;">'wmclass'</span>: <span style="color: #2aa198;">'ssh-askpass'</span>},  <span style="color: #586e75;"># </span><span style="color: #586e75;">ssh-askpass</span>
+])
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-orgae93be8" class="outline-2">
+<h2 id="orgae93be8"><span class="section-number-2">10</span> Others</h2>
+<div class="outline-text-2" id="text-10">
+<p>
+Some other things inside the default qtile config. I havent played around with any of them and didnt know where inside the config to fit them.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-python"><span style="color: #268bd2;">dgroups_key_binder</span> = <span style="color: #268bd2; font-weight: bold;">None</span>
+<span style="color: #268bd2;">dgroups_app_rules</span> = []  <span style="color: #586e75;"># </span><span style="color: #586e75;">type: List</span>
+<span style="color: #268bd2;">main</span> = <span style="color: #268bd2; font-weight: bold;">None</span>  <span style="color: #586e75;"># </span><span style="color: #586e75;">WARNING: this is deprecated and will be removed soon</span>
+<span style="color: #268bd2;">follow_mouse_focus</span> = <span style="color: #268bd2; font-weight: bold;">True</span>
+<span style="color: #268bd2;">bring_front_click</span> = <span style="color: #268bd2; font-weight: bold;">False</span>
+<span style="color: #268bd2;">cursor_warp</span> = <span style="color: #268bd2; font-weight: bold;">False</span>
+<span style="color: #268bd2;">auto_fullscreen</span> = <span style="color: #268bd2; font-weight: bold;">True</span>
+<span style="color: #268bd2;">focus_on_window_activation</span> = <span style="color: #2aa198;">"smart"</span>
+
+<span style="color: #586e75;"># </span><span style="color: #586e75;">XXX: Gasp! We're lying here. In fact, nobody really uses or cares about this</span>
+<span style="color: #586e75;"># </span><span style="color: #586e75;">string besides java UI toolkits; you can see several discussions on the</span>
+<span style="color: #586e75;"># </span><span style="color: #586e75;">mailing lists, GitHub issues, and other WM documentation that suggest setting</span>
+<span style="color: #586e75;"># </span><span style="color: #586e75;">this string if your java app doesn't work correctly. We may as well just lie</span>
+<span style="color: #586e75;"># </span><span style="color: #586e75;">and say that we're a working one by default.</span>
+<span style="color: #586e75;">#</span>
+<span style="color: #586e75;"># </span><span style="color: #586e75;">We choose LG3D to maximize irony: it is a 3D non-reparenting WM written in</span>
+<span style="color: #586e75;"># </span><span style="color: #586e75;">java that happens to be on java's whitelist.</span>
+<span style="color: #268bd2;">wmname</span> = <span style="color: #2aa198;">"LG3D"</span>
+</pre>
+</div>
+</div>
+</div>
+</div>
+<div id="postamble" class="status">
+<p class="author">Author: Vidianos</p>
+<p class="date">Created: 2020-11-08 Κυρ 19:32</p>
+<p class="validation"><a href="http://validator.w3.org/check?uri=referer">Validate</a></p>
+</div>
+</body>
+</html>

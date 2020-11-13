@@ -1,0 +1,9 @@
+#!/bin/sh
+
+echo For how many minutes?
+read MINS
+
+SECS=$(( $MINS * 60 ))
+TIME=$(( $SECS * 100))
+
+xdotool click --repeat $TIME --delay 10 3

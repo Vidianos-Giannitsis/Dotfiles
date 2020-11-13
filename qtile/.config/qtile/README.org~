@@ -1,0 +1,347 @@
+#+TITLE: Literate Qtile Config
+#+PROPERTY: header-args :tangle config.py 
+#+STARTUP: showeverything
+#+INFOJS_OPT: view:t toc:t ltoc:t mouse:underline buttons:0 path:http://thomasf.github.io/solarized-css/org-info.min.js
+#+HTML_HEAD: <link rel="stylesheet" type="text/css" href="http://thomasf.github.io/solarized-css/solarized-dark.min.css" />
+
+* About this config
+Welcome to my literate qtile config. This was written in Emacs's org-mode with the purpose of documentating my configuration better than comments can. 
+
+Feel free to use any part you like in your own qtile configuration, for that is the reason for uploading this.
+
+* Imports
+Not much to say here, importing some necessary packages for qtile to have all the functionality I want. Some were here by default, while I added some others.
+
+#+BEGIN_SRC python
+from libqtile.command import lazy
+from typing import List  # noqa: F401
+from libqtile import bar, layout, widget, hook
+from libqtile.config import Click, Drag, Group, Screen, Key, Match, Rule, ScratchPad, DropDown
+from libqtile.config import EzKey as Key2
+from libqtile.lazy import lazy
+from libqtile.utils import guess_terminal
+import os
+import subprocess
+#+END_SRC
+
+* Variables
+Here I define some variables, which are some of my programs. 
+Defining them here helps if I want to use them in multiple locations of my config file or am not sure if I want to keep them. 
+
+For example, I switch browsers often and I want the ability to open both a minimal browser and a fully featured "bloated" browser. So for this, this kind of setup works great.
+
+#+BEGIN_SRC python
+mod = "mod4"
+terminal = guess_terminal()
+editor = "emacs"
+min_browser = "qutebrowser"
+full_browser = "firefox-nightly"
+office = "libreoffice"
+file_manager = "thunar" # I mostly use dired inside emacs for file management, but this exists as a gui file manager in case I need it
+music_player = "spotify"
+calculator = "qalculate-gtk"
+pdf_reader = "zathura"
+screenshots = "flameshot gui"
+#+END_SRC
+
+* Hooks
+Defining two hooks I want for my config. The first is my autostart script (you can find it inside of this repo) which I want to be called the first time I login to qtile. It launches things like network manager and picom.
+
+The second hook is my favourite calculator program "Qalculate". I really find it inefficient to tile that specific window so I always set it to float when launched.
+
+#+BEGIN_SRC python
+@hook.subscribe.startup_once
+def autostart():
+    home = os.path.expanduser('~/.config/qtile/autostart.sh')
+    subprocess.call([home])
+
+@hook.subscribe.client_new
+def floating_calc(c):
+    if c.name == "Qalculate!":
+        c.toggle_floating()
+#+END_SRC
+
+* Keybindings
+My keybindings. This and the qtile bar are the two places that this config deviates itself the most from other (or the default) qtile config. These are easy to remember for me and what I consider suits my workflow the best. 
+
+A lot of them use one or more modifier keys (Mod, Control, Shift, Alt) and the first letter of the word they describe so they are easily memorable. 
+
+Note that I dont use the typical Key function but the Key2 function which (as can be seen in the Imports section of the config) is from the EzKey package I have imported. This allows me to enter my keybindings in this Emacs-like format which I like and find to be the best and fastest way to describe the keybinding. "M" is the Mod key, aka Super, or Windows key. "A" is the alt key, "C", the Control key, "S" the shift key, <Return> is Enter and the rest are probably self explanatory.
+
+Lastly, every keybinding has a description section to explain what it does.
+
+** Layout manipulation
+This section is all about the ways you can manipulate your current layout, some work in every layout while others are specifically for a layout. For which layouts I have enabled and what each layout is, refer to the Layouts section of this config file.
+
++ The first group of keybindings is about moving focus around your windows (which is done with M-the vim motion keys).
++ Then is moving windows around the screen, or changing the visible window of a stack in the stack layout of qtile (with M-A-the vim motion keys)
++ Next section is for changing the focus between the two windows visible in the stack layout or changing their position in the screen
++ After that are some keybindings for the master&stack layout known from many window managers (known as monadtall/monadwide in qtile depending on if the original split is vertical or horizontal). These are increasing and decreasing the size of the window with focus, setting it back to 50-50 (docs say this is how its done but I cant really get this part working, have kept it in the config though), maximizing the size of the window with focus (makes the other window very small, but useful if the other window is sth you can use even if its really small) and flipping the layout (puts the master window in the other side of the screen, by dfault its on the left)
++ Lastly is the keybinding for switching between layouts which is M-Tab
+#+BEGIN_SRC python
+keys = [
+    Key2("M-k", lazy.layout.down(),
+        desc="Move focus down in stack pane"),
+    Key2("M-j", lazy.layout.up(),
+        desc="Move focus up in stack pane"),
+    Key2("M-h", lazy.layout.left(),
+         desc="Move focus left in stack pane"),
+    Key2("M-l", lazy.layout.left(),
+         desc="Move focus right in stack pane"),
+
+    Key2("M-A-k", lazy.layout.shuffle_down(),
+        desc="Move window down in current stack "),
+    Key2("M-A-j", lazy.layout.shuffle_up(),
+        desc="Move window up in current stack "),
+    Key2("M-A-h", lazy.layout.shuffle_left(),
+        desc="Move window left in current stack "),
+    Key2("M-A-l", lazy.layout.shuffle_right(),
+        desc="Move window right in current stack "),
+
+    Key2("M-<space>", lazy.layout.next(),
+        desc="Switch window focus to other pane(s) of stack"),
+    Key2("M-S-<space>", lazy.layout.rotate(),
+        desc="Swap panes of split stack"),
+
+    Key2("M-i", lazy.layout.grow()),
+    Key2("M-d", lazy.layout.shrink()),
+    Key2("M-n", lazy.layout.normalize()),
+    Key2("M-m", lazy.layout.maximize()),
+    Key2("M-f", lazy.layout.flip()),
+    
+    Key2("M-<Tab>", lazy.next_layout(), desc="Toggle between layouts"),
+#+END_SRC
+
+** Window and window manager manipulation
+Fairly simple section for making a window floating (a window also becomes floating when you move it with M-mouse left click), killing the focused window, killing the window manager which puts you back to your computers login manager (something like LightDM) and restarting qtile in-place which is mostly useful when hacking on qtile as for changes to take place you need to restart. 
+
+#+BEGIN_SRC python
+    Key2("M-S-f", lazy.window.toggle_floating, desc="Toggle Floating"),
+    Key2("M-C-x", lazy.window.kill(), desc="Kill focused window"),
+    Key2("M-S-r", lazy.restart(), desc="Restart qtile"),
+    Key2("M-S-e", lazy.shutdown(), desc="Shutdown qtile"),
+#+END_SRC
+
+** My favourite programs
+In this subsection of my keybindings, I define all the keybindings needed to launch my favourite programs.
+
+Some notes about them are:
++ Most of them are bound as M-C-the first letter of the program I want to launch. Or if there is already a program in that letter, I use M-S-that letter
++ Terminal is bound to M-<Return> because its a good keybinding and its what almost every twm user has for their terminal
++ I currently use Qtile's built in prompt for a run prompt. Dmenu or rofi is probably better but I dont use them that often as I consider it more efficient to bind my favourite programs to specific keybindings.
++ For those that dont have a name in quotes but a variable, refer to the Variables section of this config for which program they are
+
+#+BEGIN_SRC python
+    Key2("M-<Return>", lazy.spawn(terminal), desc="Launch terminal"),
+    Key2("M-r", lazy.spawncmd(),
+        desc="Spawn a command using a prompt widget"),
+    Key2("M-S-b", lazy.spawn(min_browser), desc="Launch minimal browser"),
+    Key2("M-C-b", lazy.spawn(full_browser), desc="Launch full browser"),
+    Key2("M-C-f", lazy.spawn(file_manager), desc="Launch file manager"),
+    Key2("M-C-e", lazy.spawn(editor), desc="Launch Emacs"),
+    # Key2("M-C-s", lazy.spawn(music_player), desc="Play some music"),
+    Key2("M-C-l", lazy.spawn(office), desc="Launch an office suite"),
+    Key2("M-S-l", lazy.spawn("lutris"), desc="Launch lutris"),
+    Key2("M-S-s", lazy.spawn("steam"), desc="Launch steam"),
+    Key2("M-C-d", lazy.spawn("discord"), desc="Launch discord"),
+    Key2("M-C-o", lazy.spawn("octave --gui"), desc="Launch octave"),
+    Key2("M-C-c", lazy.spawn(calculator), desc="Launch calculator"),
+    Key2("M-C-t", lazy.spawn("thunderbird"), desc="Launch email client"),
+    Key2("M-C-a", lazy.spawn("pavucontrol"), desc="Launch audio control"),
+    Key2("M-C-g", lazy.spawn("geogebra"), desc="Launch geogebra"),
+    Key2("M-C-i", lazy.spawn("inkscape"), desc="Launch inkscape"),
+    Key2("M-C-z", lazy.spawn(pdf_reader), desc="Launch pdf reader"),
+#+END_SRC
+
+** Multimedia Keys
+By default in a tiling window manager alot of the multimedia keys of your keyboard wont work as intended. These are the keys in the top row of your keyboard which are usually reffered to as f keys. These include volume and brightness control as well as the PrintScreen button (usually denoted as PrtSc) launching my screenshot utility program.
+
+#+BEGIN_SRC python
+    Key2("<XF86AudioRaiseVolume>", lazy.spawn("amixer set Master 5%+ unmute"), desc="Raise Volume and unmute if muted"),
+    Key2("<XF86AudioLowerVolume>", lazy.spawn("amixer set Master 5%- unmute"), desc="Lower Volume and unmute if muted"),
+    Key2("<XF86AudioMute>", lazy.spawn("amixer set Master toggle"), desc="Mute audio"),
+    Key2("<XF86MonBrightnessUp>", lazy.spawn("xbacklight -inc 10"), desc="Raise Brightness"),
+    Key2("<XF86MonBrightnessDown>", lazy.spawn("xbacklight -dec 10"), desc="Lower Brightness"),
+    Key2("<Print>", lazy.spawn(screenshots), desc="Screenshot util"),
+]
+#+END_SRC
+
+* Workspaces
+This is where all the workspace magic happens. The first section defines the names of my workspaces. I dont want something big that takes up a significant portion of my bar for the workspace names so they are simply named 1-9.
+
+I also define the Scratchpad workspace here, a hidden workspace for scratchpad windows. A scratchpad, is esentially a floating windows which disappears when it loses focus. This finds great usability in things like your terminal or music player. I also set up keybindings to launch said programs. When pressed the program appears on your current workspace and when it loses focus it goes back to the Scratchpad workspace.
+
+I also bind Mod+any number from 1-9 to switch to that workspace and Mod-Shift-(1-9) to move the window with focus to that workspace.
+
+Lastly, I make the default layout in each workspace but Scratchpad (as Scratchpad isnt visible) to monadtall, which is my favourite layout.
+
+#+BEGIN_SRC python
+groups = [
+    ScratchPad("scratchpad", [
+        DropDown("music", "spotify", opacity=0.7),
+        DropDown("term", "alacritty", opacity=0.7) ]),
+    Group("1"),
+    Group("2"),
+    Group("3"),
+    Group("4"),
+    Group("5"),
+    Group("6"),
+    Group("7"),
+    Group("8"),
+    Group("9"),
+]
+
+for i in "123456789":
+    keys.extend([
+        Key([mod], i, lazy.group[i].toscreen(),
+            desc="Switch to group {}".format(i)),
+
+        Key([mod, "shift"], i, lazy.window.togroup(i, switch_group=False),
+            desc="Switch to & move focused window to group {}".format(i)),
+           ])
+
+keys.extend([Key2("M-C-s", lazy.group['scratchpad'].dropdown_toggle('music')),
+             Key2("M-S-<Return>", lazy.group['scratchpad'].dropdown_toggle('term')),
+             ]
+            )
+
+for i in range(10):
+    if i != 0:
+        groups[i].layout = "monadtall"
+#+END_SRC
+
+* Layouts
+These are all the layouts I could find in the qtile documentation. I only have 4 uncommented as adding too many makes it annoying to switch between them. Also I use this config in a small laptop screen so some layouts could be useful but the windows are too small for my screen.
+
+MonadTall is my default layout which is the well known master and stack layout used in many tiling window managers. Its behaviour is, 1 window = full screen, 2 windows, split horizontally and every window beyond that, splits vertically with the left window (as mentioned above there is a keybinding to flip this behaviour into vertically spliting the window stack in the right). I also change the border focus colour to a nice tint of blue which fits my solarized theme and the non-focus colour to a dark grey colour because white or black is too intrusive. This last setting applies to every layout of mine, except Max which doesnt have borders.
+
+Max is the full screen layout of qtile (can also act as tabbed layout if multiple windows are open) which finds usability when I want to have multiple things open in a single workspace but only look at one of them.
+
+The stack layout is a niche layout which needs a num_stacks variable defined. This is how many windows are visible in the screen. At num_stacks=2, its behaviour is the same as monadtall for 2 windows, but every other window, is hidden under one of the two visible windows. This is esentially a layout for split screen but with "tabs" integrated in it. At num_stacks=1 its identical to max and at num_stacks>2 it splits the screen in more columns, which for my screen is not usable. Note that, in this layout, as its configured here, a single window open in a workspace will only take up half of it.
+
+MonadWide is the same as monadtall with the only difference being that 2 windows are split vertically and every ither window splits horizontally with the bottom window.
+  
+#+BEGIN_SRC python
+# Layouts
+layouts = [
+    layout.MonadTall(border_focus = "#005858", border_normal = "#002525"),
+    # layout.Columns(),
+    # layout.Bsp(),
+    layout.Max(),
+    layout.Stack(num_stacks=2, border_focus = "#005858", border_normal = "#002525"),
+    # layout.Matrix(),
+    layout.MonadWide(border_focus = "#005858", border_normal = "#002525"),
+    # layout.RatioTile(),
+    # layout.Tile(border_focus = "#005858", border_normal = "#002525", border_width ="2"),
+    # layout.TreeTab(),
+    # layout.VerticalTile(),
+    # layout.Zoomy(),
+]
+#+END_SRC
+
+* Qtile Bar
+This is my configuration, for the qtile bar, which I would say is my favourite part of this qtile config. First thing I set is the font, fontsize, padding and background/foreground colour. The background color is based on solarized-dark, which is the theme I use in all my programs. Building off that colour, I found two complementary colours for it (one green and one blue) and I alternate between them for my different widgets and I put brown seperators, around them and the rest of the bar. This adds more colour to the bar and gives it a nice effect which I really like.
+
+On the left side of the bar, I have the Current Layout for qtile in green and then my workspace list and then the program I have open which have the default background colour. 
+
+On the right side of the bar, I have RAM and CPU usage, which combining textboxes and their outputs I made into one widget seemingly, the current volume of the laptop, its battery and the current date and time. Lastly, on the far right is my systray which stores things like network-manager and other things that stay in the systray upon opening (ex. Discord or flameshot). The battery specifically, displays an up arrow when recharging, a down arrow when discharging and its text turns red when under 20% to notify that the battery is low.
+
+#+BEGIN_SRC python
+widget_defaults = dict(
+    font='sans',
+    fontsize=11,
+    padding=2,
+    background="#073642",
+    foreground="#fdf6e3",
+)
+extension_defaults = widget_defaults.copy()
+
+screens = [
+    Screen(
+        bottom=bar.Bar(
+            [
+                widget.CurrentLayout(background="074231"),
+                widget.Sep(foreground="#421307", size_percent=100),
+                widget.GroupBox(),
+                widget.Prompt(),
+                widget.WindowName(),
+                widget.Sep(foreground="#421307", size_percent=100),
+                widget.TextBox("RAM: ", background="#074231"),
+                widget.Memory(background="#074231"),
+                widget.TextBox(",", background="#074231"),
+                widget.CPU(background="#074231"),
+                widget.TextBox("Volume: ", background="071942"),
+                widget.PulseVolume(background="071942"),
+                widget.TextBox("Battery: ", background="#074231"),
+                widget.Battery(low_percentage = 0.2,
+                               notify_below = 0.15,
+                               update_interval = 30,
+                               discharge_char = '↓',
+                               charge_char = '↑',
+                               background="#074231",
+                               ),
+                widget.TextBox("", background="071942"),
+                widget.Clock(format='%a %d-%m-%Y %I:%M %p', background="071942"),
+                widget.Sep(foreground="#421307", size_percent=100),
+                widget.Systray(),
+            ],
+            24,
+        ),
+    ),
+]
+#+END_SRC
+
+* Floating Windows
+Some settings for floating windows on moving and resizing them and which things to consider floating windows. This was already the default behaviour of the qtile window manager and I didnt feel the need to change them as they work very well for the most part.
+
+#+BEGIN_SRC python
+mouse = [
+    Drag([mod], "Button1", lazy.window.set_position_floating(),
+         start=lazy.window.get_position()),
+    Drag([mod], "Button3", lazy.window.set_size_floating(),
+         start=lazy.window.get_size()),
+    Click([mod], "Button2", lazy.window.bring_to_front())
+]
+
+floating_layout = layout.Floating(float_rules=[
+    # Run the utility of `xprop` to see the wm class and name of an X client.
+    {'wmclass': 'confirm'},
+    {'wmclass': 'dialog'},
+    {'wmclass': 'download'},
+    {'wmclass': 'error'},
+    {'wmclass': 'file_progress'},
+    {'wmclass': 'notification'},
+    {'wmclass': 'splash'},
+    {'wmclass': 'toolbar'},
+    {'wmclass': 'confirmreset'},  # gitk
+    {'wmclass': 'makebranch'},  # gitk
+    {'wmclass': 'maketag'},  # gitk
+    {'wname': 'branchdialog'},  # gitk
+    {'wname': 'pinentry'},  # GPG key password entry
+    {'wmclass': 'ssh-askpass'},  # ssh-askpass
+])
+#+END_SRC
+
+* Others
+Some other things inside the default qtile config. I havent played around with any of them and didnt know where inside the config to fit them.
+
+#+BEGIN_SRC python
+dgroups_key_binder = None
+dgroups_app_rules = []  # type: List
+main = None  # WARNING: this is deprecated and will be removed soon
+follow_mouse_focus = True
+bring_front_click = False
+cursor_warp = False
+auto_fullscreen = True
+focus_on_window_activation = "smart"
+
+# XXX: Gasp! We're lying here. In fact, nobody really uses or cares about this
+# string besides java UI toolkits; you can see several discussions on the
+# mailing lists, GitHub issues, and other WM documentation that suggest setting
+# this string if your java app doesn't work correctly. We may as well just lie
+# and say that we're a working one by default.
+#
+# We choose LG3D to maximize irony: it is a 3D non-reparenting WM written in
+# java that happens to be on java's whitelist.
+wmname = "LG3D"
+#+END_SRC
