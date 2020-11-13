@@ -48,6 +48,6 @@ For the rest refer to Emacs's README, have fun!
    While not a dotfile in the general sense, I have some configurations for brave which I want in this repository. Inside the "brave" folder, there is the configuration for my brave start page. By default, Brave wont allow you to change the start page, but by using the Custom New Tab URL addon for chromium browsers and linking to the html file inside that folder, that file will become your new start page.
 
    The start page is a customised version of the start page inside this github repo [[https://github.com/0-Tikaro/minimum-viable-startpage]] personalised for me. It looks like this
-   [[~/Pictures/Ricing/start_page.png]]
+   [[~/dotfiles/start_page.png]]
 
    Outside of this, I use Vimium and Darkreader for Chromium plugins and it matches my GTK theme for coloring outside of that.
