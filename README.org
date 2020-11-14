@@ -7,8 +7,10 @@ Welcome to my dotfile repository. This was made both for me to use as a backup f
 
 For anyone wondering, I manage my dotfiles using GNU Stow, and write all my READMEs in Emacs's Org-mode (like the file you are reading right now :D). This is the simplest way I have found for doing this.
 
+To start using any of my configurations you need to git clone it to an empty directory, and then from inside that directory, run "stow name_of_file" and it will neatly create a symlink to the directory needed which should work perfectly (DISCLAIMER: MAKE SURE TO BACKUP YOUR CURRENT CONFIG). Else, feel free, to only copy the parts you want, thats what I would do as well, as I like my config to be personalised. 
+
 * Structure
-I currently have 8 directories in this git repository as these are the programs I consider configured enough to be worth of putting here. They are explained below.
+Below, is an explanation of every directory inside the repo.
 
 I only have specific READMEs for i3, qtile and emacs (the latter two being literate config files of those programs) as the others dont need much of a description. Everything you need for them is explained in this file.
 
