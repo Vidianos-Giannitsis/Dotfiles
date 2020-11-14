@@ -28,7 +28,7 @@ const MASTER_MAP = [
             {"name": "Messenger", "shortcutKey": "M", "url": "https://www.messenger.com/t/2063582460419421"},
 	    {"name": "Twitch", "shortcutKey": "t", "url": "https://www.twitch.tv/"},
 	    {"name": "Youtube", "shortcutKey": "y", "url": "https://www.youtube.com/"},
- 
+	    {"name": "Github Repos", "shortcutKey": "g", "url": "https://github.com/AuroraDragoon"},
             {"name": "Instagram", "shortcutKey": "i", "url": "https://www.instagram.com/"}
         ]
     },
