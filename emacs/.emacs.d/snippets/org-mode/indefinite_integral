@@ -1,0 +1,5 @@
+# -*- mode: snippet -*-
+# name: indefinite_integral
+# key: iint
+# --
+\int dx

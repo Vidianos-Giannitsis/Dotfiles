@@ -1,0 +1,7 @@
+# -*- mode: snippet -*-
+# name: greek_latex
+# key: glatex
+# --
+#+LATEX_HEADER: \usepackage[LGR, T1]{fontenc}
+#+LATEX_HEADER: \usepackage[greek, english]{babel}
+#+LATEX_HEADER: \usepackage{alphabeta}

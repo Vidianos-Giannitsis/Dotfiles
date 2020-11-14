@@ -1,0 +1,7 @@
+# -*- mode: snippet -*-
+# name: equation
+# key: equation
+# --
+\begin{equation}
+
+\end{equation}

@@ -1,0 +1,5 @@
+# -*- mode: snippet -*-
+# name: balance_arrow
+# key: ba
+# --
+$\rightleftharpoons$

@@ -1,0 +1,5 @@
+# -*- mode: snippet -*-
+# name: celsius_degree
+# key: ^C
+# --
+^{o}C

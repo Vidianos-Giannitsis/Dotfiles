@@ -1,0 +1,5 @@
+# -*- mode: snippet -*-
+# name: spacing
+# key: s
+# --
+\newline \medskip

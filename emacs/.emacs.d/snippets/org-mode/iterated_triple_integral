@@ -1,0 +1,5 @@
+# -*- mode: snippet -*-
+# name: iterated_triple_integral
+# key: itint
+# --
+$\int_{}^{} \int_{}^{} \int_{}^{} f(x,y,z) \,dx\,dy\,dz$

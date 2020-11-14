@@ -1,0 +1,7 @@
+# -*- mode: snippet -*-
+# name: source code
+# key: \s
+# --
+#+BEGIN_SRC
+
+#+END_SRC

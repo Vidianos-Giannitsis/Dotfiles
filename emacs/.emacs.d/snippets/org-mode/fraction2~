@@ -1,0 +1,5 @@
+# -*- mode: snippet -*-
+# name: fraction2
+# key: fr
+# --
+\fraction{}{}

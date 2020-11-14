@@ -1,0 +1,5 @@
+# -*- mode: snippet -*-
+# name: line_integral
+# key: lint
+# --
+$\oint_D f \,ds$

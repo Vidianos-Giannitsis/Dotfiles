@@ -1,0 +1,2 @@
+;;; Generated package description from /home/vidianos/.emacs.d/elpa/org-pdftools-20200929.2241/org-pdftools.el  -*- no-byte-compile: t -*-
+(define-package "org-pdftools" "20200929.2241" "Support for links to documents in pdfview mode" '((emacs "26.1") (org "9.3.6") (pdf-tools "0.8") (org-noter "1.4.1")) :commit "3c2b9a413eb841c781cfb49d8c343bf07aa0ad1f" :keywords '("convenience") :authors '(("Alexander Fu Xi" . "fuxialexander@gmail.com")) :maintainer '("Alexander Fu Xi" . "fuxialexnader@gmail.com") :url "https://github.com/fuxialexander/org-pdftools")

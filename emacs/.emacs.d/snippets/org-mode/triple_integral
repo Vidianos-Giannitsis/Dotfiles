@@ -1,0 +1,5 @@
+# -*- mode: snippet -*-
+# name: triple_integral
+# key: tint
+# --
+$\iiint_V  \,dx\,dy\,dz$

@@ -1,0 +1,5 @@
+# -*- mode: snippet -*-
+# name: nested_fraction
+# key: //
+# --
+\[ \frac{}{} \]

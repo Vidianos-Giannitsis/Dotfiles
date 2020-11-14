@@ -1,0 +1,5 @@
+# -*- mode: snippet -*-
+# name: iterated_double_integral
+# key: idint
+# --
+$\int_{}^{} \int_{}^{} f(x,y) \,dx\,dy$

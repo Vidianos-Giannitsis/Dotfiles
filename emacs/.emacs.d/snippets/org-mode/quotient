@@ -1,0 +1,5 @@
+# -*- mode: snippet -*-
+# name: quotient
+# key: \Q
+# --
+$\mathbb{Q}$

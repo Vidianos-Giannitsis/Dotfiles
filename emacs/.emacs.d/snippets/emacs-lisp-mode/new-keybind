@@ -1,0 +1,5 @@
+# -*- mode: snippet -*-
+# name: new-keybind
+# key: set-key
+# --
+(global-set-key (kbd "") ')
