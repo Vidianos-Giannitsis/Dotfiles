@@ -11,6 +11,9 @@ This is still very much a work in progress project, but its in a pretty usable s
 
 Note that I know little to no elisp, so some things are probably not done in the most efficient way possible, but everything I have set has its desired behaviour, which is enough for me.
 
+This is how my Emacs currently looks, and because I didnt know what file to screenshot, have my qtile bar's config
+[[https://github.com/AuroraDragoon/Dotfiles/blob/master/screenshots/python_environment.png]]
+
 I hope you will find something useful here that you can put to your emacs config as well. Enjoy!!
 
 * Packages
@@ -121,6 +124,10 @@ Configuration for PDF-tools, my favourite built-in Emacs pdf viewer. I set it as
   (add-hook 'pdf-view-mode-hook 'pdf-view-midnight-minor-mode)
 #+END_SRC
 
+And after these changes, my emacs pdf-viewer looks like this (its very similar to the look of my current zathura config, but thats kind of the point).
+P.S. Of course its the same exact pdf as in my zathura screenshot, you might even think its the same picture :D
+[[https://github.com/AuroraDragoon/Dotfiles/blob/master/screenshots/pdf_view.png]]
+
 * Org-mode
 Some settings I want for Emacs's Org-mode which I use extensively (like for writing this literate config file). 
 It adds:
@@ -189,6 +196,9 @@ I have configured it to include:
   :hook (dired-mode . dired-hide-dotfiles-mode))
 
 #+END_SRC
+
+This is how Dired ends up looking after these changes
+[[https://github.com/AuroraDragoon/Dotfiles/blob/master/screenshots/dired.png]]
 
 * Keybindings
 This is all the keybindings I have set for my personal config. Below is a table explaining them. When the keys are seperated with a space, you need to press one after the other while in the rest you press all the keys together. Space is set as my leader key so most of my keybindings start with it. This is heavily influenced by the way spacemacs does it because I used spacemacs before this and I liked the idea. But, since it only has a few keybindings they are simpler.
