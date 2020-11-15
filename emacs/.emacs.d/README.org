@@ -225,6 +225,7 @@ This is all the keybindings I have set for my personal config. Below is a table 
 | Space b     | Open the menu to switch buffers from all files open inside emacs                                                                                   |
 | Space n     | Opens org-noter, my favourite tool for notetaking                                                                                                  |
 | M-t         | Opens my todo file. Inside it I store the current projects I have in mind. Useful to have keybinded as I use it a lot                              |
+| Space l     | Makes latex fragments inside org render as pictures showing the equation                                                                     |
 
 
 #+BEGIN_SRC elisp
@@ -243,7 +244,8 @@ This is all the keybindings I have set for my personal config. Below is a table 
     "T" 'org-babel-tangle
     "RET" 'vterm
     "b" 'switch-to-buffer
-    "n" 'org-noter)
+    "n" 'org-noter
+    "l" 'org-latex-preview)
 
   (global-set-key (kbd "M-h") 'split-window-horizontally)
   (global-set-key (kbd "M-v") 'split-window-vertically)

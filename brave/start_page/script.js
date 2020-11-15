@@ -18,6 +18,7 @@ const MASTER_MAP = [
         "items":[
             {"name": "Chemeng", "shortcutKey": "c", "url": "https://www.chemeng.ntua.gr/"},
             {"name": "MyCourses", "shortcutKey": "m", "url": "https://mycourses.ntua.gr/index.php"},
+	    {"name": "Submissions", "shortcutKey": "s", "url": "https://www.chemeng.ntua.gr/submission/"},
             {"name": "ChemengCourses", "shortcutKey": "C", "url": "https://courses.chemeng.ntua.gr/"}
         ]
     },
@@ -29,18 +30,16 @@ const MASTER_MAP = [
 	    {"name": "Twitch", "shortcutKey": "t", "url": "https://www.twitch.tv/"},
 	    {"name": "Youtube", "shortcutKey": "y", "url": "https://www.youtube.com/"},
 	    {"name": "Github Repos", "shortcutKey": "g", "url": "https://github.com/AuroraDragoon"},
+	    {"name": "Discord", "shortcutKey": "d", "url": "https://discord.com/channels/@me"},
             {"name": "Instagram", "shortcutKey": "i", "url": "https://www.instagram.com/"}
         ]
     },
     {
-        "groupName": "Games",
+        "groupName": "Documentation & Manuals",
         "items":[
-            {"name": "Lutris", "shortcutKey": "l", "url": "https://lutris.net/"},
-            {"name": "Proton", "shortcutKey": "p", "url": "https://www.protondb.com/"},
-	    {"name": "LolChess", "shortcutKey": "L", "url": "https://lolchess.gg/profile/eune/auroradraco"},
-	    {"name": "Discord", "shortcutKey": "d", "url": "https://discord.com/channels/@me"},
-
-            {"name": "Dod", "shortcutKey": "D", "url": "https://www.dod.gr/"}
+            {"name": "Emacs", "shortcutKey": "e", "url": "https://www.gnu.org/software/emacs/manual/html_node/emacs/index.html"},
+	    {"name": "Qtile", "shortcutKey": "q", "url": "http://docs.qtile.org/en/latest/"},
+            {"name": "Octave", "shortcutKey": "o", "url": "https://octave.org/doc/v5.2.0/"}
         ]
     }
 ]

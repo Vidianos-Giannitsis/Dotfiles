@@ -97,7 +97,8 @@ groups = [
     ScratchPad("scratchpad", [
 	DropDown("music", "spotify", opacity=0.8),
 	DropDown("term", "alacritty", opacity=0.8),
-	DropDown("calc", "qalculate-gtk", opacity=0.8) ]),
+	DropDown("calc", "qalculate-gtk", opacity=0.8),
+	DropDown("obs", "obs", opacity=0.8) ]),
     Group("1"),
     Group("2"),
     Group("3"),
@@ -121,6 +122,7 @@ for i in "123456789":
 keys.extend([Key2("M-C-s", lazy.group['scratchpad'].dropdown_toggle('music')),
 	     Key2("M-S-<Return>", lazy.group['scratchpad'].dropdown_toggle('term')),
 	     Key2("M-C-c", lazy.group['scratchpad'].dropdown_toggle('calculator')),
+	     Key2("M-S-o", lazy.group['scratchpad'].dropdown_toggle('obs')),
 	     ])
 
 # Layouts
