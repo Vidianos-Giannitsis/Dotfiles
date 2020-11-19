@@ -132,7 +132,6 @@ P.S. Of course its the same exact pdf as in my zathura screenshot, you might eve
 Some settings I want for Emacs's Org-mode which I use extensively (like for writing this literate config file). 
 It adds:
 + More languages to evaluate with org-babel (by default, only elisp is evaluated).
-+ Literate calc mode, an addon for the "M-x" Calc which is mostly used as a minor mode inside org which makes for more literate calculations with Calc
 + Better headings for org, as I am not a fan of the default asterisks.
 + Set the keybinding for "M-h" to nil in org mode as I use it for something else. This does not need to be done globally as by default "M-h" is only bound in org-mode.
 + When exporting to pdf, org defaults to your system's default pdf viewer (zathura in my case). Since I am in an Emacs buffer editing the file, its more convenient to open the pdf inside Emacs with pdf-tools and the last setting does just that.
@@ -151,7 +150,6 @@ It adds:
     )
        )
 
-    ;;(require 'literate-calc-mode)
 
     (require 'org-bullets)
     (add-hook 'org-mode-hook (lambda () (org-bullets-mode 1)))
@@ -182,18 +180,23 @@ I have configured it to include:
 + A dired-mode only keybinding for Alt+Space which allows me to open a file in a seperate buffer but keep the focus on dired. This is mostly useful as a file preview when you want to see something in multiple files for example.
 + Icons alongside each file which represent what type of file it is.
 + Hiding dotfiles by default (Pressing Space and then h, will show all the dotfiles in the directory but I find hiding them better for initial behaviour).
++ A keybinding to create a new file from dired (I cant comprehend why this is not bound to sth by default tbh).
 
 #+BEGIN_SRC elisp
-(require 'dired-x)
-(add-hook 'dired-mode-hook
-	  (lambda () (local-set-key (kbd "M-RET") #'dired-display-file)))
+    (require 'dired-x)
+    (add-hook 'dired-mode-hook
+	      (lambda () (local-set-key (kbd "M-RET") #'dired-display-file)))
 
-(use-package all-the-icons-dired
-  :hook (dired-mode . all-the-icons-dired-mode))
+    (use-package all-the-icons-dired
+      :hook (dired-mode . all-the-icons-dired-mode))
 
 
-(use-package dired-hide-dotfile
-  :hook (dired-mode . dired-hide-dotfiles-mode))
+    (use-package dired-hide-dotfile
+      :hook (dired-mode . dired-hide-dotfiles-mode))
+
+  (add-hook 'dired-mode-hook
+	    (lambda () (local-set-key (kbd "C-+") #'dired-create-empty-file)))
+
 
 #+END_SRC
 

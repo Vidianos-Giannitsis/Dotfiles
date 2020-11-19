@@ -91,15 +91,18 @@
 		  )))
 
 (require 'dired-x)
+  (add-hook 'dired-mode-hook
+	    (lambda () (local-set-key (kbd "M-RET") #'dired-display-file)))
+
+  (use-package all-the-icons-dired
+    :hook (dired-mode . all-the-icons-dired-mode))
+
+
+  (use-package dired-hide-dotfile
+    :hook (dired-mode . dired-hide-dotfiles-mode))
+
 (add-hook 'dired-mode-hook
-	  (lambda () (local-set-key (kbd "M-RET") #'dired-display-file)))
-
-(use-package all-the-icons-dired
-  :hook (dired-mode . all-the-icons-dired-mode))
-
-
-(use-package dired-hide-dotfile
-  :hook (dired-mode . dired-hide-dotfiles-mode))
+	  (lambda () (local-set-key (kbd "C-+") #'dired-create-empty-file)))
 
 (evil-leader/set-leader "<SPC>")
 (evil-leader/set-key
