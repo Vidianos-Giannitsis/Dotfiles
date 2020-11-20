@@ -152,5 +152,12 @@ alias free='free -m'                      # show sizes in MB
 alias np='nano -w PKGBUILD'
 alias more=less
 
+# Git command aliases
+alias gadd='git add'
+alias gst='git status'
+alias gcm='git commit -a'
+alias gpull='git pull'
+alias gpush='git push'
+
 # Vim editing mode for my shell
 set -o vi

@@ -133,7 +133,8 @@
   "RET" 'vterm
   "b" 'switch-to-buffer
   "n" 'org-noter
-  "l" 'org-latex-preview)
+  "l" 'org-latex-preview
+  "g" 'pdf-view-goto-page)
 
 (global-set-key (kbd "M-h") 'split-window-horizontally)
 (global-set-key (kbd "M-v") 'split-window-vertically)
