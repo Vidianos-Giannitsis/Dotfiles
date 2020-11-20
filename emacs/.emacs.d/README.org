@@ -124,14 +124,6 @@ Configuration for PDF-tools, my favourite built-in Emacs pdf viewer. I set it as
       :config
       (progn
 	(pdf-tools-install))
-      ;;:hook
-      ;;(pdf-view-mode . (lambda () (local-set-key (kbd "p") #'pdf-view-goto-page)))
-      ;;(pdf-view-mode . (lambda () (local-set-key (kbd "K") #'pdf-view-previous-line-or-previous-page)))
-      ;;(pdf-view-mode . (lambda () (local-set-key (kbd "k") #'pdf-view-scroll-down-or-previous-page)))
-      ;;(pdf-view-mode . (lambda () (local-set-key (kbd "j") #'pdf-view-scroll-up-or-next-page)))
-      ;;(pdf-view-mode . (lambda () (local-set-key (kbd "h") #'pdf-view-previous-page)))
-      ;;(pdf-view-mode . (lambda () (local-set-key (kbd "l") #'pdf-view-next-page)))
-      ;;(pdf-view-mode . (lambda () (local-set-key (kbd "m") #'pdf-view-midnight-minor-mode)))
       )
 
   (add-hook 'pdf-view-mode-hook 'pdf-view-midnight-minor-mode)
@@ -240,7 +232,6 @@ This is all the keybindings I have set for my personal config. Below is a table 
 | Space Enter | Opens vterm, my preffered Emacs terminal, for when needed                                                                                          |
 | Space b     | Open the menu to switch buffers from all files open inside emacs                                                                                   |
 | Space n     | Opens org-noter, my favourite tool for notetaking                                                                                                  |
-| M-t         | Opens my todo file. Inside it I store the current projects I have in mind. Useful to have keybinded as I use it a lot                              |
 | Space l     | Makes latex fragments inside org render as pictures showing the equation                                                                           |
 | Space g     | Go to specific page inside a pdf                                                                                                           |
 
@@ -270,7 +261,6 @@ This is all the keybindings I have set for my personal config. Below is a table 
 
   (global-set-key (kbd "M-C-r") 'restart-emacs)
   (global-set-key (kbd "M-d") (lambda() (interactive)(find-file "~/.emacs.d/README.org")))
-  (global-set-key (kbd "M-t") (lambda() (interactive)(find-file "~/todo.org")))
 
   (global-set-key (kbd "M-m") 'which-key-show-major-mode)
 

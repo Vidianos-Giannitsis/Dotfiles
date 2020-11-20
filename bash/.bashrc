@@ -138,8 +138,8 @@ ex ()
 export YAOURT_COLORS="nb=1:pkg=1:ver=1;32:lver=1;45:installed=1;42:grp=1;34:od=1;41;5:votes=1;44:dsc=0:other=1;35"
 
 export ALTERNATE_EDITOR=""
-export EDITOR='emacsclient -t'
-export VISUAL="emacsclient -c -a emacs"
+export EDITOR='emacs'
+export VISUAL="emacs"
 export BROWSER='brave'
 
 # General aliases
@@ -151,6 +151,8 @@ alias df='df -h'                          # human-readable sizes
 alias free='free -m'                      # show sizes in MB
 alias np='nano -w PKGBUILD'
 alias more=less
+alias nnn='nnn -e'
+alias ls='nnn -de'
 
 # Git command aliases
 alias gadd='git add'
