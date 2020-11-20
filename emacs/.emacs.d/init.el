@@ -5,7 +5,9 @@
 (unless package-archive-contents
   (package-refresh-contents))
 
-(add-to-list 'load-path "~/.emacs.d/libs/")
+(let ((default-directory  "~/.emacs.d/libs/"))
+  (normal-top-level-add-to-load-path '("."))
+  (normal-top-level-add-subdirs-to-load-path))
 
 (load-theme 'solarized-dark t)
 
@@ -33,27 +35,39 @@
 (require 'yasnippet)
 (yas-global-mode 1)
 
+(setq evil-collection-setup-minibuffer t)
+(setq evil-want-keybinding nil)
+(when (require 'evil-collection nil t)
+  (evil-collection-init))
+
 (unless (package-installed-p 'evil)
   (package-install 'evil))
 
 (require 'evil-leader)
 (global-evil-leader-mode)
+
 (require 'evil)
 (evil-mode 1)
+
+(require 'evil-org)
+(add-hook 'org-mode-hook 'evil-org-mode)
+(evil-org-set-key-theme '(navigation insert textobjects additional calendar))
+(require 'evil-org-agenda)
+(evil-org-agenda-set-keys)
 
 (use-package pdf-tools
     :mode (("\\.pdf\\'" . pdf-view-mode))
     :config
     (progn
       (pdf-tools-install))
-    :hook
-    (pdf-view-mode . (lambda () (local-set-key (kbd "J") #'pdf-view-next-line-or-next-page)))
-    (pdf-view-mode . (lambda () (local-set-key (kbd "K") #'pdf-view-previous-line-or-previous-page)))
-    (pdf-view-mode . (lambda () (local-set-key (kbd "k") #'pdf-view-scroll-down-or-previous-page)))
-    (pdf-view-mode . (lambda () (local-set-key (kbd "j") #'pdf-view-scroll-up-or-next-page)))
-    (pdf-view-mode . (lambda () (local-set-key (kbd "h") #'pdf-view-previous-page)))
-    (pdf-view-mode . (lambda () (local-set-key (kbd "l") #'pdf-view-next-page)))
-    (pdf-view-mode . (lambda () (local-set-key (kbd "m") #'pdf-view-midnight-minor-mode)))
+    ;;:hook
+    ;;(pdf-view-mode . (lambda () (local-set-key (kbd "p") #'pdf-view-goto-page)))
+    ;;(pdf-view-mode . (lambda () (local-set-key (kbd "K") #'pdf-view-previous-line-or-previous-page)))
+    ;;(pdf-view-mode . (lambda () (local-set-key (kbd "k") #'pdf-view-scroll-down-or-previous-page)))
+    ;;(pdf-view-mode . (lambda () (local-set-key (kbd "j") #'pdf-view-scroll-up-or-next-page)))
+    ;;(pdf-view-mode . (lambda () (local-set-key (kbd "h") #'pdf-view-previous-page)))
+    ;;(pdf-view-mode . (lambda () (local-set-key (kbd "l") #'pdf-view-next-page)))
+    ;;(pdf-view-mode . (lambda () (local-set-key (kbd "m") #'pdf-view-midnight-minor-mode)))
     )
 
 (add-hook 'pdf-view-mode-hook 'pdf-view-midnight-minor-mode)
@@ -68,7 +82,6 @@
   )
      )
 
-  ;;(require 'literate-calc-mode)
 
   (require 'org-bullets)
   (add-hook 'org-mode-hook (lambda () (org-bullets-mode 1)))
@@ -91,18 +104,18 @@
 		  )))
 
 (require 'dired-x)
-  (add-hook 'dired-mode-hook
-	    (lambda () (local-set-key (kbd "M-RET") #'dired-display-file)))
+ (add-hook 'dired-mode-hook
+	   (lambda () (local-set-key (kbd "M-RET") #'dired-display-file)))
 
-  (use-package all-the-icons-dired
-    :hook (dired-mode . all-the-icons-dired-mode))
+ (use-package all-the-icons-dired
+   :hook (dired-mode . all-the-icons-dired-mode))
 
 
-  (use-package dired-hide-dotfile
-    :hook (dired-mode . dired-hide-dotfiles-mode))
+ (use-package dired-hide-dotfile
+   :hook (dired-mode . dired-hide-dotfiles-mode))
 
 (add-hook 'dired-mode-hook
-	  (lambda () (local-set-key (kbd "C-+") #'dired-create-empty-file)))
+	 (lambda () (local-set-key (kbd "C-+") #'dired-create-empty-file)))
 
 (evil-leader/set-leader "<SPC>")
 (evil-leader/set-key
