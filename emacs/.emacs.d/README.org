@@ -208,6 +208,16 @@ I have configured it to include:
 This is how Dired ends up looking after these changes
 [[https://github.com/AuroraDragoon/Dotfiles/blob/master/screenshots/dired.png]]
 
+* Ebuku
+  Ebuku is the Emacs major mode for buku, a simple terminal bookmark manager. Since I store all my bookmarks there, this gives me a way to launch my favourite pages from inside Emacs, which is a utility I deem very useful. For some reason, evil-collections keybindings didn't work by default so I enabled them manually (this is the first package I have had this happen to me with)
+
+  #+BEGIN_SRC elisp
+    (require 'ebuku)
+    (require 'evil-collection-ebuku)
+
+    (add-hook 'ebuku-mode-hook 'evil-collection-ebuku-setup)
+  #+END_SRC
+  
 * Keybindings
 This is all the keybindings I have set for my personal config. Below is a table explaining them. When the keys are seperated with a space, you need to press one after the other while in the rest you press all the keys together. Space is set as my leader key so most of my keybindings start with it. This is heavily influenced by the way spacemacs does it because I used spacemacs before this and I liked the idea. But, since it only has a few keybindings they are simpler.
 
@@ -233,7 +243,8 @@ This is all the keybindings I have set for my personal config. Below is a table 
 | Space b     | Open the menu to switch buffers from all files open inside emacs                                                                                   |
 | Space n     | Opens org-noter, my favourite tool for notetaking                                                                                                  |
 | Space l     | Makes latex fragments inside org render as pictures showing the equation                                                                           |
-| Space g     | Go to specific page inside a pdf                                                                                                           |
+| Space g     | Go to specific page inside a pdf                                                                                                                   |
+| M-b         | Open Ebuku, the buku bookmark manager's Emacs major mode from where I can open my bookmarks from inside Emacs                                      |
 
 
 #+BEGIN_SRC elisp
@@ -259,6 +270,7 @@ This is all the keybindings I have set for my personal config. Below is a table 
   (global-set-key (kbd "M-h") 'split-window-horizontally)
   (global-set-key (kbd "M-v") 'split-window-vertically)
 
+  (global-set-key (kbd "M-b") 'ebuku)
   (global-set-key (kbd "M-C-r") 'restart-emacs)
   (global-set-key (kbd "M-d") (lambda() (interactive)(find-file "~/.emacs.d/README.org")))
 

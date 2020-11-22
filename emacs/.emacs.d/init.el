@@ -60,14 +60,6 @@
     :config
     (progn
       (pdf-tools-install))
-    ;;:hook
-    ;;(pdf-view-mode . (lambda () (local-set-key (kbd "p") #'pdf-view-goto-page)))
-    ;;(pdf-view-mode . (lambda () (local-set-key (kbd "K") #'pdf-view-previous-line-or-previous-page)))
-    ;;(pdf-view-mode . (lambda () (local-set-key (kbd "k") #'pdf-view-scroll-down-or-previous-page)))
-    ;;(pdf-view-mode . (lambda () (local-set-key (kbd "j") #'pdf-view-scroll-up-or-next-page)))
-    ;;(pdf-view-mode . (lambda () (local-set-key (kbd "h") #'pdf-view-previous-page)))
-    ;;(pdf-view-mode . (lambda () (local-set-key (kbd "l") #'pdf-view-next-page)))
-    ;;(pdf-view-mode . (lambda () (local-set-key (kbd "m") #'pdf-view-midnight-minor-mode)))
     )
 
 (add-hook 'pdf-view-mode-hook 'pdf-view-midnight-minor-mode)
@@ -117,6 +109,11 @@
 (add-hook 'dired-mode-hook
 	 (lambda () (local-set-key (kbd "C-+") #'dired-create-empty-file)))
 
+(require 'ebuku)
+(require 'evil-collection-ebuku)
+
+(add-hook 'ebuku-mode-hook 'evil-collection-ebuku-setup)
+
 (evil-leader/set-leader "<SPC>")
 (evil-leader/set-key
   "f" 'helm-find-files
@@ -139,6 +136,7 @@
 (global-set-key (kbd "M-h") 'split-window-horizontally)
 (global-set-key (kbd "M-v") 'split-window-vertically)
 
+(global-set-key (kbd "M-b") 'ebuku)
 (global-set-key (kbd "M-C-r") 'restart-emacs)
 (global-set-key (kbd "M-d") (lambda() (interactive)(find-file "~/.emacs.d/README.org")))
 
@@ -152,9 +150,8 @@
  ;; If there is more than one, they won't work right.
  '(custom-safe-themes
    '("0fffa9669425ff140ff2ae8568c7719705ef33b7a927a0ba7c5e2ffcfac09b75" default))
- '(helm-minibuffer-history-key "M-p")
  '(package-selected-packages
-   '(ebuku evil-collection openwith sequences cl-lib-highlight helm-system-packages async-await popup-complete helm-fuzzy-find evil-space yapfify yaml-mode ws-butler winum which-key web-mode web-beautify vterm volatile-highlights vi-tilde-fringe uuidgen use-package toc-org tagedit spaceline solarized-theme slim-mode scss-mode sass-mode restart-emacs request rainbow-delimiters pyvenv pytest pyenv-mode py-isort pug-mode pspp-mode popwin pip-requirements persp-mode pcre2el paradox org-projectile-helm org-present org-pomodoro org-mime org-download org-bullets open-junk-file neotree move-text mmm-mode markdown-toc magit macrostep lorem-ipsum livid-mode live-py-mode linum-relative link-hint json-mode js2-refactor js-doc intero indent-guide hy-mode hungry-delete htmlize hlint-refactor hl-todo hindent highlight-parentheses highlight-numbers highlight-indentation helm-themes helm-swoop helm-pydoc helm-projectile helm-mode-manager helm-make helm-hoogle helm-flx helm-descbinds helm-css-scss helm-ag haskell-snippets gruvbox-theme google-translate golden-ratio gnuplot gh-md flx-ido fill-column-indicator fancy-battery eyebrowse expand-region exec-path-from-shell evil-visualstar evil-visual-mark-mode evil-unimpaired evil-tutor evil-surround evil-search-highlight-persist evil-numbers evil-nerd-commenter evil-mc evil-matchit evil-lisp-state evil-indent-plus evil-iedit-state evil-exchange evil-escape evil-ediff evil-args evil-anzu eval-sexp-fu emmet-mode elisp-slime-nav dumb-jump diminish define-word cython-mode csv-mode company-ghci company-ghc column-enforce-mode coffee-mode cmm-mode clean-aindent-mode auto-highlight-symbol auto-compile auctex-latexmk anaconda-mode aggressive-indent adaptive-wrap ace-window ace-link ace-jump-helm-line))
+   '(evil-collection openwith sequences cl-lib-highlight helm-system-packages async-await popup-complete helm-fuzzy-find evil-space yapfify yaml-mode ws-butler winum which-key web-mode web-beautify vterm volatile-highlights vi-tilde-fringe uuidgen use-package toc-org tagedit spaceline solarized-theme slim-mode scss-mode sass-mode restart-emacs request rainbow-delimiters pyvenv pytest pyenv-mode py-isort pug-mode pspp-mode popwin pip-requirements persp-mode pcre2el paradox org-projectile-helm org-present org-pomodoro org-mime org-download org-bullets open-junk-file neotree move-text mmm-mode markdown-toc magit macrostep lorem-ipsum livid-mode live-py-mode linum-relative link-hint json-mode js2-refactor js-doc intero indent-guide hy-mode hungry-delete htmlize hlint-refactor hl-todo hindent highlight-parentheses highlight-numbers highlight-indentation helm-themes helm-swoop helm-pydoc helm-projectile helm-mode-manager helm-make helm-hoogle helm-flx helm-descbinds helm-css-scss helm-ag haskell-snippets gruvbox-theme google-translate golden-ratio gnuplot gh-md flx-ido fill-column-indicator fancy-battery eyebrowse expand-region exec-path-from-shell evil-visualstar evil-visual-mark-mode evil-unimpaired evil-tutor evil-surround evil-search-highlight-persist evil-numbers evil-nerd-commenter evil-mc evil-matchit evil-lisp-state evil-indent-plus evil-iedit-state evil-exchange evil-escape evil-ediff evil-args evil-anzu eval-sexp-fu emmet-mode elisp-slime-nav dumb-jump diminish define-word cython-mode csv-mode company-ghci company-ghc column-enforce-mode coffee-mode cmm-mode clean-aindent-mode auto-highlight-symbol auto-compile auctex-latexmk anaconda-mode aggressive-indent adaptive-wrap ace-window ace-link ace-jump-helm-line))
  '(truncate-lines nil))
 
 (custom-set-faces
