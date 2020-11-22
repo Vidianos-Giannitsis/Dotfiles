@@ -78,9 +78,6 @@
   (require 'org-bullets)
   (add-hook 'org-mode-hook (lambda () (org-bullets-mode 1)))
 
-  (add-hook 'org-mode-hook
-	    (lambda () (local-set-key (kbd "M-h") nil)))
-
   (add-to-list 'org-file-apps '("\\.pdf\\'" . emacs))
   (setq org-noter-always-create-frame nil)
 
@@ -131,7 +128,9 @@
   "b" 'switch-to-buffer
   "n" 'org-noter
   "l" 'org-latex-preview
-  "g" 'pdf-view-goto-page)
+  "g" 'pdf-view-goto-page
+  "H" 'split-window-horizontally
+  "V" 'split-window-vertically)
 
 (global-set-key (kbd "M-h") 'split-window-horizontally)
 (global-set-key (kbd "M-v") 'split-window-vertically)
@@ -139,6 +138,7 @@
 (global-set-key (kbd "M-b") 'ebuku)
 (global-set-key (kbd "M-C-r") 'restart-emacs)
 (global-set-key (kbd "M-d") (lambda() (interactive)(find-file "~/.emacs.d/README.org")))
+(global-set-key (kbd "M-t") (lambda() (interactive)(find-file "~/project_management/emacs.org")))
 
 (global-set-key (kbd "M-m") 'which-key-show-major-mode)
 

@@ -113,9 +113,9 @@ Enabling Evil Mode, my preffered editing mode for Emacs, with the evil-collectio
 
 #+END_SRC
 
-* PDF Tools (WIP after enabling evil-collection)
+* PDF Tools
 
-Configuration for PDF-tools, my favourite built-in Emacs pdf viewer. I set it as the default pdf viewer for Emacs and define vim motion keys inside it. I also enable the midnight minor mode for it as it makes its background theme solarized, which I like. I also define the key "m" as the toggle for dark/light mode in the pdf.
+Configuration for PDF-tools, my favourite built-in Emacs pdf viewer. I set it as the default pdf viewer for Emacs and enable the midnight minor mode for it as it makes it match my favourite theme solarized-dark, which I love. I also define the key "m" as the toggle for dark/light mode in the pdf (see the keybindings section for more details)
 
 #+BEGIN_SRC elisp
 
@@ -138,7 +138,6 @@ Some settings I want for Emacs's Org-mode which I use extensively (like for writ
 It adds:
 + More languages to evaluate with org-babel (by default, only elisp is evaluated).
 + Better headings for org, as I am not a fan of the default asterisks.
-+ Set the keybinding for "M-h" to nil in org mode as I use it for something else. This does not need to be done globally as by default "M-h" is only bound in org-mode.
 + When exporting to pdf, org defaults to your system's default pdf viewer (zathura in my case). Since I am in an Emacs buffer editing the file, its more convenient to open the pdf inside Emacs with pdf-tools and the last setting does just that.
 + Org-noter is an excellent program for annotating pdfs using org. Its only problem is that when you open it it creates its frame in a new emacs window which for me is inconvenient, so I change that behaviour to open in the current buffer.
 + Setting my org-todo keywords, which are useful for tracking my current projects
@@ -158,9 +157,6 @@ It adds:
 
     (require 'org-bullets)
     (add-hook 'org-mode-hook (lambda () (org-bullets-mode 1)))
-
-    (add-hook 'org-mode-hook
-	      (lambda () (local-set-key (kbd "M-h") nil)))
 
     (add-to-list 'org-file-apps '("\\.pdf\\'" . emacs))
     (setq org-noter-always-create-frame nil)
@@ -232,8 +228,8 @@ This is all the keybindings I have set for my personal config. Below is a table 
 | Space d     | Asks for a directory and opens dired in that directory                                                                                             |
 | Space j     | Opens dired in the current working directory. This is faster than simply calling dired when you want to switch between files in the same directory |
 | Space h     | Toggle visibility of dotfiles inside dired. The default behaviour, is for them to be hidden, and this toggles that behaviour                       |
-| M-h         | Create a horizontal split inside Emacs                                                                                                             |
-| M-v         | Create a vertical split inside Emacs                                                                                                               |
+| Space H     | Create a horizontal split inside Emacs                                                                                                             |
+| Space V     | Create a vertical split inside Emacs                                                                                                               |
 | M-d         | Open my Emacs config (this file). This is very useful for when hacking on Emacs so I can quickly go to my dotfile whenever I want                  |
 | M-m         | Open the major-mode commands menu for the buffers current major-mode                                                                               |
 | Space t     | Toggles Emacs's default behaviour concerning what to do when it runs out of space in a line. I always want it to go to the next line so this helps |
@@ -245,6 +241,7 @@ This is all the keybindings I have set for my personal config. Below is a table 
 | Space l     | Makes latex fragments inside org render as pictures showing the equation                                                                           |
 | Space g     | Go to specific page inside a pdf                                                                                                                   |
 | M-b         | Open Ebuku, the buku bookmark manager's Emacs major mode from where I can open my bookmarks from inside Emacs                                      |
+| M-t         | Open my Emacs todo list. I use it to track the things I want to work on next inside Emacs so its definitely worth having a shortcut to             |
 
 
 #+BEGIN_SRC elisp
@@ -265,14 +262,14 @@ This is all the keybindings I have set for my personal config. Below is a table 
     "b" 'switch-to-buffer
     "n" 'org-noter
     "l" 'org-latex-preview
-    "g" 'pdf-view-goto-page)
-
-  (global-set-key (kbd "M-h") 'split-window-horizontally)
-  (global-set-key (kbd "M-v") 'split-window-vertically)
+    "g" 'pdf-view-goto-page
+    "H" 'split-window-horizontally
+    "V" 'split-window-vertically)
 
   (global-set-key (kbd "M-b") 'ebuku)
   (global-set-key (kbd "M-C-r") 'restart-emacs)
   (global-set-key (kbd "M-d") (lambda() (interactive)(find-file "~/.emacs.d/README.org")))
+  (global-set-key (kbd "M-t") (lambda() (interactive)(find-file "~/project_management/emacs.org")))
 
   (global-set-key (kbd "M-m") 'which-key-show-major-mode)
 
