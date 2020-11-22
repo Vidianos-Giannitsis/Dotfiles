@@ -153,6 +153,7 @@ alias np='nano -w PKGBUILD'
 alias more=less
 alias nnn='nnn -e'
 alias ls='nnn -de'
+alias ..='cd ..'
 
 # Git command aliases
 alias gadd='git add'
