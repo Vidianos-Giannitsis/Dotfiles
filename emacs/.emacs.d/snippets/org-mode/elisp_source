@@ -1,0 +1,7 @@
+# -*- mode: snippet -*-
+# name: elisp_source
+# key: elisp
+# --
+#+BEGIN_SRC elisp
+
+#+END_SRC
