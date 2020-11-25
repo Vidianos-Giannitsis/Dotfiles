@@ -154,6 +154,7 @@ alias more=less
 alias nnn='nnn -e'
 alias ls='nnn -de'
 alias ..='cd ..'
+alias tlmgr='/usr/share/texmf-dist/scripts/texlive/tlmgr.pl --usermode'
 
 # Git command aliases
 alias gadd='git add'

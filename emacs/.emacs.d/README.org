@@ -67,27 +67,27 @@ This includes:
 * Utilities
 General utilities that I want enabled when editing, or changes to the way emacs opens some programs.
 This enables:
-+ Force all .m files to open in octave mode (Had, some problems with certain files).
 + When adding a bracket or quote add its pair as well for quicker editing.
 + When the cursor is on one bracket, highlight its matching bracket.
 + Enabling yasnippet snippets.
++ Enabling general, a package that helps me define leader keybindings easier. 
 
 #+BEGIN_SRC elisp
 
-(add-to-list 'auto-mode-alist '("\\.m\\'" . octave-mode))
+  (show-paren-mode 1)
+  (electric-pair-mode 1)
 
-(show-paren-mode 1)
-(electric-pair-mode 1)
+  (add-to-list 'load-path
+	       "~/.emacs.d/plugins/yasnippet")
+  (require 'yasnippet)
+  (yas-global-mode 1)
 
-(add-to-list 'load-path
-	     "~/.emacs.d/plugins/yasnippet")
-(require 'yasnippet)
-(yas-global-mode 1)
+  (require 'general)
 
 #+END_SRC
 
 * Evil Mode
-Enabling Evil Mode, my preffered editing mode for Emacs, with the evil-collection and evil-leader packages loaded. They help me with defining evil type keybindings for more programs, which I like. Then I also load evil-org which is a different third party program for evil keys inside org as evil-collection doesn't have that.
+Enabling Evil Mode, my preffered editing mode for Emacs, with the evil-collection loaded. It helps me with defining evil type keybindings for more programs, which I like. Then I also load evil-org which is a different third party program for evil keys inside org as evil-collection doesn't have that.
 
 #+BEGIN_SRC elisp
 
@@ -98,9 +98,6 @@ Enabling Evil Mode, my preffered editing mode for Emacs, with the evil-collectio
 
   (unless (package-installed-p 'evil)
     (package-install 'evil))
-
-  (require 'evil-leader)
-  (global-evil-leader-mode)
 
   (require 'evil)
   (evil-mode 1)
@@ -113,25 +110,6 @@ Enabling Evil Mode, my preffered editing mode for Emacs, with the evil-collectio
 
 #+END_SRC
 
-* PDF Tools
-
-Configuration for PDF-tools, my favourite built-in Emacs pdf viewer. I set it as the default pdf viewer for Emacs and enable the midnight minor mode for it as it makes it match my favourite theme solarized-dark, which I love. I also define the key "m" as the toggle for dark/light mode in the pdf (see the keybindings section for more details)
-
-#+BEGIN_SRC elisp
-
-    (use-package pdf-tools
-      :mode (("\\.pdf\\'" . pdf-view-mode))
-      :config
-      (progn
-	(pdf-tools-install))
-      )
-
-  (add-hook 'pdf-view-mode-hook 'pdf-view-midnight-minor-mode)
-#+END_SRC
-
-And after these changes, my emacs pdf-viewer looks like this (its very similar to the look of my current zathura config, but thats kind of the point).
-P.S. Of course its the same exact pdf as in my zathura screenshot, you might even think its the same picture :D
-[[https://github.com/AuroraDragoon/Dotfiles/blob/master/screenshots/pdf_view.png]]
 
 * Org-mode
 Some settings I want for Emacs's Org-mode which I use extensively (like for writing this literate config file). 
@@ -172,16 +150,20 @@ It adds:
 		    "DONE"
 		    )))
 
+  (setq org-agenda-files
+	  '("~/project_management/emacs.org"))
 
+  ;;(require 'calctex)
+  ;;(add-hook 'calc-mode-hook 'calctex-mode)
 #+END_SRC
 		    
 * Dired
 Dired is Emacs's built in file manager (stands for directory editor) As dired is my Emacs startup screen as mentioned before, I have some customisations for it which are pretty neat.
 I have configured it to include:
-+ A dired-mode only keybinding for Alt+Space which allows me to open a file in a seperate buffer but keep the focus on dired. This is mostly useful as a file preview when you want to see something in multiple files for example.
++ A dired-mode only keybinding for Alt+Return which allows me to open a file in a seperate buffer but keep the focus on dired. This is mostly useful as a file preview when you want to see something in multiple files for example.
 + Icons alongside each file which represent what type of file it is.
 + Hiding dotfiles by default (Pressing Space and then h, will show all the dotfiles in the directory but I find hiding them better for initial behaviour).
-+ A keybinding to create a new file from dired (I cant comprehend why this is not bound to sth by default tbh).
++ A keybinding to create a new file from dired (I cant comprehend why this is not bound to sth by default tbh). Bound to C-+.
 
 #+BEGIN_SRC elisp
     (require 'dired-x)
@@ -204,7 +186,14 @@ I have configured it to include:
 This is how Dired ends up looking after these changes
 [[https://github.com/AuroraDragoon/Dotfiles/blob/master/screenshots/dired.png]]
 
-* Ebuku
+ 
+* Other Major Modes
+Some other extensions inside my Emacs config that require some changes for their major modes to function as I want them. This currently includes:
+- Ebuku
+- PDF Tools
+- Octave
+  
+** Ebuku
   Ebuku is the Emacs major mode for buku, a simple terminal bookmark manager. Since I store all my bookmarks there, this gives me a way to launch my favourite pages from inside Emacs, which is a utility I deem very useful. For some reason, evil-collections keybindings didn't work by default so I enabled them manually (this is the first package I have had this happen to me with)
 
   #+BEGIN_SRC elisp
@@ -214,19 +203,47 @@ This is how Dired ends up looking after these changes
     (add-hook 'ebuku-mode-hook 'evil-collection-ebuku-setup)
   #+END_SRC
   
+** PDF Tools
+
+Configuration for PDF-tools, my favourite built-in Emacs pdf viewer. I set it as the default pdf viewer for Emacs and enable the midnight minor mode for it as it makes it match my favourite theme solarized-dark, which I love. I also define the key "m" as the toggle for dark/light mode in the pdf (see the keybindings section for more details)
+
+#+BEGIN_SRC elisp
+
+    (use-package pdf-tools
+      :mode (("\\.pdf\\'" . pdf-view-mode))
+      :config
+      (progn
+	(pdf-tools-install))
+      )
+
+  (add-hook 'pdf-view-mode-hook 'pdf-view-midnight-minor-mode)
+#+END_SRC
+
+And after these changes, my emacs pdf-viewer looks like this (its very similar to the look of my current zathura config, but thats kind of the point).
+P.S. Of course its the same exact pdf as in my zathura screenshot, you might even think its the same picture :D
+[[https://github.com/AuroraDragoon/Dotfiles/blob/master/screenshots/pdf_view.png]]
+
+** Octave
+   Octave is a very powerful piece of software for mathematical computations. You can edit octave scripts inside of Emacs and also run an instance of Octave to execute them. But I ran into some problems with it. Some files with the .m extension weren't being rendered properly as .m files.
+   Furthermore, it was inconvenient for Octave to open in my current working directory so when I launch it I want to automatically cd to the directory holding all my Octave scripts. For this one I needed to create an "init_octave.m" file inside my .emacs.d which octave always reads when starting inside Emacs. Inside it you just cd to "home/your_user_name/Documents/Octave". For some reason it didnt recognize ~ as my home directory so I needed to add the full path. You can find the file inside this repo.
+
+   #+BEGIN_SRC elisp
+      (add-to-list 'auto-mode-alist '("\\.m\\'" . octave-mode))
+   #+END_SRC
+   
 * Keybindings
-This is all the keybindings I have set for my personal config. Below is a table explaining them. When the keys are seperated with a space, you need to press one after the other while in the rest you press all the keys together. Space is set as my leader key so most of my keybindings start with it. This is heavily influenced by the way spacemacs does it because I used spacemacs before this and I liked the idea. But, since it only has a few keybindings they are simpler.
+This is all the keybindings I have set for my personal config. Below is a table explaining them. When the keys are seperated with a space, you need to press one after the other while in the rest you press all the keys together. Space is set as my leader key so most of my keybindings start with it. This is heavily influenced by the way spacemacs does it because I used spacemacs before this and I liked the idea. But, since it only has a few keybindings they are simpler. I manage most of these using leader keys from the general.el package. Space is used for general commands and , for org-mode specific commands (which can only be ran from an  org mode buffer). I can also nest leader keys inside other leader keys such as how I have done with Space f for commands that have to do with files 
 
 | Keybinding  | Action                                                                                                                                             |
 |-------------+----------------------------------------------------------------------------------------------------------------------------------------------------|
-| Space f     | Open a helm menu for finding a specific file                                                                                                       |
+| Space f f   | Open a helm menu for finding a specific file                                                                                                       |
 | Space Space | Opens the "M-x" menu cause I was a spacemacs user for a few months before starting this config and I got way too used to this keybinding           |
 | Space !     | Create a prompt for inputing a single shell command. This is easier than opening a terminal emulator for quick tasks                               |
 | Space p     | Opens the package install prompt                                                                                                                   |
-| Space r     | List of recently opened packages                                                                                                                   |
+| Space f r   | List of recently opened packages                                                                                                                   |
 | Space o     | Starts the octave client in the working directory of the file from which this was called. I use octave a lot so this is a must for me              |
 | Space d     | Asks for a directory and opens dired in that directory                                                                                             |
-| Space j     | Opens dired in the current working directory. This is faster than simply calling dired when you want to switch between files in the same directory |
+| Space f j   | Opens dired in the current working directory. This is faster than simply calling dired when you want to switch between files in the same directory |
 | Space h     | Toggle visibility of dotfiles inside dired. The default behaviour, is for them to be hidden, and this toggles that behaviour                       |
 | Space H     | Create a horizontal split inside Emacs                                                                                                             |
 | Space V     | Create a vertical split inside Emacs                                                                                                               |
@@ -237,34 +254,60 @@ This is all the keybindings I have set for my personal config. Below is a table 
 | M-C-r       | Simply restarts Emacs. This is useful when hacking in Emacs as for changes to take place you need to restart                                       |
 | Space Enter | Opens vterm, my preffered Emacs terminal, for when needed                                                                                          |
 | Space b     | Open the menu to switch buffers from all files open inside emacs                                                                                   |
-| Space n     | Opens org-noter, my favourite tool for notetaking                                                                                                  |
-| Space l     | Makes latex fragments inside org render as pictures showing the equation                                                                           |
+| , n         | Opens org-noter, my favourite tool for notetaking                                                                                                  |
+| , l         | Makes latex fragments inside org render as pictures showing the equation                                                                           |
 | Space g     | Go to specific page inside a pdf                                                                                                                   |
 | M-b         | Open Ebuku, the buku bookmark manager's Emacs major mode from where I can open my bookmarks from inside Emacs                                      |
 | M-t         | Open my Emacs todo list. I use it to track the things I want to work on next inside Emacs so its definitely worth having a shortcut to             |
+| , a         | Opens org-agenda                                                                                                                                   |
+| , t         | Changes the todo state of an org-heading                                                                                                           |
+| , s         | Schedules a todo task to a specific date and time                                                                                                  |
 
 
 #+BEGIN_SRC elisp
-  (evil-leader/set-leader "<SPC>")
-  (evil-leader/set-key
-    "f" 'helm-find-files
+
+  (general-create-definer my-leader-def
+			  :prefix "SPC")
+
+  (my-leader-def
+   :states 'normal
+   :keymaps 'override
     "<SPC>" 'helm-M-x
     "!" 'shell-command
     "p" 'package-install
-    "r" 'helm-recentf
     "o" 'inferior-octave
-    "j" 'dired-jump
     "d" 'dired
     "h" 'dired-hide-dotfiles-mode
     "t" 'toggle-truncate-lines
+    "j" 'dired-jump
     "T" 'org-babel-tangle
     "RET" 'vterm
     "b" 'switch-to-buffer
-    "n" 'org-noter
-    "l" 'org-latex-preview
     "g" 'pdf-view-goto-page
     "H" 'split-window-horizontally
     "V" 'split-window-vertically)
+
+  (general-create-definer org-leader-def
+    :prefix ",")
+
+  (org-leader-def
+   :states 'normal
+   :keymaps 'org-mode-map
+   "l" 'org-latex-preview
+   "n" 'org-noter
+   "a" 'org-agenda
+   "s" 'org-schedule
+   "t" 'org-todo)
+
+  (general-create-definer nested-leader-def
+    :prefix "SPC f")
+
+  (nested-leader-def
+   :states 'normal
+   :keymaps 'override
+   "j" 'dired-jump
+   "r" 'helm-recentf
+   "f" 'helm-find-files)
 
   (global-set-key (kbd "M-b") 'ebuku)
   (global-set-key (kbd "M-C-r") 'restart-emacs)

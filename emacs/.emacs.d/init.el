@@ -25,8 +25,6 @@
 
 (ido-mode 1)
 
-(add-to-list 'auto-mode-alist '("\\.m\\'" . octave-mode))
-
 (show-paren-mode 1)
 (electric-pair-mode 1)
 
@@ -34,6 +32,8 @@
 	     "~/.emacs.d/plugins/yasnippet")
 (require 'yasnippet)
 (yas-global-mode 1)
+
+(require 'general)
 
 (setq evil-collection-setup-minibuffer t)
 (setq evil-want-keybinding nil)
@@ -43,9 +43,6 @@
 (unless (package-installed-p 'evil)
   (package-install 'evil))
 
-(require 'evil-leader)
-(global-evil-leader-mode)
-
 (require 'evil)
 (evil-mode 1)
 
@@ -54,15 +51,6 @@
 (evil-org-set-key-theme '(navigation insert textobjects additional calendar))
 (require 'evil-org-agenda)
 (evil-org-agenda-set-keys)
-
-(use-package pdf-tools
-    :mode (("\\.pdf\\'" . pdf-view-mode))
-    :config
-    (progn
-      (pdf-tools-install))
-    )
-
-(add-hook 'pdf-view-mode-hook 'pdf-view-midnight-minor-mode)
 
 (org-babel-do-load-languages
      'org-babel-load-languages
@@ -92,6 +80,12 @@
 		  "DONE"
 		  )))
 
+(setq org-agenda-files
+	'("~/project_management/emacs.org"))
+
+;;(require 'calctex)
+;;(add-hook 'calc-mode-hook 'calctex-mode)
+
 (require 'dired-x)
  (add-hook 'dired-mode-hook
 	   (lambda () (local-set-key (kbd "M-RET") #'dired-display-file)))
@@ -111,29 +105,59 @@
 
 (add-hook 'ebuku-mode-hook 'evil-collection-ebuku-setup)
 
-(evil-leader/set-leader "<SPC>")
-(evil-leader/set-key
-  "f" 'helm-find-files
+(use-package pdf-tools
+    :mode (("\\.pdf\\'" . pdf-view-mode))
+    :config
+    (progn
+      (pdf-tools-install))
+    )
+
+(add-hook 'pdf-view-mode-hook 'pdf-view-midnight-minor-mode)
+
+(add-to-list 'auto-mode-alist '("\\.m\\'" . octave-mode))
+
+(general-create-definer my-leader-def
+			:prefix "SPC")
+
+(my-leader-def
+ :states 'normal
+ :keymaps 'override
   "<SPC>" 'helm-M-x
   "!" 'shell-command
   "p" 'package-install
-  "r" 'helm-recentf
   "o" 'inferior-octave
-  "j" 'dired-jump
   "d" 'dired
   "h" 'dired-hide-dotfiles-mode
   "t" 'toggle-truncate-lines
+  "j" 'dired-jump
   "T" 'org-babel-tangle
   "RET" 'vterm
   "b" 'switch-to-buffer
-  "n" 'org-noter
-  "l" 'org-latex-preview
   "g" 'pdf-view-goto-page
   "H" 'split-window-horizontally
   "V" 'split-window-vertically)
 
-(global-set-key (kbd "M-h") 'split-window-horizontally)
-(global-set-key (kbd "M-v") 'split-window-vertically)
+(general-create-definer org-leader-def
+  :prefix ",")
+
+(org-leader-def
+ :states 'normal
+ :keymaps 'org-mode-map
+ "l" 'org-latex-preview
+ "n" 'org-noter
+ "a" 'org-agenda
+ "s" 'org-schedule
+ "t" 'org-todo)
+
+(general-create-definer nested-leader-def
+  :prefix "SPC f")
+
+(nested-leader-def
+ :states 'normal
+ :keymaps 'override
+ "j" 'dired-jump
+ "r" 'helm-recentf
+ "f" 'helm-find-files)
 
 (global-set-key (kbd "M-b") 'ebuku)
 (global-set-key (kbd "M-C-r") 'restart-emacs)

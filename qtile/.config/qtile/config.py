@@ -121,7 +121,7 @@ for i in "123456789":
 
 keys.extend([Key2("M-C-s", lazy.group['scratchpad'].dropdown_toggle('music')),
 	     Key2("M-S-<Return>", lazy.group['scratchpad'].dropdown_toggle('term')),
-	     Key2("M-C-c", lazy.group['scratchpad'].dropdown_toggle('calculator')),
+	     Key2("M-C-c", lazy.group['scratchpad'].dropdown_toggle('calc')),
 	     Key2("M-S-o", lazy.group['scratchpad'].dropdown_toggle('obs')),
 	     ])
 
