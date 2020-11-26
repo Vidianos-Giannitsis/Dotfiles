@@ -118,58 +118,75 @@ It adds:
 + Better headings for org, as I am not a fan of the default asterisks.
 + When exporting to pdf, org defaults to your system's default pdf viewer (zathura in my case). Since I am in an Emacs buffer editing the file, its more convenient to open the pdf inside Emacs with pdf-tools and the last setting does just that.
 + Org-noter is an excellent program for annotating pdfs using org. Its only problem is that when you open it it creates its frame in a new emacs window which for me is inconvenient, so I change that behaviour to open in the current buffer.
-+ Setting my org-todo keywords, which are useful for tracking my current projects
++ I use org-mode extensively for my uni projects, which have a lot of equations which I normally render with Latex. But it has one problem, the Latex formatting sucks. I used to get around this with snippets which auto expand into the symbols I want but I recently found this calctex package and got it to work properly (its not packaged in MELPA and is kind of a dependency hell with Latex dependencies I didn't have). This essentially gives the "M-x" calc's embedded mode proper latex formatting  which is amazing. With this I can type the equation in its easy to use format and calctex will make it a latex equation which renders properly. But I never managed to make it work inside the Calc major mode (it tries to render pictures of the latex equations but its missing a font, which I am almost sure I installed but it doesnt work and I have tried for too long) so I only enable it for the embedded mode, which is its main use anyways so I dont mind this outcome.
+ 
+I also have my org-agenda configuration and some settings for my todo items but since its a big part of the config I have split that to its own source code block
 
 #+BEGIN_SRC elisp
 
-    (org-babel-do-load-languages
-       'org-babel-load-languages
-       '(
-	 (python . t)
-	 (haskell . t)
-	 (octave . t)
-	 (latex . t)
-    )
-       )
+  (org-babel-do-load-languages
+     'org-babel-load-languages
+     '(
+       (python . t)
+       (haskell . t)
+       (octave . t)
+       (latex . t)
+  )
+     )
 
 
-    (require 'org-bullets)
-    (add-hook 'org-mode-hook (lambda () (org-bullets-mode 1)))
+  (require 'org-bullets)
+  (add-hook 'org-mode-hook (lambda () (org-bullets-mode 1)))
 
-    (add-to-list 'org-file-apps '("\\.pdf\\'" . emacs))
-    (setq org-noter-always-create-frame nil)
+  (add-to-list 'org-file-apps '("\\.pdf\\'" . emacs))
+  (setq org-noter-always-create-frame nil)
 
-  (setq org-todo-keywords
-	'((sequence "TODO"
-		    "IMPORTANT"
-		    "MAYBE"
-		    "ON HOLD"
-		    "STARTED"
-		    "|"
-		    "CANCELLED"
-		    "DONE"
-		    )))
-
-  (setq org-agenda-files
-	  '("~/project_management/emacs.org"))
-
-  ;;(require 'calctex)
-  ;;(add-hook 'calc-mode-hook 'calctex-mode)
+  (require 'calctex)
+  (add-hook 'calc-embedded-new-formula-hook 'calctex-mode)
 #+END_SRC
 		    
-* Dired
-Dired is Emacs's built in file manager (stands for directory editor) As dired is my Emacs startup screen as mentioned before, I have some customisations for it which are pretty neat.
-I have configured it to include:
-+ A dired-mode only keybinding for Alt+Return which allows me to open a file in a seperate buffer but keep the focus on dired. This is mostly useful as a file preview when you want to see something in multiple files for example.
-+ Icons alongside each file which represent what type of file it is.
-+ Hiding dotfiles by default (Pressing Space and then h, will show all the dotfiles in the directory but I find hiding them better for initial behaviour).
-+ A keybinding to create a new file from dired (I cant comprehend why this is not bound to sth by default tbh). Bound to C-+.
-
+** Org-agenda and TODOs
+   This is where all the project management magic happens. I set everything I need for TODOs and the org-agenda. Later on in the Keybindings section of the config you can see the keybindings I have set for each action while here are the configurations I want to make. This helps keep this consistent by having those keybindings in that section.
+   
 #+BEGIN_SRC elisp
-    (require 'dired-x)
-    (add-hook 'dired-mode-hook
-	      (lambda () (local-set-key (kbd "M-RET") #'dired-display-file)))
 
+  (setq org-todo-keywords
+	  '((sequence "TODO(t)"
+		      "ACTIVE(a)"
+		      "NEXT(n)"
+		      "|"
+		      "DONE(d@)"
+		      "CANCELLED(c@)"
+		      )))
+
+    (setq org-agenda-files
+	    '("~/project_management"))
+
+  (defun org-make-todo ()
+    (interactive)
+    (org-todo)
+    (org-priority)
+    (org-set-effort))
+
+  (setq org-priority-highest 1)
+  (setq org-priority-default 5)
+  (setq org-priority-lowest 10)
+
+  (setq org-agenda-start-with-log-mode t)
+  (setq org-log-into-drawer t)
+
+#+END_SRC
+
+* Dired
+  Dired is Emacs's built in file manager (stands for directory editor) As dired is my Emacs startup screen as mentioned before, I have some customisations for it which are pretty neat.
+  I have configured it to include:
+  + Icons alongside each file which represent what type of file it is.
+  + Hiding dotfiles by default (Pressing Space and then h, will show all the dotfiles in the directory but I find hiding them better for initial behaviour).
+  + A keybinding to create a new file from dired (I cant comprehend why this is not bound to sth by default tbh). Bound to C-+.
+  + For consistency the keybindings are in the Keybindings section of this config even if they are only for dired
+
+  #+BEGIN_SRC elisp
+    (require 'dired-x)
     (use-package all-the-icons-dired
       :hook (dired-mode . all-the-icons-dired-mode))
 
@@ -177,14 +194,12 @@ I have configured it to include:
     (use-package dired-hide-dotfile
       :hook (dired-mode . dired-hide-dotfiles-mode))
 
-   (add-hook 'dired-mode-hook
-	    (lambda () (local-set-key (kbd "C-+") #'dired-create-empty-file)))
 
 
-#+END_SRC
+  #+END_SRC
 
-This is how Dired ends up looking after these changes
-[[https://github.com/AuroraDragoon/Dotfiles/blob/master/screenshots/dired.png]]
+  This is how Dired ends up looking after these changes
+  [[https://github.com/AuroraDragoon/Dotfiles/blob/master/screenshots/dired.png]]
 
  
 * Other Major Modes
@@ -259,62 +274,71 @@ This is all the keybindings I have set for my personal config. Below is a table 
 | Space g     | Go to specific page inside a pdf                                                                                                                   |
 | M-b         | Open Ebuku, the buku bookmark manager's Emacs major mode from where I can open my bookmarks from inside Emacs                                      |
 | M-t         | Open my Emacs todo list. I use it to track the things I want to work on next inside Emacs so its definitely worth having a shortcut to             |
-| , a         | Opens org-agenda                                                                                                                                   |
+| Space a     | Opens org-agenda                                                                                                                                   |
 | , t         | Changes the todo state of an org-heading                                                                                                           |
 | , s         | Schedules a todo task to a specific date and time                                                                                                  |
+| C-+         | Creates a new empty file inside the current working directory if the buffer is in dired mode                                                       |
 
 
 #+BEGIN_SRC elisp
 
-  (general-create-definer my-leader-def
-			  :prefix "SPC")
+    (general-create-definer my-leader-def
+			    :prefix "SPC")
 
-  (my-leader-def
-   :states 'normal
-   :keymaps 'override
-    "<SPC>" 'helm-M-x
-    "!" 'shell-command
-    "p" 'package-install
-    "o" 'inferior-octave
-    "d" 'dired
-    "h" 'dired-hide-dotfiles-mode
-    "t" 'toggle-truncate-lines
-    "j" 'dired-jump
-    "T" 'org-babel-tangle
-    "RET" 'vterm
-    "b" 'switch-to-buffer
-    "g" 'pdf-view-goto-page
-    "H" 'split-window-horizontally
-    "V" 'split-window-vertically)
+    (my-leader-def
+     :states 'normal
+     :keymaps 'override
+      "<SPC>" 'helm-M-x
+      "!" 'shell-command
+      "p" 'package-install
+      "o" 'inferior-octave
+      "d" 'dired
+      "h" 'dired-hide-dotfiles-mode
+      "t" 'toggle-truncate-lines
+      "j" 'dired-jump
+      "T" 'org-babel-tangle
+      "RET" 'vterm
+      "b" 'switch-to-buffer
+      "a" 'org-agenda
+      "g" 'pdf-view-goto-page
+      "H" 'split-window-horizontally
+      "V" 'split-window-vertically
+      "c" 'calc-dispatch)
 
-  (general-create-definer org-leader-def
-    :prefix ",")
+    (general-create-definer org-leader-def
+      :prefix ",")
 
-  (org-leader-def
-   :states 'normal
-   :keymaps 'org-mode-map
-   "l" 'org-latex-preview
-   "n" 'org-noter
-   "a" 'org-agenda
-   "s" 'org-schedule
-   "t" 'org-todo)
+    (org-leader-def
+     :states 'normal
+     :keymaps 'org-mode-map
+     "l" 'org-latex-preview
+     "n" 'org-noter
+     "s" 'org-schedule
+     "c" 'org-todo
+     "t" 'org-make-todo
+     "e" 'org-export-dispatch
+     "p" 'org-priority)
 
-  (general-create-definer nested-leader-def
-    :prefix "SPC f")
+    (general-create-definer nested-leader-def
+      :prefix "SPC f")
 
-  (nested-leader-def
-   :states 'normal
-   :keymaps 'override
-   "j" 'dired-jump
-   "r" 'helm-recentf
-   "f" 'helm-find-files)
+    (nested-leader-def
+     :states 'normal
+     :keymaps 'override
+     "j" 'dired-jump
+     "r" 'helm-recentf
+     "f" 'helm-find-files)
 
-  (global-set-key (kbd "M-b") 'ebuku)
-  (global-set-key (kbd "M-C-r") 'restart-emacs)
-  (global-set-key (kbd "M-d") (lambda() (interactive)(find-file "~/.emacs.d/README.org")))
-  (global-set-key (kbd "M-t") (lambda() (interactive)(find-file "~/project_management/emacs.org")))
+    (global-set-key (kbd "M-b") 'ebuku)
+    (global-set-key (kbd "M-C-r") 'restart-emacs)
+    (global-set-key (kbd "M-d") (lambda() (interactive)(find-file "~/.emacs.d/README.org")))
+    (global-set-key (kbd "M-t") (lambda() (interactive)(find-file "~/project_management/emacs.org")))
 
-  (global-set-key (kbd "M-m") 'which-key-show-major-mode)
+    (global-set-key (kbd "M-m") 'which-key-show-major-mode)
+
+  (add-hook 'dired-mode-hook
+	    (lambda () (local-set-key (kbd "C-+") #'dired-create-empty-file)))
+
 
 #+END_SRC
 

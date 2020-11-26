@@ -53,52 +53,57 @@
 (evil-org-agenda-set-keys)
 
 (org-babel-do-load-languages
-     'org-babel-load-languages
-     '(
-       (python . t)
-       (haskell . t)
-       (octave . t)
-       (latex . t)
-  )
-     )
+   'org-babel-load-languages
+   '(
+     (python . t)
+     (haskell . t)
+     (octave . t)
+     (latex . t)
+)
+   )
 
 
-  (require 'org-bullets)
-  (add-hook 'org-mode-hook (lambda () (org-bullets-mode 1)))
+(require 'org-bullets)
+(add-hook 'org-mode-hook (lambda () (org-bullets-mode 1)))
 
-  (add-to-list 'org-file-apps '("\\.pdf\\'" . emacs))
-  (setq org-noter-always-create-frame nil)
+(add-to-list 'org-file-apps '("\\.pdf\\'" . emacs))
+(setq org-noter-always-create-frame nil)
+
+(require 'calctex)
+(add-hook 'calc-embedded-new-formula-hook 'calctex-mode)
 
 (setq org-todo-keywords
-      '((sequence "TODO"
-		  "IMPORTANT"
-		  "MAYBE"
-		  "ON HOLD"
-		  "STARTED"
-		  "|"
-		  "CANCELLED"
-		  "DONE"
-		  )))
+	'((sequence "TODO(t)"
+		    "ACTIVE(a)"
+		    "NEXT(n)"
+		    "|"
+		    "DONE(d@)"
+		    "CANCELLED(c@)"
+		    )))
 
-(setq org-agenda-files
-	'("~/project_management/emacs.org"))
+  (setq org-agenda-files
+	  '("~/project_management"))
 
-;;(require 'calctex)
-;;(add-hook 'calc-mode-hook 'calctex-mode)
+(defun org-make-todo ()
+  (interactive)
+  (org-todo)
+  (org-priority)
+  (org-set-effort))
+
+(setq org-priority-highest 1)
+(setq org-priority-default 5)
+(setq org-priority-lowest 10)
+
+(setq org-agenda-start-with-log-mode t)
+(setq org-log-into-drawer t)
 
 (require 'dired-x)
- (add-hook 'dired-mode-hook
-	   (lambda () (local-set-key (kbd "M-RET") #'dired-display-file)))
-
- (use-package all-the-icons-dired
-   :hook (dired-mode . all-the-icons-dired-mode))
+(use-package all-the-icons-dired
+  :hook (dired-mode . all-the-icons-dired-mode))
 
 
- (use-package dired-hide-dotfile
-   :hook (dired-mode . dired-hide-dotfiles-mode))
-
-(add-hook 'dired-mode-hook
-	 (lambda () (local-set-key (kbd "C-+") #'dired-create-empty-file)))
+(use-package dired-hide-dotfile
+  :hook (dired-mode . dired-hide-dotfiles-mode))
 
 (require 'ebuku)
 (require 'evil-collection-ebuku)
@@ -117,54 +122,61 @@
 (add-to-list 'auto-mode-alist '("\\.m\\'" . octave-mode))
 
 (general-create-definer my-leader-def
-			:prefix "SPC")
+			  :prefix "SPC")
 
-(my-leader-def
- :states 'normal
- :keymaps 'override
-  "<SPC>" 'helm-M-x
-  "!" 'shell-command
-  "p" 'package-install
-  "o" 'inferior-octave
-  "d" 'dired
-  "h" 'dired-hide-dotfiles-mode
-  "t" 'toggle-truncate-lines
-  "j" 'dired-jump
-  "T" 'org-babel-tangle
-  "RET" 'vterm
-  "b" 'switch-to-buffer
-  "g" 'pdf-view-goto-page
-  "H" 'split-window-horizontally
-  "V" 'split-window-vertically)
+  (my-leader-def
+   :states 'normal
+   :keymaps 'override
+    "<SPC>" 'helm-M-x
+    "!" 'shell-command
+    "p" 'package-install
+    "o" 'inferior-octave
+    "d" 'dired
+    "h" 'dired-hide-dotfiles-mode
+    "t" 'toggle-truncate-lines
+    "j" 'dired-jump
+    "T" 'org-babel-tangle
+    "RET" 'vterm
+    "b" 'switch-to-buffer
+    "a" 'org-agenda
+    "g" 'pdf-view-goto-page
+    "H" 'split-window-horizontally
+    "V" 'split-window-vertically
+    "c" 'calc-dispatch)
 
-(general-create-definer org-leader-def
-  :prefix ",")
+  (general-create-definer org-leader-def
+    :prefix ",")
 
-(org-leader-def
- :states 'normal
- :keymaps 'org-mode-map
- "l" 'org-latex-preview
- "n" 'org-noter
- "a" 'org-agenda
- "s" 'org-schedule
- "t" 'org-todo)
+  (org-leader-def
+   :states 'normal
+   :keymaps 'org-mode-map
+   "l" 'org-latex-preview
+   "n" 'org-noter
+   "s" 'org-schedule
+   "c" 'org-todo
+   "t" 'org-make-todo
+   "e" 'org-export-dispatch
+   "p" 'org-priority)
 
-(general-create-definer nested-leader-def
-  :prefix "SPC f")
+  (general-create-definer nested-leader-def
+    :prefix "SPC f")
 
-(nested-leader-def
- :states 'normal
- :keymaps 'override
- "j" 'dired-jump
- "r" 'helm-recentf
- "f" 'helm-find-files)
+  (nested-leader-def
+   :states 'normal
+   :keymaps 'override
+   "j" 'dired-jump
+   "r" 'helm-recentf
+   "f" 'helm-find-files)
 
-(global-set-key (kbd "M-b") 'ebuku)
-(global-set-key (kbd "M-C-r") 'restart-emacs)
-(global-set-key (kbd "M-d") (lambda() (interactive)(find-file "~/.emacs.d/README.org")))
-(global-set-key (kbd "M-t") (lambda() (interactive)(find-file "~/project_management/emacs.org")))
+  (global-set-key (kbd "M-b") 'ebuku)
+  (global-set-key (kbd "M-C-r") 'restart-emacs)
+  (global-set-key (kbd "M-d") (lambda() (interactive)(find-file "~/.emacs.d/README.org")))
+  (global-set-key (kbd "M-t") (lambda() (interactive)(find-file "~/project_management/emacs.org")))
 
-(global-set-key (kbd "M-m") 'which-key-show-major-mode)
+  (global-set-key (kbd "M-m") 'which-key-show-major-mode)
+
+(add-hook 'dired-mode-hook
+	  (lambda () (local-set-key (kbd "C-+") #'dired-create-empty-file)))
 
 ;; CUSTOM VARIABLES
 (custom-set-variables
