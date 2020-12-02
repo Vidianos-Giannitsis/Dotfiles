@@ -111,7 +111,7 @@
 	       ("David Gonzalez Gandara" . "dggandara@member.fsf.org"))
 	      (:maintainer "David Gonzalez Gandara" . "dggandara@member.fsf.org"))])
  (ascii-art-to-unicode .
-		       [(1 12)
+		       [(1 13)
 			nil "a small artist adjunct" single
 			((:keywords "ascii" "unicode" "box-drawing")
 			 (:authors
@@ -246,12 +246,12 @@
 		(1 3))
 	       (cl-lib
 		(0 5)))
-	      "Hunt down errors by bisecting elisp files" single
-	      ((:keywords "lisp")
+	      "Hunt down errors by bisecting elisp files" tar
+	      ((:url . "https://github.com/Malabarba/elisp-bug-hunter")
+	       (:maintainer "Artur Malabarba" . "emacs@endlessparentheses.com")
 	       (:authors
 		("Artur Malabarba" . "emacs@endlessparentheses.com"))
-	       (:maintainer "Artur Malabarba" . "emacs@endlessparentheses.com")
-	       (:url . "https://github.com/Malabarba/elisp-bug-hunter"))])
+	       (:keywords "lisp"))])
  (caps-lock .
 	    [(1 0)
 	     nil "Caps-lock as a minor mode" single
@@ -404,7 +404,7 @@
 	    (:maintainer "Oleh Krehel" . "ohwoeowho@gmail.com")
 	    (:url . "https://github.com/abo-abo/swiper"))])
  (cpio-mode .
-	    [(0 16)
+	    [(0 17)
 	     ((emacs
 	       (24 5)))
 	     "Handle cpio archives in the style of dired." tar
@@ -570,7 +570,7 @@
 	    (nil . "Frank E. Ritter, ritter@cs.cmu.edu"))
 	   (:url . "http://elpa.gnu.org/packages/dismal.html"))])
  (djvu .
-       [(1 1)
+       [(1 1 1)
 	nil "Edit and view Djvu files via djvused" single
 	((:url . "http://elpa.gnu.org/packages/djvu.html")
 	 (:keywords "files" "wp")
@@ -606,7 +606,7 @@
 	       ("Leo Liu" . "sdl.web@gmail.com"))
 	      (:keywords "killing" "convenience"))])
  (ebdb .
-       [(0 6 20)
+       [(0 6 21)
 	((emacs
 	  (25 1))
 	 (cl-lib
@@ -712,7 +712,7 @@
 		      ("William Xu" . "william.xwl@gmail.com"))
 		     (:maintainer "William Xu" . "william.xwl@gmail.com"))])
  (elisp-benchmarks .
-		   [(1 8)
+		   [(1 9)
 		    nil "elisp benchmarks collection" tar
 		    ((:maintainer "Andrea Corallo" . "akrl@sdf.org")
 		     (:authors
@@ -874,6 +874,16 @@
 	(:authors
 	 ("Magnus Henoch" . "magnus.henoch@gmail.com"))
 	(:maintainer "Thomas Fitzsimmons" . "fitzsim@fitzsim.org"))])
+ (gcmh .
+       [(0 2 1)
+	((emacs
+	  (24)))
+	"the Garbage Collector Magic Hack" single
+	((:keywords "internal")
+	 (:authors
+	  ("Andrea Corallo" . "akrl@sdf.org"))
+	 (:maintainer nil . "akrl@sdf.org")
+	 (:url . "https://gitlab.com/koral/gcmh"))])
  (ggtags .
 	 [(0 8 13)
 	  ((emacs
@@ -1101,7 +1111,7 @@
 		 (:maintainer "Clemens Radermacher" . "clemera@posteo.net")
 		 (:url . "https://github.com/clemera/ivy-explorer"))])
  (ivy-posframe .
-	       [(0 5 2)
+	       [(0 5 3)
 		((emacs
 		  (26 0))
 		 (posframe
@@ -1158,7 +1168,7 @@
 	       ("Simen Heggestøyl" . "simenheg@gmail.com"))
 	      (:maintainer "Simen Heggestøyl" . "simenheg@gmail.com"))])
  (jsonrpc .
-	  [(1 0 12)
+	  [(1 0 14)
 	   ((emacs
 	     (25 2)))
 	   "JSON-RPC library" single
@@ -1659,7 +1669,7 @@
 	   ("Mario Lang" . "mlang@delysid.org"))
 	  (:maintainer "Mario Lang" . "mlang@delysid.org"))])
  (posframe .
-	   [(0 8 2)
+	   [(0 8 3)
 	    ((emacs
 	      (26)))
 	    "Pop a posframe (just a frame) at point" single
@@ -1858,6 +1868,15 @@
 		      (:maintainer "Rocky Bernstein" . "rocky@gnu.org")
 		      (:authors
 		       ("Rocky Bernstein" . "rocky@gnu.org")))])
+ (rec-mode .
+	   [(1 6)
+	    ((emacs
+	      (25)))
+	    "Major mode for viewing/editing rec files" tar
+	    ((:url . "https://www.gnu.org/software/recutils/")
+	     (:maintainer "Antoine Kalmbach" . "ane@iki.fi")
+	     (:authors
+	      ("Jose E. Marchesi" . "jemarch@gnu.org")))])
  (register-list .
 		[(0 1)
 		 nil "Interactively list/edit registers" single
@@ -1867,9 +1886,9 @@
 		   ("Bastien Guerry" . "bzg@gnu.org"))
 		  (:maintainer "Bastien Guerry" . "bzg@gnu.org"))])
  (relint .
-	 [(1 18)
+	 [(1 19)
 	  ((xr
-	    (1 19))
+	    (1 20))
 	   (emacs
 	    (26 1)))
 	  "Elisp regexp mistake finder" tar
@@ -1989,8 +2008,18 @@
 	       ("Ralph Amissah & Ambrose Kofi Laing"))
 	      (:maintainer "Ralph Amissah" . "ralph.amissah@gmail.com")
 	      (:url . "http://www.sisudoc.org/"))])
+ (slime-volleyball .
+		   [(1 1 6)
+		    ((cl-lib
+		      (0 5)))
+		    "An SVG Slime Volleyball Game" tar
+		    ((:maintainer "Thomas Fitzsimmons" . "fitzsim@fitzsim.org")
+		     (:authors
+		      ("Thomas Fitzsimmons" . "fitzsim@fitzsim.org"))
+		     (:keywords "games")
+		     (:url . "http://elpa.gnu.org/packages/slime-volleyball.html"))])
  (sm-c-mode .
-	    [(1 0)
+	    [(1 1)
 	     nil "C major mode based on SMIE" single
 	     ((:url . "http://elpa.gnu.org/packages/sm-c-mode.html")
 	      (:authors
@@ -2213,7 +2242,7 @@
 	  ("Oleh Krehel" . "ohwoeowho@gmail.com"))
 	 (:keywords "convenience"))])
  (tramp .
-	[(2 4 4 3)
+	[(2 4 4 4)
 	 ((emacs
 	   (24 4)))
 	 "Transparent Remote Access, Multiple Protocol" tar
@@ -2401,7 +2430,7 @@
 		("Eric Schulte" . "schulte.eric@gmail.com"))
 	       (:keywords "http" "server" "network"))])
  (webfeeder .
-	    [(1 1 0)
+	    [(1 1 1)
 	     ((emacs
 	       (25 1)))
 	     "Build RSS and Atom webfeeds from HTML files" tar
@@ -2509,7 +2538,7 @@
 	 ("Thien-Thi Nguyen" . "ttn@gnu.org"))
 	(:keywords "multimedia" "xpm"))])
  (xr .
-     [(1 19)
+     [(1 20)
       ((emacs
 	(26 1)))
       "Convert string regexp to rx notation" tar

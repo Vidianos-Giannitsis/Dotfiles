@@ -1,0 +1,2 @@
+;;; Generated package description from /home/vidianos/.emacs.d/elpa/all-the-icons-ibuffer-20201027.758/all-the-icons-ibuffer.el  -*- no-byte-compile: t -*-
+(define-package "all-the-icons-ibuffer" "20201027.758" "Display icons for all buffers in ibuffer" '((emacs "24.4") (all-the-icons "2.2.0")) :commit "c41e12033712969bfa2e3e9f1c62feae866a48ac" :keywords '("convenience" "icons" "ibuffer") :authors '(("Vincent Zhang" . "seagle0128@gmail.com")) :maintainer '("Vincent Zhang" . "seagle0128@gmail.com") :url "https://github.com/seagle0128/all-the-icons-ibuffer")

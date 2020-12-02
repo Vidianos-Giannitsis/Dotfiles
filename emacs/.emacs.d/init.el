@@ -1,7 +1,8 @@
 (require 'package)
 (add-to-list 'package-archives
 	     '("melpa" . "https://melpa.org/packages/"))
-(package-initialize)
+
+(add-to-list 'package-archives (package-initialize))
 (unless package-archive-contents
   (package-refresh-contents))
 
@@ -35,6 +36,10 @@
 
 (require 'general)
 
+(add-hook 'ibuffer-mode-hook 'all-the-icons-ibuffer-mode)
+
+(setq truncate-partial-width-windows nil)
+
 (setq evil-collection-setup-minibuffer t)
 (setq evil-want-keybinding nil)
 (when (require 'evil-collection nil t)
@@ -53,29 +58,36 @@
 (evil-org-agenda-set-keys)
 
 (org-babel-do-load-languages
-   'org-babel-load-languages
-   '(
-     (python . t)
-     (haskell . t)
-     (octave . t)
-     (latex . t)
-)
-   )
+    'org-babel-load-languages
+    '(
+      (python . t)
+      (haskell . t)
+      (octave . t)
+      (latex . t)
+ )
+    )
 
+ (require 'org-bullets)
+ (add-hook 'org-mode-hook (lambda () (org-bullets-mode 1)))
 
-(require 'org-bullets)
-(add-hook 'org-mode-hook (lambda () (org-bullets-mode 1)))
+ (add-to-list 'org-file-apps '("\\.pdf\\'" . emacs))
+ (setq org-noter-always-create-frame nil)
 
-(add-to-list 'org-file-apps '("\\.pdf\\'" . emacs))
-(setq org-noter-always-create-frame nil)
+ (require 'calctex)
+ (add-hook 'calc-embedded-new-formula-hook 'calctex-mode)
 
-(require 'calctex)
-(add-hook 'calc-embedded-new-formula-hook 'calctex-mode)
+ (setq org-format-latex-options '(:foreground default :background default :scale 1.3 :html-foreground "Black" :html-background "Transparent" :html-scale 1.0 :matchers))
+
+ (add-hook 'org-mode-hook 'turn-on-org-cdlatex)
+
+ (require 'org-roam)
+; (require 'org-super-agenda)
 
 (setq org-todo-keywords
 	'((sequence "TODO(t)"
 		    "ACTIVE(a)"
 		    "NEXT(n)"
+		    "WAIT(w)"
 		    "|"
 		    "DONE(d@)"
 		    "CANCELLED(c@)"
@@ -88,14 +100,60 @@
   (interactive)
   (org-todo)
   (org-priority)
-  (org-set-effort))
-
-(setq org-priority-highest 1)
-(setq org-priority-default 5)
-(setq org-priority-lowest 10)
+  (org-set-effort)
+  (org-set-tags-command))
 
 (setq org-agenda-start-with-log-mode t)
 (setq org-log-into-drawer t)
+
+(org-super-agenda-mode 1)
+
+(add-hook 'org-agenda-mode-hook 'toggle-truncate-lines)
+
+(setq org-agenda-custom-commands
+      '(("s" "Super Powered Agenda"
+	 ((agenda "" ((org-agenda-span 'day)
+		      (org-super-agenda-groups
+		       '((:name "Today"
+				:time-grid t
+				:date today
+				:scheduled today)))))
+	 (alltodo "" ((org-agenda-overriding-header "")
+		       (org-super-agenda-groups
+			'((:name "What I've been doing"
+				 :todo "ACTIVE")
+			  (:name "Plans for the foreseeable future"
+				 :todo "NEXT")
+			  (:name "You GOTTA check this one out"
+				 :priority "A")
+			  (:name "As easy as they get"
+				 :effort< "0:10")
+			  (:discard (:anything))))))))
+	("u" "University Projects"
+	 ((alltodo "" ((org-agenda-overriding-header "")
+		       (org-super-agenda-groups
+			'((:name "Currently Working on"
+				 :and (:tag "University" :todo "ACTIVE"))
+			  (:name "This one's next (probably)"
+				 :and (:priority "A" :tag "University"))
+			  (:name "Medium Priority Projects"
+				 :and (:tag "University" :priority "B"))
+			  (:name "Trivial Projects, I'ma do them at some point though :D"
+				 :and (:tag "University" :priority "C"))
+			  (:discard (:not (:tag "University")))))))))
+	("e" "Emacs Projects"
+	 ((alltodo "" ((org-agenda-overriding-header "")
+		       (org-super-agenda-groups
+			'((:name "Configuring Emacs, the Present"
+				 :and (:tag "Emacs" :todo "ACTIVE")
+				 :and (:tag "Emacs" :todo "NEXT"))
+			  (:name "What to add, What to add??"
+				 :and (:tag "Emacs" :priority "A"))
+			  (:name "Wow, this one's easy, lets do it"
+				 :and (:tag "Emacs" :effort< "0:15"))
+			  (:discard (:not (:tag "Emacs")))
+			  (:name "But wait, this was only the beginning. The real fun starts here!"
+				 :anything)))))))))
 
 (require 'dired-x)
 (use-package all-the-icons-dired
@@ -113,6 +171,7 @@
 (use-package pdf-tools
     :mode (("\\.pdf\\'" . pdf-view-mode))
     :config
+    ;(define-key pdf-view-mode-map [remap quit-window] #'kill-current-buffer)
     (progn
       (pdf-tools-install))
     )
@@ -137,7 +196,7 @@
     "j" 'dired-jump
     "T" 'org-babel-tangle
     "RET" 'vterm
-    "b" 'switch-to-buffer
+    "b" 'ibuffer
     "a" 'org-agenda
     "g" 'pdf-view-goto-page
     "H" 'split-window-horizontally
@@ -153,20 +212,18 @@
    "l" 'org-latex-preview
    "n" 'org-noter
    "s" 'org-schedule
-   "c" 'org-todo
-   "t" 'org-make-todo
+   "t" 'org-todo
+   "m" 'org-make-todo
    "e" 'org-export-dispatch
-   "p" 'org-priority)
+   "p" 'org-priority
+   "v" 'org-tags-view
+   "T" 'org-set-tags-command)
 
-  (general-create-definer nested-leader-def
-    :prefix "SPC f")
-
-  (nested-leader-def
-   :states 'normal
-   :keymaps 'override
-   "j" 'dired-jump
-   "r" 'helm-recentf
-   "f" 'helm-find-files)
+(general-define-key
+ :states 'normal
+ :keymaps 'pdf-view-mode-map
+ "i" 'org-noter-insert-note
+ "c" 'kill-current-buffer)
 
   (global-set-key (kbd "M-b") 'ebuku)
   (global-set-key (kbd "M-C-r") 'restart-emacs)
@@ -187,8 +244,7 @@
  '(custom-safe-themes
    '("0fffa9669425ff140ff2ae8568c7719705ef33b7a927a0ba7c5e2ffcfac09b75" default))
  '(package-selected-packages
-   '(evil-collection openwith sequences cl-lib-highlight helm-system-packages async-await popup-complete helm-fuzzy-find evil-space yapfify yaml-mode ws-butler winum which-key web-mode web-beautify vterm volatile-highlights vi-tilde-fringe uuidgen use-package toc-org tagedit spaceline solarized-theme slim-mode scss-mode sass-mode restart-emacs request rainbow-delimiters pyvenv pytest pyenv-mode py-isort pug-mode pspp-mode popwin pip-requirements persp-mode pcre2el paradox org-projectile-helm org-present org-pomodoro org-mime org-download org-bullets open-junk-file neotree move-text mmm-mode markdown-toc magit macrostep lorem-ipsum livid-mode live-py-mode linum-relative link-hint json-mode js2-refactor js-doc intero indent-guide hy-mode hungry-delete htmlize hlint-refactor hl-todo hindent highlight-parentheses highlight-numbers highlight-indentation helm-themes helm-swoop helm-pydoc helm-projectile helm-mode-manager helm-make helm-hoogle helm-flx helm-descbinds helm-css-scss helm-ag haskell-snippets gruvbox-theme google-translate golden-ratio gnuplot gh-md flx-ido fill-column-indicator fancy-battery eyebrowse expand-region exec-path-from-shell evil-visualstar evil-visual-mark-mode evil-unimpaired evil-tutor evil-surround evil-search-highlight-persist evil-numbers evil-nerd-commenter evil-mc evil-matchit evil-lisp-state evil-indent-plus evil-iedit-state evil-exchange evil-escape evil-ediff evil-args evil-anzu eval-sexp-fu emmet-mode elisp-slime-nav dumb-jump diminish define-word cython-mode csv-mode company-ghci company-ghc column-enforce-mode coffee-mode cmm-mode clean-aindent-mode auto-highlight-symbol auto-compile auctex-latexmk anaconda-mode aggressive-indent adaptive-wrap ace-window ace-link ace-jump-helm-line))
- '(truncate-lines nil))
+   '(evil-collection openwith sequences cl-lib-highlight helm-system-packages async-await popup-complete helm-fuzzy-find evil-space yapfify yaml-mode ws-butler winum which-key web-mode web-beautify vterm volatile-highlights vi-tilde-fringe uuidgen use-package toc-org tagedit spaceline solarized-theme slim-mode scss-mode sass-mode restart-emacs request rainbow-delimiters pyvenv pytest pyenv-mode py-isort pug-mode pspp-mode popwin pip-requirements persp-mode pcre2el paradox org-projectile-helm org-present org-pomodoro org-mime org-download org-bullets open-junk-file neotree move-text mmm-mode markdown-toc magit macrostep lorem-ipsum livid-mode live-py-mode linum-relative link-hint json-mode js2-refactor js-doc intero indent-guide hy-mode hungry-delete htmlize hlint-refactor hl-todo hindent highlight-parentheses highlight-numbers highlight-indentation helm-themes helm-swoop helm-pydoc helm-projectile helm-mode-manager helm-make helm-hoogle helm-flx helm-descbinds helm-css-scss helm-ag haskell-snippets gruvbox-theme google-translate golden-ratio gnuplot gh-md flx-ido fill-column-indicator fancy-battery eyebrowse expand-region exec-path-from-shell evil-visualstar evil-visual-mark-mode evil-unimpaired evil-tutor evil-surround evil-search-highlight-persist evil-numbers evil-nerd-commenter evil-mc evil-matchit evil-lisp-state evil-indent-plus evil-iedit-state evil-exchange evil-escape evil-ediff evil-args evil-anzu eval-sexp-fu emmet-mode elisp-slime-nav dumb-jump diminish define-word cython-mode csv-mode company-ghci company-ghc column-enforce-mode coffee-mode cmm-mode clean-aindent-mode auto-highlight-symbol auto-compile auctex-latexmk anaconda-mode aggressive-indent adaptive-wrap ace-window ace-link ace-jump-helm-line)))
 
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
