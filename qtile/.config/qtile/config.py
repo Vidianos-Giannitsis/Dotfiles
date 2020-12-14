@@ -68,7 +68,7 @@ Key2("M-S-r", lazy.restart(), desc="Restart qtile"),
 Key2("M-S-e", lazy.shutdown(), desc="Shutdown qtile"),
 
 Key2("M-<Return>", lazy.spawn(terminal), desc="Launch terminal"),
-Key2("M-r", lazy.spawncmd(),
+Key2("M-r", lazy.spawn("rofi -show run"),
     desc="Spawn a command using a prompt widget"),
 Key2("M-S-b", lazy.spawn(min_browser), desc="Launch minimal browser"),
 Key2("M-C-b", lazy.spawn(full_browser), desc="Launch full browser"),

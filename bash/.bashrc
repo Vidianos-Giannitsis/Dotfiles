@@ -152,9 +152,14 @@ alias free='free -m'                      # show sizes in MB
 alias np='nano -w PKGBUILD'
 alias more=less
 alias nnn='nnn -e'
-alias ls='nnn -de'
+alias ls='exa -al --color=always --group-directories-first' 
+alias la='exa -a --color=always --group-directories-first'  # all files and dirs
+alias ll='exa -l --color=always --group-directories-first'  # long format
+alias lt='exa -aT --color=always --group-directories-first' # tree listing
+alias l.='exa -a | egrep "^\."'
 alias ..='cd ..'
 alias tlmgr='/usr/share/texmf-dist/scripts/texlive/tlmgr.pl --usermode'
+alias zotero='cd Zotero_linux-x86_64/ && ./zotero && cd'
 
 # Git command aliases
 alias gadd='git add'
@@ -165,3 +170,7 @@ alias gpush='git push'
 
 # Vim editing mode for my shell
 set -o vi
+eval "$(starship init bash)"
+
+
+

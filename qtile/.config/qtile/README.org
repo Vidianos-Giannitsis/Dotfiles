@@ -28,20 +28,18 @@ import subprocess
 Here I define some variables, which are some of my programs. 
 Defining them here helps if I want to use them in multiple locations of my config file or am not sure if I want to keep them. 
 
-For example, I switch browsers often and I want the ability to open both a minimal browser and a fully featured "bloated" browser. So for this, this kind of setup works great.
-
 #+BEGIN_SRC python
-mod = "mod4"
-terminal = guess_terminal()
-editor = "emacs"
-min_browser = "qutebrowser"
-full_browser = "brave"
-office = "libreoffice"
-file_manager = "thunar" # I mostly use dired inside emacs for file management, but this exists as a gui file manager in case I need it
-music_player = "spotify"
-calculator = "qalculate-gtk"
-pdf_reader = "zathura"
-screenshots = "flameshot gui"
+  mod = "mod4"
+  terminal = guess_terminal()
+  editor = "emacs"
+  min_browser = "qutebrowser"
+  full_browser = "brave"
+  office = "libreoffice"
+  file_manager = "thunar" # I mostly use dired inside emacs for file management, but this exists as a gui file manager in case I need it
+  music_player = "spotify"
+  calculator = "qalculate-gtk"
+  pdf_reader = "zathura"
+  screenshots = "flameshot gui"
 #+END_SRC
 
 * Hooks
@@ -128,27 +126,27 @@ In this subsection of my keybindings, I define all the keybindings needed to lau
 Some notes about them are:
 + Most of them are bound as M-C-the first letter of the program I want to launch. Or if there is already a program in that letter, I use M-S-that letter
 + Terminal is bound to M-<Return> because its a good keybinding and its what almost every twm user has for their terminal
-+ I currently use Qtile's built in prompt for a run prompt. Dmenu or rofi is probably better but I dont use them that often as I consider it more efficient to bind my favourite programs to specific keybindings.
++ I currently use rofi for a run prompt. You can also find my rofi config in this repo, but not much is changed from the default config. It is something I will configure more in the future when I find the time though. For now, I dont actually use it enough to justify spending time in ricing it.
 + For those that dont have a name in quotes but a variable, refer to the Variables section of this config for which program they are
 
 #+BEGIN_SRC python
-   Key2("M-<Return>", lazy.spawn(terminal), desc="Launch terminal"),
-   Key2("M-r", lazy.spawncmd(),
-       desc="Spawn a command using a prompt widget"),
-   Key2("M-S-b", lazy.spawn(min_browser), desc="Launch minimal browser"),
-   Key2("M-C-b", lazy.spawn(full_browser), desc="Launch full browser"),
-   Key2("M-C-f", lazy.spawn(file_manager), desc="Launch file manager"),
-   Key2("M-C-e", lazy.spawn(editor), desc="Launch Emacs"),
-   Key2("M-C-l", lazy.spawn(office), desc="Launch an office suite"),
-   Key2("M-S-l", lazy.spawn("lutris"), desc="Launch lutris"),
-   Key2("M-S-s", lazy.spawn("steam"), desc="Launch steam"),
-   Key2("M-C-d", lazy.spawn("discord"), desc="Launch discord"),
-   Key2("M-C-o", lazy.spawn("octave --gui"), desc="Launch octave"),
-   Key2("M-C-t", lazy.spawn("thunderbird"), desc="Launch email client"),
-   Key2("M-C-a", lazy.spawn("pavucontrol"), desc="Launch audio control"),
-   Key2("M-C-g", lazy.spawn("geogebra"), desc="Launch geogebra"),
-   Key2("M-C-i", lazy.spawn("inkscape"), desc="Launch inkscape"),
-   Key2("M-C-z", lazy.spawn(pdf_reader), desc="Launch pdf reader"),
+  Key2("M-<Return>", lazy.spawn(terminal), desc="Launch terminal"),
+  Key2("M-r", lazy.spawn("rofi -show run"),
+      desc="Spawn a command using a prompt widget"),
+  Key2("M-S-b", lazy.spawn(min_browser), desc="Launch minimal browser"),
+  Key2("M-C-b", lazy.spawn(full_browser), desc="Launch full browser"),
+  Key2("M-C-f", lazy.spawn(file_manager), desc="Launch file manager"),
+  Key2("M-C-e", lazy.spawn(editor), desc="Launch Emacs"),
+  Key2("M-C-l", lazy.spawn(office), desc="Launch an office suite"),
+  Key2("M-S-l", lazy.spawn("lutris"), desc="Launch lutris"),
+  Key2("M-S-s", lazy.spawn("steam"), desc="Launch steam"),
+  Key2("M-C-d", lazy.spawn("discord"), desc="Launch discord"),
+  Key2("M-C-o", lazy.spawn("octave --gui"), desc="Launch octave"),
+  Key2("M-C-t", lazy.spawn("thunderbird"), desc="Launch email client"),
+  Key2("M-C-a", lazy.spawn("pavucontrol"), desc="Launch audio control"),
+  Key2("M-C-g", lazy.spawn("geogebra"), desc="Launch geogebra"),
+  Key2("M-C-i", lazy.spawn("inkscape"), desc="Launch inkscape"),
+  Key2("M-C-z", lazy.spawn(pdf_reader), desc="Launch pdf reader"),
 #+END_SRC
 
 ** Multimedia Keys

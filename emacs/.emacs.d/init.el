@@ -35,6 +35,7 @@
 (yas-global-mode 1)
 
 (require 'general)
+(require 'vterm-toggle)
 
 (add-hook 'ibuffer-mode-hook 'all-the-icons-ibuffer-mode)
 
@@ -58,30 +59,35 @@
 (evil-org-agenda-set-keys)
 
 (org-babel-do-load-languages
-    'org-babel-load-languages
-    '(
-      (python . t)
-      (haskell . t)
-      (octave . t)
-      (latex . t)
- )
-    )
+   'org-babel-load-languages
+   '(
+     (python . t)
+     (haskell . t)
+     (octave . t)
+     (latex . t)
+)
+   )
 
- (require 'org-bullets)
- (add-hook 'org-mode-hook (lambda () (org-bullets-mode 1)))
+(require 'org-bullets)
+(add-hook 'org-mode-hook (lambda () (org-bullets-mode 1)))
 
- (add-to-list 'org-file-apps '("\\.pdf\\'" . emacs))
- (setq org-noter-always-create-frame nil)
+(add-to-list 'org-file-apps '("\\.pdf\\'" . emacs))
+(setq org-noter-always-create-frame nil)
 
- (require 'calctex)
- (add-hook 'calc-embedded-new-formula-hook 'calctex-mode)
+(require 'calctex)
+(add-hook 'calc-embedded-new-formula-hook 'calctex-mode)
 
- (setq org-format-latex-options '(:foreground default :background default :scale 1.3 :html-foreground "Black" :html-background "Transparent" :html-scale 1.0 :matchers))
+(setq org-format-latex-options '(:foreground default :background default :scale 1.3 :html-foreground "Black" :html-background "Transparent" :html-scale 1.0 :matchers))
 
- (add-hook 'org-mode-hook 'turn-on-org-cdlatex)
+(add-hook 'org-mode-hook 'turn-on-org-cdlatex)
+(add-hook 'org-mode-hook 'org-zotxt-mode)
 
- (require 'org-roam)
-; (require 'org-super-agenda)
+(require 'org-roam)
+
+(use-package org-download
+  :after org)
+
+(setq org-odt-preferred-output-format "docx")
 
 (setq org-todo-keywords
 	'((sequence "TODO(t)"
@@ -111,7 +117,7 @@
 (add-hook 'org-agenda-mode-hook 'toggle-truncate-lines)
 
 (setq org-agenda-custom-commands
-      '(("s" "Super Powered Agenda"
+      '(("q" "Quick Check for the day"
 	 ((agenda "" ((org-agenda-span 'day)
 		      (org-super-agenda-groups
 		       '((:name "Today"
@@ -163,6 +169,13 @@
 (use-package dired-hide-dotfile
   :hook (dired-mode . dired-hide-dotfiles-mode))
 
+(require 'eaf)
+
+(require 'eaf-evil)
+;(setq eaf-evil-leader-key "SPC")
+
+(setq eaf-wm-focus-fix-wms '("qtile"))
+
 (require 'ebuku)
 (require 'evil-collection-ebuku)
 
@@ -195,7 +208,8 @@
     "t" 'toggle-truncate-lines
     "j" 'dired-jump
     "T" 'org-babel-tangle
-    "RET" 'vterm
+    "RET" 'vterm-toggle
+    "<C-return>" 'vterm 
     "b" 'ibuffer
     "a" 'org-agenda
     "g" 'pdf-view-goto-page
@@ -217,7 +231,11 @@
    "e" 'org-export-dispatch
    "p" 'org-priority
    "v" 'org-tags-view
-   "T" 'org-set-tags-command)
+   "T" 'org-set-tags-command
+   "y" 'org-download-clipboard
+   "z i" 'org-zotxt-insert-reference-link
+   "z o" 'org-zotxt-open-attachment
+   "z n" 'org-zotxt-noter)
 
 (general-define-key
  :states 'normal
@@ -229,8 +247,6 @@
   (global-set-key (kbd "M-C-r") 'restart-emacs)
   (global-set-key (kbd "M-d") (lambda() (interactive)(find-file "~/.emacs.d/README.org")))
   (global-set-key (kbd "M-t") (lambda() (interactive)(find-file "~/project_management/emacs.org")))
-
-  (global-set-key (kbd "M-m") 'which-key-show-major-mode)
 
 (add-hook 'dired-mode-hook
 	  (lambda () (local-set-key (kbd "C-+") #'dired-create-empty-file)))
