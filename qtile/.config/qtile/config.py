@@ -95,7 +95,7 @@ Key2("<XF86AudioRaiseVolume>", lazy.spawn("amixer set Master 5%+ unmute"), desc=
 
 groups = [
     ScratchPad("scratchpad", [
-	DropDown("music", "spotify", opacity=0.8),
+	DropDown("music", "spotify", opacity=0.8, height=0.8, weight=0.8),
 	DropDown("term", "alacritty", opacity=0.8),
 	DropDown("calc", "qalculate-gtk", opacity=0.8),
 	DropDown("obs", "obs", opacity=0.8) ]),

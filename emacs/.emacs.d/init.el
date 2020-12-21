@@ -58,34 +58,26 @@
 (require 'evil-org-agenda)
 (evil-org-agenda-set-keys)
 
-(org-babel-do-load-languages
-   'org-babel-load-languages
-   '(
-     (python . t)
-     (haskell . t)
-     (octave . t)
-     (latex . t)
-)
-   )
-
 (require 'org-bullets)
 (add-hook 'org-mode-hook (lambda () (org-bullets-mode 1)))
-
-(add-to-list 'org-file-apps '("\\.pdf\\'" . emacs))
-(setq org-noter-always-create-frame nil)
-
-(require 'calctex)
-(add-hook 'calc-embedded-new-formula-hook 'calctex-mode)
-
-(setq org-format-latex-options '(:foreground default :background default :scale 1.3 :html-foreground "Black" :html-background "Transparent" :html-scale 1.0 :matchers))
-
-(add-hook 'org-mode-hook 'turn-on-org-cdlatex)
-(add-hook 'org-mode-hook 'org-zotxt-mode)
 
 (require 'org-roam)
 
 (use-package org-download
   :after org)
+
+(require 'calctex)
+(add-hook 'calc-embedded-new-formula-hook 'calctex-mode)
+
+(add-hook 'org-mode-hook 'turn-on-org-cdlatex)
+(add-hook 'org-mode-hook 'org-zotxt-mode)
+
+(add-to-list 'org-file-apps '("\\.pdf\\'" . emacs))
+(setq org-noter-always-create-frame nil)
+
+(setq org-format-latex-options '(:foreground default :background default :scale 1.3 :html-foreground "Black" :html-background "Transparent" :html-scale 1.0 :matchers))
+
+(setq org-latex-pdf-process (list "latexmk -shell-escape -bibtex -f -pdf %f"))
 
 (setq org-odt-preferred-output-format "docx")
 
@@ -161,6 +153,16 @@
 			  (:name "But wait, this was only the beginning. The real fun starts here!"
 				 :anything)))))))))
 
+(org-babel-do-load-languages
+   'org-babel-load-languages
+   '(
+     (python . t)
+     (haskell . t)
+     (octave . t)
+     (latex . t)
+)
+   )
+
 (require 'dired-x)
 (use-package all-the-icons-dired
   :hook (dired-mode . all-the-icons-dired-mode))
@@ -194,48 +196,47 @@
 (add-to-list 'auto-mode-alist '("\\.m\\'" . octave-mode))
 
 (general-create-definer my-leader-def
-			  :prefix "SPC")
+			:prefix "SPC")
 
-  (my-leader-def
-   :states 'normal
-   :keymaps 'override
-    "<SPC>" 'helm-M-x
-    "!" 'shell-command
-    "p" 'package-install
-    "o" 'inferior-octave
-    "d" 'dired
-    "h" 'dired-hide-dotfiles-mode
-    "t" 'toggle-truncate-lines
-    "j" 'dired-jump
-    "T" 'org-babel-tangle
-    "RET" 'vterm-toggle
-    "<C-return>" 'vterm 
-    "b" 'ibuffer
-    "a" 'org-agenda
-    "g" 'pdf-view-goto-page
-    "H" 'split-window-horizontally
-    "V" 'split-window-vertically
-    "c" 'calc-dispatch)
+(my-leader-def
+ :states 'normal
+ :keymaps 'override
+  "!" 'shell-command
+  "p" 'package-install
+  "o" 'inferior-octave
+  "d" 'dired
+  "h" 'dired-hide-dotfiles-mode
+  "t" 'toggle-truncate-lines
+  "j" 'dired-jump
+  "T" 'org-babel-tangle
+  "RET" 'vterm-toggle
+  "<C-return>" 'vterm 
+  "b" 'ibuffer
+  "a" 'org-agenda
+  "g" 'pdf-view-goto-page
+  "H" 'split-window-horizontally
+  "V" 'split-window-vertically
+  "c" 'calc-dispatch)
 
-  (general-create-definer org-leader-def
-    :prefix ",")
+(general-create-definer org-leader-def
+      :prefix ",")
 
-  (org-leader-def
-   :states 'normal
-   :keymaps 'org-mode-map
-   "l" 'org-latex-preview
-   "n" 'org-noter
-   "s" 'org-schedule
-   "t" 'org-todo
-   "m" 'org-make-todo
-   "e" 'org-export-dispatch
-   "p" 'org-priority
-   "v" 'org-tags-view
-   "T" 'org-set-tags-command
-   "y" 'org-download-clipboard
-   "z i" 'org-zotxt-insert-reference-link
-   "z o" 'org-zotxt-open-attachment
-   "z n" 'org-zotxt-noter)
+    (org-leader-def
+     :states 'normal
+     :keymaps 'org-mode-map
+     "l" 'org-latex-preview
+     "n" 'org-noter
+     "s" 'org-schedule
+     "t" 'org-todo
+     "m" 'org-make-todo
+     "e" 'org-export-dispatch
+     "p" 'org-priority
+     "v" 'org-tags-view
+     "T" 'org-set-tags-command
+     "y" 'org-download-clipboard
+     "z i" 'org-zotxt-insert-reference-link
+     "z o" 'org-zotxt-open-attachment
+     "z n" 'org-zotxt-noter)
 
 (general-define-key
  :states 'normal

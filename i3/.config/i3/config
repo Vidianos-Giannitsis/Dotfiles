@@ -40,7 +40,7 @@ floating_modifier $mod
 # kill focused window
 bindsym $mod+Control+x kill
 # start dmenu
-bindsym $mod+d exec dmenu_run -i -fn 'Mononoki Nerd Font 8'
+bindsym $mod+r exec rofi -show run
 
 # Language changer Greek-English
 exec_always "setxkbmap -model pc104 -layout us,gr -variant ,, -option grp:alt_shift_toggle"
@@ -151,7 +151,7 @@ mode "resize" {
         bindsym $mod+r mode "default"
 }
 
-bindsym $mod+r mode "resize"
+bindsym $mod+Control+r mode "resize"
 
 # -- Bar Config (i3bar with i3blocks) --
 bar {

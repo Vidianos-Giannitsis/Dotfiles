@@ -119,54 +119,51 @@ Enabling Evil Mode, my preffered editing mode for Emacs, with the evil-collectio
 
 
 * Org-mode
-Some settings I want for Emacs's Org-mode which I use extensively (like for writing this literate config file). This is getting too large, I should split it inot a few more sections at some point for more readability, but for now enjoy it as it is.
-It adds:
-+ More languages to evaluate with org-babel (by default, only elisp is evaluated).
-+ Better headings for org, as I am not a fan of the default asterisks.
-+ When exporting to pdf, org defaults to your system's default pdf viewer (zathura in my case). Since I am in an Emacs buffer editing the file, its more convenient to open the pdf inside Emacs with pdf-tools and the last setting does just that.
-+ Org-noter is an excellent program for annotating pdfs using org. Its only problem is that when you open it it creates its frame in a new emacs window which for me is inconvenient, so I change that behaviour to open in the current buffer.
-+ I use org-mode extensively for my uni projects, which have a lot of equations which I normally render with Latex. But it has one problem, the Latex formatting sucks. I used to get around this with snippets which auto expand into the symbols I want but I recently found this calctex package and got it to work properly (its not packaged in MELPA and is kind of a dependency hell with Latex dependencies I didn't have). This essentially gives the "M-x" calc's embedded mode proper latex formatting  which is amazing. With this I can type the equation in its easy to use format and calctex will make it a latex equation which renders properly. But I never managed to make it work inside the Calc major mode (it tries to render pictures of the latex equations but its missing a font, which I am almost sure I installed but it doesnt work and I have tried for too long) so I only enable it for the embedded mode, which is its main use anyways so I dont mind this outcome.
-+ As mentioned, I use latex fragments in org a lot and the normal size of them is a bit small for my liking so I scale it up to 1.3 of the original which I consider a very sensible size
-+ I activate org-cdlatex-mode which makes typing latex equations easier inside org and massively improves speed of typing equations together with snippets for org and org-zotxt-mode which helps org communicate with Zotero and draw articles/bibliographies for my documents which I have saved in Zotero's database
-+ I require org-roam although I havent set it up just yet, to remind me that I eventually want to work with it
-+ I load org-download after org, this is a helpful addon which allows me to paste photos on my clipboard to org, which makes adding photos to org documents much faster.
-+ Laslty, I tell org that its odt export should be converted to docx as if I am exporting to that, its for a collaboration and most people I know use that format. If its personal I just export to the latex pdf anyways. 
- 
-I also have my org-agenda configuration and some settings for my todo items but since its a big part of the config I have split that to its own source code block
+Some settings I want for Emacs's Org-mode which I use extensively (like for writing this literate config file). Its split in sections cause its too huge otherwise. I change way too many stuff in Org :D. 
 
+** Setting up external packages for org
+   This first section is about some packages I load for org, which are very helpful for my workflow, such as:
+   + Better headings for org, as I am not a fan of the default asterisks.
+   + I require org-roam although I havent set it up just yet, to remind me that I eventually want to work with it
+   + I load org-download after org, this is a helpful addon which allows me to paste photos on my clipboard to org, which makes adding photos to org documents much faster.
+   + I activate calctex and activate it when I go into calc's embedded mode. Its a neat package that allows me to type a formula inside calc and renders it automatically into latex. Latex snippets are what I use mostly (you can find them inside the snippets directory of my .emacs.d but if you want to draw inspiration from somewhere there are much better sources tbh).
+   + I activate org-cdlatex-mode which makes typing latex equations easier inside org and massively improves speed of typing equations together with snippets for org and org-zotxt-mode which helps org communicate with Zotero and draw articles/bibliographies for my citations which I have saved in Zotero's database
+     
 #+BEGIN_SRC elisp
-
-  (org-babel-do-load-languages
-     'org-babel-load-languages
-     '(
-       (python . t)
-       (haskell . t)
-       (octave . t)
-       (latex . t)
-  )
-     )
 
   (require 'org-bullets)
   (add-hook 'org-mode-hook (lambda () (org-bullets-mode 1)))
-
-  (add-to-list 'org-file-apps '("\\.pdf\\'" . emacs))
-  (setq org-noter-always-create-frame nil)
-
-  (require 'calctex)
-  (add-hook 'calc-embedded-new-formula-hook 'calctex-mode)
-
-  (setq org-format-latex-options '(:foreground default :background default :scale 1.3 :html-foreground "Black" :html-background "Transparent" :html-scale 1.0 :matchers))
-
-  (add-hook 'org-mode-hook 'turn-on-org-cdlatex)
-  (add-hook 'org-mode-hook 'org-zotxt-mode)
 
   (require 'org-roam)
 
   (use-package org-download
     :after org)
 
-  (setq org-odt-preferred-output-format "docx")
+  (require 'calctex)
+  (add-hook 'calc-embedded-new-formula-hook 'calctex-mode)
 
+  (add-hook 'org-mode-hook 'turn-on-org-cdlatex)
+  (add-hook 'org-mode-hook 'org-zotxt-mode)
+
+#+END_SRC
+
+** Org mode utilities
+   I change some more things inside org to fix some annoying default behaviours.
+   + When exporting to pdf, org defaults to your system's default pdf viewer (zathura in my case). Since I am in an Emacs buffer editing the file, its more convenient to open the pdf inside Emacs with pdf-tools.
+   + Org-noter is an excellent program for annotating pdfs using org. Its only problem is that when you open it it creates its frame in a new emacs window which for me is inconvenient, so I change that behaviour to open the notes the current buffer.
+   + I write a lot of equations in my documents usually with latex and the normal size of those inside org (available with org-latex-preview) is a bit small for my liking so after playing around with it a bit I scaled it up to 1.3 of the original which I consider a very sensible size
+   + Making latex view my bibtex bibliography and export it properly. I took this from the org-ref docs as originally I wasnt getting proper bibliographic entries. I t works with this.
+   + Laslty, I tell org that its odt export should be converted to docx as if I am exporting to a rich text editors format, its for a collaboration and most people I know use that format. If its a personal project I always export to a latex pdf because it looks better. 
+
+#+BEGIN_SRC elisp
+  (add-to-list 'org-file-apps '("\\.pdf\\'" . emacs))
+  (setq org-noter-always-create-frame nil)
+
+  (setq org-format-latex-options '(:foreground default :background default :scale 1.3 :html-foreground "Black" :html-background "Transparent" :html-scale 1.0 :matchers))
+
+  (setq org-latex-pdf-process (list "latexmk -shell-escape -bibtex -f -pdf %f"))
+
+  (setq org-odt-preferred-output-format "docx")
 
 #+END_SRC
 
@@ -261,6 +258,23 @@ I also have my org-agenda configuration and some settings for my todo items but 
 | s | Super Powered Agenda | ((agenda  ((org-agenda-span 'day) (org-super-agenda-groups '((:name Today :time-grid t :date today :scheduled today))))) (alltodo  ((org-agenda-overriding-header ) (org-super-agenda-groups '((:name What I've been doing :todo ACTIVE) (:name Plans for the foreseeable future :todo NEXT) (:name You GOTTA check this one out :priority A) (:name As easy as they get :effort< 0:10) (:discard (:anything)))))))                        |
 | u | University Projects  | ((alltodo  ((org-agenda-overriding-header ) (org-super-agenda-groups '((:name Currently Working on :and (:tag University :todo ACTIVE)) (:name What you gonna start next (probably) :and (:priority A :tag University)) (:name Medium Priority Projects :and (:tag University :priority B)) (:name Trivial Projects, I'ma do them at some point :D :and (:tag University :priority C)) (:discard (:not (:tag University))))))))            |
 | e | Emacs Projects       | ((alltodo  ((org-agenda-overriding-header ) (org-super-agenda-groups '((:name Configuring Emacs, the Present :and (:tag Emacs :todo ACTIVE) :and (:tag Emacs :todo NEXT)) (:name What to add, What to add?? :and (:tag Emacs :priority A)) (:name Wow, this one's easy, lets do it :and (:tag Emacs :effort< 0:15)) (:discard (:not (:tag Emacs))) (:name But wait, this was only the beginning. The real fun starts here! :anything)))))) |
+
+** Org Babel
+More languages to evaluate with org-babel (by default, only elisp is evaluated). I dont use this extensively but for those times that I need to evaluate code in org, its probably going to be in one of these so might as well add them.
+
+#+BEGIN_SRC elisp
+
+  (org-babel-do-load-languages
+     'org-babel-load-languages
+     '(
+       (python . t)
+       (haskell . t)
+       (octave . t)
+       (latex . t)
+  )
+     )
+
+#+END_SRC
 
 * Dired
   Dired is Emacs's built in file manager (stands for directory editor) As dired is my Emacs startup screen as mentioned before, I have some customisations for it which are pretty neat.
