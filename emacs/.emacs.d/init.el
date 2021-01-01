@@ -26,20 +26,10 @@
 
 (ido-mode 1)
 
-(show-paren-mode 1)
-(electric-pair-mode 1)
-
-(add-to-list 'load-path
-	     "~/.emacs.d/plugins/yasnippet")
-(require 'yasnippet)
-(yas-global-mode 1)
-
-(require 'general)
-(require 'vterm-toggle)
-
-(add-hook 'ibuffer-mode-hook 'all-the-icons-ibuffer-mode)
-
-(setq truncate-partial-width-windows nil)
+(setq backup-directory-alist `(("." . ,(expand-file-name "tmp/backups/" user-emacs-directory))))
+(make-directory (expand-file-name "tmp/auto-saves/" user-emacs-directory) t)
+(setq auto-save-list-file-prefix (expand-file-name "tmp/auto-saves/sessions/" user-emacs-directory)
+      auto-save-file-name-transforms `((".*" ,(expand-file-name "tmp/auto-saves/" user-emacs-directory) t)))
 
 (setq evil-collection-setup-minibuffer t)
 (setq evil-want-keybinding nil)
@@ -57,6 +47,23 @@
 (evil-org-set-key-theme '(navigation insert textobjects additional calendar))
 (require 'evil-org-agenda)
 (evil-org-agenda-set-keys)
+
+(show-paren-mode 1)
+(electric-pair-mode 1)
+
+(add-to-list 'load-path
+	     "~/.emacs.d/plugins/yasnippet")
+(require 'yasnippet)
+(yas-global-mode 1)
+
+(require 'general)
+(require 'vterm-toggle)
+
+(add-hook 'ibuffer-mode-hook 'all-the-icons-ibuffer-mode)
+
+(setq truncate-partial-width-windows nil)
+
+(setq wolfram-alpha-app-id "U9PERG-KTPL49AWA2")
 
 (require 'org-bullets)
 (add-hook 'org-mode-hook (lambda () (org-bullets-mode 1)))
@@ -216,7 +223,8 @@
   "g" 'pdf-view-goto-page
   "H" 'split-window-horizontally
   "V" 'split-window-vertically
-  "c" 'calc-dispatch)
+  "c" 'calc-dispatch
+  "w" 'wolfram-alpha)
 
 (general-create-definer org-leader-def
       :prefix ",")

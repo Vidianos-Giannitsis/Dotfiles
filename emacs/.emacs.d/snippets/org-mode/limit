@@ -2,4 +2,4 @@
 # name: limit
 # key: lim
 # --
-$\lim_{x\to} f(x)$
+\lim_{x\to} f(x)

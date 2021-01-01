@@ -240,48 +240,48 @@ On the left side of the bar, I have the Current Layout for qtile in green and th
 On the right side of the bar, I have RAM and CPU usage, which combining textboxes and their outputs I made into one widget seemingly, the current volume of the laptop, its battery and the current date and time. Lastly, on the far right is my systray which stores things like network-manager and other things that stay in the systray upon opening (ex. Discord or flameshot). The battery specifically, displays an up arrow when recharging, a down arrow when discharging and its text turns red when under 20% to notify that the battery is low.
 
 #+BEGIN_SRC python
-widget_defaults = dict(
-    font='sans',
-    fontsize=11,
-    padding=2,
-    background="#002b36",
-    foreground="#fdf6e3",
-)
-extension_defaults = widget_defaults.copy()
+  widget_defaults = dict(
+      font='sans',
+      fontsize=11,
+      padding=2,
+      background="#002b36",
+      foreground="#fdf6e3",
+  )
+  extension_defaults = widget_defaults.copy()
 
-screens = [
-    Screen(
-        bottom=bar.Bar(
-            [
-                widget.CurrentLayout(background="074231"),
-                widget.Sep(foreground="#421307", size_percent=100),
-                widget.GroupBox(),
-                widget.Prompt(),
-                widget.WindowName(),
-                widget.Sep(foreground="#421307", size_percent=100),
-                widget.TextBox("RAM: ", background="#074231"),
-                widget.Memory(background="#074231"),
-                widget.TextBox(",", background="#074231"),
-                widget.CPU(background="#074231"),
-                widget.TextBox("Volume: ", background="071942"),
-                widget.PulseVolume(background="071942"),
-                widget.TextBox("Battery: ", background="#074231"),
-                widget.Battery(low_percentage = 0.2,
-                               notify_below = 0.15,
-                               update_interval = 30,
-                               discharge_char = '↓',
-                               charge_char = '↑',
-                               background="#074231",
-                               ),
-                widget.TextBox("", background="071942"),
-                widget.Clock(format='%a %d-%m-%Y %I:%M %p', background="071942"),
-                widget.Sep(foreground="#421307", size_percent=100),
-                widget.Systray(),
-            ],
-            24,
-        ),
-    ),
-]
+  screens = [
+      Screen(
+	  bottom=bar.Bar(
+	      [
+		  widget.CurrentLayout(background="074231"),
+		  widget.Sep(foreground="#421307", size_percent=100),
+		  widget.GroupBox(),
+		  widget.Prompt(),
+		  widget.WindowName(),
+		  widget.Sep(foreground="#421307", size_percent=100),
+		  widget.TextBox("RAM: ", background="#074231"),
+		  widget.Memory(background="#074231"),
+		  widget.TextBox(",", background="#074231"),
+		  widget.CPU(background="#074231"),
+		  widget.TextBox("Volume: ", background="071942"),
+		  widget.PulseVolume(background="071942"),
+		  widget.TextBox("Battery: ", background="#074231"),
+		  widget.Battery(low_percentage = 0.2,
+				 notify_below = 0.15,
+				 update_interval = 30,
+				 discharge_char = '↓',
+				 charge_char = '↑',
+				 background="#074231",
+				 ),
+		  widget.TextBox("", background="071942"),
+		  widget.Clock(format='%a %d-%m-%Y %I:%M %p', background="071942"),
+		  widget.Sep(foreground="#421307", size_percent=100),
+		  widget.Systray(),
+	      ],
+	      24,
+	  ),
+      ),
+  ]
 #+END_SRC
 
 * Floating Windows
