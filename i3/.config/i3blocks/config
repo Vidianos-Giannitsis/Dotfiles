@@ -15,9 +15,9 @@ command=$SCRIPT_DIR/battery2
 markup=pango
 interval=30
 
-[calculator]
-full_text=Calculator
-command=i3-msg -q exec qalculate-gtk
+[run_launcher]
+full_text=Run Launcher
+command=i3-msg -q exec "rofi -show run"
 
 [mediaplayer]
 command=$SCRIPT_DIR/mediaplayer

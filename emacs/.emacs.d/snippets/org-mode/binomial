@@ -1,5 +1,5 @@
 # -*- mode: snippet -*-
 # name: binomial
-# key: bi
+# key: bin
 # --
-$\binom{}{}$
+\binom{}{}

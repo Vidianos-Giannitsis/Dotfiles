@@ -79,6 +79,8 @@
 (add-hook 'org-mode-hook 'turn-on-org-cdlatex)
 (add-hook 'org-mode-hook 'org-zotxt-mode)
 
+(require 'org-tree-slide)
+
 (add-to-list 'org-file-apps '("\\.pdf\\'" . emacs))
 (setq org-noter-always-create-frame nil)
 
@@ -178,13 +180,6 @@
 (use-package dired-hide-dotfile
   :hook (dired-mode . dired-hide-dotfiles-mode))
 
-(require 'eaf)
-
-(require 'eaf-evil)
-;(setq eaf-evil-leader-key "SPC")
-
-(setq eaf-wm-focus-fix-wms '("qtile"))
-
 (require 'ebuku)
 (require 'evil-collection-ebuku)
 
@@ -201,6 +196,13 @@
 (add-hook 'pdf-view-mode-hook 'pdf-view-midnight-minor-mode)
 
 (add-to-list 'auto-mode-alist '("\\.m\\'" . octave-mode))
+
+(require 'eaf)
+
+(require 'eaf-evil)
+;(setq eaf-evil-leader-key "SPC")
+
+(setq eaf-wm-focus-fix-wms '("qtile"))
 
 (general-create-definer my-leader-def
 			:prefix "SPC")
@@ -224,7 +226,9 @@
   "H" 'split-window-horizontally
   "V" 'split-window-vertically
   "c" 'calc-dispatch
-  "w" 'wolfram-alpha)
+  "w" 'wolfram-alpha
+  "r" 'recover-this-file
+  "f" 'find-file)
 
 (general-create-definer org-leader-def
       :prefix ",")

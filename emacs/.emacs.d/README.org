@@ -153,6 +153,7 @@ Some settings I want for Emacs's Org-mode which I use extensively (like for writ
   (add-hook 'org-mode-hook 'turn-on-org-cdlatex)
   (add-hook 'org-mode-hook 'org-zotxt-mode)
 
+  (require 'org-tree-slide)
 #+END_SRC
 
 ** Org mode utilities
@@ -306,23 +307,12 @@ More languages to evaluate with org-babel (by default, only elisp is evaluated).
   This is how Dired ends up looking after these changes
   [[https://github.com/AuroraDragoon/Dotfiles/blob/master/screenshots/dired.png]]
 
-* Emacs Application Framework
-  EAF is a very promising package for Emacs giving it some useful gui apps that are not so easy to find in other packages (such as a browser) and in general a full suite of applications. Unfortunately its got a weird behaviour in tiling window managers such as i3 and qtile, which I use not allowing me to use Emacs commands inside its buffers. It seems that when the cursor is outside the Emacs buffer (in my bar) this fixes but its still annoying so its use is limited unfortunately.
-  
-  #+BEGIN_SRC elisp
-    (require 'eaf)
-
-    (require 'eaf-evil)
-    ;(setq eaf-evil-leader-key "SPC")
-
-    (setq eaf-wm-focus-fix-wms '("qtile"))
-  #+END_SRC
-  
 * Other Major Modes
 Some other extensions inside my Emacs config that require some changes for their major modes to function as I want them. This currently includes:
 - Ebuku
 - PDF Tools
 - Octave
+- Emacs Application Framework
   
 ** Ebuku
   Ebuku is the Emacs major mode for buku, a simple terminal bookmark manager. Since I store all my bookmarks there, this gives me a way to launch my favourite pages from inside Emacs, which is a utility I deem very useful. For some reason, evil-collections keybindings didn't work by default so I enabled them manually (this is the first package I have had this happen to me with)
@@ -364,6 +354,19 @@ P.S. Of course its the same exact pdf as in my zathura screenshot, you might eve
       (add-to-list 'auto-mode-alist '("\\.m\\'" . octave-mode))
    #+END_SRC
    
+** Emacs Application Framework
+  
+     EAF is a very promising package for Emacs giving it some useful gui apps that are not so easy to find in other packages (such as a browser) and in general a full suite of applications. Unfortunately its got a weird behaviour in tiling window managers such as i3 and qtile, which I use not allowing me to use Emacs commands inside its buffers. It seems that when the cursor is outside the Emacs buffer (in my bar) this fixes but its still annoying so its use is limited unfortunately.
+
+   #+BEGIN_SRC elisp
+     (require 'eaf)
+
+     (require 'eaf-evil)
+     ;(setq eaf-evil-leader-key "SPC")
+
+     (setq eaf-wm-focus-fix-wms '("qtile"))
+   #+END_SRC
+  
 * Keybindings
 This is all the keybindings I have set for my personal config. Below is a table explaining them. When the keys are seperated with a space, you need to press one after the other while in the rest you press all the keys together. Space is set as my global leader key so most of my keybindings start with it. This is heavily influenced by the way spacemacs does it because I used spacemacs before this and I liked the idea. But, since it has way less keybindings than spacemacs they are simpler. I manage most of these using leader keys from the general.el package. I also have , for org-mode specific commands (which can only be ran from an org mode buffer) as they are too many to have in the same leader key. I can also nest leader keys inside other leader keys, like how z is the leader key for zotxt (Zotero integration) inside the org keybindings.
 
@@ -411,7 +414,9 @@ This is all the keybindings I have set for my personal config. Below is a table 
     "H" 'split-window-horizontally
     "V" 'split-window-vertically
     "c" 'calc-dispatch
-    "w" 'wolfram-alpha)
+    "w" 'wolfram-alpha
+    "r" 'recover-this-file
+    "f" 'find-file)
 
 #+END_SRC
 
