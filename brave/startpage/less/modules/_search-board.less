@@ -1,0 +1,31 @@
+#search-wrapper {
+  height: auto;
+  .row();
+  margin-bottom: 10px;
+}
+#search-board {
+  .column(24);
+  color: @color-1;
+  padding: 10px;
+  background: @color-bg;
+  border-top: @color-3 1px solid;
+  border-bottom: @color-3 1px solid;
+
+  .text {
+    padding: 10px 0;
+    text-align: center;
+    text-transform: uppercase;
+    font-size: 1.5em;
+    letter-spacing: .3em;
+    .setFont-family(Roboto Light);
+  }
+
+  input {
+    background-color: rgba(150,150,150,0.4);
+    color: @color-1;
+    border: 1px solid @color-3;
+    width: 100%;
+    padding: 2px 5px;
+    outline: none;
+  }
+}

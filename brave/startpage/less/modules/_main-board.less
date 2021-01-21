@@ -1,0 +1,50 @@
+#main-wrapper {
+  height: auto;
+  .row();
+  margin-bottom: 10px;
+}
+#main-board {
+  .column(24);
+  color: @color-1;
+  padding: 10px;
+  background: @color-bg;
+  border-top: @color-3 1px solid;
+  border-bottom: @color-3 1px solid;
+
+  .text {
+    padding: 10px 0;
+    text-align: center;
+    text-transform: uppercase;
+    font-size: 1.5em;
+    letter-spacing: .3em;
+    .setFont-family(Roboto Light);
+  }
+  .image {
+    .clearfix();
+    text-align: center;
+  }
+
+  .squares {
+    margin: 15px 0 15px;
+    height: 70px;
+    position: relative;
+  }
+  .square {
+    position: absolute;
+    top: 50%; left: 50%; margin-top: -20px; margin-left: -20px;
+    width: 40px; height: 40px;
+
+    &.s1 {
+      background-color: @color-4;
+    }
+    &.s2 {
+      background-color: @color-3;
+    }
+    &.s3 {
+      background-color: @color-2;
+    }
+    &.s4 {
+      background-color: @color-1;
+    }
+  }
+}

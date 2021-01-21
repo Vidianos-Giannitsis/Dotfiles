@@ -1,0 +1,45 @@
+#rss-wrapper {
+  height: auto;
+  .row();
+  margin-bottom: 10px;
+
+  #rss-board {
+    .column(24);
+    color: @color-1;
+    padding: 10px;
+    background: @color-bg;
+    border-top: @color-3 1px solid;
+    border-bottom: @color-3 1px solid;
+
+    p {
+      padding: 10px 0;
+      text-transform: uppercase;
+      font-size: 1em;
+      letter-spacing: .3em;
+      .setFont-family(Roboto Light);
+    }
+
+    div {
+        .feedEkList {
+          li {
+            padding: 10px 0;
+            display: inline-block;
+            width: 100%;
+            white-space: wrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+          }
+          .itemTitle {
+            a{text-decoration: none; color: @color-1;}
+          }
+          .itemDate {
+            display: none;
+          }
+          .itemContent {
+            display: none;
+          }
+        }
+    }
+
+  }
+}
