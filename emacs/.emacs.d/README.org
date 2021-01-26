@@ -468,14 +468,21 @@ This is all the keybindings I have set for my personal config. Below is a table 
 | C-+        | In Dired mode. Creates a new empty file inside the current working directory                                                            |
 | M-t        | Open my Emacs todo list. I use it to track the things I want to work on next inside Emacs so its definitely worth having a shortcut to  |
 | M-b        | Open Ebuku, the buku bookmark manager's Emacs major mode from where I can open my bookmarks from inside Emacs                           |
+|------------+-----------------------------------------------------------------------------------------------------------------------------------------|
+| PDF VIEW   | PDF View keybindings                                                                                                                    |
 | c          | In pdf-view mode. Kill the buffer. This is useful for org-pdf-exports  cause when I reopen it, it refreshes automatically, which I like |
+| i          | If pdf-view is in an org-noter buffer, this allows for a note to be added in the matching org buffer                                    |
+| a t        | Add a text annotation to a pdf directly                                                                                                 |
+| a m        | Add a markup annotation to a pdf directly                                                                                               |
 
 #+BEGIN_SRC elisp
       (general-define-key
    :states 'normal
    :keymaps 'pdf-view-mode-map
    "i" 'org-noter-insert-note
-   "c" 'kill-current-buffer)
+   "c" 'kill-current-buffer
+   "a t" 'pdf-annot-add-text-annotation
+   "a m" 'pdf-annot-add-markup-annotation)
 
     (global-set-key (kbd "M-b") 'ebuku)
     (global-set-key (kbd "M-C-r") 'restart-emacs)

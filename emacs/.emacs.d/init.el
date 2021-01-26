@@ -254,7 +254,9 @@
  :states 'normal
  :keymaps 'pdf-view-mode-map
  "i" 'org-noter-insert-note
- "c" 'kill-current-buffer)
+ "c" 'kill-current-buffer
+ "a t" 'pdf-annot-add-text-annotation
+ "a m" 'pdf-annot-add-markup-annotation)
 
   (global-set-key (kbd "M-b") 'ebuku)
   (global-set-key (kbd "M-C-r") 'restart-emacs)
