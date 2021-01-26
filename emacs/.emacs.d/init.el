@@ -228,7 +228,8 @@
   "c" 'calc-dispatch
   "w" 'wolfram-alpha
   "r" 'recover-this-file
-  "f" 'find-file)
+  "f" 'find-file
+  "m" 'magit)
 
 (general-create-definer org-leader-def
       :prefix ",")
