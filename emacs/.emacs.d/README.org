@@ -7,7 +7,7 @@
 * About this config
 This is my GNU Emacs literate config file written in org-mode. Its heavily documentated for that reason. 
 
-This is still very much a work in progress project, but its in a pretty usable state. I was a spacemacs user for a few months before deciding to start using this personal config for Emacs so some of its keybindings are heavily influenced by it. For example the Space and , keys are leader keys which I use a lot (space for general commands and , for mode specific, currently only org though).
+I have definitely put in a lot of work into this config and I truly love it as it feels really personal. I have drawn inspiration from a lot of other init.el's but the most apparent one is the spacemacs keybindings. I was a spacemacs user for a few months before deciding to start using this personal config for Emacs. I found its keybindings very ergonomic and although most things arent exactly the way they are done in spacemacs, the inspiration is apparent. For example the Space and , keys are leader keys which I use a lot (space for general commands and , for mode specific, currently only org though).
 
 Note that I know little to no elisp, so some things are probably not done in the most efficient way possible, but everything I have set has its desired behaviour, which is enough for me.
 
