@@ -31,6 +31,9 @@
 (setq auto-save-list-file-prefix (expand-file-name "tmp/auto-saves/sessions/" user-emacs-directory)
       auto-save-file-name-transforms `((".*" ,(expand-file-name "tmp/auto-saves/" user-emacs-directory) t)))
 
+(require 'dash-functional)
+(require 'helpful)
+
 (setq evil-collection-setup-minibuffer t)
 (setq evil-want-keybinding nil)
 (when (require 'evil-collection nil t)
@@ -266,6 +269,13 @@
 
 (add-hook 'dired-mode-hook
 	  (lambda () (local-set-key (kbd "C-+") #'dired-create-empty-file)))
+
+(global-set-key (kbd "C-h f") #'helpful-callable)
+(global-set-key (kbd "C-h v") #'helpful-variable)
+(global-set-key (kbd "C-h k") #'helpful-key)
+(global-set-key (kbd "C-c C-d") #'helpful-at-point)
+(global-set-key (kbd "C-h F") #'helpful-function)
+(global-set-key (kbd "C-h C") #'helpful-command)
 
 ;; CUSTOM VARIABLES
 (custom-set-variables

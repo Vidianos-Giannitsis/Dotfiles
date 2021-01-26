@@ -45,6 +45,7 @@ This includes:
 + Making the M-x menu a helm menu which I consider much better than the default
 + Activating ido-mode which amplifies most menus by displaying available tab autocompletions.
 + Moving backup and autosave files to a tmp folder inside my .emacs.d so my directories look like less of a mess.
++ Adding the helpful package which makes documentations better (installing from MELPA didnt work so I needed to require it first)
 
 #+BEGIN_SRC elisp
 
@@ -68,6 +69,9 @@ This includes:
   (make-directory (expand-file-name "tmp/auto-saves/" user-emacs-directory) t)
   (setq auto-save-list-file-prefix (expand-file-name "tmp/auto-saves/sessions/" user-emacs-directory)
 	auto-save-file-name-transforms `((".*" ,(expand-file-name "tmp/auto-saves/" user-emacs-directory) t)))
+
+  (require 'dash-functional)
+  (require 'helpful)
 
 #+END_SRC
 
@@ -463,19 +467,21 @@ This is all the keybindings I have set for my personal config. Below is a table 
 #+END_SRC
 
 ** Other keybindings, either mode specific or general, that function without the space key
-| Keybinding | Action                                                                                                                                  |
-|------------+-----------------------------------------------------------------------------------------------------------------------------------------|
-| M-d        | Open my Emacs config (this file). This is very useful for when hacking on Emacs so I can quickly go to my dotfile whenever I want       |
-| M-C-r      | Simply restarts Emacs. This is useful when hacking in Emacs as for changes to take place you need to restart                            |
-| C-+        | In Dired mode. Creates a new empty file inside the current working directory                                                            |
-| M-t        | Open my Emacs todo list. I use it to track the things I want to work on next inside Emacs so its definitely worth having a shortcut to  |
-| M-b        | Open Ebuku, the buku bookmark manager's Emacs major mode from where I can open my bookmarks from inside Emacs                           |
-|------------+-----------------------------------------------------------------------------------------------------------------------------------------|
-| PDF VIEW   | PDF View keybindings                                                                                                                    |
-| c          | In pdf-view mode. Kill the buffer. This is useful for org-pdf-exports  cause when I reopen it, it refreshes automatically, which I like |
-| i          | If pdf-view is in an org-noter buffer, this allows for a note to be added in the matching org buffer                                    |
-| a t        | Add a text annotation to a pdf directly                                                                                                 |
-| a m        | Add a markup annotation to a pdf directly                                                                                               |
+| Keybinding | Action                                                                                                                                                 |
+|------------+--------------------------------------------------------------------------------------------------------------------------------------------------------|
+| M-d        | Open my Emacs config (this file). This is very useful for when hacking on Emacs so I can quickly go to my dotfile whenever I want                      |
+| M-C-r      | Simply restarts Emacs. This is useful when hacking in Emacs as for changes to take place you need to restart                                           |
+| C-+        | In Dired mode. Creates a new empty file inside the current working directory                                                                           |
+| M-t        | Open my Emacs todo list. I use it to track the things I want to work on next inside Emacs so its definitely worth having a shortcut to                 |
+| M-b        | Open Ebuku, the buku bookmark manager's Emacs major mode from where I can open my bookmarks from inside Emacs                                          |
+| C-h keys   | I change the primary C-h keybindings to their helpful alternatives. They have even more info than the defaults (which are already great) so its a plus |
+| C-c C-d    | Lookup the current symbol at point. Not exactly sure of its use but its recommended in the helpful github repo so I added it                           |
+|------------+--------------------------------------------------------------------------------------------------------------------------------------------------------|
+| PDF VIEW   | PDF View keybindings                                                                                                                                   |
+| c          | In pdf-view mode. Kill the buffer. This is useful for org-pdf-exports  cause when I reopen it, it refreshes automatically, which I like                |
+| i          | If pdf-view is in an org-noter buffer, this allows for a note to be added in the matching org buffer                                                   |
+| a t        | Add a text annotation to a pdf directly                                                                                                                |
+| a m        | Add a markup annotation to a pdf directly                                                                                                              |
 
 #+BEGIN_SRC elisp
       (general-define-key
@@ -493,6 +499,13 @@ This is all the keybindings I have set for my personal config. Below is a table 
 
   (add-hook 'dired-mode-hook
 	    (lambda () (local-set-key (kbd "C-+") #'dired-create-empty-file)))
+
+  (global-set-key (kbd "C-h f") #'helpful-callable)
+  (global-set-key (kbd "C-h v") #'helpful-variable)
+  (global-set-key (kbd "C-h k") #'helpful-key)
+  (global-set-key (kbd "C-c C-d") #'helpful-at-point)
+  (global-set-key (kbd "C-h F") #'helpful-function)
+  (global-set-key (kbd "C-h C") #'helpful-command)
 
 #+END_SRC
 
