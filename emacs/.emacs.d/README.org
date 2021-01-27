@@ -5,11 +5,13 @@
 #+HTML_HEAD: <link rel="stylesheet" type="text/css" href="http://thomasf.github.io/solarized-css/solarized-dark.min.css" />
 
 * About this config
-This is my GNU Emacs literate config file written in org-mode. Its heavily documentated for that reason. 
+This is my GNU Emacs literate config file written in org-mode. Its heavily documentated for that reason.
 
-I have definitely put in a lot of work into this config and I truly love it as it feels really personal. I have drawn inspiration from a lot of other init.el's but the most apparent one is the spacemacs keybindings. I was a spacemacs user for a few months before deciding to start using this personal config for Emacs. I found its keybindings very ergonomic and although most things arent exactly the way they are done in spacemacs, the inspiration is apparent. For example the Space and , keys are leader keys which I use a lot (space for general commands and , for mode specific, currently only org though).
+Emacs has truly become that one tool that has molded SO perfectly to my workflow, that I can no longer live without it. I use it for most of my tasks at this point. This is a vanilla GNU Emacs install with a ton of configurations. I initially used Spacemacs, but the mentality of vanilla fits more with me. Its a blank slate on which I can do anything I want. Spacemacs felt like a different person's vision so I wanted to move to my own Emacs config so I can truly feel its mine. I feel I have succeeded at this in making it truly personal. At this point, I am proud to call it a masterpiece for what I want it. Its definitely not the best config I have seen, nor is it for everyone, but for me, it does everything I want. And its truly incredible at doing all that. I can not imagine a better workflow than this. Thats why although its far from perfect, for what I use it, I can truly consider it a masterpiece in its own right as no other program can get even close to this. 
 
-Note that I know little to no elisp, so some things are probably not done in the most efficient way possible, but everything I have set has its desired behaviour, which is enough for me.
+I have drawn inspiration from a lot of other init.el's but the most apparent one is the spacemacs keybindings. I was a spacemacs user for a few months before deciding to start using this personal config for Emacs. I found its keybindings very ergonomic and although most things arent exactly the way they are done in spacemacs, the inspiration is apparent. For example the Space and , keys are leader keys which I use a lot (space for general commands and , for mode specific, currently only org though).
+
+Note that I know little to no elisp yet (I am in the process of learning though), so some things are probably not done in the most efficient way possible, but everything I have set has its desired behaviour, which is enough for me.
 
 This is how my Emacs currently looks, and because I didnt know what file to screenshot, have my qtile bar's config
 [[https://github.com/AuroraDragoon/Dotfiles/blob/master/screenshots/python_environment.png]]
@@ -45,7 +47,7 @@ This includes:
 + Making the M-x menu a helm menu which I consider much better than the default
 + Activating ido-mode which amplifies most menus by displaying available tab autocompletions.
 + Moving backup and autosave files to a tmp folder inside my .emacs.d so my directories look like less of a mess.
-+ Adding the helpful package which makes documentations better (installing from MELPA didnt work so I needed to require it first)
++ Adding the helpful package which makes documentations better (installing from MELPA didnt work so I needed to do the manual install)
 
 #+BEGIN_SRC elisp
 
@@ -107,7 +109,9 @@ This enables:
 + When the cursor is on one bracket, highlight its matching bracket.
 + Enabling yasnippet snippets.
 + Enabling general, a package that helps me define keybindings easier.
++ Enabling vterm-toggle, a package which helps with not getting a milion vterms open (with a run-or-raise behaviour)
 + Enable all-the-icons mode for the ibuffer which makes it look much nicer.
++ Setting my wolfram alpha ID for use in emacs which allows me to query the website from inside Emacs
 
 #+BEGIN_SRC elisp
 
@@ -140,6 +144,7 @@ Some settings I want for Emacs's Org-mode which I use extensively (like for writ
    + I load org-download after org, this is a helpful addon which allows me to paste photos on my clipboard to org, which makes adding photos to org documents much faster.
    + I activate calctex and activate it when I go into calc's embedded mode. Its a neat package that allows me to type a formula inside calc and renders it automatically into latex. Latex snippets are what I use mostly (you can find them inside the snippets directory of my .emacs.d but if you want to draw inspiration from somewhere there are much better sources tbh).
    + I activate org-cdlatex-mode which makes typing latex equations easier inside org and massively improves speed of typing equations together with snippets for org and org-zotxt-mode which helps org communicate with Zotero and draw articles/bibliographies for my citations which I have saved in Zotero's database
+   + Also add org-tree-slide from presentations inside Org
      
 #+BEGIN_SRC elisp
 
@@ -330,7 +335,7 @@ Some other extensions inside my Emacs config that require some changes for their
   
 ** PDF Tools
 
-Configuration for PDF-tools, my favourite built-in Emacs pdf viewer. I set it as the default pdf viewer for Emacs and enable the midnight minor mode for it as it makes it match my favourite theme solarized-dark, which I love. I also define the key "m" as the toggle for dark/light mode in the pdf (see the keybindings section for more details)
+Configuration for PDF-tools, my favourite built-in Emacs pdf viewer. I set it as the default pdf viewer for Emacs and enable the midnight minor mode for it as it makes it match my favourite theme solarized-dark, which I love.
 
 #+BEGIN_SRC elisp
 
@@ -351,7 +356,7 @@ P.S. Of course its the same exact pdf as in my zathura screenshot, you might eve
 [[https://github.com/AuroraDragoon/Dotfiles/blob/master/screenshots/pdf_view.png]]
 
 ** Octave
-   Octave is a very powerful piece of software for mathematical computations. You can edit octave scripts inside of Emacs and also run an instance of Octave to execute them. But I ran into some problems with it. Some files with the .m extension weren't being rendered properly as .m files.
+   Octave is a very powerful piece of software for mathematical computations. You can edit octave scripts inside of Emacs and also run an instance of Octave to execute them. But I ran into some problems with it. Some files with the .m extension weren't being opened in the Octave major mode, so I fix that.
    Furthermore, it was inconvenient for Octave to open in my current working directory so when I launch it I want to automatically cd to the directory holding all my Octave scripts. For this one I needed to create an "init_octave.m" file inside my .emacs.d which octave always reads when starting inside Emacs. Inside it you just cd to "home/your_user_name/Documents/Octave". For some reason it didnt recognize ~ as my home directory so I needed to add the full path. You can find the file inside this repo.
 
    #+BEGIN_SRC elisp
@@ -372,7 +377,7 @@ P.S. Of course its the same exact pdf as in my zathura screenshot, you might eve
    #+END_SRC
   
 * Keybindings
-This is all the keybindings I have set for my personal config. Below is a table explaining them. When the keys are seperated with a space, you need to press one after the other while in the rest you press all the keys together. Space is set as my global leader key so most of my keybindings start with it. This is heavily influenced by the way spacemacs does it because I used spacemacs before this and I liked the idea. But, since it has way less keybindings than spacemacs they are simpler. I manage most of these using leader keys from the general.el package. I also have , for org-mode specific commands (which can only be ran from an org mode buffer) as they are too many to have in the same leader key. I can also nest leader keys inside other leader keys, like how z is the leader key for zotxt (Zotero integration) inside the org keybindings.
+This is all the keybindings I have set for my personal config. Below is a table explaining them. When the keys are seperated with a space, you need to press one after the other while when seperated with a "-" you press all the keys together. Space is set as my global leader key so most of my keybindings start with it. This is heavily influenced by the way spacemacs does it because I used spacemacs before this and I liked the idea. But, since it has way less keybindings than spacemacs they are simpler. I manage most of these using leader keys from the general.el package. I also have "," for org-mode specific commands (which can only be ran from an org mode buffer) as they are too many to have in the same leader key. I can also nest leader keys inside other leader keys, like how z is the leader key for zotxt (Zotero integration) inside the org keybindings.
 
 ** Global keybindings, defined with the space leader key
 | Keybinding  | Action                                                                                                                                             |
@@ -382,18 +387,18 @@ This is all the keybindings I have set for my personal config. Below is a table 
 | Space o     | Starts the octave client in the working directory of the file from which this was called. I use octave a lot so this is a must for me              |
 | Space d     | Asks for a directory and opens dired in that directory                                                                                             |
 | Space j     | Opens dired in the current working directory. This is faster than simply calling dired when you want to switch between files in the same directory |
-| Space h     | Toggle visibility of dotfiles inside dired. The default behaviour, is for them to be hidden, and this toggles that behaviour                       |
+| Space h     | Toggle visibility of dotfiles inside dired. In the dired section I set them to be hidden by default, and this toggles that behaviour               |
 | Space H     | Create a horizontal split inside Emacs                                                                                                             |
 | Space V     | Create a vertical split inside Emacs                                                                                                               |
 | Space Enter | Opens vterm, my preffered Emacs terminal, for when needed                                                                                          |
 | Space t     | Toggles Emacs's default behaviour concerning what to do when it runs out of space in a line. I always want it to go to the next line so this helps |
 | Space T     | Executes org-babel-tangle, which is the command used to tangle source code blocks to your config file (the way you make literate config files)     |
 | Space b     | Open the ibuffer menu which allows switching buffers with relative ease                                                                            |
-| Space g     | Go to specific page inside a pdf                                                                                                                   |
-| Space a     | Opens org-agenda. Technically an org command, but I want to be able to use it globally                                                             |
+| Space g     | Go to a specific page inside a pdf                                                                                                                 |
+| Space a     | Opens org-agenda. Technically an org command, but I want to be able to use it globally and not only in Emacs                                       |
 | Space c     | Activates the calc menu (originally C-x *). The two options I use from here are "c" for the classic calc major mode and "e" for embedded mode      |
 | Space w     | Query WolframAlpha from inside Emacs. Wolfram Alpha is a website which helps with advanced mathematical calculations. Its very helpful to have     |
-| Space m     | Open magit, the emacs git client                                                                                                              |
+| Space m     | Open magit, the emacs git client                                                                                                                   |
 
 #+BEGIN_SRC elisp
 
@@ -427,21 +432,21 @@ This is all the keybindings I have set for my personal config. Below is a table 
 #+END_SRC
 
 ** Org mode keybindings
-| Keybinding | Action                                                                                                                                        |
-|------------+-----------------------------------------------------------------------------------------------------------------------------------------------|
-| , l        | Makes latex fragments inside org render as pictures showing the equation                                                                      |
-| , s        | Schedules a todo task to a specific date and time                                                                                             |
-| , n        | Opens org-noter, my favourite tool for notetaking                                                                                             |
-| , t        | Changes the todo state of an item                                                                                                             |
-| , p        | Changes a tasks priority                                                                                                                      |
-| , e        | Org export command cause C-c C-e was getting annoying. I export to pdf way too often to like that                                             |
-| , T        | Changes a tasks tags                                                                                                                          |
-| , v        | Search for all tasks with a specific tag                                                                                                      |
-| , m        | Activates my custom make-todo function which sets todo state, effort, tags and priority for a task. I prefer it for todo initialization       |
-| , y        | Pastes a photograph from my clipboard, very helptful to speed up adding photos to my documents                                                |
-| , z i      | Insert zotero reference link. With C-u it chooses the highlighted reference link inside Zotero (it needs to be open and have zotxt installed) |
-| , z o      | Open a zotero link if the cursor is on one                                                                                                    |
-| , z n      | Open org-noter for a zotero article, very helpful for live annotations, which none can do as well as Emacs. Still experimental though         |
+| Keybinding | Action                                                                                                                                            |
+|------------+---------------------------------------------------------------------------------------------------------------------------------------------------|
+| , l        | Makes latex fragments inside org, render as pictures showing the equation. Helps ensure I havent typed something wrong without the need to export |
+| , s        | Schedules a todo task to a specific date and time                                                                                                 |
+| , n        | Opens org-noter, my favourite tool for notetaking from pdfs                                                                                       |
+| , t        | Changes the todo state of an item                                                                                                                 |
+| , p        | Changes a tasks priority                                                                                                                          |
+| , e        | Org export command cause C-c C-e is really annoying when you export like 20 times for the same pdf.                                               |
+| , T        | Changes a tasks tags                                                                                                                              |
+| , v        | Search for all tasks with a specific tag                                                                                                          |
+| , m        | Activates my custom make-todo function which sets todo state, effort, tags and priority for a task. I prefer it for todo initialization           |
+| , y        | Pastes a photograph from my clipboard, very helptful to speed up adding photos to my documents                                                    |
+| , z i      | Insert zotero reference link. With C-u it chooses the highlighted reference link inside Zotero (it needs to be open and have zotxt installed)     |
+| , z o      | Open a zotero link if the cursor is on one                                                                                                        |
+| , z n      | Open org-noter for a zotero article, very helpful for live annotations, which none can do as well as Emacs. Still experimental though             |
 
 #+BEGIN_SRC elisp
 (general-create-definer org-leader-def
@@ -467,21 +472,21 @@ This is all the keybindings I have set for my personal config. Below is a table 
 #+END_SRC
 
 ** Other keybindings, either mode specific or general, that function without the space key
-| Keybinding | Action                                                                                                                                                 |
-|------------+--------------------------------------------------------------------------------------------------------------------------------------------------------|
-| M-d        | Open my Emacs config (this file). This is very useful for when hacking on Emacs so I can quickly go to my dotfile whenever I want                      |
-| M-C-r      | Simply restarts Emacs. This is useful when hacking in Emacs as for changes to take place you need to restart                                           |
-| C-+        | In Dired mode. Creates a new empty file inside the current working directory                                                                           |
-| M-t        | Open my Emacs todo list. I use it to track the things I want to work on next inside Emacs so its definitely worth having a shortcut to                 |
-| M-b        | Open Ebuku, the buku bookmark manager's Emacs major mode from where I can open my bookmarks from inside Emacs                                          |
-| C-h keys   | I change the primary C-h keybindings to their helpful alternatives. They have even more info than the defaults (which are already great) so its a plus |
-| C-c C-d    | Lookup the current symbol at point. Not exactly sure of its use but its recommended in the helpful github repo so I added it                           |
-|------------+--------------------------------------------------------------------------------------------------------------------------------------------------------|
-| PDF VIEW   | PDF View keybindings                                                                                                                                   |
-| c          | In pdf-view mode. Kill the buffer. This is useful for org-pdf-exports  cause when I reopen it, it refreshes automatically, which I like                |
-| i          | If pdf-view is in an org-noter buffer, this allows for a note to be added in the matching org buffer                                                   |
-| a t        | Add a text annotation to a pdf directly                                                                                                                |
-| a m        | Add a markup annotation to a pdf directly                                                                                                              |
+| Keybinding | Action                                                                                                                                             |
+|------------+----------------------------------------------------------------------------------------------------------------------------------------------------|
+| M-d        | Open my Emacs config. This is very useful for when hacking on Emacs so I can quickly go to my dotfile whenever I want without typing the full path |
+| M-C-r      | Simply restarts Emacs. Always good to have a restart function                                                                                      |
+| C-+        | In Dired mode. Creates a new empty file inside the current working directory                                                                       |
+| M-t        | Open my Emacs todo file. I use it to track the things I want to work on next inside Emacs so its definitely worth having a shortcut to             |
+| M-b        | Open Ebuku, the buku bookmark manager's Emacs major mode from where I can open my bookmarks from inside Emacs                                      |
+| C-h keys   | I change the primary C-h keybindings to their helpful alternatives. They have more info than the defaults (which are already great) so its a plus  |
+| C-c C-d    | Lookup the current symbol at point. Not exactly sure of its use but its recommended in the helpful github repo so I added it                       |
+|------------+----------------------------------------------------------------------------------------------------------------------------------------------------|
+| PDF VIEW   | PDF View keybindings                                                                                                                               |
+| c          | In pdf-view mode. Kill the buffer. This is useful for org-pdf-exports  cause when I reopen it, it refreshes automatically, which I like            |
+| i          | If pdf-view is in an org-noter buffer, this allows for a note to be added in the matching org buffer                                               |
+| a t        | Add a text annotation to a pdf directly                                                                                                            |
+| a m        | Add a markup annotation to a pdf directly                                                                                                          |
 
 #+BEGIN_SRC elisp
       (general-define-key

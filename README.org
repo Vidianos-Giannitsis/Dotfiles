@@ -12,7 +12,7 @@ To start using any of my configurations you need to git clone it to an empty dir
 * Structure
 Below, is an explanation of every directory inside the repo.
 
-I only have specific READMEs for i3, qtile and emacs (the latter two being literate config files of those programs) as the others dont need much of a description. Everything you need for them is explained in this file.
+I only have specific READMEs for i3, qtile and emacs (the latter two being literate config files of those programs) as the others dont need much more than a description inside this file. Everything you need for them is explained here.
 
 Lastly, since its an important part of my config, but not included in my dotfiles, I should mention that my GTK theme is SolArc-Dark and my icon theme Solarized-Deluxe-Iconpack.
 
@@ -38,7 +38,7 @@ This is how my alacritty terminal looks, with neofetch in the screenshot so its 
 [[https://github.com/AuroraDragoon/Dotfiles/blob/master/screenshots/neofetch.png]]
 
 ** i3
-i3, together with qtile, are currently my two favourite tiling window managers. They are configured specifically to my liking, but feel free to take the ideas and maybe change the specifics. i3 was the first tiling window manager I got into, because of its ease of use and I would definitely recommend it for anyone else new to programming and tiling window managers.
+i3, together with qtile, are currently my two favourite tiling window managers. They are configured specifically to my liking, but feel free to take the ideas and maybe change the specifics. i3 was the first tiling window manager I got into, because of its excellent documentation (seriously, its probably the best docs I have ever seen for a piece of software) and ease of configuring (configured in plain text which makes it very easy) and I would definitely recommend it for anyone else new to programming and tiling window managers.
 
 Inside the repo, you will find a README file explaining some things about the config file (I dont have a literate config for it as its formatting is so easy I never considered it important, but there are some things I would like to explain), the i3 folder, which contains my i3 config file and a folder for i3blocks, with which I customise all the widgets in my i3bar.
 
@@ -46,23 +46,23 @@ This is the look of my current i3 config (although, the programs are what truly 
 [[https://github.com/AuroraDragoon/Dotfiles/blob/master/screenshots/i3.png]]
 
 ** Qtile
-Qtile, is my other heavily configured tiling window manager and actually the one I use as my daily driver for the most part. This one is configured in python in a format not as simple as i3's, so its README file is a literate config file, so looking at that instead of config.py is heavily encouraged. Together with the config, is a shell script which I use to autostart certain applications (things like picom and network manager are included there). Outside of this, there isn't much else to say about this, everything is included in the README file. 
+Qtile, is my other heavily configured tiling window manager and actually the one I use as my daily driver for the most part. This one is configured in python in a format not as simple as i3's (although its still very easy and understandable), so its README file is a literate config file, so looking at that instead of config.py is heavily encouraged. Together with the config, is a shell script which I use to autostart certain applications (things like picom and network manager are included there). Outside of this, there isn't much else to say about this, everything is included in the README file. 
 
 This is the look of my current qtile config (but, as with i3, its not that you see much here, its mostly for the bar and background)
 [[https://github.com/AuroraDragoon/Dotfiles/blob/master/screenshots/qtile.png]]
 
 ** Emacs
-Lastly, we get to Emacs, which is slowly becoming my absolute favourite program. I was a spacemacs user for a good while before switching to this config, so it is reminiscent to that in a lot of ways. Note that this is still heavily WIP as Emacs has way too much stuff to do. Of course, as you can expect, this is also a literate config file inside the README of the repo which documents very well everything that happens inside it.
+Then... Then we get to Emacs, which is slowly becoming my absolute favourite program and I am starting to use it for almost everything. I was a spacemacs user for some time before switching to this config, so it is reminiscent to that in some ways. Of course, as you can expect, this is also a literate config file inside the README of the repo which documents very well everything that happens inside it. Emacs is that one tool that you can literally mold to your workflow perfectly and I think I am getting very close to perfection. I want to say that at least for me, its truly a work of art. Enjoy it.
 
 The repo, has quite a few things, as its my entire /.emacs.d. Outside of README and init.el, other places of importance are: 
-+ /libs where I have my load-path for packages not installed through MELPA
++ /libs where I have my load-path for packages not installed through MELPA but manually
 + /snippets where I have my collection of snippets. It mostly has snippets for org-mode to simplify me writing Latex equations inside org. They could be much better but I am kinda lazy, I will make them better eventually. 
 + The last place I would consider interesting is /spaceinit.el. This is the spacemacs init file. Its here, as while transitioning (which took way less than I thought really, like 3 days) from Spacemacs to GNU Emacs I needed a way to have both init files inside .emacs.d. I changed their names to trick emacs into launching init.el with the correct configuration framework. I have kept this inside this directory, just in case I need Spacemacs for something else.
 
 For the rest, like some screenshots of different emacs buffers refer to Emacs's README inside this repo, have fun!
 
 ** Picom
-   Picom is my compositor currently. The main things I want to set in it, is slightly transparent windows (opacity at 80%) and a small fading effect. These arent the biggest of changes but they add a little bit of eye candy to my desktop which I like. Its nothing big, but certainly worth keeping.
+   Picom is my compositor currently. The main thing I set in it is a small fading effect. I have also played around with different opacity settings, but I do think that 100% is the best for me. These arent the biggest of changes but they add a little bit of eye candy to my desktop which I like. Its nothing big, but certainly worth keeping.
 
 ** Rofi
    Rofi is my application launcher of choice currently. I am a big fan of keybinding all of my favourite programs to different keybindings so it doesnt find the most usage but its always good to have it here just in case. My config changes the colours and makes the rofi box slightly smaller because it was too large imo.
