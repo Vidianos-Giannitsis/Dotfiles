@@ -1,8 +1,8 @@
 (require 'package)
 (add-to-list 'package-archives
-	     '("melpa" . "https://melpa.org/packages/"))
+	     '("melpa" . "https://melpa.org/packages/") t)
 
-(add-to-list 'package-archives (package-initialize))
+(package-initialize)
 (unless package-archive-contents
   (package-refresh-contents))
 
@@ -22,9 +22,8 @@
 (setq inhibit-startup-screen t)
 (add-hook 'after-init-hook 'dired-jump)
 
-(global-set-key (kbd "M-x") 'helm-M-x)
-
-(ido-mode 1)
+(ivy-mode 1)
+(all-the-icons-ivy-setup)
 
 (setq backup-directory-alist `(("." . ,(expand-file-name "tmp/backups/" user-emacs-directory))))
 (make-directory (expand-file-name "tmp/auto-saves/" user-emacs-directory) t)
@@ -52,26 +51,26 @@
 (evil-org-agenda-set-keys)
 
 (show-paren-mode 1)
-(electric-pair-mode 1)
+  (electric-pair-mode 1)
 
-(add-to-list 'load-path
-	     "~/.emacs.d/plugins/yasnippet")
-(require 'yasnippet)
-(yas-global-mode 1)
+  (add-to-list 'load-path
+	       "~/.emacs.d/plugins/yasnippet")
+  (require 'yasnippet)
+  (yas-global-mode 1)
 
-(require 'general)
-(require 'vterm-toggle)
+  (require 'general)
+  (require 'vterm-toggle)
 
-(add-hook 'ibuffer-mode-hook 'all-the-icons-ibuffer-mode)
+;;  (add-hook 'ibuffer-mode-hook 'all-the-icons-ibuffer-mode)
 
-(setq truncate-partial-width-windows nil)
+  (setq truncate-partial-width-windows nil)
 
-(setq wolfram-alpha-app-id "U9PERG-KTPL49AWA2")
+  (setq wolfram-alpha-app-id "U9PERG-KTPL49AWA2")
+
+  (add-hook 'after-init-hook 'global-company-mode)
 
 (require 'org-bullets)
 (add-hook 'org-mode-hook (lambda () (org-bullets-mode 1)))
-
-(require 'org-roam)
 
 (use-package org-download
   :after org)
@@ -92,6 +91,10 @@
 (setq org-latex-pdf-process (list "latexmk -shell-escape -bibtex -f -pdf %f"))
 
 (setq org-odt-preferred-output-format "docx")
+
+(setq org-roam-directory "~/org_roam")
+
+(add-hook 'after-init-hook 'org-roam-mode)
 
 (setq org-todo-keywords
 	'((sequence "TODO(t)"
@@ -223,16 +226,17 @@
   "T" 'org-babel-tangle
   "RET" 'vterm-toggle
   "<C-return>" 'vterm 
-  "b" 'ibuffer
+  "b" 'counsel-switch-buffer
   "a" 'org-agenda
   "g" 'pdf-view-goto-page
   "H" 'split-window-horizontally
   "V" 'split-window-vertically
   "c" 'calc-dispatch
   "w" 'wolfram-alpha
-  "r" 'recover-this-file
+  "R" 'recover-this-file
   "f" 'find-file
-  "m" 'magit)
+  "m" 'magit
+  "r f" 'org-roam-find-file)
 
 (general-create-definer org-leader-def
       :prefix ",")
@@ -252,7 +256,9 @@
      "y" 'org-download-clipboard
      "z i" 'org-zotxt-insert-reference-link
      "z o" 'org-zotxt-open-attachment
-     "z n" 'org-zotxt-noter)
+     "z n" 'org-zotxt-noter
+     "r i" 'org-roam-insert
+     "r r" 'org-roam)
 
 (general-define-key
  :states 'normal
