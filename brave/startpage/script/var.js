@@ -38,9 +38,10 @@ var searchs = [
   ["!r", "https://www.reddit.com/search/?q="],
   ["!l", "https://lutris.net/games?q="],
   ["!p", "https://www.protondb.com/search?q="],
-  ["!t", "https://lolchess.gg/search?region=EUNE&name="],
+  ["!c", "https://lolchess.gg/search?region=EUNE&name="],
   ["!w", "https://www.wolframalpha.com/input/?i="],
-  ["!s", "https://scholar.google.com/scholar?hl=en&as_sdt=0%2C5&q="],
+  ["!s", "https://www.sciencedirect.com/search?qs="],
+  ["!t", "https://translate.google.com/?sl=auto&tl=en&text="],
   ["!b", "https://bulbapedia.bulbagarden.net/w/index.php?title="]
 ];
 var favorites = [
@@ -50,6 +51,8 @@ var favorites = [
       ["MyCourses" , "https://mycourses.ntua.gr/index.php", "mc"],
       ["Submissions" , "https://www.chemeng.ntua.gr/submission/", "cs"],
       ["Wolfram Alpha" , "https://www.wolframalpha.com", "wa"],
+      ["Chemeng Forum" , "https://forum.chemeng.ntua.gr/", "cf"],
+      ["Science Direct" , "https://www.sciencedirect.com/", "sc"],
       ["ChemengCourses" , "https://courses.chemeng.ntua.gr/", "cc"]
     ]
   ],

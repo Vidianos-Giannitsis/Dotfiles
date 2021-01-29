@@ -24,6 +24,7 @@
 
 (ivy-mode 1)
 (all-the-icons-ivy-setup)
+(global-set-key (kbd "M-x") #'counsel-M-x)
 
 (setq backup-directory-alist `(("." . ,(expand-file-name "tmp/backups/" user-emacs-directory))))
 (make-directory (expand-file-name "tmp/auto-saves/" user-emacs-directory) t)
@@ -95,6 +96,10 @@
 (setq org-roam-directory "~/org_roam")
 
 (add-hook 'after-init-hook 'org-roam-mode)
+
+(setq bibtex-completion-bibliography
+      '("~/org_roam/Zotero_library.bib"))
+(setq reftex-default-bibliography '("~/org_roam/Zotero_library.bib"))
 
 (setq org-todo-keywords
 	'((sequence "TODO(t)"
@@ -234,9 +239,10 @@
   "c" 'calc-dispatch
   "w" 'wolfram-alpha
   "R" 'recover-this-file
-  "f" 'find-file
+  "f" 'counsel-find-file
   "m" 'magit
-  "r f" 'org-roam-find-file)
+  "r f" 'org-roam-find-file
+  "B" 'ivy-bibtex)
 
 (general-create-definer org-leader-def
       :prefix ",")
@@ -258,7 +264,8 @@
      "z o" 'org-zotxt-open-attachment
      "z n" 'org-zotxt-noter
      "r i" 'org-roam-insert
-     "r r" 'org-roam)
+     "r r" 'org-roam
+     "c" 'org-ref-ivy-insert-cite-link)
 
 (general-define-key
  :states 'normal

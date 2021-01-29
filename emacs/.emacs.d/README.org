@@ -47,6 +47,7 @@ This includes:
 + Activating which-key-mode, which is a popup prompt to display how to complete an emacs command.
 + Changing the startup screen to dired because I consider it way more productive than the default.
 + Activating ivy-mode my favourite emacs completion framework. I feel its really counter-productive to not use a completion framework such as Ivy/Helm/Ido. I also activate the all-the-icons integration for ivy. This is primarily for my switch-buffer command. I like icons
++ Changing the M-x menu to counsel M-x. With ivy-mode enabled you get an ivy M-x menu, but it doesn't have the keybinding associated with the action which I deem important. Thats why I set M-x to the counsel menu
 + Moving backup and autosave files to a tmp folder inside my .emacs.d so my directories look like less of a mess.
 + Adding the helpful package which makes documentations better (installing from MELPA didnt work so I needed to do the manual install)
 
@@ -66,6 +67,7 @@ This includes:
 
   (ivy-mode 1)
   (all-the-icons-ivy-setup)
+  (global-set-key (kbd "M-x") #'counsel-M-x)
 
   (setq backup-directory-alist `(("." . ,(expand-file-name "tmp/backups/" user-emacs-directory))))
   (make-directory (expand-file-name "tmp/auto-saves/" user-emacs-directory) t)
@@ -192,14 +194,20 @@ Some settings I want for Emacs's Org-mode which I use extensively (like for writ
 #+RESULTS:
 : docx
 	    
-** Org Roam
-   Org Roam is a package that allows for a Zettelkasten type workflow inside Emacs similar to something like RoamResearch. I am experimenting with making it my main note taking tool. Its keybindings will be in the *Keybindings* section of this config, but this here is for the more general things I need for Roam
+** Org Roam, Ref and Bibtex
+   Org Roam, Org ref and Bibtex are all used in the same context which is why I have them in the same category here (until one gets too large). Bibtex and Org-ref help manage bibliographic references inside org. I use Zotero as my reference manager in which I gather my bibliographies. It exports a .bib file which these two use. Org Roam is a tool which helps you create your own network of notes. Its based on the Zettelkasten method and the Roam Research website. Everything is linked with one another. Org Roam Bibtex (ORB) is a package that combines all of these to help you add citation links from org-ref inside an org-roam buffer. This section includes all the customisations and settings of these packages.
+
+   I set the default directory for org_roam to look and activate it as well as tell Emacs where to find my .bib file exported by Zotero.
 
    #+BEGIN_SRC elisp
 
      (setq org-roam-directory "~/org_roam")
 
      (add-hook 'after-init-hook 'org-roam-mode)
+
+     (setq bibtex-completion-bibliography
+	   '("~/org_roam/Zotero_library.bib"))
+     (setq reftex-default-bibliography '("~/org_roam/Zotero_library.bib"))
 
    #+END_SRC
    
@@ -417,6 +425,7 @@ This is all the keybindings I have set for my personal config. Below is a table 
 | Space m     | Open magit, the emacs git client                                                                                                                    |
 | Space r f   | Find file inside the org-roam dir. If it doesn't exist create it. Since this method follows a non hierarchical sorting system its better than dired |
 | Space R     | If Emacs crashes for some reason, this command restores the backup it kept (almost always results to no data-loss)                                  |
+| Space B     | Open the Ivy Bibtex menu to open an article saved to my Zotero database                                                                             |
 
 #+BEGIN_SRC elisp
 
@@ -444,9 +453,10 @@ This is all the keybindings I have set for my personal config. Below is a table 
     "c" 'calc-dispatch
     "w" 'wolfram-alpha
     "R" 'recover-this-file
-    "f" 'find-file
+    "f" 'counsel-find-file
     "m" 'magit
-    "r f" 'org-roam-find-file)
+    "r f" 'org-roam-find-file
+    "B" 'ivy-bibtex)
 
 #+END_SRC
 
@@ -468,6 +478,7 @@ This is all the keybindings I have set for my personal config. Below is a table 
 | , z n      | Open org-noter for a zotero article, very helpful for live annotations, which none can do as well as Emacs. Still experimental though             |
 | , r i      | Insert a backlink to connect to notes together in org-roam                                                                                        |
 | , r r      | Open the org-roam sidebar which shows all references to the current active file                                                                   |
+| , c        | Open an ivy menu to choose a citation to add to an article                                                                                     |
 
 #+BEGIN_SRC elisp
   (general-create-definer org-leader-def
@@ -490,7 +501,8 @@ This is all the keybindings I have set for my personal config. Below is a table 
        "z o" 'org-zotxt-open-attachment
        "z n" 'org-zotxt-noter
        "r i" 'org-roam-insert
-       "r r" 'org-roam)
+       "r r" 'org-roam
+       "c" 'org-ref-ivy-insert-cite-link)
 
 #+END_SRC
 
