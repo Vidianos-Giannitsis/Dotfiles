@@ -174,14 +174,12 @@ Some settings I want for Emacs's Org-mode which I use extensively (like for writ
 ** Org mode utilities
    I change some more things inside org to fix some annoying default behaviours.
    + When exporting to pdf, org defaults to your system's default pdf viewer (zathura in my case). Since I am in an Emacs buffer editing the file, its more convenient to open the pdf inside Emacs with pdf-tools.
-   + Org-noter is an excellent program for annotating pdfs using org. Its only problem is that when you open it it creates its frame in a new emacs window which for me is inconvenient, so I change that behaviour to open the notes the current buffer.
    + I write a lot of equations in my documents usually with latex and the normal size of those inside org (available with org-latex-preview) is a bit small for my liking so after playing around with it a bit I scaled it up to 1.3 of the original which I consider a very sensible size
    + Making latex view my bibtex bibliography and export it properly. I took this from the org-ref docs as originally I wasnt getting proper bibliographic entries. I t works with this.
    + Laslty, I tell org that its odt export should be converted to docx as if I am exporting to a rich text editors format, its for a collaboration and most people I know use that format. If its a personal project I always export to a latex pdf because it looks better. 
 
 #+BEGIN_SRC elisp
   (add-to-list 'org-file-apps '("\\.pdf\\'" . emacs))
-  (setq org-noter-always-create-frame nil)
 
   (setq org-format-latex-options '(:foreground default :background default :scale 1.3 :html-foreground "Black" :html-background "Transparent" :html-scale 1.0 :matchers))
 
@@ -194,6 +192,52 @@ Some settings I want for Emacs's Org-mode which I use extensively (like for writ
 #+RESULTS:
 : docx
 	    
+** Org Noter
+   
+   Org-noter is an excellent program for annotating pdfs using org. Its main problem is that when you open it it creates its frame in a new emacs window which for me is inconvenient, so I change that behaviour to open the notes the current buffer. I also make another change. Because the typical file that includes a lot of org-noter annotations is crammed with :PROPERTIES: arguments I use a custom function to hide them. They can be useful so I dont hide them by default, but instead make the function interactive (can be called from M-x) and when given the 'all argument on the prompt hides all the :PROPERTIES: arguments. Below is the source code for these changes
+
+   #+BEGIN_SRC elisp
+
+     (setq org-noter-always-create-frame nil)
+
+     (defun org-cycle-hide-drawers (state)
+       "Hide all the :PROPERTIES: drawers when called with the 'all argument. Mainly for hiding them in crammed org-noter files"
+       (interactive "M")
+       (when (and (derived-mode-p 'org-mode)
+		  (not (memq state '(overview folded contents))))
+	 (save-excursion
+	   (let* ((globalp (memq state '(contents all)))
+		  (beg (if globalp
+			 (point-min)
+			 (point)))
+		  (end (if globalp
+			 (point-max)
+			 (if (eq state 'children)
+			   (save-excursion
+			     (outline-next-heading)
+			     (point))
+			   (org-end-of-subtree t)))))
+	     (goto-char beg)
+	     (while (re-search-forward org-drawer-regexp end t)
+	       (save-excursion
+		 (beginning-of-line 1)
+		 (when (looking-at org-drawer-regexp)
+		   (let* ((start (1- (match-beginning 0)))
+			  (limit
+			    (save-excursion
+			      (outline-next-heading)
+				(point)))
+			  (msg (format
+				 (concat
+				   "org-cycle-hide-drawers:  "
+				   "`:END:`"
+				   " line missing at position %s")
+				 (1+ start))))
+		     (if (re-search-forward "^[ \t]*:END:" limit t)
+		       (outline-flag-region start (point-at-eol) t)
+		       (user-error msg))))))))))
+
+   #+END_SRC
 ** Org Roam, Ref and Bibtex
    Org Roam, Org ref and Bibtex are all used in the same context which is why I have them in the same category here (until one gets too large). Bibtex and Org-ref help manage bibliographic references inside org. I use Zotero as my reference manager in which I gather my bibliographies. It exports a .bib file which these two use. Org Roam is a tool which helps you create your own network of notes. Its based on the Zettelkasten method and the Roam Research website. Everything is linked with one another. Org Roam Bibtex (ORB) is a package that combines all of these to help you add citation links from org-ref inside an org-roam buffer. This section includes all the customisations and settings of these packages.
 
@@ -239,9 +283,6 @@ Some settings I want for Emacs's Org-mode which I use extensively (like for writ
     (org-priority)
     (org-set-effort)
     (org-set-tags-command))
-
-  (setq org-agenda-start-with-log-mode t)
-  (setq org-log-into-drawer t)
 
   (org-super-agenda-mode 1)
 
@@ -502,9 +543,12 @@ This is all the keybindings I have set for my personal config. Below is a table 
        "z n" 'org-zotxt-noter
        "r i" 'org-roam-insert
        "r r" 'org-roam
-       "c" 'org-ref-ivy-insert-cite-link)
+       "c" 'org-ref-ivy-insert-cite-link
+       "h" 'org-cycle-hide-drawers)
 
 #+END_SRC
+
+#+RESULTS:
 
 ** Other keybindings, either mode specific or general, that function without the space key
 | Keybinding | Action                                                                                                                                             |

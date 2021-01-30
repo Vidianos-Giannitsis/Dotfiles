@@ -85,13 +85,51 @@
 (require 'org-tree-slide)
 
 (add-to-list 'org-file-apps '("\\.pdf\\'" . emacs))
-(setq org-noter-always-create-frame nil)
 
 (setq org-format-latex-options '(:foreground default :background default :scale 1.3 :html-foreground "Black" :html-background "Transparent" :html-scale 1.0 :matchers))
 
 (setq org-latex-pdf-process (list "latexmk -shell-escape -bibtex -f -pdf %f"))
 
 (setq org-odt-preferred-output-format "docx")
+
+(setq org-noter-always-create-frame nil)
+
+(defun org-cycle-hide-drawers (state)
+  "Hide all the :PROPERTIES: drawers when called with the 'all argument. Mainly for hiding them in crammed org-noter files"
+  (interactive "M")
+  (when (and (derived-mode-p 'org-mode)
+	     (not (memq state '(overview folded contents))))
+    (save-excursion
+      (let* ((globalp (memq state '(contents all)))
+	     (beg (if globalp
+		    (point-min)
+		    (point)))
+	     (end (if globalp
+		    (point-max)
+		    (if (eq state 'children)
+		      (save-excursion
+			(outline-next-heading)
+			(point))
+		      (org-end-of-subtree t)))))
+	(goto-char beg)
+	(while (re-search-forward org-drawer-regexp end t)
+	  (save-excursion
+	    (beginning-of-line 1)
+	    (when (looking-at org-drawer-regexp)
+	      (let* ((start (1- (match-beginning 0)))
+		     (limit
+		       (save-excursion
+			 (outline-next-heading)
+			   (point)))
+		     (msg (format
+			    (concat
+			      "org-cycle-hide-drawers:  "
+			      "`:END:`"
+			      " line missing at position %s")
+			    (1+ start))))
+		(if (re-search-forward "^[ \t]*:END:" limit t)
+		  (outline-flag-region start (point-at-eol) t)
+		  (user-error msg))))))))))
 
 (setq org-roam-directory "~/org_roam")
 
@@ -120,9 +158,6 @@
   (org-priority)
   (org-set-effort)
   (org-set-tags-command))
-
-(setq org-agenda-start-with-log-mode t)
-(setq org-log-into-drawer t)
 
 (org-super-agenda-mode 1)
 
@@ -265,7 +300,8 @@
      "z n" 'org-zotxt-noter
      "r i" 'org-roam-insert
      "r r" 'org-roam
-     "c" 'org-ref-ivy-insert-cite-link)
+     "c" 'org-ref-ivy-insert-cite-link
+     "h" 'org-cycle-hide-drawers)
 
 (general-define-key
  :states 'normal
