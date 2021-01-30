@@ -194,7 +194,7 @@ Some settings I want for Emacs's Org-mode which I use extensively (like for writ
 	    
 ** Org Noter
    
-   Org-noter is an excellent program for annotating pdfs using org. Its main problem is that when you open it it creates its frame in a new emacs window which for me is inconvenient, so I change that behaviour to open the notes the current buffer. I also make another change. Because the typical file that includes a lot of org-noter annotations is crammed with :PROPERTIES: arguments I use a custom function to hide them. They can be useful so I dont hide them by default, but instead make the function interactive (can be called from M-x) and when given the 'all argument on the prompt hides all the :PROPERTIES: arguments. Below is the source code for these changes
+   Org-noter is an excellent program for annotating pdfs using org. Its main problem is that when you open it it creates its frame in a new emacs window which for me is inconvenient, so I change that behaviour to open the notes the current buffer. I also make another change. Because the typical file that includes a lot of org-noter annotations is crammed with :PROPERTIES: arguments I use a custom function to hide them. They can be useful so I dont hide them by default, but instead make the function interactive (can be called from M-x) and when given the 'all argument on the prompt hides all the :PROPERTIES: arguments. Below is the source code for these changes. Also, since I am not the one who wrote the function have a link to the stack-overflow page where this is answered [[https://stackoverflow.com/questions/17478260/completely-hide-the-properties-drawer-in-org-mode]]
 
    #+BEGIN_SRC elisp
 
