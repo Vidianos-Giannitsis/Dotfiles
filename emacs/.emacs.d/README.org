@@ -165,19 +165,19 @@ This is the "heart" of my config being all the keybindings I have set for my per
 | SPC w        | Query WolframAlpha from inside Emacs. Wolfram Alpha is a website which helps with advanced mathematical calculations. Its very helpful to have      |
 | SPC B        | Open the Ivy Bibtex menu to open an article saved to my Zotero database                                                                             |
 |--------------+-----------------------------------------------------------------------------------------------------------------------------------------------------|
-| Dired        | Dired is the Emacs file manager, below are commands specific to dired (bound to SPC d)                                                              |
+| *Dired*      | Dired is the Emacs file manager, below are commands specific to dired (bound to SPC d)                                                              |
 |--------------+-----------------------------------------------------------------------------------------------------------------------------------------------------|
 | SPC D        | Asks for a directory and opens dired in that directory                                                                                              |
 | SPC d j      | Opens dired in the current working directory. This is faster than simply calling dired when you want to switch between files in the same directory  |
 | SPC d h      | Toggle visibility of dotfiles inside dired. In the dired section I set them to be hidden by default, and this toggles that behaviour                |
 | SPC d f      | Find a file inside a directory. I usually prefer just using dired but this can prove useful in folders with a lot of "chaos"                        |
 |--------------+-----------------------------------------------------------------------------------------------------------------------------------------------------|
-| Org-Roam     | I use Org-roam for my notetaking. Its got a lot of useful commands. The letter r is reserved for it (SPC r for general and , r for org-specific)    |
+| *Org-Roam*   | I use Org-roam for my notetaking. Its got a lot of useful commands. The letter r is reserved for it (SPC r for general and , r for org-specific)    |
 |--------------+-----------------------------------------------------------------------------------------------------------------------------------------------------|
 | SPC r f      | Find file inside the org-roam dir. If it doesn't exist create it. Since this method follows a non hierarchical sorting system its better than dired |
 | SPC r b      | Choose a citation and add a note specific to it. Follows the "orb-template" variable                                                                |
 |--------------+-----------------------------------------------------------------------------------------------------------------------------------------------------|
-| Roam-Dailies | Org-roam has the ability to create daily notes for various subjects. The keybindings for its most important commands are defined here               |
+| *Roam-Daily* | Org-roam has the ability to create daily notes for various subjects. The keybindings for its most important commands are defined here               |
 |--------------+-----------------------------------------------------------------------------------------------------------------------------------------------------|
 | SPC j c t    | Capture a daily note for today                                                                                                                      |
 | SPC j f t    | Find the daily notes created for today (creates the file if it doesnt exist)                                                                        |
@@ -237,13 +237,13 @@ This is the "heart" of my config being all the keybindings I have set for my per
 | , y        | Pastes a photograph from my clipboard, very helptful to speed up adding photos to my documents                                                      |
 | , c        | Open an ivy menu to choose a citation to add to an article                                                                                          |
 |------------+-----------------------------------------------------------------------------------------------------------------------------------------------------|
-| Zotxt      | Zotxt is a package with some Zotero compatibility. I use Zotero for my reference management so its cool. I mostly use a .bib file it creates though |
+| *Zotxt*    | Zotxt is a package with some Zotero compatibility. I use Zotero for my reference management so its cool. I mostly use a .bib file it creates though |
 |------------+-----------------------------------------------------------------------------------------------------------------------------------------------------|
 | , z i      | Insert zotero reference link. With C-u it chooses the highlighted reference link inside Zotero (it needs to be open and have zotxt installed)       |
 | , z o      | Open a zotero link if the cursor is on one                                                                                                          |
 | , z n      | Open org-noter for a zotero article, very helpful for live annotations, which none can do as well as Emacs. Still experimental though               |
 |------------+-----------------------------------------------------------------------------------------------------------------------------------------------------|
-| Org-Roam   | I use Org-roam for my notetaking. Its got a lot of useful commands. The letter r is reserved for it (SPC r for general and , r for org-specific)    |
+| *Org-Roam* | I use Org-roam for my notetaking. Its got a lot of useful commands. The letter r is reserved for it (SPC r for general and , r for org-specific)    |
 |------------+-----------------------------------------------------------------------------------------------------------------------------------------------------|
 | , r i      | Insert a backlink to connect to notes together in org-roam                                                                                          |
 | , R        | Open the org-roam sidebar which shows all references to the current active file                                                                     |
@@ -288,7 +288,7 @@ This is the "heart" of my config being all the keybindings I have set for my per
 | C-h keys   | I change the primary C-h keybindings to their helpful alternatives. They have more info than the defaults (which are already great) so its a plus  |
 | C-c C-d    | Lookup the current symbol at point. Not exactly sure of its use but its recommended in the helpful github repo so I added it                       |
 |------------+----------------------------------------------------------------------------------------------------------------------------------------------------|
-| Pdf View   | PDF View is the best Emacs pdf reader. I set some keybindings specific to it                                                        |
+| *Pdf View* | PDF View is the best Emacs pdf reader. I set some keybindings specific to it                                                                       |
 |------------+----------------------------------------------------------------------------------------------------------------------------------------------------|
 | c          | In pdf-view mode. Kill the buffer. This is useful for org-pdf-exports  cause when I reopen it, it refreshes automatically, which I like            |
 | i          | If pdf-view is in an org-noter buffer, this allows for a note to be added in the matching org buffer                                               |
