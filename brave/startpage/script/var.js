@@ -70,6 +70,8 @@ var favorites = [
     [
       ["Emacs", "https://www.gnu.org/software/emacs/manual/html_node/emacs/index.html", "em"],
       ["Octave" , "https://octave.org/doc/v5.2.0/", "oc"],
+      ["Org-Roam" , "https://www.orgroam.com/manual.html", "or"],
+      ["Org-Roam-Bibtex" , "https://github.com/org-roam/org-roam-bibtex", "orb"],
       ["Qtile", "http://docs.qtile.org/en/latest/", "qt"]
     ]
   ],

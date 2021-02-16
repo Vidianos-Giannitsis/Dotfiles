@@ -70,6 +70,14 @@
 
   (add-hook 'after-init-hook 'global-company-mode)
 
+(require 'dired-x)
+(use-package all-the-icons-dired
+  :hook (dired-mode . all-the-icons-dired-mode))
+
+
+(use-package dired-hide-dotfile
+  :hook (dired-mode . dired-hide-dotfiles-mode))
+
 (require 'org-bullets)
 (add-hook 'org-mode-hook (lambda () (org-bullets-mode 1)))
 
@@ -96,7 +104,7 @@
 
 (defun org-cycle-hide-drawers (state)
   "Hide all the :PROPERTIES: drawers when called with the 'all argument. Mainly for hiding them in crammed org-noter files"
-  (interactive "M")
+  (interactive "MEnter 'all for hiding :PROPERTIES: drawers in an org buffer: ")
   (when (and (derived-mode-p 'org-mode)
 	     (not (memq state '(overview folded contents))))
     (save-excursion
@@ -131,13 +139,15 @@
 		  (outline-flag-region start (point-at-eol) t)
 		  (user-error msg))))))))))
 
-(setq org-roam-directory "~/org_roam")
-
-(add-hook 'after-init-hook 'org-roam-mode)
-
-(setq bibtex-completion-bibliography
-      '("~/org_roam/Zotero_library.bib"))
-(setq reftex-default-bibliography '("~/org_roam/Zotero_library.bib"))
+(org-babel-do-load-languages
+   'org-babel-load-languages
+   '(
+     (python . t)
+     (haskell . t)
+     (octave . t)
+     (latex . t)
+)
+   )
 
 (setq org-todo-keywords
 	'((sequence "TODO(t)"
@@ -208,23 +218,38 @@
 			  (:name "But wait, this was only the beginning. The real fun starts here!"
 				 :anything)))))))))
 
-(org-babel-do-load-languages
-   'org-babel-load-languages
-   '(
-     (python . t)
-     (haskell . t)
-     (octave . t)
-     (latex . t)
-)
-   )
+(setq org-roam-directory "~/org_roam")
 
-(require 'dired-x)
-(use-package all-the-icons-dired
-  :hook (dired-mode . all-the-icons-dired-mode))
+(add-hook 'after-init-hook 'org-roam-mode)
+(add-hook 'after-init-hook 'org-roam-bibtex-mode)
 
+(setq bibtex-completion-bibliography
+      '("~/org_roam/Zotero_library.bib"))
+(setq reftex-default-bibliography '("~/org_roam/Zotero_library.bib"))
 
-(use-package dired-hide-dotfile
-  :hook (dired-mode . dired-hide-dotfiles-mode))
+(setq bibtex-completion-additional-search-fields '(keywords abstract))
+
+(setq orb-preformat-keywords
+      '("citekey" "title" "author" "keywords" "abstract" "entry-type" "file")
+      orb-process-file-keyword t
+      orb-file-field-extensions '("pdf"))
+
+(setq orb-templates
+      '(("r" "ref" plain (function org-roam-capture--get-point)
+	 ""
+	 :file-name "${citekey}"
+	 :head "#+TITLE: ${title}\nglatex\n#+ROAM_KEY: ${ref}
+
+* Ref Info
+:PROPERTIES:
+:Custom_ID: ${citekey}
+:AUTHOR: ${author}
+:NOTER_DOCUMENT: ${file} ;
+:END:
+#+BEGIN_abstract\n${abstract}\n#+END_abstract
+
+- tags ::
+- keywords :: ${keywords}")))
 
 (require 'ebuku)
 (require 'evil-collection-ebuku)

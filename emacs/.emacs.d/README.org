@@ -142,6 +142,28 @@ This enables:
 
 #+END_SRC
 
+* Dired
+  Dired is Emacs's built in file manager (stands for directory editor) As dired is my Emacs startup screen as mentioned before, I have some customisations for it which are pretty neat.
+  I have configured it to include:
+  + Icons alongside each file which represent what type of file it is.
+  + Hiding dotfiles by default (Pressing Space and then h, will show all the dotfiles in the directory but I find hiding them better for initial behaviour).
+  + A keybinding to create a new file from dired (I cant comprehend why this is not bound to sth by default tbh). Bound to C-+.
+  + For consistency the keybindings are in the Keybindings section of this config even if they are only for dired
+
+  #+BEGIN_SRC elisp
+    (require 'dired-x)
+    (use-package all-the-icons-dired
+      :hook (dired-mode . all-the-icons-dired-mode))
+
+
+    (use-package dired-hide-dotfile
+      :hook (dired-mode . dired-hide-dotfiles-mode))
+
+  #+END_SRC
+
+  This is how Dired ends up looking after these changes
+  [[https://github.com/AuroraDragoon/Dotfiles/blob/master/screenshots/dired.png]]
+
 * Org-mode
 Some settings I want for Emacs's Org-mode which I use extensively (like for writing this literate config file). Its split in sections cause its too huge otherwise. I change way too many stuff in Org :D. 
 
@@ -202,7 +224,7 @@ Some settings I want for Emacs's Org-mode which I use extensively (like for writ
 
      (defun org-cycle-hide-drawers (state)
        "Hide all the :PROPERTIES: drawers when called with the 'all argument. Mainly for hiding them in crammed org-noter files"
-       (interactive "M")
+       (interactive "MEnter 'all for hiding :PROPERTIES: drawers in an org buffer: ")
        (when (and (derived-mode-p 'org-mode)
 		  (not (memq state '(overview folded contents))))
 	 (save-excursion
@@ -238,23 +260,27 @@ Some settings I want for Emacs's Org-mode which I use extensively (like for writ
 		       (user-error msg))))))))))
 
    #+END_SRC
-** Org Roam, Ref and Bibtex
-   Org Roam, Org ref and Bibtex are all used in the same context which is why I have them in the same category here (until one gets too large). Bibtex and Org-ref help manage bibliographic references inside org. I use Zotero as my reference manager in which I gather my bibliographies. It exports a .bib file which these two use. Org Roam is a tool which helps you create your own network of notes. Its based on the Zettelkasten method and the Roam Research website. Everything is linked with one another. Org Roam Bibtex (ORB) is a package that combines all of these to help you add citation links from org-ref inside an org-roam buffer. This section includes all the customisations and settings of these packages.
 
-   I set the default directory for org_roam to look and activate it as well as tell Emacs where to find my .bib file exported by Zotero.
+   #+RESULTS:
+   : org-cycle-hide-drawers
 
-   #+BEGIN_SRC elisp
+** Org Babel
+More languages to evaluate with org-babel (by default, only elisp is evaluated). I dont use this extensively but for those times that I need to evaluate code in org, its probably going to be in one of these so might as well add them.
 
-     (setq org-roam-directory "~/org_roam")
+#+BEGIN_SRC elisp
 
-     (add-hook 'after-init-hook 'org-roam-mode)
+  (org-babel-do-load-languages
+     'org-babel-load-languages
+     '(
+       (python . t)
+       (haskell . t)
+       (octave . t)
+       (latex . t)
+  )
+     )
 
-     (setq bibtex-completion-bibliography
-	   '("~/org_roam/Zotero_library.bib"))
-     (setq reftex-default-bibliography '("~/org_roam/Zotero_library.bib"))
+#+END_SRC
 
-   #+END_SRC
-   
 ** Org-agenda and TODOs
    This is where all the project management magic happens. I set everything I need for TODOs and the org-agenda. Later on in the Keybindings section of the config you can see the keybindings I have set for each action while here are the configurations I want to make. This helps keep this consistent by having those keybindings in that section. I track all my todo files in one directory "~/project_management" so I want every todo defined in that directory to be loaded inside Org-agenda.
 
@@ -341,44 +367,58 @@ Some settings I want for Emacs's Org-mode which I use extensively (like for writ
 | u | University Projects  | ((alltodo  ((org-agenda-overriding-header ) (org-super-agenda-groups '((:name Currently Working on :and (:tag University :todo ACTIVE)) (:name What you gonna start next (probably) :and (:priority A :tag University)) (:name Medium Priority Projects :and (:tag University :priority B)) (:name Trivial Projects, I'ma do them at some point :D :and (:tag University :priority C)) (:discard (:not (:tag University))))))))            |
 | e | Emacs Projects       | ((alltodo  ((org-agenda-overriding-header ) (org-super-agenda-groups '((:name Configuring Emacs, the Present :and (:tag Emacs :todo ACTIVE) :and (:tag Emacs :todo NEXT)) (:name What to add, What to add?? :and (:tag Emacs :priority A)) (:name Wow, this one's easy, lets do it :and (:tag Emacs :effort< 0:15)) (:discard (:not (:tag Emacs))) (:name But wait, this was only the beginning. The real fun starts here! :anything)))))) |
 
-** Org Babel
-More languages to evaluate with org-babel (by default, only elisp is evaluated). I dont use this extensively but for those times that I need to evaluate code in org, its probably going to be in one of these so might as well add them.
+* Org Roam, References and the Zettelkasten Workflow
+  This section is about my Org-roam setup and my reference management inside org. It is based on the slip-box (Zettelkasten) workflow. The packages that are most relevant to this are Org-roam (obviously) bibtex-completion (ivy-bibtex in my case), org-ref, Org-roam-bibtex. Org Roam is a tool which helps you create your own network of notes. Its based on the Zettelkasten method and the Roam Research website. Everything is linked with one another. Bibtex completion (and the existence of .bib files in general) as well as Org-ref help manage bibliographic references inside org. I use Zotero as my reference manager in which I gather my bibliographies. It exports a .bib file which these two use. Org Roam Bibtex (ORB) is a package that combines all of these to help you add citation links from org-ref inside an org-roam buffer. This section includes all the customisations and settings of these packages.
 
-#+BEGIN_SRC elisp
+** Initialisation Variables
+   This section is all about the initialisation of variables. These are essential for the packages to work most of the time.
 
-  (org-babel-do-load-languages
-     'org-babel-load-languages
-     '(
-       (python . t)
-       (haskell . t)
-       (octave . t)
-       (latex . t)
-  )
-     )
+   #+BEGIN_SRC elisp
 
-#+END_SRC
+     (setq org-roam-directory "~/org_roam")
 
-* Dired
-  Dired is Emacs's built in file manager (stands for directory editor) As dired is my Emacs startup screen as mentioned before, I have some customisations for it which are pretty neat.
-  I have configured it to include:
-  + Icons alongside each file which represent what type of file it is.
-  + Hiding dotfiles by default (Pressing Space and then h, will show all the dotfiles in the directory but I find hiding them better for initial behaviour).
-  + A keybinding to create a new file from dired (I cant comprehend why this is not bound to sth by default tbh). Bound to C-+.
-  + For consistency the keybindings are in the Keybindings section of this config even if they are only for dired
+     (add-hook 'after-init-hook 'org-roam-mode)
+     (add-hook 'after-init-hook 'org-roam-bibtex-mode)
 
-  #+BEGIN_SRC elisp
-    (require 'dired-x)
-    (use-package all-the-icons-dired
-      :hook (dired-mode . all-the-icons-dired-mode))
+     (setq bibtex-completion-bibliography
+	   '("~/org_roam/Zotero_library.bib"))
+     (setq reftex-default-bibliography '("~/org_roam/Zotero_library.bib"))
+
+     (setq bibtex-completion-additional-search-fields '(keywords abstract))
+
+     (setq orb-preformat-keywords
+	   '("citekey" "title" "author" "keywords" "abstract" "entry-type" "file")
+	   orb-process-file-keyword t
+	   orb-file-field-extensions '("pdf"))
 
 
-    (use-package dired-hide-dotfile
-      :hook (dired-mode . dired-hide-dotfiles-mode))
+    #+END_SRC
 
-  #+END_SRC
+** Templates
+   This section is about the various templates used. Examples are orb-templates, org-roam-capture-templates, org-roam-dailies-capture-templates
 
-  This is how Dired ends up looking after these changes
-  [[https://github.com/AuroraDragoon/Dotfiles/blob/master/screenshots/dired.png]]
+   #+BEGIN_SRC elisp
+     (setq orb-templates
+	   '(("r" "ref" plain (function org-roam-capture--get-point)
+	      ""
+	      :file-name "${citekey}"
+	      :head "#+TITLE: ${title}\nglatex\n#+ROAM_KEY: ${ref}
+
+     * Ref Info
+     :PROPERTIES:
+     :Custom_ID: ${citekey}
+     :AUTHOR: ${author}
+     :NOTER_DOCUMENT: ${file} ;
+     :END:
+     #+BEGIN_abstract\n${abstract}\n#+END_abstract
+
+     - tags ::
+     - keywords :: ${keywords}")))
+
+   #+END_SRC
+   
+   #+RESULTS:
+   | r | ref | plain | #'org-roam-capture--get-point |   | :file-name | ${citekey} | :head | #+TITLE: ${title} |
 
 * Other Major Modes
 Some other extensions inside my Emacs config that require some changes for their major modes to function as I want them. This currently includes:
@@ -412,8 +452,10 @@ Configuration for PDF-tools, my favourite built-in Emacs pdf viewer. I set it as
       )
 
   (add-hook 'pdf-view-mode-hook 'pdf-view-midnight-minor-mode)
-
 #+END_SRC
+
+#+RESULTS:
+| pdf-tools-enable-minor-modes | pdf-view-midnight-minor-mode |
 
 And after these changes, my emacs pdf-viewer looks like this (its very similar to the look of my current zathura config, but thats kind of the point).
 P.S. Of course its the same exact pdf as in my zathura screenshot, you might even think its the same picture :D
@@ -619,7 +661,5 @@ These are some variables automatically generated by Custom. Its better not to pl
 
 
 #+RESULTS:
-Wrong type argument: integer-or-marker-p, nil
-t
-quit-window kill
+Wrong type argument: integer-or-marker-p, nil t quit-window kill
 

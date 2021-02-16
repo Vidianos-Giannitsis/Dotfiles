@@ -608,7 +608,7 @@
 	       ("Leo Liu" . "sdl.web@gmail.com"))
 	      (:keywords "killing" "convenience"))])
  (ebdb .
-       [(0 6 21)
+       [(0 6 22)
 	((emacs
 	  (25 1))
 	 (cl-lib
@@ -774,7 +774,7 @@
 		    ("Matthew L. Fidler" . "matthew.fidler@gmail.com"))
 		   (:keywords "convenience"))])
  (excorporate .
-	      [(0 9 2)
+	      [(0 9 3)
 	       ((emacs
 		 (24 1))
 		(fsm
@@ -1663,7 +1663,7 @@
 	     ("Phillip Lord" . "phillip.lord@russet.org.uk"))
 	    (:url . "http://elpa.gnu.org/packages/persist.html"))])
  (phps-mode .
-	    [(0 3 65)
+	    [(0 4 1)
 	     ((emacs
 	       (26)))
 	     "Major mode for PHP with Semantic integration" tar
@@ -1689,7 +1689,7 @@
 	   ("Mario Lang" . "mlang@delysid.org"))
 	  (:maintainer "Mario Lang" . "mlang@delysid.org"))])
  (posframe .
-	   [(0 8 4)
+	   [(0 8 5)
 	    ((emacs
 	      (26)))
 	    "Pop a posframe (just a frame) at point" tar
@@ -1918,7 +1918,7 @@
 	    ("Mattias Engdegård" . "mattiase@acm.org"))
 	   (:keywords "lisp" "regexps"))])
  (repology .
-	   [(1 0 1)
+	   [(1 1 0)
 	    ((emacs
 	      (26 1)))
 	    "Repology API access via Elisp" tar
@@ -2272,7 +2272,7 @@
 	  ("Oleh Krehel" . "ohwoeowho@gmail.com"))
 	 (:keywords "convenience"))])
  (tramp .
-	[(2 5 0)
+	[(2 5 0 1)
 	 ((emacs
 	   (25 1)))
 	 "Transparent Remote Access, Multiple Protocol" tar
