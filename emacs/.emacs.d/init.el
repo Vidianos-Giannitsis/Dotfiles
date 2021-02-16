@@ -70,6 +70,87 @@
 
   (add-hook 'after-init-hook 'global-company-mode)
 
+(general-create-definer my-leader-def
+			:prefix "SPC")
+
+(my-leader-def
+ :states 'normal
+ :keymaps 'override
+  "!" 'shell-command
+  "p" 'package-install
+  "o" 'inferior-octave
+  "D" 'dired
+  "d h" 'dired-hide-dotfiles-mode
+  "t" 'toggle-truncate-lines
+  "d j" 'dired-jump
+  "T" 'org-babel-tangle
+  "RET" 'vterm-toggle
+  "<C-return>" 'vterm 
+  "b" 'counsel-switch-buffer
+  "a" 'org-agenda
+  "g" 'pdf-view-goto-page
+  "H" 'split-window-horizontally
+  "V" 'split-window-vertically
+  "c" 'calc-dispatch
+  "w" 'wolfram-alpha
+  "R" 'recover-this-file
+  "d f" 'counsel-find-file
+  "m" 'magit
+  "r f" 'org-roam-find-file
+  "B" 'ivy-bibtex
+  "r b" 'orb-insert
+  "j c t" 'org-roam-dailies-capture-today
+  "j f t" 'org-roam-dailies-find-today
+  "j c c" 'org-roam-dailies-capture-date
+  "j f c" 'org-roam-dailies-find-date)
+
+(general-create-definer org-leader-def
+      :prefix ",")
+
+    (org-leader-def
+     :states 'normal
+     :keymaps 'org-mode-map
+     "l" 'org-latex-preview
+     "n" 'org-noter
+     "s" 'org-schedule
+     "t" 'org-todo
+     "m" 'org-make-todo
+     "e" 'org-export-dispatch
+     "p" 'org-priority
+     "v" 'org-tags-view
+     "T" 'org-set-tags-command
+     "y" 'org-download-clipboard
+     "z i" 'org-zotxt-insert-reference-link
+     "z o" 'org-zotxt-open-attachment
+     "z n" 'org-zotxt-noter
+     "r i" 'org-roam-insert
+     "R" 'org-roam
+     "c" 'org-ref-ivy-insert-cite-link
+     "h" 'org-cycle-hide-drawers)
+
+(general-define-key
+ :states 'normal
+ :keymaps 'pdf-view-mode-map
+ "i" 'org-noter-insert-note
+ "c" 'kill-current-buffer
+ "a t" 'pdf-annot-add-text-annotation
+ "a m" 'pdf-annot-add-markup-annotation)
+
+  (global-set-key (kbd "M-b") 'ebuku)
+  (global-set-key (kbd "M-C-r") 'restart-emacs)
+  (global-set-key (kbd "M-d") (lambda() (interactive)(find-file "~/.emacs.d/README.org")))
+  (global-set-key (kbd "M-t") (lambda() (interactive)(find-file "~/project_management/emacs.org")))
+
+(add-hook 'dired-mode-hook
+	  (lambda () (local-set-key (kbd "C-+") #'dired-create-empty-file)))
+
+(global-set-key (kbd "C-h f") #'helpful-callable)
+(global-set-key (kbd "C-h v") #'helpful-variable)
+(global-set-key (kbd "C-h k") #'helpful-key)
+(global-set-key (kbd "C-c C-d") #'helpful-at-point)
+(global-set-key (kbd "C-h F") #'helpful-function)
+(global-set-key (kbd "C-h C") #'helpful-command)
+
 (require 'dired-x)
 (use-package all-the-icons-dired
   :hook (dired-mode . all-the-icons-dired-mode))
@@ -234,6 +315,8 @@
       orb-process-file-keyword t
       orb-file-field-extensions '("pdf"))
 
+(setq org-roam-dailies-directory "~/org_roam/daily")
+
 (setq orb-templates
       '(("r" "ref" plain (function org-roam-capture--get-point)
 	 ""
@@ -250,6 +333,35 @@
 
 - tags ::
 - keywords :: ${keywords}")))
+
+(setq org-roam-dailies-capture-templates
+      '(("l" "lesson" entry
+	 #'org-roam-capture--get-point
+	 "* %?"
+	 :file-name "daily/%<%Y-%m-%d>"
+	 :head "#+title: %<%Y-%m-%d>\n"
+	 :olp ("Lesson notes"))
+
+	("b" "bibliography" entry
+	 #'org-roam-capture--get-point
+	 "* %?"
+	 :file-name "daily/%<%Y-%m-%d>"
+	 :head "#+title: %<%Y-%m-%d>\n"
+	 :olp ("Notes on Articles, Books, etc."))
+
+	("g" "general" entry
+	 #'org-roam-capture--get-point
+	 "* %?"
+	 :file-name "daily/%<%Y-%m-%d>"
+	 :head "#+title: %<%Y-%m-%d>\n"
+	 :olp ("Random general notes"))
+
+	("t" "todo" entry
+	 #'org-roam-capture--get-point
+	 "* %?"
+	 :file-name "daily/%<%Y-%m-%d>"
+	 :head "#+title: %<%Y-%m-%d>\n"
+	 :olp ("Things to do"))))
 
 (require 'ebuku)
 (require 'evil-collection-ebuku)
@@ -274,82 +386,6 @@
 ;(setq eaf-evil-leader-key "SPC")
 
 (setq eaf-wm-focus-fix-wms '("qtile"))
-
-(general-create-definer my-leader-def
-			:prefix "SPC")
-
-(my-leader-def
- :states 'normal
- :keymaps 'override
-  "!" 'shell-command
-  "p" 'package-install
-  "o" 'inferior-octave
-  "d" 'dired
-  "h" 'dired-hide-dotfiles-mode
-  "t" 'toggle-truncate-lines
-  "j" 'dired-jump
-  "T" 'org-babel-tangle
-  "RET" 'vterm-toggle
-  "<C-return>" 'vterm 
-  "b" 'counsel-switch-buffer
-  "a" 'org-agenda
-  "g" 'pdf-view-goto-page
-  "H" 'split-window-horizontally
-  "V" 'split-window-vertically
-  "c" 'calc-dispatch
-  "w" 'wolfram-alpha
-  "R" 'recover-this-file
-  "f" 'counsel-find-file
-  "m" 'magit
-  "r f" 'org-roam-find-file
-  "B" 'ivy-bibtex)
-
-(general-create-definer org-leader-def
-      :prefix ",")
-
-    (org-leader-def
-     :states 'normal
-     :keymaps 'org-mode-map
-     "l" 'org-latex-preview
-     "n" 'org-noter
-     "s" 'org-schedule
-     "t" 'org-todo
-     "m" 'org-make-todo
-     "e" 'org-export-dispatch
-     "p" 'org-priority
-     "v" 'org-tags-view
-     "T" 'org-set-tags-command
-     "y" 'org-download-clipboard
-     "z i" 'org-zotxt-insert-reference-link
-     "z o" 'org-zotxt-open-attachment
-     "z n" 'org-zotxt-noter
-     "r i" 'org-roam-insert
-     "r r" 'org-roam
-     "c" 'org-ref-ivy-insert-cite-link
-     "h" 'org-cycle-hide-drawers)
-
-(general-define-key
- :states 'normal
- :keymaps 'pdf-view-mode-map
- "i" 'org-noter-insert-note
- "c" 'kill-current-buffer
- "a t" 'pdf-annot-add-text-annotation
- "a m" 'pdf-annot-add-markup-annotation)
-
-  (global-set-key (kbd "M-b") 'ebuku)
-  (global-set-key (kbd "M-C-r") 'restart-emacs)
-  (global-set-key (kbd "M-d") (lambda() (interactive)(find-file "~/.emacs.d/README.org")))
-  (global-set-key (kbd "M-t") (lambda() (interactive)(find-file "~/project_management/emacs.org")))
-
-(add-hook 'dired-mode-hook
-	  (lambda () (local-set-key (kbd "C-+") #'dired-create-empty-file)))
-
-(global-set-key (kbd "C-h f") #'helpful-callable)
-(global-set-key (kbd "C-h v") #'helpful-variable)
-(global-set-key (kbd "C-h k") #'helpful-key)
-(global-set-key (kbd "C-c C-d") #'helpful-at-point)
-(global-set-key (kbd "C-h F") #'helpful-function)
-(global-set-key (kbd "C-h C") #'helpful-command)
 
 ;; CUSTOM VARIABLES
 (custom-set-variables
