@@ -10,7 +10,7 @@
   (normal-top-level-add-to-load-path '("."))
   (normal-top-level-add-subdirs-to-load-path))
 
-(load-theme 'solarized-dark t)
+(load-theme 'doom-solarized-dark t)
 
 (menu-bar-mode -1)
 (toggle-scroll-bar -1)
@@ -33,6 +33,12 @@
 
 (require 'dash-functional)
 (require 'helpful)
+
+(use-package doom-modeline
+  :ensure t
+  :init (doom-modeline-mode 1)
+  :config (setq doom-modeline-minor-modes t
+		doom-modeline-enable-word-count t))
 
 (setq evil-collection-setup-minibuffer t)
 (setq evil-want-keybinding nil)
@@ -241,7 +247,7 @@
 		    )))
 
   (setq org-agenda-files
-	  '("~/project_management"))
+	  '("~/org_roam"))
 
 (defun org-make-todo ()
   (interactive)
@@ -339,28 +345,28 @@
 	 #'org-roam-capture--get-point
 	 "* %?"
 	 :file-name "daily/%<%Y-%m-%d>"
-	 :head "#+title: %<%Y-%m-%d>\n"
+	 :head "#+title: Fleeting notes for %<%Y-%m-%d>\n"
 	 :olp ("Lesson notes"))
 
 	("b" "bibliography" entry
 	 #'org-roam-capture--get-point
 	 "* %?"
 	 :file-name "daily/%<%Y-%m-%d>"
-	 :head "#+title: %<%Y-%m-%d>\n"
+	 :head "#+title: Fleeting notes for %<%Y-%m-%d>\n"
 	 :olp ("Notes on Articles, Books, etc."))
 
 	("g" "general" entry
 	 #'org-roam-capture--get-point
 	 "* %?"
 	 :file-name "daily/%<%Y-%m-%d>"
-	 :head "#+title: %<%Y-%m-%d>\n"
+	 :head "#+title: Fleeting notes for %<%Y-%m-%d>\n"
 	 :olp ("Random general notes"))
 
 	("t" "todo" entry
 	 #'org-roam-capture--get-point
 	 "* %?"
 	 :file-name "daily/%<%Y-%m-%d>"
-	 :head "#+title: %<%Y-%m-%d>\n"
+	 :head "#+title: Fleeting notes for %<%Y-%m-%d>\n"
 	 :olp ("Things to do"))))
 
 (require 'ebuku)

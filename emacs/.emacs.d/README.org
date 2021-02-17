@@ -53,7 +53,7 @@ This includes:
 
 #+BEGIN_SRC elisp
 
-  (load-theme 'solarized-dark t)
+  (load-theme 'doom-solarized-dark t)
 
   (menu-bar-mode -1)
   (toggle-scroll-bar -1)
@@ -76,6 +76,12 @@ This includes:
 
   (require 'dash-functional)
   (require 'helpful)
+
+  (use-package doom-modeline
+    :ensure t
+    :init (doom-modeline-mode 1)
+    :config (setq doom-modeline-minor-modes t
+		  doom-modeline-enable-word-count t))
 
 #+END_SRC
 
@@ -461,7 +467,7 @@ More languages to evaluate with org-babel (by default, only elisp is evaluated).
 #+END_SRC
 
 ** Org-agenda and TODOs
-   This is where all the project management magic happens. I set everything I need for TODOs and the org-agenda. Later on in the Keybindings section of the config you can see the keybindings I have set for each action while here are the configurations I want to make. This helps keep this consistent by having those keybindings in that section. I track all my todo files in one directory "~/project_management" so I want every todo defined in that directory to be loaded inside Org-agenda.
+    I set everything I need for TODOs and the org-agenda in this section. In the Keybindings section of the config you can see the keybindings I have set for each action while here are the configurations I want to make. This helps keep this consistent by having those keybindings in that section. I track all my todo files in one directory, my org_roam directory (more on that in the next section, its an important part of my workflow). So I want every todo defined in that directory to be loaded inside Org-agenda.
 
    I define a custom function org-make-todo which makes an item todo, gives it a priority and effort value. I like this for initialization of a todo file as it helps with organizing tasks with which one is more urgent and which is harder outside of the already existing file system to manage different kinds of todos.
 
@@ -480,7 +486,7 @@ More languages to evaluate with org-babel (by default, only elisp is evaluated).
 		      )))
 
     (setq org-agenda-files
-	    '("~/project_management"))
+	    '("~/org_roam"))
 
   (defun org-make-todo ()
     (interactive)
@@ -571,6 +577,7 @@ More languages to evaluate with org-babel (by default, only elisp is evaluated).
 	   orb-file-field-extensions '("pdf"))
 
      (setq org-roam-dailies-directory "~/org_roam/daily")
+
     #+END_SRC
 
 ** Templates
@@ -599,41 +606,41 @@ More languages to evaluate with org-babel (by default, only elisp is evaluated).
 	      #'org-roam-capture--get-point
 	      "* %?"
 	      :file-name "daily/%<%Y-%m-%d>"
-	      :head "#+title: %<%Y-%m-%d>\n"
+	      :head "#+title: Fleeting notes for %<%Y-%m-%d>\n"
 	      :olp ("Lesson notes"))
 
 	     ("b" "bibliography" entry
 	      #'org-roam-capture--get-point
 	      "* %?"
 	      :file-name "daily/%<%Y-%m-%d>"
-	      :head "#+title: %<%Y-%m-%d>\n"
+	      :head "#+title: Fleeting notes for %<%Y-%m-%d>\n"
 	      :olp ("Notes on Articles, Books, etc."))
 
 	     ("g" "general" entry
 	      #'org-roam-capture--get-point
 	      "* %?"
 	      :file-name "daily/%<%Y-%m-%d>"
-	      :head "#+title: %<%Y-%m-%d>\n"
+	      :head "#+title: Fleeting notes for %<%Y-%m-%d>\n"
 	      :olp ("Random general notes"))
 
 	     ("t" "todo" entry
 	      #'org-roam-capture--get-point
 	      "* %?"
 	      :file-name "daily/%<%Y-%m-%d>"
-	      :head "#+title: %<%Y-%m-%d>\n"
+	      :head "#+title: Fleeting notes for %<%Y-%m-%d>\n"
 	      :olp ("Things to do"))))
 
    #+END_SRC
    
    #+RESULTS:
-   | l    | lesson                           | entry | #'org-roam-capture--get-point | * %? | :file-name | daily/%<%Y-%m-%d> | :head | #+title: %<%Y-%m-%d> |
-   | :olp | (Lesson notes)                   |       |                               |      |            |                   |       |                      |
-   | b    | bibliography                     | entry | #'org-roam-capture--get-point | * %? | :file-name | daily/%<%Y-%m-%d> | :head | #+title: %<%Y-%m-%d> |
-   | :olp | (Notes on Articles, Books, etc.) |       |                               |      |            |                   |       |                      |
-   | g    | general                          | entry | #'org-roam-capture--get-point | * %? | :file-name | daily/%<%Y-%m-%d> | :head | #+title: %<%Y-%m-%d> |
-   | :olp | (Random general notes)           |       |                               |      |            |                   |       |                      |
-   | t    | todo                             | entry | #'org-roam-capture--get-point | * %? | :file-name | daily/%<%Y-%m-%d> | :head | #+title: %<%Y-%m-%d> |
-   | :olp | (Things to do)                   |       |                               |      |            |                   |       |                      |
+   | l    | lesson                           | entry | #'org-roam-capture--get-point | * %? | :file-name | daily/%<%Y-%m-%d> | :head | #+title: Fleeting notes for %<%Y-%m-%d> |
+   | :olp | (Lesson notes)                   |       |                               |      |            |                   |       |                                         |
+   | b    | bibliography                     | entry | #'org-roam-capture--get-point | * %? | :file-name | daily/%<%Y-%m-%d> | :head | #+title: Fleeting notes for %<%Y-%m-%d> |
+   | :olp | (Notes on Articles, Books, etc.) |       |                               |      |            |                   |       |                                         |
+   | g    | general                          | entry | #'org-roam-capture--get-point | * %? | :file-name | daily/%<%Y-%m-%d> | :head | #+title: Fleeting notes for %<%Y-%m-%d> |
+   | :olp | (Random general notes)           |       |                               |      |            |                   |       |                                         |
+   | t    | todo                             | entry | #'org-roam-capture--get-point | * %? | :file-name | daily/%<%Y-%m-%d> | :head | #+title: Fleeting notes for %<%Y-%m-%d> |
+   | :olp | (Things to do)                   |       |                               |      |            |                   |       |                                         |
 
 * Other Major Modes
 Some other extensions inside my Emacs config that require some changes for their major modes to function as I want them. This currently includes:
