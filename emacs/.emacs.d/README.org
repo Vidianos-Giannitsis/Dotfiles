@@ -13,7 +13,7 @@ I have drawn inspiration from a lot of other init.el's but the most apparent one
 
 Note that I know little to no elisp yet (I am in the process of learning though), so some things are probably not done in the most efficient way possible, but everything I have set has its desired behaviour, which is enough for me.
 
-This is how my Emacs currently looks, and because I didnt know what file to screenshot, have my qtile bar's config
+This is how my Emacs currently looks. The file viewed is qtile's config.py in the bar config part
 [[https://github.com/AuroraDragoon/Dotfiles/blob/master/screenshots/python_environment.png]]
 
 I hope you will find something useful here that you can put to your emacs config as well. Enjoy!!
@@ -680,8 +680,7 @@ Configuration for PDF-tools, my favourite built-in Emacs pdf viewer. I set it as
 #+RESULTS:
 | pdf-tools-enable-minor-modes | pdf-view-midnight-minor-mode |
 
-And after these changes, my emacs pdf-viewer looks like this (its very similar to the look of my current zathura config, but thats kind of the point).
-P.S. Of course its the same exact pdf as in my zathura screenshot, you might even think its the same picture :D
+And after these changes, my emacs pdf-viewer looks like this. I didn't know what pdf to use so I put a LibreTexts document for Equations of States, which is close to my studies. xDD
 [[https://github.com/AuroraDragoon/Dotfiles/blob/master/screenshots/pdf_view.png]]
 
 ** Octave
