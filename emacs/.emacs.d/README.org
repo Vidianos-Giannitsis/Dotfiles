@@ -42,7 +42,7 @@ The first section has to do with MELPA packages and the second with packages ins
 * Sensible Defaults
 Change some Emacs defaults to things I consider more sensible.
 This includes: 
-+ Setting my theme to solarized-dark (my favourite theme).
++ Setting my theme to doom's variant of solarized-dark. I like it more than the default solarized-dark in melpa (you can get it from the doom-themes package).
 + Disabling some features which I dislike personally like the bars that comes by default, and the annoying sounds emacs makes when you type sth wrong.
 + Activating which-key-mode, which is a popup prompt to display how to complete an emacs command.
 + Changing the startup screen to dired because I consider it way more productive than the default.
@@ -50,6 +50,7 @@ This includes:
 + Changing the M-x menu to counsel M-x. With ivy-mode enabled you get an ivy M-x menu, but it doesn't have the keybinding associated with the action which I deem important. Thats why I set M-x to the counsel menu
 + Moving backup and autosave files to a tmp folder inside my .emacs.d so my directories look like less of a mess.
 + Adding the helpful package which makes documentations better (installing from MELPA didnt work so I needed to do the manual install)
++ Changed my modeline to the doom-modeline. It looks better than the default modeline in Emacs imo
 
 #+BEGIN_SRC elisp
 
