@@ -58,23 +58,21 @@
 (evil-org-agenda-set-keys)
 
 (show-paren-mode 1)
-  (electric-pair-mode 1)
+(electric-pair-mode 1)
 
-  (add-to-list 'load-path
-	       "~/.emacs.d/plugins/yasnippet")
-  (require 'yasnippet)
-  (yas-global-mode 1)
+(add-to-list 'load-path
+	     "~/.emacs.d/plugins/yasnippet")
+(require 'yasnippet)
+(yas-global-mode 1)
 
-  (require 'general)
-  (require 'vterm-toggle)
+(require 'general)
+(require 'vterm-toggle)
 
-;;  (add-hook 'ibuffer-mode-hook 'all-the-icons-ibuffer-mode)
+(setq truncate-partial-width-windows nil)
 
-  (setq truncate-partial-width-windows nil)
+(setq wolfram-alpha-app-id "U9PERG-KTPL49AWA2")
 
-  (setq wolfram-alpha-app-id "U9PERG-KTPL49AWA2")
-
-  (add-hook 'after-init-hook 'global-company-mode)
+(add-hook 'after-init-hook 'global-company-mode)
 
 (general-create-definer my-leader-def
 			:prefix "SPC")
@@ -175,7 +173,6 @@
 (add-hook 'calc-embedded-new-formula-hook 'calctex-mode)
 
 (add-hook 'org-mode-hook 'turn-on-org-cdlatex)
-(add-hook 'org-mode-hook 'org-zotxt-mode)
 
 (require 'org-tree-slide)
 
@@ -389,7 +386,6 @@
 (require 'eaf)
 
 (require 'eaf-evil)
-;(setq eaf-evil-leader-key "SPC")
 
 (setq eaf-wm-focus-fix-wms '("qtile"))
 

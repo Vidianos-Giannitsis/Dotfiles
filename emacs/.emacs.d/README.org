@@ -122,7 +122,6 @@ This enables:
 + Enabling yasnippet snippets.
 + Enabling general, a package that helps me define keybindings easier.
 + Enabling vterm-toggle, a package which helps with not getting a milion vterms open (with a run-or-raise behaviour)
-+ Enable all-the-icons mode for the ibuffer which makes it look much nicer (playing around with counsel's switch buffer, which has a sick feature of previewing the buffer you are about to switch to so I have this commented out for now, if I decide to go back to ibuffer though it will be useful).
 + Setting my wolfram alpha ID for use in emacs which allows me to query the website from inside Emacs
 + Activate company-mode everywhere. Trying this experimentally to see if I like what it provides
 
@@ -138,8 +137,6 @@ This enables:
 
   (require 'general)
   (require 'vterm-toggle)
-
-;;  (add-hook 'ibuffer-mode-hook 'all-the-icons-ibuffer-mode)
 
   (setq truncate-partial-width-windows nil)
 
@@ -334,7 +331,8 @@ This is the "heart" of my config being all the keybindings I have set for my per
   + Icons alongside each file which represent what type of file it is.
   + Hiding dotfiles by default (Pressing SPC and then h, will show all the dotfiles in the directory but I find hiding them better for initial behaviour).
   + A keybinding to create a new file from dired (I cant comprehend why this is not bound to sth by default tbh). Bound to C-+.
-  + For consistency the keybindings are in the Keybindings section of this config even if they are only for dired
+
+  For consistency the keybindings are in the Keybindings section of this config even if they are only for dired
 
   #+BEGIN_SRC elisp
     (require 'dired-x)
@@ -356,10 +354,9 @@ Some settings I want for Emacs's Org-mode which I use extensively (like for writ
 ** Setting up external packages for org
    This first section is about some packages I load for org, which are very helpful for my workflow, such as:
    + Better headings for org, as I am not a fan of the default asterisks.
-   + I require org-roam although I havent set it up just yet, to remind me that I eventually want to work with it
    + I load org-download after org, this is a helpful addon which allows me to paste photos on my clipboard to org, which makes adding photos to org documents much faster.
    + I activate calctex and activate it when I go into calc's embedded mode. Its a neat package that allows me to type a formula inside calc and renders it automatically into latex. Latex snippets are what I use mostly (you can find them inside the snippets directory of my .emacs.d but if you want to draw inspiration from somewhere there are much better sources tbh).
-   + I activate org-cdlatex-mode which makes typing latex equations easier inside org and massively improves speed of typing equations together with snippets for org and org-zotxt-mode which helps org communicate with Zotero and draw articles/bibliographies for my citations which I have saved in Zotero's database
+   + I activate org-cdlatex-mode which makes typing latex equations easier inside org and massively improves speed of typing equations together with snippets for org
    + Also add org-tree-slide from presentations inside Org
      
 #+BEGIN_SRC elisp
@@ -374,7 +371,6 @@ Some settings I want for Emacs's Org-mode which I use extensively (like for writ
   (add-hook 'calc-embedded-new-formula-hook 'calctex-mode)
 
   (add-hook 'org-mode-hook 'turn-on-org-cdlatex)
-  (add-hook 'org-mode-hook 'org-zotxt-mode)
 
   (require 'org-tree-slide)
 #+END_SRC
@@ -662,7 +658,7 @@ Some other extensions inside my Emacs config that require some changes for their
   
 ** PDF Tools
 
-Configuration for PDF-tools, my favourite built-in Emacs pdf viewer. I set it as the default pdf viewer for Emacs and enable the midnight minor mode for it as it makes it match my favourite theme solarized-dark, which I love.
+Configuration for PDF-tools, my favourite built-in Emacs pdf viewer. I set it as the default pdf viewer for Emacs and enable the midnight minor mode for it as it makes it match my theme.
 
 #+BEGIN_SRC elisp
 
@@ -699,9 +695,9 @@ And after these changes, my emacs pdf-viewer looks like this. I didn't know what
      (require 'eaf)
 
      (require 'eaf-evil)
-     ;(setq eaf-evil-leader-key "SPC")
 
      (setq eaf-wm-focus-fix-wms '("qtile"))
+
    #+END_SRC
   
 * Custom Variables
