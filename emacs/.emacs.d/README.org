@@ -23,17 +23,19 @@ Setting up my packages to work properly.
 The first section has to do with MELPA packages and the second with packages installed manually to my load path.
 #+BEGIN_SRC elisp
 
-    (require 'package)
-    (add-to-list 'package-archives
-		 '("melpa" . "https://melpa.org/packages/") t)
+  (require 'package)
 
-    (package-initialize)
-    (unless package-archive-contents
-      (package-refresh-contents))
+  (setq package-archives '(("melpa" . "https://melpa.org/packages/")
+			   ("org" . "https://orgmode.org/elpa/")
+			   ("elpa" . "https://elpa.gnu.org/packages/")))
 
-    (let ((default-directory  "~/.emacs.d/libs/"))
-      (normal-top-level-add-to-load-path '("."))
-      (normal-top-level-add-subdirs-to-load-path))
+  (package-initialize)
+  (unless package-archive-contents
+    (package-refresh-contents))
+
+  (let ((default-directory  "~/.emacs.d/libs/"))
+    (normal-top-level-add-to-load-path '("."))
+    (normal-top-level-add-subdirs-to-load-path))
 
 #+END_SRC
 
@@ -42,6 +44,7 @@ The first section has to do with MELPA packages and the second with packages ins
 * Sensible Defaults
 Change some Emacs defaults to things I consider more sensible.
 This includes: 
++ Activating gcmh mode, which helps improve my startup time.
 + Setting my theme to doom's variant of solarized-dark. I like it more than the default solarized-dark in melpa (you can get it from the doom-themes package).
 + Disabling some features which I dislike personally like the bars that comes by default, and the annoying sounds emacs makes when you type sth wrong.
 + Activating which-key-mode, which is a popup prompt to display how to complete an emacs command.
@@ -53,6 +56,8 @@ This includes:
 + Changed my modeline to the doom-modeline. It looks better than the default modeline in Emacs imo
 
 #+BEGIN_SRC elisp
+
+  (gcmh-mode 1)
 
   (load-theme 'doom-solarized-dark t)
 
@@ -90,7 +95,7 @@ This includes:
 : helpful
 
 * Evil Mode
-Enabling Evil Mode, my preffered editing mode for Emacs, with the evil-collection loaded. It helps me with defining evil type keybindings for more programs, which I like. Then I also load evil-org which is a different third party program for evil keys inside org as evil-collection doesn't have that.
+Enabling Evil Mode, my preffered editing mode for Emacs, with the evil-collection loaded. It helps me with defining evil type keybindings for more programs, which I like. Then I also load evil-org which is a different third party program for evil keys inside org as evil-collection doesn't have that. 
 
 #+BEGIN_SRC elisp
 
@@ -230,16 +235,22 @@ This is the "heart" of my config being all the keybindings I have set for my per
 | Keybinding | Action                                                                                                                                              |
 |------------+-----------------------------------------------------------------------------------------------------------------------------------------------------|
 | , l        | Makes latex fragments inside org, render as pictures showing the equation. Helps ensure I havent typed something wrong without the need to export   |
-| , s        | Schedules a todo task to a specific date and time                                                                                                   |
 | , n        | Opens org-noter, my favourite tool for notetaking from pdfs                                                                                         |
-| , t        | Changes the todo state of an item                                                                                                                   |
-| , p        | Changes a tasks priority                                                                                                                            |
 | , e        | Org export command cause C-c C-e is really annoying when you export like 20 times for the same pdf.                                                 |
-| , T        | Changes a tasks tags                                                                                                                                |
-| , v        | Search for all tasks with a specific tag                                                                                                            |
-| , m        | Activates my custom make-todo function which sets todo state, effort, tags and priority for a task. I prefer it for todo initialization             |
 | , y        | Pastes a photograph from my clipboard, very helptful to speed up adding photos to my documents                                                      |
 | , c        | Open an ivy menu to choose a citation to add to an article                                                                                          |
+| , h        | Invoke a custom command which hides the properties of org headings. Check Org-agenda section for more details                                       |
+| , s        | Store a link from an org buffer to insert to another buffer. I mainly use this with Roam to add links to headings                                   |
+| , i        | Insert a link stored from org-store-link. Again used mostly with Roam                                                                               |
+|------------+-----------------------------------------------------------------------------------------------------------------------------------------------------|
+| *To-Dos*   | You can do a lot with to-do items in Org. These are the commands I have keybound which are specific to to-do management. They are under , t         |
+|------------+-----------------------------------------------------------------------------------------------------------------------------------------------------|
+| , t p      | Changes a tasks priority                                                                                                                            |
+| , t c      | Changes the todo state of an item                                                                                                                   |
+| , t t      | Changes a tasks tags                                                                                                                                |
+| , t v      | Search for all tasks with a specific tag                                                                                                            |
+| , t m      | Activates my custom make-todo function which sets todo state, effort, tags and priority for a task. I prefer it for todo initialization             |
+| , t s      | Schedules a todo task to a specific date and time                                                                                                   |
 |------------+-----------------------------------------------------------------------------------------------------------------------------------------------------|
 | *Zotxt*    | Zotxt is a package with some Zotero compatibility. I use Zotero for my reference management so its cool. I mostly use a .bib file it creates though |
 |------------+-----------------------------------------------------------------------------------------------------------------------------------------------------|
@@ -261,21 +272,22 @@ This is the "heart" of my config being all the keybindings I have set for my per
        :keymaps 'org-mode-map
        "l" 'org-latex-preview
        "n" 'org-noter
-       "s" 'org-schedule
-       "t" 'org-todo
-       "m" 'org-make-todo
+       "t s" 'org-schedule
+       "t c" 'org-todo
+       "t m" 'org-make-todo
        "e" 'org-export-dispatch
-       "p" 'org-priority
-       "v" 'org-tags-view
-       "T" 'org-set-tags-command
+       "t p" 'org-priority
+       "t v" 'org-tags-view
+       "t t" 'org-set-tags-command
        "y" 'org-download-clipboard
        "z i" 'org-zotxt-insert-reference-link
        "z o" 'org-zotxt-open-attachment
        "z n" 'org-zotxt-noter
        "r i" 'org-roam-insert
        "R" 'org-roam
-       "c" 'org-ref-ivy-insert-cite-link
-       "h" 'org-cycle-hide-drawers)
+       "h" 'org-cycle-hide-drawers
+       "s" 'org-store-link
+       "i" 'org-insert-link)
 
 #+END_SRC
 
@@ -553,7 +565,14 @@ More languages to evaluate with org-babel (by default, only elisp is evaluated).
   This section is about my Org-roam setup and my reference management inside org. It is based on the slip-box (Zettelkasten) workflow. The packages that are most relevant to this are Org-roam (obviously) bibtex-completion (ivy-bibtex in my case), org-ref, Org-roam-bibtex. Org Roam is a tool which helps you create your own network of notes. Its based on the Zettelkasten method and the Roam Research website. Everything is linked with one another. Bibtex completion (and the existence of .bib files in general) as well as Org-ref help manage bibliographic references inside org. I use Zotero as my reference manager in which I gather my bibliographies. It exports a .bib file which these two use. Org Roam Bibtex (ORB) is a package that combines all of these to help you add citation links from org-ref inside an org-roam buffer. This section includes all the customisations and settings of these packages.
 
 ** Initialisation Variables
-   This section is all about the initialisation of variables. These are essential for the packages to work most of the time.
+   This section is all about the initialisation of variables. These are essential for the packages to work most of the time. More in detail,
+   - I define the org_roam directory
+   - Activate org-roam and orb after emacs's init so I can use their commands from anywhere, anytime
+   - Zotero exports a .bib file with all my references (the main way it "talks" to Emacs). I "tell" ivy-bibtex and org-ref the location of this file for usage in their various commands.
+   - I allow ivy-bibtex to query by keywords or abstract. Can be useful
+   - I then define the fields of a bibtex file that get queried to create a file with the notes of a reference and set the variable that controls if they should be used to true (already default behaviour though so not truly needed). These are defined here and then formatted in the orb-template. The third variable is about what extension the "file" section uses.
+   - I define the directory in which org-roam-dailies should be put
+   - Lastly, I make the default action of ivy-bibtex, inserting the citation of the chosen reference. Personally, its the action I use most as opening the link/pdf to the reference (which is the original default) is more easily done from Zotero imo. In Emacs I find more utility in inserting the citation in my own documents. 
 
    #+BEGIN_SRC elisp
 
@@ -575,10 +594,11 @@ More languages to evaluate with org-babel (by default, only elisp is evaluated).
 
      (setq org-roam-dailies-directory "~/org_roam/daily")
 
+     (setq ivy-bibtex-default-action 'ivy-bibtex-insert-citation)
     #+END_SRC
 
 ** Templates
-   This section is about the various templates used. Examples are orb-templates, org-roam-capture-templates, org-roam-dailies-capture-templates
+   This section is about the various templates used. These are orb-templates, org-roam-capture-templates, org-roam-dailies-capture-templates
 
    #+BEGIN_SRC elisp
      (setq orb-templates

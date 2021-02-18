@@ -1,6 +1,8 @@
 (require 'package)
-(add-to-list 'package-archives
-	     '("melpa" . "https://melpa.org/packages/") t)
+
+(setq package-archives '(("melpa" . "https://melpa.org/packages/")
+			 ("org" . "https://orgmode.org/elpa/")
+			 ("elpa" . "https://elpa.gnu.org/packages/")))
 
 (package-initialize)
 (unless package-archive-contents
@@ -9,6 +11,8 @@
 (let ((default-directory  "~/.emacs.d/libs/"))
   (normal-top-level-add-to-load-path '("."))
   (normal-top-level-add-subdirs-to-load-path))
+
+(gcmh-mode 1)
 
 (load-theme 'doom-solarized-dark t)
 
@@ -116,21 +120,22 @@
      :keymaps 'org-mode-map
      "l" 'org-latex-preview
      "n" 'org-noter
-     "s" 'org-schedule
-     "t" 'org-todo
-     "m" 'org-make-todo
+     "t s" 'org-schedule
+     "t c" 'org-todo
+     "t m" 'org-make-todo
      "e" 'org-export-dispatch
-     "p" 'org-priority
-     "v" 'org-tags-view
-     "T" 'org-set-tags-command
+     "t p" 'org-priority
+     "t v" 'org-tags-view
+     "t t" 'org-set-tags-command
      "y" 'org-download-clipboard
      "z i" 'org-zotxt-insert-reference-link
      "z o" 'org-zotxt-open-attachment
      "z n" 'org-zotxt-noter
      "r i" 'org-roam-insert
      "R" 'org-roam
-     "c" 'org-ref-ivy-insert-cite-link
-     "h" 'org-cycle-hide-drawers)
+     "h" 'org-cycle-hide-drawers
+     "s" 'org-store-link
+     "i" 'org-insert-link)
 
 (general-define-key
  :states 'normal
@@ -319,6 +324,8 @@
       orb-file-field-extensions '("pdf"))
 
 (setq org-roam-dailies-directory "~/org_roam/daily")
+
+(setq ivy-bibtex-default-action 'ivy-bibtex-insert-citation)
 
 (setq orb-templates
       '(("r" "ref" plain (function org-roam-capture--get-point)
