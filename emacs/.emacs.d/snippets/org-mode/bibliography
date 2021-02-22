@@ -1,0 +1,6 @@
+# -*- mode: snippet -*-
+# name: bibliography
+# key: bib
+# --
+bibliography:~/org_roam/zotero_library.bib
+bibliographystyle:unsrt

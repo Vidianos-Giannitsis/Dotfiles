@@ -61,9 +61,6 @@
 (require 'evil-org-agenda)
 (evil-org-agenda-set-keys)
 
-(show-paren-mode 1)
-(electric-pair-mode 1)
-
 (add-to-list 'load-path
 	     "~/.emacs.d/plugins/yasnippet")
 (require 'yasnippet)
@@ -72,11 +69,16 @@
 (require 'general)
 (require 'vterm-toggle)
 
-(setq truncate-partial-width-windows nil)
+(add-hook 'emacs-startup-hook
+	  (lambda ()
+	    (message "*** Emacs loaded in %s with %d garbage collections."
+		     (format "%.2f seconds"
+			     (float-time
+			      (time-subtract after-init-time before-init-time)))
+		     gcs-done)))
 
-(setq wolfram-alpha-app-id "U9PERG-KTPL49AWA2")
-
-(add-hook 'after-init-hook 'global-company-mode)
+(setq large-file-warning-threshold nil)
+(setq vc-follow-symlinks t)
 
 (general-create-definer my-leader-def
 			:prefix "SPC")
@@ -132,10 +134,14 @@
      "z o" 'org-zotxt-open-attachment
      "z n" 'org-zotxt-noter
      "r i" 'org-roam-insert
-     "R" 'org-roam
      "h" 'org-cycle-hide-drawers
      "s" 'org-store-link
      "i" 'org-insert-link)
+
+(general-define-key
+ :states 'normal
+ :keymaps 'org-mode-map
+ "`" 'org-roam)
 
 (general-define-key
  :states 'normal
@@ -149,6 +155,8 @@
   (global-set-key (kbd "M-C-r") 'restart-emacs)
   (global-set-key (kbd "M-d") (lambda() (interactive)(find-file "~/.emacs.d/README.org")))
   (global-set-key (kbd "M-t") (lambda() (interactive)(find-file "~/project_management/emacs.org")))
+  (global-set-key (kbd "M-m") 'man)
+
 
 (add-hook 'dired-mode-hook
 	  (lambda () (local-set-key (kbd "C-+") #'dired-create-empty-file)))
@@ -167,6 +175,16 @@
 
 (use-package dired-hide-dotfile
   :hook (dired-mode . dired-hide-dotfiles-mode))
+
+(show-paren-mode 1)
+
+(electric-pair-mode 1)
+
+(setq wolfram-alpha-app-id "U9PERG-KTPL49AWA2")
+
+(add-hook 'after-init-hook 'global-company-mode)
+
+(elcord-mode 1)
 
 (require 'org-bullets)
 (add-hook 'org-mode-hook (lambda () (org-bullets-mode 1)))
@@ -188,6 +206,16 @@
 (setq org-latex-pdf-process (list "latexmk -shell-escape -bibtex -f -pdf %f"))
 
 (setq org-odt-preferred-output-format "docx")
+
+(defun org-babel-tangle-dont-ask ()
+  (let ((org-confirm-babel-evaluate nil))
+    (org-babel-tangle)))
+
+(add-hook 'org-mode-hook (lambda () (add-hook 'after-save-hook #'org-babel-tangle-dont-ask
+					      'run-at-end 'only-in-org-mode)))
+
+;(use-package org-make-toc
+ ; :hook (org-mode . org-make-toc-mode))
 
 (setq org-noter-always-create-frame nil)
 
@@ -366,12 +394,12 @@
 	 :head "#+title: Fleeting notes for %<%Y-%m-%d>\n"
 	 :olp ("Random general notes"))
 
-	("t" "todo" entry
+	("w" "workout" entry
 	 #'org-roam-capture--get-point
 	 "* %?"
 	 :file-name "daily/%<%Y-%m-%d>"
 	 :head "#+title: Fleeting notes for %<%Y-%m-%d>\n"
-	 :olp ("Things to do"))))
+	 :olp ("Workout Regimes"))))
 
 (require 'ebuku)
 (require 'evil-collection-ebuku)

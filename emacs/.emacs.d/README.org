@@ -4,6 +4,46 @@
 #+INFOJS_OPT: view:t toc:t ltoc:t mouse:underline buttons:0 path:http://thomasf.github.io/solarized-css/org-info.min.js
 #+HTML_HEAD: <link rel="stylesheet" type="text/css" href="http://thomasf.github.io/solarized-css/solarized-dark.min.css" />
 
+* COMMENT System Crafters config notes  https://github.com/daviwil/dotfiles/blob/master/Emacs.org [1/17]
+  - [ ] Counsel-imenu is a menu to jump around org headings. In big files as my config file, it can be helpful so I want to be reminded to bind it to a key. 
+  
+  - [ ] :which-key argument allows me to define messages in which-key displayed for a keybinding. Will help with prefixes and such when I play around with it. For the leader key you can do :ignore t which makes it not function but displays the message instead of prefix.
+  
+  - [ ] Open-with is a package that allows for specific file extensions to be opened externally. As dired has become my primary file manager of choice, this is useful for some things such as audio files and MS Office documents.
+  
+  - [ ] Look at the Workflow.org file for ideas with org mode.
+  
+  - [ ] May check this booklet out https://leanpub.com/lit-config/read#leanpub-auto-configuring-emacs-and--org-mode-for-literate-programming
+   
+  - [ ] Source code for changing the font size on headings and document title. Will require tinkering with sizes and fonts so I wont add it to my config yet.
+  #+BEGIN_SRC elisp
+
+    ;; Increase the size of various headings
+    (set-face-attribute 'org-document-title nil :font "Cantarell" :weight 'bold :height 1.3)
+    (dolist (face '((org-level-1 . 1.2)
+		    (org-level-2 . 1.1)
+		    (org-level-3 . 1.05)
+		    (org-level-4 . 1.0)
+		    (org-level-5 . 1.1)
+		    (org-level-6 . 1.1)
+		    (org-level-7 . 1.1)
+		    (org-level-8 . 1.1)))
+      (set-face-attribute (car face) nil :font "Cantarell" :weight 'regular :height (cdr face)))
+
+  #+END_SRC
+
+ - [ ] Counsel-rg greps for a string to find in a specified location. In david's config its used to search for notes. I can look into it.
+ - [ ] Seeing the presentations section reminds me that I want to eventually look into org-tree-slide for org presentations as it looks cool. Haven't gotten around to doing it yet though.
+ - [ ] Take a look at dired+ and dired-hacks. Both have additions for dired which I may want to use.
+ - [ ] Magit-todos is a package that shows todos in vc controlled files inside your git status. This can be helpful for tasks such as this. Adding todos to my README that will show up in the git status.
+ - [ ] Darkroom mode looks like a helpful package for distraction free writing if I need it.
+ - [ ] Calfw is a calendar inside Emacs. Why not try it. It also seems to have interaction with org-agenda. If it can also interact with org-roam-daily-notes thats one more reason to use it. 
+ - [ ] There are a lot of eshell configuration options which I can try if I ever get around to using eshell.
+ - [X] elcord is a package that tells discord "Playing Emacs" for the lolz
+ - [ ] ERC is an IRC client for Emacs. Elfeed is an RSS reader for emacs. EMMS is a music player for Emacs. I could get around to configuring them in case I start using them
+ - [ ] There is a mastodon package for Emacs (I am assuming to run mastodon from inside Emacs). If I try out mastodon, I cant see why I shouldn't use this.
+ - [ ] The last section of the config, mentions other inspiring dotfiles which I can check out.
+  
 * About this config
 This is my GNU Emacs literate config file written in org-mode. Its heavily documentated for that reason.
 
@@ -122,18 +162,13 @@ Enabling Evil Mode, my preffered editing mode for Emacs, with the evil-collectio
 * Utilities
 General utilities that I want enabled when editing, or changes to the way emacs opens some programs.
 This enables:
-+ When adding a bracket or quote add its pair as well for quicker editing.
-+ When the cursor is on one bracket, highlight its matching bracket.
 + Enabling yasnippet snippets.
 + Enabling general, a package that helps me define keybindings easier.
 + Enabling vterm-toggle, a package which helps with not getting a milion vterms open (with a run-or-raise behaviour)
-+ Setting my wolfram alpha ID for use in emacs which allows me to query the website from inside Emacs
-+ Activate company-mode everywhere. Trying this experimentally to see if I like what it provides
++ Adding a message when Emacs launches telling me how much time it takes to launch.
++ Remove the warnings Emacs gives when opening large files or following vc controlled symlinks. I dont need them and they can be annoying.
 
 #+BEGIN_SRC elisp
-
-  (show-paren-mode 1)
-  (electric-pair-mode 1)
 
   (add-to-list 'load-path
 	       "~/.emacs.d/plugins/yasnippet")
@@ -143,11 +178,16 @@ This enables:
   (require 'general)
   (require 'vterm-toggle)
 
-  (setq truncate-partial-width-windows nil)
+  (add-hook 'emacs-startup-hook
+	    (lambda ()
+	      (message "*** Emacs loaded in %s with %d garbage collections."
+		       (format "%.2f seconds"
+			       (float-time
+				(time-subtract after-init-time before-init-time)))
+		       gcs-done)))
 
-  (setq wolfram-alpha-app-id "U9PERG-KTPL49AWA2")
-
-  (add-hook 'after-init-hook 'global-company-mode)
+  (setq large-file-warning-threshold nil)
+  (setq vc-follow-symlinks t)
 
 #+END_SRC
 
@@ -261,7 +301,7 @@ This is the "heart" of my config being all the keybindings I have set for my per
 | *Org-Roam* | I use Org-roam for my notetaking. Its got a lot of useful commands. The letter r is reserved for it (SPC r for general and , r for org-specific)    |
 |------------+-----------------------------------------------------------------------------------------------------------------------------------------------------|
 | , r i      | Insert a backlink to connect to notes together in org-roam                                                                                          |
-| , R        | Open the org-roam sidebar which shows all references to the current active file                                                                     |
+| Grave      | Open the Org-Roam sidebar. The grave key is the one under Escape. Its an "underused" key, but its convenient to click so its useful for such tasks  |
 
 #+BEGIN_SRC elisp
   (general-create-definer org-leader-def
@@ -284,11 +324,14 @@ This is the "heart" of my config being all the keybindings I have set for my per
        "z o" 'org-zotxt-open-attachment
        "z n" 'org-zotxt-noter
        "r i" 'org-roam-insert
-       "R" 'org-roam
        "h" 'org-cycle-hide-drawers
        "s" 'org-store-link
        "i" 'org-insert-link)
 
+  (general-define-key
+   :states 'normal
+   :keymaps 'org-mode-map
+   "`" 'org-roam)
 #+END_SRC
 
 #+RESULTS:
@@ -303,6 +346,7 @@ This is the "heart" of my config being all the keybindings I have set for my per
 | M-b        | Open Ebuku, the buku bookmark manager's Emacs major mode from where I can open my bookmarks from inside Emacs                                      |
 | C-h keys   | I change the primary C-h keybindings to their helpful alternatives. They have more info than the defaults (which are already great) so its a plus  |
 | C-c C-d    | Lookup the current symbol at point. Not exactly sure of its use but its recommended in the helpful github repo so I added it                       |
+| M-m        | Query for a man page. Man pages are essential for app documentation for many Linux programs so it's cool to be able to query for one in emacs      |
 |------------+----------------------------------------------------------------------------------------------------------------------------------------------------|
 | *Pdf View* | PDF View is the best Emacs pdf reader. I set some keybindings specific to it                                                                       |
 |------------+----------------------------------------------------------------------------------------------------------------------------------------------------|
@@ -324,6 +368,8 @@ This is the "heart" of my config being all the keybindings I have set for my per
     (global-set-key (kbd "M-C-r") 'restart-emacs)
     (global-set-key (kbd "M-d") (lambda() (interactive)(find-file "~/.emacs.d/README.org")))
     (global-set-key (kbd "M-t") (lambda() (interactive)(find-file "~/project_management/emacs.org")))
+    (global-set-key (kbd "M-m") 'man)
+
 
   (add-hook 'dired-mode-hook
 	    (lambda () (local-set-key (kbd "C-+") #'dired-create-empty-file)))
@@ -360,6 +406,27 @@ This is the "heart" of my config being all the keybindings I have set for my per
   This is how Dired ends up looking after these changes
   [[https://github.com/AuroraDragoon/Dotfiles/blob/master/screenshots/dired.png]]
 
+* Useful Minor Modes
+  I enable a lot of minor modes on startup and I also set some up for use. This section documents these modes. Which-key and Ivy are omitted from this section as they fit more in the [[*Sensible Defaults][Sensible Defaults]] section.
++ When adding a bracket or quote add its pair as well for quicker editing.
++ When the cursor is on one bracket, highlight its matching bracket.
++ Setting my wolfram alpha ID for use in emacs which allows me to query the website from inside Emacs
++ Activate company-mode everywhere. Helpful autocompletions, I dont see why not.
++ Activating Elcord mode for the memes. 
+  
+  #+BEGIN_SRC elisp
+
+    (show-paren-mode 1)
+
+    (electric-pair-mode 1)
+
+    (setq wolfram-alpha-app-id "U9PERG-KTPL49AWA2")
+
+    (add-hook 'after-init-hook 'global-company-mode)
+
+    (elcord-mode 1)
+  #+END_SRC
+  
 * Org-mode
 Some settings I want for Emacs's Org-mode which I use extensively (like for writing this literate config file). Its split in sections cause its too huge otherwise. I change way too many stuff in Org :D. 
 
@@ -392,7 +459,9 @@ Some settings I want for Emacs's Org-mode which I use extensively (like for writ
    + When exporting to pdf, org defaults to your system's default pdf viewer (zathura in my case). Since I am in an Emacs buffer editing the file, its more convenient to open the pdf inside Emacs with pdf-tools.
    + I write a lot of equations in my documents usually with latex and the normal size of those inside org (available with org-latex-preview) is a bit small for my liking so after playing around with it a bit I scaled it up to 1.3 of the original which I consider a very sensible size
    + Making latex view my bibtex bibliography and export it properly. I took this from the org-ref docs as originally I wasnt getting proper bibliographic entries. I t works with this.
-   + Laslty, I tell org that its odt export should be converted to docx as if I am exporting to a rich text editors format, its for a collaboration and most people I know use that format. If its a personal project I always export to a latex pdf because it looks better. 
+   + I tell org that its odt export should be converted to docx as if I am exporting to a rich text editors format, its for a collaboration and most people I know use that format. If its a personal project I always export to a latex pdf because it looks better.
+   + Defining a function which supresses the confirmation message for tangling an org document's source code and hooking it to the after save hook in org-mode. If I understand it correctly, it should automatically tangle after saving, if thats possible, which is handy for things such as this configuration.
+   + Org-make-toc creates a table of contents for org files. Some of its exports already have it, but its useful to have for things such as long README files in github which don't have a toc otherwise. 
 
 #+BEGIN_SRC elisp
   (add-to-list 'org-file-apps '("\\.pdf\\'" . emacs))
@@ -403,10 +472,19 @@ Some settings I want for Emacs's Org-mode which I use extensively (like for writ
 
   (setq org-odt-preferred-output-format "docx")
 
+  (defun org-babel-tangle-dont-ask ()
+    (let ((org-confirm-babel-evaluate nil))
+      (org-babel-tangle)))
+
+  (add-hook 'org-mode-hook (lambda () (add-hook 'after-save-hook #'org-babel-tangle-dont-ask
+						'run-at-end 'only-in-org-mode)))
+
+  ;(use-package org-make-toc
+   ; :hook (org-mode . org-make-toc-mode))
+
 #+END_SRC
 
 #+RESULTS:
-: docx
 	    
 ** Org Noter
    
@@ -640,12 +718,12 @@ More languages to evaluate with org-babel (by default, only elisp is evaluated).
 	      :head "#+title: Fleeting notes for %<%Y-%m-%d>\n"
 	      :olp ("Random general notes"))
 
-	     ("t" "todo" entry
+	     ("w" "workout" entry
 	      #'org-roam-capture--get-point
 	      "* %?"
 	      :file-name "daily/%<%Y-%m-%d>"
 	      :head "#+title: Fleeting notes for %<%Y-%m-%d>\n"
-	      :olp ("Things to do"))))
+	      :olp ("Workout Regimes"))))
 
    #+END_SRC
    
@@ -656,8 +734,8 @@ More languages to evaluate with org-babel (by default, only elisp is evaluated).
    | :olp | (Notes on Articles, Books, etc.) |       |                               |      |            |                   |       |                                         |
    | g    | general                          | entry | #'org-roam-capture--get-point | * %? | :file-name | daily/%<%Y-%m-%d> | :head | #+title: Fleeting notes for %<%Y-%m-%d> |
    | :olp | (Random general notes)           |       |                               |      |            |                   |       |                                         |
-   | t    | todo                             | entry | #'org-roam-capture--get-point | * %? | :file-name | daily/%<%Y-%m-%d> | :head | #+title: Fleeting notes for %<%Y-%m-%d> |
-   | :olp | (Things to do)                   |       |                               |      |            |                   |       |                                         |
+   | w    | workout                          | entry | #'org-roam-capture--get-point | * %? | :file-name | daily/%<%Y-%m-%d> | :head | #+title: Fleeting notes for %<%Y-%m-%d> |
+   | :olp | (Workout Regimes)                |       |                               |      |            |                   |       |                                         |
 
 * Other Major Modes
 Some other extensions inside my Emacs config that require some changes for their major modes to function as I want them. This currently includes:

@@ -1,0 +1,5 @@
+# -*- mode: snippet -*-
+# name: partial_derivative 
+# key: pdev
+# --
+\left \frac{\partial }{\partial } \right)_{}
