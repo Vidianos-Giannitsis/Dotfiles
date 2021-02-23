@@ -4,19 +4,21 @@
 #+INFOJS_OPT: view:t toc:t ltoc:t mouse:underline buttons:0 path:http://thomasf.github.io/solarized-css/org-info.min.js
 #+HTML_HEAD: <link rel="stylesheet" type="text/css" href="http://thomasf.github.io/solarized-css/solarized-dark.min.css" />
 
-* COMMENT System Crafters config notes  https://github.com/daviwil/dotfiles/blob/master/Emacs.org [6/12]
+* COMMENT System Crafters config notes  https://github.com/daviwil/dotfiles/blob/master/Emacs.org [7/9]
   - [X] Counsel-imenu is a menu to jump around org headings. In big files as my config file, it can be helpful so I want to be reminded to bind it to a key. 
   
   - [X] :which-key argument allows me to define messages in which-key displayed for a keybinding. Will help with prefixes and such when I play around with it. For the leader key you can do :ignore t which makes it not function but displays the message instead of prefix.
   
   - [X] Open-with is a package that allows for specific file extensions to be opened externally. As dired has become my primary file manager of choice, this is useful for some things such as audio files and MS Office documents.
   
-  - [ ] Take a look at dired+ and dired-hacks. Both have additions for dired which I may want to use.
+  - [X] Take a look at dired+ and dired-hacks. Both have additions for dired which I may want to use.
+  - [ ] Set up dired-rainbow for better coloring in dired buffers. 
   - [X] Magit-todos is a package that shows todos in vc controlled files inside your git status. This can be helpful for tasks such as this. Adding todos to my README that will show up in the git status.
   - [X] Calfw is a calendar inside Emacs. Why not try it. It also seems to have interaction with org-agenda. If it can also interact with org-roam-daily-notes thats one more reason to use it. 
   - [X] elcord is a package that tells discord "Playing Emacs" for the lolz
   - [ ] The last section of the config, mentions other inspiring dotfiles which I can check out.
 
+* COMMENT Long term ideas for things I can try [0/4]
 These are interesting packages to check in the long term. But nothing to hurry with, as I dont need any of them urgently.
  - [ ] There is a mastodon package for Emacs (I am assuming to run mastodon from inside Emacs). If I try out mastodon, I cant see why I shouldn't use this.
  - [ ] ERC is an IRC client for Emacs. Elfeed is an RSS reader for emacs. EMMS is a music player for Emacs. I could get around to configuring them in case I start using them
@@ -26,7 +28,7 @@ These are interesting packages to check in the long term. But nothing to hurry w
 * About this config
 This is my GNU Emacs literate config file written in org-mode. Its heavily documentated for that reason.
 
-Emacs has truly become that one tool that has molded exceptionally to my workflow, that I can no longer live without it. I use it for most of my tasks at this point. This is a vanilla GNU Emacs install with a ton of configurations. I initially used Spacemacs, but the mentality of vanilla fits more with me. Its a blank slate on which I can do anything I want. Spacemacs felt like a different person's vision so I wanted to move to my own Emacs config so I can truly feel its mine. I feel I have succeeded at this in making it truly personal. At this point, I am proud to call it a masterpiece for what I want it. Its definitely not the best config I have seen, nor is it for everyone, but for me, it does everything I want. And its truly incredible at doing all that. I can not imagine a better workflow than this. Thats why although its far from perfect, for what I use it, I can truly consider it a masterpiece in its own right as no other program can get even close to this. 
+Emacs has truly become that one tool that has molded exceptionally to my workflow, that I can no longer live without it. I use it for most of my tasks at this point. This is a vanilla GNU Emacs install with a ton of configurations. I initially used Spacemacs, but the mentality of vanilla fits more with me. Its a blank slate on which I can do anything I want. Spacemacs felt like a different person's vision so I wanted to move to my own Emacs config so I can truly feel its mine. I feel I have succeeded at this in making it truly personal. Its definitely not the best config I have seen, nor is it for everyone, but for me, it does everything I want. And its truly incredible at doing all that. I can not imagine a better workflow than this. Thats why although its far from perfect, for what I use it, I can truly consider it a masterpiece in its own right as no other program can get even close to this. 
 
 I have drawn inspiration from a lot of other init.el's but the most apparent one is the spacemacs keybindings. I was a spacemacs user for a few months before deciding to start using this personal config for Emacs. I found its keybindings very ergonomic and although most things arent exactly the way they are done in spacemacs, the inspiration is apparent. For example the Space and , keys are leader keys which I use a lot (space for general commands and , for mode specific, currently only org though).
 
@@ -63,7 +65,7 @@ The first section has to do with MELPA packages and the second with packages ins
 * Sensible Defaults
 Change some Emacs defaults to things I consider more sensible.
 This includes: 
-+ Activating gcmh mode, which helps improve my startup time.
++ Activating gcmh mode, which helps improve my startup time (Note that to truly get a benefit from this it needs to be very early on in the config). 
 + Setting my theme to doom's variant of solarized-dark. I like it more than the default solarized-dark in melpa (you can get it from the doom-themes package).
 + Disabling some features which I dislike personally like the bars that comes by default, and the annoying sounds emacs makes when you type sth wrong.
 + Activating which-key-mode, which is a popup prompt to display how to complete an emacs command.
@@ -415,6 +417,9 @@ This is the "heart" of my config being all the keybindings I have set for my per
     (use-package dired-hide-dotfile
       :hook (dired-mode . dired-hide-dotfiles-mode))
 
+    (use-package dired-collapse
+      :hook (dired-mode . dired-collapse-mode))
+
   #+END_SRC
 
   This is how Dired ends up looking after these changes
@@ -438,7 +443,8 @@ This is the "heart" of my config being all the keybindings I have set for my per
     (setq wolfram-alpha-app-id "U9PERG-KTPL49AWA2")
     (add-hook 'after-init-hook 'global-company-mode)
     (elcord-mode 1)
-    (add-hook 'magit-mode-hook 'magit-todos-mode)
+    (use-package magit-todos-mode
+      :hook magit-mode)
     (require 'calfw-git)
     (require 'calfw-org)
 

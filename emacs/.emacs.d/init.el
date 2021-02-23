@@ -200,12 +200,16 @@
 (use-package dired-hide-dotfile
   :hook (dired-mode . dired-hide-dotfiles-mode))
 
+(use-package dired-collapse
+  :hook (dired-mode . dired-collapse-mode))
+
 (show-paren-mode 1)
 (electric-pair-mode 1)
 (setq wolfram-alpha-app-id "U9PERG-KTPL49AWA2")
 (add-hook 'after-init-hook 'global-company-mode)
 (elcord-mode 1)
-(add-hook 'magit-mode-hook 'magit-todos-mode)
+(use-package magit-todos-mode
+  :hook magit-mode)
 (require 'calfw-git)
 (require 'calfw-org)
 
