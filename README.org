@@ -57,7 +57,6 @@ Then... Then we get to Emacs, which is slowly becoming my absolute favourite pro
 The repo, has quite a few things, as its my entire /.emacs.d. Outside of README and init.el, other places of importance are: 
 + /libs where I have my load-path for packages not installed through MELPA but manually
 + /snippets where I have my collection of snippets. It mostly has snippets for org-mode to simplify me writing Latex equations inside org. They could be much better but I am kinda lazy, I will make them better eventually. 
-+ The last place I would consider interesting is /spaceinit.el. This is the spacemacs init file. Its here, as while transitioning (which took way less than I thought really, like 3 days) from Spacemacs to GNU Emacs I needed a way to have both init files inside .emacs.d. I changed their names to trick emacs into launching init.el with the correct configuration framework. I have kept this inside this directory, just in case I need Spacemacs for something else.
 
 For the rest, like some screenshots of different emacs buffers refer to Emacs's README inside this repo, have fun!
 

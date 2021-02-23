@@ -80,6 +80,17 @@
 (setq large-file-warning-threshold nil)
 (setq vc-follow-symlinks t)
 
+(set-face-attribute 'org-document-title nil :font "Source Code Pro" :weight 'bold :height 1.3)
+    (dolist (face '((org-level-1 . 1.2)
+		    (org-level-2 . 1.1)
+		    (org-level-3 . 1.05)
+		    (org-level-4 . 1.0)
+		    (org-level-5 . 1.1)
+		    (org-level-6 . 1.1)
+		    (org-level-7 . 1.1)
+		    (org-level-8 . 1.1)))
+      (set-face-attribute (car face) nil :font "Source Code Pro" :weight 'regular :height (cdr face)))
+
 (general-create-definer my-leader-def
 			:prefix "SPC")
 
@@ -90,9 +101,11 @@
   "p" 'package-install
   "o" 'inferior-octave
   "D" 'dired
+  "d" '(:ignore t :which-key "Dired functions")
+  "d f" 'counsel-find-file
   "d h" 'dired-hide-dotfiles-mode
-  "t" 'toggle-truncate-lines
   "d j" 'dired-jump
+  "t" 'toggle-truncate-lines
   "T" 'org-babel-tangle
   "RET" 'vterm-toggle
   "<C-return>" 'vterm 
@@ -101,18 +114,26 @@
   "g" 'pdf-view-goto-page
   "H" 'split-window-horizontally
   "V" 'split-window-vertically
-  "c" 'calc-dispatch
+  "C" 'calc-dispatch
   "w" 'wolfram-alpha
   "R" 'recover-this-file
-  "d f" 'counsel-find-file
   "m" 'magit
-  "r f" 'org-roam-find-file
   "B" 'ivy-bibtex
+  "r" '(:ignore t :which-key "Org-Roam commands")
+  "r f" 'org-roam-find-file
   "r b" 'orb-insert
+  "j" '(:ignore t :which-key "Daily notes")
+  "j f" '(:ignore t :which-key "Find daily note")
+  "j c" '(:ignore t :which-key "Capture daily note")
   "j c t" 'org-roam-dailies-capture-today
   "j f t" 'org-roam-dailies-find-today
-  "j c c" 'org-roam-dailies-capture-date
-  "j f c" 'org-roam-dailies-find-date)
+  "j c d" 'org-roam-dailies-capture-date
+  "j f d" 'org-roam-dailies-find-date
+  "h" 'counsel-imenu
+  "c" '(:ignore t :which-key "Calendar Commands")
+  "c b" 'cfw:open-calendar-buffer
+  "c o" 'cfw:open-org-calendar
+  "c g" 'cfw:git-open-calendar)
 
 (general-create-definer org-leader-def
       :prefix ",")
@@ -122,17 +143,20 @@
      :keymaps 'org-mode-map
      "l" 'org-latex-preview
      "n" 'org-noter
+     "e" 'org-export-dispatch
+     "t" '(:ignore t :which-key "To-do management")
      "t s" 'org-schedule
      "t c" 'org-todo
      "t m" 'org-make-todo
-     "e" 'org-export-dispatch
      "t p" 'org-priority
      "t v" 'org-tags-view
      "t t" 'org-set-tags-command
      "y" 'org-download-clipboard
+     "z" '(:ignore t :which-key "Zotxt commands")
      "z i" 'org-zotxt-insert-reference-link
      "z o" 'org-zotxt-open-attachment
      "z n" 'org-zotxt-noter
+     "r" '(:ignore t :which-key "Org-Roam commands")
      "r i" 'org-roam-insert
      "h" 'org-cycle-hide-drawers
      "s" 'org-store-link
@@ -148,13 +172,13 @@
  :keymaps 'pdf-view-mode-map
  "i" 'org-noter-insert-note
  "c" 'kill-current-buffer
+ "a" '(:ignore t :which-key "Add annotation")
  "a t" 'pdf-annot-add-text-annotation
  "a m" 'pdf-annot-add-markup-annotation)
 
   (global-set-key (kbd "M-b") 'ebuku)
   (global-set-key (kbd "M-C-r") 'restart-emacs)
   (global-set-key (kbd "M-d") (lambda() (interactive)(find-file "~/.emacs.d/README.org")))
-  (global-set-key (kbd "M-t") (lambda() (interactive)(find-file "~/project_management/emacs.org")))
   (global-set-key (kbd "M-m") 'man)
 
 
@@ -177,14 +201,34 @@
   :hook (dired-mode . dired-hide-dotfiles-mode))
 
 (show-paren-mode 1)
-
 (electric-pair-mode 1)
-
 (setq wolfram-alpha-app-id "U9PERG-KTPL49AWA2")
-
 (add-hook 'after-init-hook 'global-company-mode)
-
 (elcord-mode 1)
+(add-hook 'magit-mode-hook 'magit-todos-mode)
+(require 'calfw-git)
+(require 'calfw-org)
+
+(use-package openwith
+  :config
+  (setq openwith-associations
+	(list
+	 (list (openwith-make-extension-regexp
+		'("mpg" "mpeg" "mp3" "mp4"
+		  "avi" "wmv" "wav" "mov" "flv"
+		  "ogm" "ogg" "mkv"))
+		"mpv"
+		'(file))
+(list (openwith-make-extension-regexp
+		'("xbm" "pbm" "pgm" "ppm" "pnm"
+		  "gif" "bmp" "tif"))
+		  "sxiv"
+		  '(file))
+	 (list (openwith-make-extension-regexp
+		'("docx" "doc" "xlsx" "xls" "ppt" "odt"))
+	       "libreoffice"
+	       '(file))))
+	(openwith-mode 1))
 
 (require 'org-bullets)
 (add-hook 'org-mode-hook (lambda () (org-bullets-mode 1)))
