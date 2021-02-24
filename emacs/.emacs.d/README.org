@@ -26,7 +26,13 @@ These are interesting packages to check in the long term. But nothing to hurry w
  - [ ] There are a lot of eshell configuration options which I can try if I ever get around to using eshell.
  - [ ] There is a mastodon package for Emacs (I am assuming to run mastodon from inside Emacs). If I try out mastodon, I cant see why I shouldn't use this.
   
+:CONTENTS:
+
+:END:
 * About this config
+  :PROPERTIES:
+  :TOC:      :include all
+  :END:
 This is my GNU Emacs literate config file written in org-mode. Its heavily documentated for that reason.
 
 Emacs has truly become that one tool that has molded exceptionally to my workflow, that I can no longer live without it. I use it for most of my tasks at this point. This is a vanilla GNU Emacs install with a ton of configurations. I initially used Spacemacs, but the mentality of vanilla fits more with me. Its a blank slate on which I can do anything I want. Spacemacs felt like a different person's vision so I wanted to move to my own Emacs config so I can truly feel its mine. I feel I have succeeded at this in making it truly personal. Its definitely not the best config I have seen, nor is it for everyone, but for me, it does everything I want. And its truly incredible at doing all that. I can not imagine a better workflow than this. Thats why although its far from perfect, for what I use it, I can truly consider it a masterpiece in its own right as no other program can get even close to this. 
@@ -40,7 +46,40 @@ This is how my Emacs currently looks. The file viewed is qtile's config.py in th
 
 I hope you will find something useful here that you can put to your emacs config as well. Enjoy!!
 
+:CONTENTS:
+- [[#about-this-config][About this config]]
+- [[#packages][Packages]]
+- [[#sensible-defaults][Sensible Defaults]]
+- [[#evil-mode][Evil Mode]]
+- [[#utilities][Utilities]]
+- [[#keybindings][Keybindings]]
+  - [[#global-keybindings-defined-with-the-space-leader-key][Global keybindings, defined with the space leader key]]
+  - [[#org-mode-keybindings][Org mode keybindings]]
+  - [[#other-keybindings-either-mode-specific-or-general-that-function-without-the-space-key][Other keybindings, either mode specific or general, that function without the space key]]
+- [[#dired][Dired]]
+- [[#useful-minor-modes][Useful Minor Modes]]
+- [[#org-mode][Org-mode]]
+  - [[#setting-up-external-packages-for-org][Setting up external packages for org]]
+  - [[#org-mode-utilities][Org mode utilities]]
+  - [[#org-noter][Org Noter]]
+  - [[#org-babel][Org Babel]]
+  - [[#org-agenda-and-todos][Org-agenda and TODOs]]
+- [[#org-roam-references-and-the-zettelkasten-workflow][Org Roam, References and the Zettelkasten Workflow]]
+  - [[#initialisation-variables][Initialisation Variables]]
+  - [[#templates][Templates]]
+- [[#inkscape-x-emacs][Inkscape x Emacs]]
+- [[#other-major-modes][Other Major Modes]]
+  - [[#ebuku][Ebuku]]
+  - [[#pdf-tools][PDF Tools]]
+  - [[#octave][Octave]]
+  - [[#emacs-application-framework][Emacs Application Framework]]
+- [[#custom-variables][Custom Variables]]
+:END:
+
 * Packages
+  :PROPERTIES:
+  :TOC:      :include all
+  :END:
 Setting up my packages to work properly. 
 The first section has to do with MELPA packages and the second with packages installed manually to my load path.
 #+BEGIN_SRC elisp
@@ -295,7 +334,7 @@ This is the "heart" of my config being all the keybindings I have set for my per
 | , l        | Makes latex fragments inside org, render as pictures showing the equation. Helps ensure I havent typed something wrong without the need to export.   |
 |            | Its also great if you prefer to view a document from the org buffer and not a pdf (for the various utilities you have inside org)                    |
 | , n        | Opens org-noter, my favourite tool for notetaking from pdfs                                                                                          |
-| , e        | Org export command cause C-c C-e is really annoying when you export like 20 times for the same pdf.                                                  |
+| , e        | Org export dispatch command for exporting to pdf or html.                                                                                            |
 | , y        | Pastes a photograph from my clipboard, very helptful to speed up adding photos to my documents                                                       |
 | , c        | Open an ivy menu to choose a citation to add to an article                                                                                           |
 | , h        | Invoke a custom command which hides the properties of org headings. Check Org-agenda section for more details                                        |
@@ -303,6 +342,7 @@ This is the "heart" of my config being all the keybindings I have set for my per
 | , i        | Insert a link stored from org-store-link. Again used mostly with Roam                                                                                |
 | , S        | Custom command to export .svg to .pdf files. This is a prerequisite for the Inkscape integration with Emacs to work. This is better explained in     |
 |            | the Inkscape x Emacs section of the config, which is specifically made for this functionality                                                        |
+| , I        | Set TOC properties for a heading. This allows me to create a ToC for big files such as this which are uploaded to github so they look better         |
 |------------+------------------------------------------------------------------------------------------------------------------------------------------------------|
 | *To-Dos*   | You can do a lot with to-do items in Org. These are the commands I have keybound which are specific to to-do management. They are under , t          |
 |------------+------------------------------------------------------------------------------------------------------------------------------------------------------|
@@ -352,7 +392,8 @@ This is the "heart" of my config being all the keybindings I have set for my per
        "h" 'org-cycle-hide-drawers
        "s" 'org-store-link
        "i" 'org-insert-link
-       "S" 'org-svg-pdf-export)
+       "S" 'org-svg-pdf-export
+       "I" 'org-make-toc-insert)
 
   (general-define-key
    :states 'normal

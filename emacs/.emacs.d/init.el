@@ -161,7 +161,8 @@
      "h" 'org-cycle-hide-drawers
      "s" 'org-store-link
      "i" 'org-insert-link
-     "S" 'org-svg-pdf-export)
+     "S" 'org-svg-pdf-export
+     "I" 'org-make-toc-insert)
 
 (general-define-key
  :states 'normal
