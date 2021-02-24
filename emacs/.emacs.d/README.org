@@ -224,7 +224,7 @@ This enables:
 #+RESULTS:
 
 * Keybindings
-This is the "heart" of my config being all the keybindings I have set for my personal config. This is heavily customised as I personally am not a fun of the default Emacs keybindings (I find them a little too chaotic). Below is a table explaining them. When the keys are seperated with a space, you need to press one after the other while when seperated with a "-" you press all the keys together. Space (SPC) is set as my global leader key so most of my keybindings start with it. This is heavily influenced by the way spacemacs does it because I used spacemacs before this and I liked the idea. But, since it has way less keybindings than spacemacs they are simpler. I manage most of these using leader keys from the general.el package. I also have "," for org-mode specific commands (which can only be ran from an org mode buffer) as they are too many to have in the same leader key. I can also nest leader keys inside other leader keys, like how r is the leader key for org-roam commands both in the general keybindings and the org specific keybindings.
+This is the "heart" of my config being all the keybindings I have set for my personal config. This is heavily customised as I personally am not a fun of the default Emacs keybindings as the control key is not in an ergonomic position to click (and personally I dont like the solution of making Caps-Lock act as control or something similar) and I also find some of them a little too chaotic. Below is a table explaining them. When the keys are seperated with a space, you need to press one after the other while when seperated with a "-" you press all the keys together. Space (SPC) is set as my global leader key so most of my general keybindings start with it. This is heavily influenced by the way spacemacs does it because I used spacemacs before this and I liked the idea. I manage these leader keys with the general.el package. I also have "," for org-mode specific commands (which can only be ran from an org mode buffer) as they are too many to have in the same leader key. I can also nest leader keys inside other leader keys, like how r is the leader key for org-roam commands both in the general keybindings and the org specific keybindings. For these nested leader keys, I have a keybinding with the leader key which is set to :ignore t so that I can have a :which-key argument which allows me to describe the leader key's function inside the which-key menu (which is awesome). I also have :which-key arguments for commands whose names I dont find very self explanatory (such as counsel-imenu, which is better described for me as jump to heading). 
 
 ** Global keybindings, defined with the space leader key
 | Keybinding   | Action                                                                                                                                             |
@@ -285,12 +285,12 @@ This is the "heart" of my config being all the keybindings I have set for my per
    :keymaps 'override
     "!" 'shell-command
     "p" 'package-install
-    "o" 'inferior-octave
+    "o" '(inferior-octave :which-key "octave")
     "D" 'dired
     "d" '(:ignore t :which-key "Dired functions")
     "d f" 'counsel-find-file
     "d h" 'dired-hide-dotfiles-mode
-    "d j" 'dired-jump
+    "d j" '(dired-jump :which-key "Open dired in the current buffer's directory")
     "t" 'toggle-truncate-lines
     "T" 'org-babel-tangle
     "RET" 'vterm-toggle
@@ -300,7 +300,7 @@ This is the "heart" of my config being all the keybindings I have set for my per
     "g" 'pdf-view-goto-page
     "H" 'split-window-horizontally
     "V" 'split-window-vertically
-    "C" 'calc-dispatch
+    "C" '(calc-dispatch :which-key "Open the M-x calc menu")
     "w" 'wolfram-alpha
     "R" 'recover-this-file
     "m" 'magit
@@ -315,11 +315,11 @@ This is the "heart" of my config being all the keybindings I have set for my per
     "j f t" 'org-roam-dailies-find-today
     "j c d" 'org-roam-dailies-capture-date
     "j f d" 'org-roam-dailies-find-date
-    "h" 'counsel-imenu
+    "h" '(counsel-imenu :which-key "Jump to heading")
     "c" '(:ignore t :which-key "Calendar Commands")
     "c b" 'cfw:open-calendar-buffer
-    "c o" 'cfw:open-org-calendar
-    "c g" 'cfw:git-open-calendar)
+    "c o" '(cfw:open-org-calendar :which-key "Open calendar with scheduled to-dos")
+    "c g" '(cfw:git-open-calendar :which-key "Open calendar with git commit history"))
 
 #+END_SRC
 
@@ -336,10 +336,10 @@ This is the "heart" of my config being all the keybindings I have set for my per
 | , c        | Open an ivy menu to choose a citation to add to an article                                                                                           |
 | , h        | Invoke a custom command which hides the properties of org headings. Check Org-agenda section for more details                                        |
 | , s        | Store a link from an org buffer to insert to another buffer. I mainly use this with Roam to add links to headings                                    |
-| , i        | Insert a link stored from org-store-link. Again used mostly with Roam                                                                                |
+| , I        | Insert a link stored from org-store-link. Again used mostly with Roam                                                                                |
 | , S        | Custom command to export .svg to .pdf files. This is a prerequisite for the Inkscape integration with Emacs to work. This is better explained in     |
 |            | the Inkscape x Emacs section of the config, which is specifically made for this functionality                                                        |
-| , I        | Set TOC properties for a heading. This allows me to create a ToC for big files such as this which are uploaded to github so they look better         |
+| , i        | Toggle whether images on an org document are visible or not.                                                                                         |
 |------------+------------------------------------------------------------------------------------------------------------------------------------------------------|
 | *To-Dos*   | You can do a lot with to-do items in Org. These are the commands I have keybound which are specific to to-do management. They are under , t          |
 |------------+------------------------------------------------------------------------------------------------------------------------------------------------------|
@@ -375,7 +375,7 @@ This is the "heart" of my config being all the keybindings I have set for my per
        "t" '(:ignore t :which-key "To-do management")
        "t s" 'org-schedule
        "t c" 'org-todo
-       "t m" 'ad/org-make-todo
+       "t m" '(ad/org-make-todo :which-key "Initialise to-do item")
        "t p" 'org-priority
        "t v" 'org-tags-view
        "t t" 'org-set-tags-command
@@ -386,11 +386,11 @@ This is the "heart" of my config being all the keybindings I have set for my per
        "z n" 'org-zotxt-noter
        "r" '(:ignore t :which-key "Org-Roam commands")
        "r i" 'org-roam-insert
-       "h" 'ad/org-cycle-hide-drawers
+       "h" '(ad/org-cycle-hide-drawers :which-key "Hide properties drawers")
        "s" 'org-store-link
-       "i" 'org-insert-link
-       "S" 'ad/org-svg-pdf-export
-       "I" 'org-make-toc-insert)
+       "I" 'org-insert-link
+       "S" '(ad/org-svg-pdf-export :which-key "Export svg files to pdf")
+       "i" 'org-toggle-inline-images)
 
   (general-define-key
    :states 'normal
@@ -453,15 +453,13 @@ This is the "heart" of my config being all the keybindings I have set for my per
   I have configured it to include:
   + Icons alongside each file which represent what type of file it is.
   + Hiding dotfiles by default (Pressing SPC and then h, will show all the dotfiles in the directory but I find hiding them better for initial behaviour).
-  + A keybinding to create a new file from dired (I cant comprehend why this is not bound to sth by default tbh). Bound to C-+.
-
-  For consistency the keybindings are in the Keybindings section of this config even if they are only for dired
+  + Added the functionality of when a folder has a single item, directly go to that item (open if its file, display the directory if its a directory). This is how you vieew folders in github, which behaviour I really like it so since I found a package with this behaviour (dired-collapse) I added it to my config and hooked it to dired mode. 
 
   #+BEGIN_SRC elisp
     (require 'dired-x)
+
     (use-package all-the-icons-dired
       :hook (dired-mode . all-the-icons-dired-mode))
-
 
     (use-package dired-hide-dotfile
       :hook (dired-mode . dired-hide-dotfiles-mode))

@@ -99,12 +99,12 @@
  :keymaps 'override
   "!" 'shell-command
   "p" 'package-install
-  "o" 'inferior-octave
+  "o" '(inferior-octave :which-key "octave")
   "D" 'dired
   "d" '(:ignore t :which-key "Dired functions")
   "d f" 'counsel-find-file
   "d h" 'dired-hide-dotfiles-mode
-  "d j" 'dired-jump
+  "d j" '(dired-jump :which-key "Open dired in the current buffer's directory")
   "t" 'toggle-truncate-lines
   "T" 'org-babel-tangle
   "RET" 'vterm-toggle
@@ -114,7 +114,7 @@
   "g" 'pdf-view-goto-page
   "H" 'split-window-horizontally
   "V" 'split-window-vertically
-  "C" 'calc-dispatch
+  "C" '(calc-dispatch :which-key "Open the M-x calc menu")
   "w" 'wolfram-alpha
   "R" 'recover-this-file
   "m" 'magit
@@ -129,11 +129,11 @@
   "j f t" 'org-roam-dailies-find-today
   "j c d" 'org-roam-dailies-capture-date
   "j f d" 'org-roam-dailies-find-date
-  "h" 'counsel-imenu
+  "h" '(counsel-imenu :which-key "Jump to heading")
   "c" '(:ignore t :which-key "Calendar Commands")
   "c b" 'cfw:open-calendar-buffer
-  "c o" 'cfw:open-org-calendar
-  "c g" 'cfw:git-open-calendar)
+  "c o" '(cfw:open-org-calendar :which-key "Open calendar with scheduled to-dos")
+  "c g" '(cfw:git-open-calendar :which-key "Open calendar with git commit history"))
 
 (general-create-definer org-leader-def
       :prefix ",")
@@ -147,7 +147,7 @@
      "t" '(:ignore t :which-key "To-do management")
      "t s" 'org-schedule
      "t c" 'org-todo
-     "t m" 'ad/org-make-todo
+     "t m" '(ad/org-make-todo :which-key "Initialise to-do item")
      "t p" 'org-priority
      "t v" 'org-tags-view
      "t t" 'org-set-tags-command
@@ -158,11 +158,11 @@
      "z n" 'org-zotxt-noter
      "r" '(:ignore t :which-key "Org-Roam commands")
      "r i" 'org-roam-insert
-     "h" 'ad/org-cycle-hide-drawers
+     "h" '(ad/org-cycle-hide-drawers :which-key "Hide properties drawers")
      "s" 'org-store-link
-     "i" 'org-insert-link
-     "S" 'ad/org-svg-pdf-export
-     "I" 'org-make-toc-insert)
+     "I" 'org-insert-link
+     "S" '(ad/org-svg-pdf-export :which-key "Export svg files to pdf")
+     "i" 'org-toggle-inline-images)
 
 (general-define-key
  :states 'normal
@@ -195,9 +195,9 @@
 (global-set-key (kbd "C-h C") #'helpful-command)
 
 (require 'dired-x)
+
 (use-package all-the-icons-dired
   :hook (dired-mode . all-the-icons-dired-mode))
-
 
 (use-package dired-hide-dotfile
   :hook (dired-mode . dired-hide-dotfiles-mode))
