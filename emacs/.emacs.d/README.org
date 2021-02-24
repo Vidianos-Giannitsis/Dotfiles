@@ -4,7 +4,7 @@
 #+INFOJS_OPT: view:t toc:t ltoc:t mouse:underline buttons:0 path:http://thomasf.github.io/solarized-css/org-info.min.js
 #+HTML_HEAD: <link rel="stylesheet" type="text/css" href="http://thomasf.github.io/solarized-css/solarized-dark.min.css" />
 
-* COMMENT Ideas for things to work on (Inspiration for most of these https://github.com/daviwil/dotfiles/blob/master/Emacs.org) [7/10]
+* COMMENT Ideas for things to work on (Inspiration for most of these https://github.com/daviwil/dotfiles/blob/master/Emacs.org) [8/10]
   - [X] Counsel-imenu is a menu to jump around org headings. In big files as my config file, it can be helpful so I want to be reminded to bind it to a key. 
   
   - [X] :which-key argument allows me to define messages in which-key displayed for a keybinding. Will help with prefixes and such when I play around with it. For the leader key you can do :ignore t which makes it not function but displays the message instead of prefix.
@@ -16,7 +16,7 @@
   - [X] Magit-todos is a package that shows todos in vc controlled files inside your git status. This can be helpful for tasks such as this. Adding todos to my README that will show up in the git status.
   - [X] Calfw is a calendar inside Emacs. Why not try it. It also seems to have interaction with org-agenda. If it can also interact with org-roam-daily-notes thats one more reason to use it. 
   - [X] elcord is a package that tells discord "Playing Emacs" for the lolz
-  - [ ] Set up Inkscape x Emacs integration (I found it in r/emacs [[https://www.reddit.com/r/emacs/comments/lo9ov0/latex_export_with_inkscape_images_and_drawio/]])
+  - [X] Set up Inkscape x Emacs integration (I found it in r/emacs [[https://www.reddit.com/r/emacs/comments/lo9ov0/latex_export_with_inkscape_images_and_drawio/]])
   - [ ] The last section of the config, mentions other inspiring dotfiles which I can check out.
 
 * COMMENT Long term ideas for things I can try [0/5]
@@ -41,10 +41,7 @@ I have drawn inspiration from a lot of other init.el's but the most apparent one
 
 Note that I know little to no elisp yet (I am in the process of learning though), so some things are probably not done in the most efficient way possible, but everything I have set has its desired behaviour, which is enough for me.
 
-This is how my Emacs currently looks. The file viewed is qtile's config.py in the bar config part
-[[https://github.com/AuroraDragoon/Dotfiles/blob/master/screenshots/python_environment.png]]
-
-I hope you will find something useful here that you can put to your emacs config as well. Enjoy!!
+I hope you will find something useful here that you can put to your emacs config as well. Below, is the Table of Contents for my config as it has grown to be quite lengthy. Enjoy!!
 
 :CONTENTS:
 - [[#about-this-config][About this config]]
@@ -153,7 +150,7 @@ This includes:
 #+END_SRC
 
 #+RESULTS:
-: helpful
+: t
 
 * Evil Mode
 Enabling Evil Mode, my preffered editing mode for Emacs, with the evil-collection loaded. It helps me with defining evil type keybindings for more programs, which I like. Then I also load evil-org which is a different third party program for evil keys inside org as evil-collection doesn't have that. 
@@ -378,7 +375,7 @@ This is the "heart" of my config being all the keybindings I have set for my per
        "t" '(:ignore t :which-key "To-do management")
        "t s" 'org-schedule
        "t c" 'org-todo
-       "t m" 'org-make-todo
+       "t m" 'ad/org-make-todo
        "t p" 'org-priority
        "t v" 'org-tags-view
        "t t" 'org-set-tags-command
@@ -389,10 +386,10 @@ This is the "heart" of my config being all the keybindings I have set for my per
        "z n" 'org-zotxt-noter
        "r" '(:ignore t :which-key "Org-Roam commands")
        "r i" 'org-roam-insert
-       "h" 'org-cycle-hide-drawers
+       "h" 'ad/org-cycle-hide-drawers
        "s" 'org-store-link
        "i" 'org-insert-link
-       "S" 'org-svg-pdf-export
+       "S" 'ad/org-svg-pdf-export
        "I" 'org-make-toc-insert)
 
   (general-define-key
@@ -560,8 +557,8 @@ Some settings I want for Emacs's Org-mode which I use extensively (like for writ
    + Making latex view my bibtex bibliography and export it properly. I took this from the org-ref docs as originally I wasnt getting proper bibliographic entries. I t works with this.
    + I tell org that its odt export should be converted to docx as if I am exporting to a rich text editors format, its for a collaboration and most people I know use that format. If its a personal project I always export to a latex pdf because it looks better.
    + Defining a function which supresses the confirmation message for tangling an org document's source code and hooking it to the after save hook in org-mode. If I understand it correctly, it should automatically tangle after saving, if thats possible, which is handy for things such as this configuration.
-   + Org-make-toc creates a table of contents for org files. Some of its exports already have it, but its useful to have for things such as long README files in github which don't have a toc otherwise. 
-
+   + I have a custom function which I hook to the org-mode-hook (so it activates every time a new org mode buffer is opened) which automatically displays images I have added to the buffer, creates previews for latex code in the document and toggles truncate-lines so that I can see the entire text when opening the buffer (really can't understand why its not nil by default in org documents)
+     
 #+BEGIN_SRC elisp
   (add-to-list 'org-file-apps '("\\.pdf\\'" . emacs))
 
@@ -571,19 +568,24 @@ Some settings I want for Emacs's Org-mode which I use extensively (like for writ
 
   (setq org-odt-preferred-output-format "docx")
 
-  (defun org-babel-tangle-dont-ask ()
+  (defun ad/org-babel-tangle-dont-ask ()
     (let ((org-confirm-babel-evaluate nil))
       (org-babel-tangle)))
 
-  (add-hook 'org-mode-hook (lambda () (add-hook 'after-save-hook #'org-babel-tangle-dont-ask
+  (add-hook 'org-mode-hook (lambda () (add-hook 'after-save-hook #'ad/org-babel-tangle-dont-ask
 						'run-at-end 'only-in-org-mode)))
 
-  ;(use-package org-make-toc
-   ; :hook (org-mode . org-make-toc-mode))
+  (defun ad/org-initialise ()
+    (interactive)
+    (toggle-truncate-lines)
+    (org-latex-preview)
+    (org-toggle-inline-images))
+  (add-hook 'org-mode-hook 'ad/org-initialise)
 
 #+END_SRC
 
 #+RESULTS:
+| ad/org-initialise | org-truncate-latex | (lambda nil (add-hook 'after-save-hook #'org-babel-tangle-dont-ask 'run-at-end 'only-in-org-mode)) | turn-on-org-cdlatex | (lambda nil (org-bullets-mode 1)) | evil-org-mode | (closure (org--rds reftex-docstruct-symbol org-element-greater-elements org-clock-history org-agenda-current-date org-with-time org-defdecode org-def org-read-date-inactive org-ans2 org-ans1 org-columns-current-fmt-compiled org-clock-current-task org-clock-effort org-agenda-skip-function org-agenda-skip-comment-trees org-agenda-archives-mode org-end-time-was-given org-time-was-given org-log-note-extra org-log-note-purpose org-log-post-message org-last-inserted-timestamp org-last-changed-timestamp org-entry-property-inherited-from org-blocked-by-checkboxes org-state org-agenda-headline-snapshot-before-repeat org-agenda-start-on-weekday org-agenda-buffer-tmp-name org-priority-regexp org-mode-abbrev-table org-mode-syntax-table buffer-face-mode-face org-tbl-menu org-org-menu org-struct-menu org-entities org-last-state org-id-track-globally org-clock-start-time texmathp-why remember-data-file org-agenda-tags-todo-honor-ignore-options iswitchb-temp-buflist calc-embedded-open-mode calc-embedded-open-formula calc-embedded-close-formula align-mode-rules-list org-emphasis-alist org-emphasis-regexp-components org-export-registered-backends org-modules org-babel-load-languages org-id-overriding-file-name org-indent-indentation-per-level org-element-paragraph-separate ffap-url-regexp org-inlinetask-min-level t) nil (add-hook 'change-major-mode-hook 'org-show-all 'append 'local)) | #[0 \300\301\302\303\304$\207 [add-hook change-major-mode-hook org-babel-show-result-all append local] 5] | org-babel-result-hide-spec | org-babel-hide-all-hashes | (closure (org-agenda-skip-regexp org-table1-hline-regexp org-table-tab-recognizes-table.el org-table-dataline-regexp org-table-any-border-regexp org-agenda-restriction-lock-overlay org-agenda-overriding-restriction org-agenda-diary-file org-complex-heading-regexp t) nil (setq imenu-create-index-function 'org-imenu-get-tree)) |
 	    
 ** Org Noter
    
@@ -593,7 +595,7 @@ Some settings I want for Emacs's Org-mode which I use extensively (like for writ
 
      (setq org-noter-always-create-frame nil)
 
-     (defun org-cycle-hide-drawers (state)
+     (defun ad/org-cycle-hide-drawers (state)
        "Hide all the :PROPERTIES: drawers when called with the 'all argument. Mainly for hiding them in crammed org-noter files"
        (interactive "MEnter 'all for hiding :PROPERTIES: drawers in an org buffer: ")
        (when (and (derived-mode-p 'org-mode)
@@ -674,7 +676,7 @@ More languages to evaluate with org-babel (by default, only elisp is evaluated).
     (setq org-agenda-files
 	    '("~/org_roam"))
 
-  (defun org-make-todo ()
+  (defun ad/org-make-todo ()
     (interactive)
     (org-todo)
     (org-priority)
@@ -845,7 +847,7 @@ More languages to evaluate with org-babel (by default, only elisp is evaluated).
   
   #+BEGIN_SRC elisp
 
-    (defun org-inkscape-img()
+    (defun ad/org-inkscape-img()
 	(interactive "P")
 	(setq string (read-from-minibuffer "Insert image name: "))
 	;; if images folder not exists create it
@@ -867,7 +869,7 @@ More languages to evaluate with org-babel (by default, only elisp is evaluated).
     (add-to-list 'org-latex-packages-alist '("" "booktabs"))
     (add-to-list 'org-latex-packages-alist '("" "import"))
 
-    (defun org-svg-pdf-export ()
+    (defun ad/org-svg-pdf-export ()
       (interactive)
       (setq dirname (concat (f-base (buffer-file-name)) "-org-img"))
       (if (file-directory-p dirname)
@@ -880,7 +882,7 @@ More languages to evaluate with org-babel (by default, only elisp is evaluated).
   #+END_SRC
 
   #+RESULTS:
-  | org-svg-pdf-export |
+  : org-svg-pdf-export
   
 * Other Major Modes
 Some other extensions inside my Emacs config that require some changes for their major modes to function as I want them. This currently includes:

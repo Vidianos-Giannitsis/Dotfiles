@@ -147,7 +147,7 @@
      "t" '(:ignore t :which-key "To-do management")
      "t s" 'org-schedule
      "t c" 'org-todo
-     "t m" 'org-make-todo
+     "t m" 'ad/org-make-todo
      "t p" 'org-priority
      "t v" 'org-tags-view
      "t t" 'org-set-tags-command
@@ -158,10 +158,10 @@
      "z n" 'org-zotxt-noter
      "r" '(:ignore t :which-key "Org-Roam commands")
      "r i" 'org-roam-insert
-     "h" 'org-cycle-hide-drawers
+     "h" 'ad/org-cycle-hide-drawers
      "s" 'org-store-link
      "i" 'org-insert-link
-     "S" 'org-svg-pdf-export
+     "S" 'ad/org-svg-pdf-export
      "I" 'org-make-toc-insert)
 
 (general-define-key
@@ -257,19 +257,23 @@
 
 (setq org-odt-preferred-output-format "docx")
 
-(defun org-babel-tangle-dont-ask ()
+(defun ad/org-babel-tangle-dont-ask ()
   (let ((org-confirm-babel-evaluate nil))
     (org-babel-tangle)))
 
-(add-hook 'org-mode-hook (lambda () (add-hook 'after-save-hook #'org-babel-tangle-dont-ask
+(add-hook 'org-mode-hook (lambda () (add-hook 'after-save-hook #'ad/org-babel-tangle-dont-ask
 					      'run-at-end 'only-in-org-mode)))
 
-;(use-package org-make-toc
- ; :hook (org-mode . org-make-toc-mode))
+(defun ad/org-initialise ()
+  (interactive)
+  (toggle-truncate-lines)
+  (org-latex-preview)
+  (org-toggle-inline-images))
+(add-hook 'org-mode-hook 'ad/org-initialise)
 
 (setq org-noter-always-create-frame nil)
 
-(defun org-cycle-hide-drawers (state)
+(defun ad/org-cycle-hide-drawers (state)
   "Hide all the :PROPERTIES: drawers when called with the 'all argument. Mainly for hiding them in crammed org-noter files"
   (interactive "MEnter 'all for hiding :PROPERTIES: drawers in an org buffer: ")
   (when (and (derived-mode-p 'org-mode)
@@ -329,7 +333,7 @@
   (setq org-agenda-files
 	  '("~/org_roam"))
 
-(defun org-make-todo ()
+(defun ad/org-make-todo ()
   (interactive)
   (org-todo)
   (org-priority)
@@ -451,7 +455,7 @@
 	 :head "#+title: Fleeting notes for %<%Y-%m-%d>\n"
 	 :olp ("Workout Regimes"))))
 
-(defun org-inkscape-img()
+(defun ad/org-inkscape-img()
     (interactive "P")
     (setq string (read-from-minibuffer "Insert image name: "))
     ;; if images folder not exists create it
@@ -473,7 +477,7 @@
 (add-to-list 'org-latex-packages-alist '("" "booktabs"))
 (add-to-list 'org-latex-packages-alist '("" "import"))
 
-(defun org-svg-pdf-export ()
+(defun ad/org-svg-pdf-export ()
   (interactive)
   (setq dirname (concat (f-base (buffer-file-name)) "-org-img"))
   (if (file-directory-p dirname)
