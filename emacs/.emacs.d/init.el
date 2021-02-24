@@ -160,7 +160,8 @@
      "r i" 'org-roam-insert
      "h" 'org-cycle-hide-drawers
      "s" 'org-store-link
-     "i" 'org-insert-link)
+     "i" 'org-insert-link
+     "S" 'org-svg-pdf-export)
 
 (general-define-key
  :states 'normal
@@ -207,7 +208,7 @@
 (electric-pair-mode 1)
 (setq wolfram-alpha-app-id "U9PERG-KTPL49AWA2")
 (add-hook 'after-init-hook 'global-company-mode)
-(elcord-mode 1)
+;(elcord-mode 1)
 (use-package magit-todos-mode
   :hook magit-mode)
 (require 'calfw-git)
@@ -448,6 +449,38 @@
 	 :file-name "daily/%<%Y-%m-%d>"
 	 :head "#+title: Fleeting notes for %<%Y-%m-%d>\n"
 	 :olp ("Workout Regimes"))))
+
+(defun org-inkscape-img()
+    (interactive "P")
+    (setq string (read-from-minibuffer "Insert image name: "))
+    ;; if images folder not exists create it
+    (setq dirname (concat (f-base (buffer-file-name)) "-org-img"))
+    (if (not (file-directory-p dirname))
+	(make-directory dirname))
+     ;; if file doesn't exist create it
+     (if (not (file-exists-p (concat "./" dirname "/" string ".svg")))
+     (progn
+	 (setq command (concat "echo " "'<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?><svg xmlns:dc=\"http://purl.org/dc/elements/1.1/\" xmlns:cc=\"http://creativecommons.org/ns#\" xmlns:rdf=\"http://www.w3.org/1999/02/22-rdf-syntax-ns#\" xmlns:svg=\"http://www.w3.org/2000/svg\" xmlns=\"http://www.w3.org/2000/svg\" xmlns:sodipodi=\"http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd\" xmlns:inkscape=\"http://www.inkscape.org/namespaces/inkscape\" width=\"164.13576mm\" height=\"65.105995mm\" viewBox=\"0 0 164.13576 65.105995\" version=\"1.1\" id=\"svg8\" inkscape:version=\"1.0.2 (e86c8708, 2021-01-15)\" sodipodi:docname=\"disegno.svg\"> <defs id=\"defs2\" /> <sodipodi:namedview id=\"base\" pagecolor=\"#ffffff\" bordercolor=\"#666666\" borderopacity=\"1.0\" inkscape:zoom=\"1.2541194\" inkscape:cx=\"310.17781\" inkscape:cy=\"123.03495\"z inkscape:window-width=\"1440\" inkscape:window-height=\"847\" inkscape:window-x=\"1665\" inkscape:window-y=\"131\" inkscape:window-maximized=\"1\"  inkscape:current-layer=\"svg8\" /><g/></svg>' >> " dirname "/" string ".svg; inkscape " dirname "/" string ".svg"))
+	    (shell-command command)
+	    (concat "#+begin_export latex\n\\begin{figure}\n\\centering\n\\def\\svgwidth{0.9\\columnwidth}\n\\import{" "./" dirname "/}{" string ".pdf_tex" "}\n\\end{figure}\n#+end_export"))
+	;; if file exists opens it
+	(progn
+	    (setq command (concat "inkscape " dirname "/" string ".svg"))
+	    (shell-command command)
+	    (concat "" ""))))
+
+(add-to-list 'org-latex-packages-alist '("" "booktabs"))
+(add-to-list 'org-latex-packages-alist '("" "import"))
+
+(defun org-svg-pdf-export ()
+  (interactive)
+  (setq dirname (concat (f-base (buffer-file-name)) "-org-img"))
+  (if (file-directory-p dirname)
+      (progn
+	(setq command (concat "/usr/bin/inkscape -D --export-latex --export-type=\"pdf\" " dirname "/" "*.svg"))
+	(shell-command command))))
+
+;(add-to-list 'org-export-before-processing-hook #'org-svg-pdf-export)
 
 (require 'ebuku)
 (require 'evil-collection-ebuku)
