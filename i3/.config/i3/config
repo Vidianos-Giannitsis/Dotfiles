@@ -38,7 +38,7 @@ bindsym XF86AudioMute exec amixer -q -D pulse sset Master toggle && pkill -RTMIN
 # Use Mouse+$mod to drag floating windows to their wanted position
 floating_modifier $mod
 # kill focused window
-bindsym $mod+Control+x kill
+bindsym $mod+q kill
 # start dmenu
 bindsym $mod+r exec rofi -show run
 

@@ -63,7 +63,7 @@ keys = [
     Key2("M-<Tab>", lazy.next_layout(), desc="Toggle between layouts"),
 
 Key2("M-S-f", lazy.window.toggle_floating, desc="Toggle Floating"),
-Key2("M-C-x", lazy.window.kill(), desc="Kill focused window"),
+Key2("M-q", lazy.window.kill(), desc="Kill focused window"),
 Key2("M-S-r", lazy.restart(), desc="Restart qtile"),
 Key2("M-S-e", lazy.shutdown(), desc="Shutdown qtile"),
 
@@ -142,7 +142,7 @@ layouts = [
 ]
 
 widget_defaults = dict(
-    font='sans',
+    font='Source Code Pro',
     fontsize=11,
     padding=2,
     background="#002b36",

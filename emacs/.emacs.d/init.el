@@ -1,9 +1,7 @@
 (require 'package)
-
 (setq package-archives '(("melpa" . "https://melpa.org/packages/")
 			 ("org" . "https://orgmode.org/elpa/")
 			 ("elpa" . "https://elpa.gnu.org/packages/")))
-
 (package-initialize)
 (unless package-archive-contents
   (package-refresh-contents))
@@ -11,6 +9,16 @@
 (let ((default-directory  "~/.emacs.d/libs/"))
   (normal-top-level-add-to-load-path '("."))
   (normal-top-level-add-subdirs-to-load-path))
+
+(use-package auto-package-update
+  :custom
+  (auto-package-update-interval 7)
+  (auto-package-update-prompt-before-update t)
+  (auto-package-update-hide-results t)
+  (auto-package-update-delete-old-versions t)
+  :config
+  (auto-package-update-maybe)
+  (auto-package-update-at-time "09:00"))
 
 (gcmh-mode 1)
 
@@ -133,7 +141,8 @@
   "c" '(:ignore t :which-key "Calendar Commands")
   "c b" 'cfw:open-calendar-buffer
   "c o" '(cfw:open-org-calendar :which-key "Open calendar with scheduled to-dos")
-  "c g" '(cfw:git-open-calendar :which-key "Open calendar with git commit history"))
+  "c g" '(cfw:git-open-calendar :which-key "Open calendar with git commit history")
+  "r i" '(org-roam-jump-to-index :which-key "Go to the master index file"))
 
 (general-create-definer org-leader-def
       :prefix ",")
@@ -152,10 +161,6 @@
      "t v" 'org-tags-view
      "t t" 'org-set-tags-command
      "y" 'org-download-clipboard
-     "z" '(:ignore t :which-key "Zotxt commands")
-     "z i" 'org-zotxt-insert-reference-link
-     "z o" 'org-zotxt-open-attachment
-     "z n" 'org-zotxt-noter
      "r" '(:ignore t :which-key "Org-Roam commands")
      "r i" 'org-roam-insert
      "h" '(ad/org-cycle-hide-drawers :which-key "Hide properties drawers")
@@ -236,8 +241,7 @@
 	       '(file))))
 	(openwith-mode 1))
 
-(require 'org-bullets)
-(add-hook 'org-mode-hook (lambda () (org-bullets-mode 1)))
+(add-hook 'org-mode-hook (lambda () (org-superstar-mode 1)))
 
 (use-package org-download
   :after org)
@@ -409,6 +413,10 @@
 
 (setq ivy-bibtex-default-action 'ivy-bibtex-insert-citation)
 
+(ivy-add-actions
+ 'ivy-bibtex
+ '(("p" ivy-bibtex-open-any "Open pdf, url or DOI")))
+
 (setq orb-templates
       '(("r" "ref" plain (function org-roam-capture--get-point)
 	 ""
@@ -425,6 +433,14 @@
 
 - tags ::
 - keywords :: ${keywords}")))
+
+(setq org-roam-capture-templates
+      '(("d" "default" plain (function org-roam-capture--get-point)
+	"%?"
+	:file-name "%<%d-%m-%Y %H:%M>-${slug}"
+	:unnarrowed t
+	:head "#+title: ${title}\n
+- tags ::  ")))
 
 (setq org-roam-dailies-capture-templates
       '(("l" "lesson" entry

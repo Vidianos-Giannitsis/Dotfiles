@@ -1,5 +1,0 @@
-# -*- mode: snippet -*-
-# name: left_alligned
-# key: la
-# --
-\begin{flallign} \end{flallign}

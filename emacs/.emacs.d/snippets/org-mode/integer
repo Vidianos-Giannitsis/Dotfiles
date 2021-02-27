@@ -1,5 +1,5 @@
 # -*- mode: snippet -*-
 # name: integer
-# key: Z
+# key: \Z
 # --
-$\mathbb{Z}$
+\mathbb{Z}

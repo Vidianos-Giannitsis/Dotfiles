@@ -6,10 +6,17 @@
                          (or (file-name-directory #$) (car load-path))))
 
 
-;;;### (autoloads nil "calfw" "calfw.el" (0 0 0 0))
-;;; Generated autoloads from calfw.el
+;;;### (autoloads "actual autoloads are elsewhere" "calfw" "../../../../../.emacs.d/elpa/calfw-20180118.45/calfw.el"
+;;;;;;  (0 0 0 0))
+;;; Generated autoloads from ../../../../../.emacs.d/elpa/calfw-20180118.45/calfw.el
 
 (if (fboundp 'register-definition-prefixes) (register-definition-prefixes "calfw" '("cfw:")))
+
+;;;***
+
+;;;### (autoloads nil nil ("../../../../../.emacs.d/elpa/calfw-20180118.45/calfw-autoloads.el"
+;;;;;;  "../../../../../.emacs.d/elpa/calfw-20180118.45/calfw.el")
+;;;;;;  (0 0 0 0))
 
 ;;;***
 

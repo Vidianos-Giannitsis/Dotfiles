@@ -2,4 +2,4 @@
 # name: line_integral
 # key: lint
 # --
-$\oint_D f \,ds$
+\oint_D f \,ds
