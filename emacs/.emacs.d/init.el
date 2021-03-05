@@ -77,14 +77,6 @@
 (require 'general)
 (require 'vterm-toggle)
 
-(add-hook 'emacs-startup-hook
-	  (lambda ()
-	    (message "*** Emacs loaded in %s with %d garbage collections."
-		     (format "%.2f seconds"
-			     (float-time
-			      (time-subtract after-init-time before-init-time)))
-		     gcs-done)))
-
 (setq large-file-warning-threshold nil)
 (setq vc-follow-symlinks t)
 
@@ -106,7 +98,7 @@
  :states 'normal
  :keymaps 'override
   "!" 'shell-command
-  "p" 'package-install
+  "P" 'package-install
   "o" '(inferior-octave :which-key "octave")
   "D" 'dired
   "d" '(:ignore t :which-key "Dired functions")
@@ -142,7 +134,9 @@
   "c b" 'cfw:open-calendar-buffer
   "c o" '(cfw:open-org-calendar :which-key "Open calendar with scheduled to-dos")
   "c g" '(cfw:git-open-calendar :which-key "Open calendar with git commit history")
-  "r i" '(org-roam-jump-to-index :which-key "Go to the master index file"))
+  "r i" '(org-roam-jump-to-index :which-key "Go to the master index file")
+  "l" '(linum-mode :which-key "Line numbers")
+  "e" 'ielm)
 
 (general-create-definer org-leader-def
       :prefix ",")
@@ -167,7 +161,10 @@
      "s" 'org-store-link
      "I" 'org-insert-link
      "S" '(ad/org-svg-pdf-export :which-key "Export svg files to pdf")
-     "i" 'org-toggle-inline-images)
+     "i" 'org-toggle-inline-images
+     "p" 'org-tree-slide-mode
+     "j" '(org-tree-slide-move-next-tree :which-key "Next Slide")
+     "k" '(org-tree-slide-move-previous-tree :which-key "Previous Slide"))
 
 (general-define-key
  :states 'normal
@@ -188,9 +185,12 @@
   (global-set-key (kbd "M-d") (lambda() (interactive)(find-file "~/.emacs.d/README.org")))
   (global-set-key (kbd "M-m") 'man)
 
-
-(add-hook 'dired-mode-hook
-	  (lambda () (local-set-key (kbd "C-+") #'dired-create-empty-file)))
+(general-define-key
+ :states 'normal
+ :keymaps 'dired-mode-map
+ "C-+" 'dired-create-empty-file
+ "h" 'dired-up-directory
+ "l" 'dired-find-file)
 
 (global-set-key (kbd "C-h f") #'helpful-callable)
 (global-set-key (kbd "C-h v") #'helpful-variable)
@@ -198,6 +198,12 @@
 (global-set-key (kbd "C-c C-d") #'helpful-at-point)
 (global-set-key (kbd "C-h F") #'helpful-function)
 (global-set-key (kbd "C-h C") #'helpful-command)
+
+(general-define-key
+ :states 'normal
+ :keymaps 'override
+ "u" 'undo-tree-undo
+ "C-r" 'undo-tree-redo)
 
 (require 'dired-x)
 
@@ -210,11 +216,19 @@
 (use-package dired-collapse
   :hook (dired-mode . dired-collapse-mode))
 
+(setq all-the-icons-dired-monochrome nil)
+
 (show-paren-mode 1)
 (electric-pair-mode 1)
 (setq wolfram-alpha-app-id "U9PERG-KTPL49AWA2")
+(global-undo-tree-mode 1)
+
 (add-hook 'after-init-hook 'global-company-mode)
-;(elcord-mode 1)
+(add-hook 'company-mode-hook '(lambda ()
+				(add-to-list 'company-backends 'company-math-symbols-latex)
+				(setq company-math-allow-latex-symbols-in-faces t)
+				(setq company-minimum-prefix-length 2)))
+
 (use-package magit-todos-mode
   :hook magit-mode)
 (require 'calfw-git)
@@ -241,7 +255,9 @@
 	       '(file))))
 	(openwith-mode 1))
 
-(add-hook 'org-mode-hook (lambda () (org-superstar-mode 1)))
+(add-hook 'org-mode-hook #'(lambda ()
+			       (org-superstar-mode)
+			       (org-superstar-configure-like-org-bullets)))
 
 (use-package org-download
   :after org)
@@ -261,19 +277,15 @@
 
 (setq org-odt-preferred-output-format "docx")
 
-(defun ad/org-babel-tangle-dont-ask ()
-  (let ((org-confirm-babel-evaluate nil))
-    (org-babel-tangle)))
+(add-hook 'org-mode-hook (lambda () (add-hook 'after-save-hook #'(lambda ()
+								   (let ((org-confirm-babel-evaluate nil))
+								     (org-babel-tangle))))
+					      'run-at-end 'only-in-org-mode))
 
-(add-hook 'org-mode-hook (lambda () (add-hook 'after-save-hook #'ad/org-babel-tangle-dont-ask
-					      'run-at-end 'only-in-org-mode)))
-
-(defun ad/org-initialise ()
-  (interactive)
-  (toggle-truncate-lines)
-  (org-latex-preview)
-  (org-toggle-inline-images))
-(add-hook 'org-mode-hook 'ad/org-initialise)
+(add-hook 'org-mode-hook '(lambda ()
+			    (toggle-truncate-lines)
+			    (org-latex-preview)
+			    (org-toggle-inline-images)))
 
 (setq org-noter-always-create-frame nil)
 
@@ -439,7 +451,7 @@
 	"%?"
 	:file-name "%<%d-%m-%Y %H:%M>-${slug}"
 	:unnarrowed t
-	:head "#+title: ${title}\n
+	:head "#+title: ${title}\nglatex\n
 - tags ::  ")))
 
 (setq org-roam-dailies-capture-templates
@@ -502,6 +514,13 @@
 	(shell-command command))))
 
 ;(add-to-list 'org-export-before-processing-hook #'org-svg-pdf-export)
+
+(use-package projectile
+  :ensure t
+  :init
+  (projectile-mode +1)
+  :bind (:map projectile-mode-map
+	      ("M-p" . projectile-command-map)))
 
 (require 'ebuku)
 (require 'evil-collection-ebuku)

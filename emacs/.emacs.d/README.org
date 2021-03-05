@@ -4,27 +4,22 @@
 #+INFOJS_OPT: view:t toc:t ltoc:t mouse:underline buttons:0 path:http://thomasf.github.io/solarized-css/org-info.min.js
 #+HTML_HEAD: <link rel="stylesheet" type="text/css" href="http://thomasf.github.io/solarized-css/solarized-dark.min.css" />
 
-* COMMENT Ideas for things to work on (Inspiration for most of these https://github.com/daviwil/dotfiles/blob/master/Emacs.org) [8/10]
-  - [X] Counsel-imenu is a menu to jump around org headings. In big files as my config file, it can be helpful so I want to be reminded to bind it to a key. 
-  
-  - [X] :which-key argument allows me to define messages in which-key displayed for a keybinding. Will help with prefixes and such when I play around with it. For the leader key you can do :ignore t which makes it not function but displays the message instead of prefix.
-  
-  - [X] Open-with is a package that allows for specific file extensions to be opened externally. As dired has become my primary file manager of choice, this is useful for some things such as audio files and MS Office documents.
-  
-  - [X] Take a look at dired+ and dired-hacks. Both have additions for dired which I may want to use.
-  - [ ] Set up dired-rainbow for better coloring in dired buffers. 
-  - [X] Magit-todos is a package that shows todos in vc controlled files inside your git status. This can be helpful for tasks such as this. Adding todos to my README that will show up in the git status.
-  - [X] Calfw is a calendar inside Emacs. Why not try it. It also seems to have interaction with org-agenda. If it can also interact with org-roam-daily-notes thats one more reason to use it. 
-  - [X] elcord is a package that tells discord "Playing Emacs" for the lolz
-  - [X] Set up Inkscape x Emacs integration (I found it in r/emacs [[https://www.reddit.com/r/emacs/comments/lo9ov0/latex_export_with_inkscape_images_and_drawio/]])
-  - [ ] The last section of the config, mentions other inspiring dotfiles which I can check out.
+* COMMENT Ideas for things to work on (Inspiration for these https://github.com/howardabrams/dot-files/blob/master/emacs.org) [2/7]
+  - [X] Check out company-math for autocompletions in latex symbols.
+  - [ ] I have found that while for normal writing the default idle time in company is very good (gives me time to auto expand snippets and such), in latex symbols I would like to do it faster. I am not sure if its possible but I would like to check if I can change the idle time only for specific backends.
+  - [ ] I want to set up flyspell. I dont know if I want it globally enabled, or enabled with a keybinding for spell-checking before finalising. By default no dictionaries are enabled so I need to add an english dictionary and if possible a greek dictionary and find the function to toggle between. With these utilities I will have full spelll checking. But this is rather low priority imo for the most part. 
+  - [X] Linum mode for line numbers
+  - [ ] I could go down the rabbit hole of playing around with projectile. It looks interesting, but I am unsure if I want to spend my time on it. May move it to the long term ideas soon.
+  - [ ] Set up redos better cause they are pretty confusing right now tbh. There is a section for this in the config I am checking out currently
+  - [ ] Howard Abram's config is split into multiple files, so I want to check all of them. I also am going to double check, the original file for other things I can use
 
-* COMMENT Long term ideas for things I can try [0/5]
+* COMMENT Long term ideas for things I can try [1/5]
 These are interesting packages to check in the long term. But nothing to hurry with, as I dont need any of them urgently.
- - [ ] Seeing the presentations section reminds me that I want to eventually look into org-tree-slide for org presentations as it looks cool. Haven't gotten around to doing it yet though.
+ - [X] Seeing the presentations section reminds me that I want to eventually look into org-tree-slide for org presentations as it looks cool. Haven't gotten around to doing it yet though.
  - [ ] ERC is an IRC client for Emacs. Elfeed is an RSS reader for emacs. EMMS is a music player for Emacs. I could get around to configuring them in case I start using them
  - [ ] There are a lot of eshell configuration options which I can try if I ever get around to using eshell.
  - [ ] There is a mastodon package for Emacs (I am assuming to run mastodon from inside Emacs). If I try out mastodon, I cant see why I shouldn't use this.
+ - [ ] The last section of this config, mentions other inspiring dotfiles which I can check out. https://github.com/daviwil/dotfiles/blob/master/Emacs.org,
   
 :CONTENTS:
 
@@ -189,7 +184,6 @@ This enables:
 + Enabling yasnippet snippets.
 + Enabling general, a package that helps me define keybindings easier.
 + Enabling vterm-toggle, a package which helps with not getting a milion vterms open (with a run-or-raise behaviour)
-+ Adding a message when Emacs launches telling me how much time it takes to launch.
 + Remove the warnings Emacs gives when opening large files or following vc controlled symlinks. I dont need them and they can be annoying.
 + Changing the heading and title font to match my global font and resizing them so 1st tier headings and titles actually stand out like they should.
 
@@ -202,14 +196,6 @@ This enables:
 
   (require 'general)
   (require 'vterm-toggle)
-
-  (add-hook 'emacs-startup-hook
-	    (lambda ()
-	      (message "*** Emacs loaded in %s with %d garbage collections."
-		       (format "%.2f seconds"
-			       (float-time
-				(time-subtract after-init-time before-init-time)))
-		       gcs-done)))
 
   (setq large-file-warning-threshold nil)
   (setq vc-follow-symlinks t)
@@ -236,7 +222,7 @@ This is the "heart" of my config being all the keybindings I have set for my per
 | Keybinding   | Action                                                                                                                                             |
 |--------------+----------------------------------------------------------------------------------------------------------------------------------------------------|
 | SPC !        | Create a prompt for inputing a single shell command. This is easier than opening a terminal emulator for quick tasks                               |
-| SPC p        | Opens the package install prompt                                                                                                                   |
+| SPC P        | Opens the package install prompt                                                                                                                   |
 | SPC o        | Starts the octave client. I use octave a lot for my lessons so this is a must for me                                                               |
 | SPC H        | Create a horizontal split inside Emacs                                                                                                             |
 | SPC V        | Create a vertical split inside Emacs                                                                                                               |
@@ -253,6 +239,8 @@ This is the "heart" of my config being all the keybindings I have set for my per
 | SPC w        | Query WolframAlpha from inside Emacs. Wolfram Alpha is a website which helps with advanced mathematical calculations. Its very helpful to have     |
 | SPC B        | Open the Ivy Bibtex menu to open an article saved to my Zotero database                                                                            |
 | SPC h        | Jump to heading with Counsel                                                                                                                       |
+| SPC l        | Activates linum mode which turns on line numbers                                                                                                   |
+| SPC e        | Opens an ielm buffer. ielm is for interactively running elisp in the current emacs session. It can be very helpful                                 |
 |--------------+----------------------------------------------------------------------------------------------------------------------------------------------------|
 | *Dired*      | Dired is the Emacs file manager, below are commands specific to dired (bound to SPC d)                                                             |
 |--------------+----------------------------------------------------------------------------------------------------------------------------------------------------|
@@ -265,7 +253,7 @@ This is the "heart" of my config being all the keybindings I have set for my per
 |--------------+----------------------------------------------------------------------------------------------------------------------------------------------------|
 | SPC r f      | Find file inside the org-roam dir. If it doesn't exist create it. Since this system follows a non hierarchical sorting system, the org_roam        |
 |              | folder (which contains all these files) is cluttered. So this is the best way to find the file you are looking for. Also creates the file if it    |
-|              | doesn't find it in the system.                                                                                                                 |
+|              | doesn't find it in the system.                                                                                                                     |
 | SPC r b      | Choose a citation and add a note specific to it. Follows the "orb-template" variable                                                               |
 |--------------+----------------------------------------------------------------------------------------------------------------------------------------------------|
 | *Roam-Daily* | Org-roam has the ability to create daily notes for various subjects. SPC j commands create/open the various daily notes                            |
@@ -290,7 +278,7 @@ This is the "heart" of my config being all the keybindings I have set for my per
    :states 'normal
    :keymaps 'override
     "!" 'shell-command
-    "p" 'package-install
+    "P" 'package-install
     "o" '(inferior-octave :which-key "octave")
     "D" 'dired
     "d" '(:ignore t :which-key "Dired functions")
@@ -326,7 +314,9 @@ This is the "heart" of my config being all the keybindings I have set for my per
     "c b" 'cfw:open-calendar-buffer
     "c o" '(cfw:open-org-calendar :which-key "Open calendar with scheduled to-dos")
     "c g" '(cfw:git-open-calendar :which-key "Open calendar with git commit history")
-    "r i" '(org-roam-jump-to-index :which-key "Go to the master index file"))
+    "r i" '(org-roam-jump-to-index :which-key "Go to the master index file")
+    "l" '(linum-mode :which-key "Line numbers")
+    "e" 'ielm)
 
 #+END_SRC
 
@@ -347,6 +337,9 @@ This is the "heart" of my config being all the keybindings I have set for my per
 | , S        | Custom command to export .svg to .pdf files. This is a prerequisite for the Inkscape integration with Emacs to work. This is better explained in     |
 |            | the Inkscape x Emacs section of the config, which is specifically made for this functionality                                                        |
 | , i        | Toggle whether images on an org document are visible or not.                                                                                         |
+| , p        | Activate org-tree-slide-mode an org minor mode which enables you to do presentations from inside org                                                 |
+| , j        | In org-tree-slide go to the next "slide" meaning org-heading                                                                                         |
+| , k        | Same as above but for the previous "slide"                                                                                                |
 |------------+------------------------------------------------------------------------------------------------------------------------------------------------------|
 | *To-Dos*   | You can do a lot with to-do items in Org. These are the commands I have keybound which are specific to to-do management. They are under , t          |
 |------------+------------------------------------------------------------------------------------------------------------------------------------------------------|
@@ -387,12 +380,16 @@ This is the "heart" of my config being all the keybindings I have set for my per
        "s" 'org-store-link
        "I" 'org-insert-link
        "S" '(ad/org-svg-pdf-export :which-key "Export svg files to pdf")
-       "i" 'org-toggle-inline-images)
+       "i" 'org-toggle-inline-images
+       "p" 'org-tree-slide-mode
+       "j" '(org-tree-slide-move-next-tree :which-key "Next Slide")
+       "k" '(org-tree-slide-move-previous-tree :which-key "Previous Slide"))
 
   (general-define-key
    :states 'normal
    :keymaps 'org-mode-map
    "`" 'org-roam)
+
 #+END_SRC
 
 #+RESULTS:
@@ -400,7 +397,6 @@ This is the "heart" of my config being all the keybindings I have set for my per
 ** Other keybindings, either mode specific or general, that function without the space key
 | Keybinding | Action                                                                                                                                             |
 |------------+----------------------------------------------------------------------------------------------------------------------------------------------------|
-| C-+        | In Dired mode. Creates a new empty file inside the current working directory                                                                       |
 | C-h keys   | I change the primary C-h keybindings to their alternatives from the helpful package. They have more info than the default help menus (which are    |
 |            | already incredible) so they are excellent for function/variable documentation without needing to look online.                                      |
 | C-c C-d    | Lookup the current symbol at point. Not exactly sure of its use but its recommended in the helpful github repo so I added it                       |
@@ -416,6 +412,12 @@ This is the "heart" of my config being all the keybindings I have set for my per
 | i          | If pdf-view is in an org-noter buffer, this allows for a note to be added in the matching org buffer                                               |
 | a t        | Add a text annotation to a pdf directly                                                                                                            |
 | a m        | Add a markup annotation to a pdf directly                                                                                                          |
+|------------+----------------------------------------------------------------------------------------------------------------------------------------------------|
+| *Dired*    | Some dired mode keybindings which I consider should be defaults                                                                                    |
+|------------+----------------------------------------------------------------------------------------------------------------------------------------------------|
+| C-+        | Creates a new empty file inside the current working directory                                                                                      |
+| h          | Go up one directory in Dired                                                                                                                       |
+| l          | Jump one directory forward in Dired                                                                                                                |
 
 #+BEGIN_SRC elisp
       (general-define-key
@@ -432,9 +434,12 @@ This is the "heart" of my config being all the keybindings I have set for my per
     (global-set-key (kbd "M-d") (lambda() (interactive)(find-file "~/.emacs.d/README.org")))
     (global-set-key (kbd "M-m") 'man)
 
-
-  (add-hook 'dired-mode-hook
-	    (lambda () (local-set-key (kbd "C-+") #'dired-create-empty-file)))
+  (general-define-key
+   :states 'normal
+   :keymaps 'dired-mode-map
+   "C-+" 'dired-create-empty-file
+   "h" 'dired-up-directory
+   "l" 'dired-find-file)
 
   (global-set-key (kbd "C-h f") #'helpful-callable)
   (global-set-key (kbd "C-h v") #'helpful-variable)
@@ -443,7 +448,15 @@ This is the "heart" of my config being all the keybindings I have set for my per
   (global-set-key (kbd "C-h F") #'helpful-function)
   (global-set-key (kbd "C-h C") #'helpful-command)
 
+  (general-define-key
+   :states 'normal
+   :keymaps 'override
+   "u" 'undo-tree-undo
+   "C-r" 'undo-tree-redo)
+
 #+END_SRC
+
+#+RESULTS:
 
 * Dired
   Dired is Emacs's built in file manager (stands for directory editor) As dired is my Emacs startup screen as mentioned before, I have some customisations for it which are pretty neat.
@@ -464,6 +477,7 @@ This is the "heart" of my config being all the keybindings I have set for my per
     (use-package dired-collapse
       :hook (dired-mode . dired-collapse-mode))
 
+    (setq all-the-icons-dired-monochrome nil)
   #+END_SRC
 
   This is how Dired ends up looking after these changes
@@ -474,10 +488,11 @@ This is the "heart" of my config being all the keybindings I have set for my per
 + When adding a bracket or quote add its pair as well for quicker editing.
 + When the cursor is on one bracket, highlight its matching bracket.
 + Setting my wolfram alpha ID for use in emacs which allows me to query the website from inside Emacs
++ Activating undo-tree-mode everywhere.
 + Activate company-mode everywhere. Helpful autocompletions, I dont see why not.
-+ Activating Elcord mode for the memes. Here is what it does to my discord profile https://github.com/AuroraDragoon/Dotfiles/blob/master/screenshots/playing_emacs.png
++ Change some Company-specific variables when company is activated. This activates autocompletion for latex symbols and allows to use them in org-mode. It also makes the autocompletion start from the second character typed (mostly important for latex autocompletions to start after the first character following the \)
 + Hooking magit-todos to magit-mode. This allows me to see todos in a git repo inside the git status.
-+ Calfw is a calendar app for Emacs. Calfw-git allows you to see your git commit history inside of calfw. 
++ Calfw is a calendar app for Emacs. Calfw-git allows you to see your git commit history inside of calfw while calfw-org shows org-todos in a calendar interface.
 + Audio files, obscure image files and MS/Libre Office documents don't open properly inside Emacs. I set up openwith to open them with external files.
   
   #+BEGIN_SRC elisp
@@ -485,8 +500,14 @@ This is the "heart" of my config being all the keybindings I have set for my per
     (show-paren-mode 1)
     (electric-pair-mode 1)
     (setq wolfram-alpha-app-id "U9PERG-KTPL49AWA2")
+    (global-undo-tree-mode 1)
+
     (add-hook 'after-init-hook 'global-company-mode)
-    ;(elcord-mode 1)
+    (add-hook 'company-mode-hook '(lambda ()
+				    (add-to-list 'company-backends 'company-math-symbols-latex)
+				    (setq company-math-allow-latex-symbols-in-faces t)
+				    (setq company-minimum-prefix-length 2)))
+
     (use-package magit-todos-mode
       :hook magit-mode)
     (require 'calfw-git)
@@ -531,7 +552,9 @@ Some settings I want for Emacs's Org-mode which I use extensively (like for writ
      
 #+BEGIN_SRC elisp
 
-  (add-hook 'org-mode-hook (lambda () (org-superstar-mode 1)))
+    (add-hook 'org-mode-hook #'(lambda ()
+				 (org-superstar-mode)
+				 (org-superstar-configure-like-org-bullets)))
 
   (use-package org-download
     :after org)
@@ -562,19 +585,15 @@ Some settings I want for Emacs's Org-mode which I use extensively (like for writ
 
   (setq org-odt-preferred-output-format "docx")
 
-  (defun ad/org-babel-tangle-dont-ask ()
-    (let ((org-confirm-babel-evaluate nil))
-      (org-babel-tangle)))
+  (add-hook 'org-mode-hook (lambda () (add-hook 'after-save-hook #'(lambda ()
+								     (let ((org-confirm-babel-evaluate nil))
+								       (org-babel-tangle))))
+						'run-at-end 'only-in-org-mode))
 
-  (add-hook 'org-mode-hook (lambda () (add-hook 'after-save-hook #'ad/org-babel-tangle-dont-ask
-						'run-at-end 'only-in-org-mode)))
-
-  (defun ad/org-initialise ()
-    (interactive)
-    (toggle-truncate-lines)
-    (org-latex-preview)
-    (org-toggle-inline-images))
-  (add-hook 'org-mode-hook 'ad/org-initialise)
+  (add-hook 'org-mode-hook '(lambda ()
+			      (toggle-truncate-lines)
+			      (org-latex-preview)
+			      (org-toggle-inline-images)))
 
 #+END_SRC
 
@@ -743,7 +762,7 @@ More languages to evaluate with org-babel (by default, only elisp is evaluated).
    - Activate org-roam and orb after emacs's init so I can use their commands from anywhere, anytime
    - Zotero exports a .bib file with all my references (the main way it "talks" to Emacs). I "tell" ivy-bibtex and org-ref the location of this file for usage in their various commands.
    - I allow ivy-bibtex to query by keywords or abstract. Can be useful
-   - I then define the fields of a bibtex file that get queried to create a file with the notes of a reference and set the variable that controls if they should be used to true (already default behaviour though so not truly needed). These are defined here and then formatted in the orb-template. The third variable is about what extension the "file" section uses.
+   - I then define the fields of a bibtex file that get queried to create a file with the notes of a reference and set the variable that controls if they should be used to true (already default behaviour though so not truly needed). These are defined here and then formatted in the orb-template. The third variable is about what extnsion the "file" section uses.
    - I define the directory in which org-roam-dailies should be put
    - Lastly, I make the default action of ivy-bibtex, inserting the citation of the chosen reference. Personally, its the action I use most as opening the link/pdf to the reference (which is the original default) is more easily done from Zotero imo. In Emacs I find more utility in inserting the citation in my own documents. 
 
@@ -804,7 +823,7 @@ More languages to evaluate with org-babel (by default, only elisp is evaluated).
 	     "%?"
 	     :file-name "%<%d-%m-%Y %H:%M>-${slug}"
 	     :unnarrowed t
-	     :head "#+title: ${title}\n
+	     :head "#+title: ${title}\nglatex\n
      - tags ::  ")))
 
      (setq org-roam-dailies-capture-templates
@@ -893,6 +912,23 @@ More languages to evaluate with org-babel (by default, only elisp is evaluated).
 
   #+RESULTS:
   : org-svg-pdf-export
+ 
+* Projectile
+  Projectile is a promising package for project management. I havent really found the need for this, but its good for managing large projects such as my dotfiles repo and working more efficient in it. I have much more to configure inside it but this is enough for now.
+  
+  #+BEGIN_SRC elisp
+
+    (use-package projectile
+      :ensure t
+      :init
+      (projectile-mode +1)
+      :bind (:map projectile-mode-map
+		  ("M-p" . projectile-command-map)))
+
+  #+END_SRC
+
+  #+RESULTS:
+  : projectile-command-map
   
 * Other Major Modes
 Some other extensions inside my Emacs config that require some changes for their major modes to function as I want them. This currently includes:
