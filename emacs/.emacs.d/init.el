@@ -49,8 +49,12 @@
 (use-package doom-modeline
   :ensure t
   :init (doom-modeline-mode 1)
-  :config (setq doom-modeline-minor-modes t
+  :config (setq doom-modeline-minor-modes nil
 		doom-modeline-enable-word-count t))
+
+(defalias 'yes-or-no-p 'y-or-n-p)
+
+(setq org-hide-emphasis-markers t)
 
 (setq evil-collection-setup-minibuffer t)
 (setq evil-want-keybinding nil)
@@ -91,6 +95,13 @@
 		    (org-level-8 . 1.1)))
       (set-face-attribute (car face) nil :font "Source Code Pro" :weight 'regular :height (cdr face)))
 
+(defun org-toggle-emphasis ()
+  "Toggle hiding/showing of org emphasize markers."
+  (interactive)
+  (if org-hide-emphasis-markers
+      (set-variable 'org-hide-emphasis-markers nil)
+    (set-variable 'org-hide-emphasis-markers t)))
+
 (general-create-definer my-leader-def
 			:prefix "SPC")
 
@@ -98,7 +109,7 @@
  :states 'normal
  :keymaps 'override
   "!" 'shell-command
-  "P" 'package-install
+  "p" 'package-install
   "o" '(inferior-octave :which-key "octave")
   "D" 'dired
   "d" '(:ignore t :which-key "Dired functions")
@@ -157,14 +168,16 @@
      "y" 'org-download-clipboard
      "r" '(:ignore t :which-key "Org-Roam commands")
      "r i" 'org-roam-insert
-     "h" '(ad/org-cycle-hide-drawers :which-key "Hide properties drawers")
+     "h" '(org-cycle-hide-drawers :which-key "Hide properties drawers")
      "s" 'org-store-link
      "I" 'org-insert-link
      "S" '(ad/org-svg-pdf-export :which-key "Export svg files to pdf")
      "i" 'org-toggle-inline-images
      "p" 'org-tree-slide-mode
      "j" '(org-tree-slide-move-next-tree :which-key "Next Slide")
-     "k" '(org-tree-slide-move-previous-tree :which-key "Previous Slide"))
+     "k" '(org-tree-slide-move-previous-tree :which-key "Previous Slide")
+     "p" '(org-plot/gnuplot :which-key "Plot table data")
+     "f" 'org-footnote-action)
 
 (general-define-key
  :states 'normal
@@ -223,12 +236,6 @@
 (setq wolfram-alpha-app-id "U9PERG-KTPL49AWA2")
 (global-undo-tree-mode 1)
 
-(add-hook 'after-init-hook 'global-company-mode)
-(add-hook 'company-mode-hook '(lambda ()
-				(add-to-list 'company-backends 'company-math-symbols-latex)
-				(setq company-math-allow-latex-symbols-in-faces t)
-				(setq company-minimum-prefix-length 2)))
-
 (use-package magit-todos-mode
   :hook magit-mode)
 (require 'calfw-git)
@@ -250,10 +257,17 @@
 		  "sxiv"
 		  '(file))
 	 (list (openwith-make-extension-regexp
-		'("docx" "doc" "xlsx" "xls" "ppt" "odt"))
+		'("docx" "doc" "xlsx" "xls" "ppt" "odt" "ods"))
 	       "libreoffice"
 	       '(file))))
 	(openwith-mode 1))
+
+(use-package projectile
+  :ensure t
+  :init
+  (projectile-mode +1)
+  :bind (:map projectile-mode-map
+	      ("M-p" . projectile-command-map)))
 
 (add-hook 'org-mode-hook #'(lambda ()
 			       (org-superstar-mode)
@@ -289,7 +303,7 @@
 
 (setq org-noter-always-create-frame nil)
 
-(defun ad/org-cycle-hide-drawers (state)
+(defun org-cycle-hide-drawers (state)
   "Hide all the :PROPERTIES: drawers when called with the 'all argument. Mainly for hiding them in crammed org-noter files"
   (interactive "MEnter 'all for hiding :PROPERTIES: drawers in an org buffer: ")
   (when (and (derived-mode-p 'org-mode)
@@ -333,6 +347,7 @@
      (haskell . t)
      (octave . t)
      (latex . t)
+     (gnuplot . t)
 )
    )
 
@@ -350,6 +365,7 @@
 	  '("~/org_roam"))
 
 (defun ad/org-make-todo ()
+  "Set todo keyword, priority, effort and tags for a todo item. This is very useful for initialising todo items"
   (interactive)
   (org-todo)
   (org-priority)
@@ -483,7 +499,7 @@
 	 :head "#+title: Fleeting notes for %<%Y-%m-%d>\n"
 	 :olp ("Workout Regimes"))))
 
-(defun ad/org-inkscape-img()
+(defun ad/org-inkscape-img ()
     (interactive "P")
     (setq string (read-from-minibuffer "Insert image name: "))
     ;; if images folder not exists create it
@@ -515,12 +531,11 @@
 
 ;(add-to-list 'org-export-before-processing-hook #'org-svg-pdf-export)
 
-(use-package projectile
-  :ensure t
-  :init
-  (projectile-mode +1)
-  :bind (:map projectile-mode-map
-	      ("M-p" . projectile-command-map)))
+(add-hook 'after-init-hook 'global-company-mode)
+(add-hook 'company-mode-hook '(lambda ()
+				(add-to-list 'company-backends 'company-math-symbols-latex)
+				(setq company-math-allow-latex-symbols-in-faces t)
+				(setq company-minimum-prefix-length 2)))
 
 (require 'ebuku)
 (require 'evil-collection-ebuku)
@@ -544,6 +559,9 @@
 (require 'eaf-evil)
 
 (setq eaf-wm-focus-fix-wms '("qtile"))
+
+(add-hook 'emacs-lisp-mode-hook 'eldoc-mode)
+(add-hook 'ielm-mode-hook 'eldoc-mode)
 
 ;; CUSTOM VARIABLES
 (custom-set-variables

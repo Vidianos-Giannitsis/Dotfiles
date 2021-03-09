@@ -40,7 +40,7 @@ floating_modifier $mod
 # kill focused window
 bindsym $mod+q kill
 # start dmenu
-bindsym $mod+r exec rofi -show run
+bindsym $mod+r exec dmenu_run -fn "Source Code Pro Bold" -i -nb "#073642" -sb "#005858" -nf "#839496" -sf "#58002c" -p "Launch program"
 
 # Language changer Greek-English
 exec_always "setxkbmap -model pc104 -layout us,gr -variant ,, -option grp:alt_shift_toggle"

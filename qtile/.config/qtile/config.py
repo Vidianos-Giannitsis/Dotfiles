@@ -17,8 +17,8 @@ office = "libreoffice"
 file_manager = "thunar" # I mostly use dired inside emacs for file management, but this exists as a gui file manager in case I need it
 music_player = "spotify"
 calculator = "qalculate-gtk"
-pdf_reader = "zathura"
 screenshots = "flameshot gui"
+run_launcher = 'dmenu_run -fn "Source Code Pro Bold" -i -nb "#073642" -sb "#005858" -nf "#839496" -sf "#58002c" -p "Launch program"'
 
 @hook.subscribe.startup_once
 def autostart():
@@ -68,7 +68,7 @@ Key2("M-S-r", lazy.restart(), desc="Restart qtile"),
 Key2("M-S-e", lazy.shutdown(), desc="Shutdown qtile"),
 
 Key2("M-<Return>", lazy.spawn(terminal), desc="Launch terminal"),
-Key2("M-r", lazy.spawn("rofi -show run"),
+Key2("M-r", lazy.spawn(run_launcher),
     desc="Spawn a command using a prompt widget"),
 Key2("M-S-b", lazy.spawn(min_browser), desc="Launch minimal browser"),
 Key2("M-C-b", lazy.spawn(full_browser), desc="Launch full browser"),
@@ -83,7 +83,6 @@ Key2("M-C-t", lazy.spawn("thunderbird"), desc="Launch email client"),
 Key2("M-C-a", lazy.spawn("pavucontrol"), desc="Launch audio control"),
 Key2("M-C-g", lazy.spawn("geogebra"), desc="Launch geogebra"),
 Key2("M-C-i", lazy.spawn("inkscape"), desc="Launch inkscape"),
-Key2("M-C-z", lazy.spawn(pdf_reader), desc="Launch pdf reader"),
 
 Key2("<XF86AudioRaiseVolume>", lazy.spawn("amixer set Master 5%+ unmute"), desc="Raise Volume and unmute if muted"),
     Key2("<XF86AudioLowerVolume>", lazy.spawn("amixer set Master 5%- unmute"), desc="Lower Volume and unmute if muted"),

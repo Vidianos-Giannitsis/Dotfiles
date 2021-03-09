@@ -4,22 +4,24 @@
 #+INFOJS_OPT: view:t toc:t ltoc:t mouse:underline buttons:0 path:http://thomasf.github.io/solarized-css/org-info.min.js
 #+HTML_HEAD: <link rel="stylesheet" type="text/css" href="http://thomasf.github.io/solarized-css/solarized-dark.min.css" />
 
-* COMMENT Ideas for things to work on (Inspiration for these https://github.com/howardabrams/dot-files/blob/master/emacs.org) [2/7]
-  - [X] Check out company-math for autocompletions in latex symbols.
-  - [ ] I have found that while for normal writing the default idle time in company is very good (gives me time to auto expand snippets and such), in latex symbols I would like to do it faster. I am not sure if its possible but I would like to check if I can change the idle time only for specific backends.
-  - [ ] I want to set up flyspell. I dont know if I want it globally enabled, or enabled with a keybinding for spell-checking before finalising. By default no dictionaries are enabled so I need to add an english dictionary and if possible a greek dictionary and find the function to toggle between. With these utilities I will have full spelll checking. But this is rather low priority imo for the most part. 
-  - [X] Linum mode for line numbers
-  - [ ] I could go down the rabbit hole of playing around with projectile. It looks interesting, but I am unsure if I want to spend my time on it. May move it to the long term ideas soon.
-  - [ ] Set up redos better cause they are pretty confusing right now tbh. There is a section for this in the config I am checking out currently
-  - [ ] Howard Abram's config is split into multiple files, so I want to check all of them. I also am going to double check, the original file for other things I can use
-
-* COMMENT Long term ideas for things I can try [1/5]
+* COMMENT Things to do [2/4]
+  - [X] Learn to use footnotes in Emacs (org-footnote-action)
+  - [X] Make /italics/ and *bold* hide the slashes and asterisks so they look seamless in my org buffers
+  - [ ] Play around with org-ref more but this time, for referencing diagrams and equations. My citation workflow could possibly use more, but its not truly lacking I would say so these are the focuses.
+  - [ ] The picture below shows the special characters inside a snippet. With them I can make my latex snippets MUCH better. This is going to help incredibly in the long run and is something I am urgently interested in working in. 
+	#+DOWNLOADED: screenshot @ 2021-03-09 20:50:07
+	[[file:COMMENT_Things_to_do_\[1/4\]/2021-03-09_20-50-07_screenshot.png]]
+ 
+* COMMENT Long term ideas for things I can try [0/8]
 These are interesting packages to check in the long term. But nothing to hurry with, as I dont need any of them urgently.
- - [X] Seeing the presentations section reminds me that I want to eventually look into org-tree-slide for org presentations as it looks cool. Haven't gotten around to doing it yet though.
  - [ ] ERC is an IRC client for Emacs. Elfeed is an RSS reader for emacs. EMMS is a music player for Emacs. I could get around to configuring them in case I start using them
  - [ ] There are a lot of eshell configuration options which I can try if I ever get around to using eshell.
  - [ ] There is a mastodon package for Emacs (I am assuming to run mastodon from inside Emacs). If I try out mastodon, I cant see why I shouldn't use this.
- - [ ] The last section of this config, mentions other inspiring dotfiles which I can check out. https://github.com/daviwil/dotfiles/blob/master/Emacs.org,
+ - [ ] I could go down the rabbit hole of playing around with projectile. It looks interesting, but I am unsure if I want to spend my time on it. May move it to the long term ideas soon.
+ - [ ] https://github.com/daedreth/UncleDavesEmacs/blob/master/config.org An emacs DE config. The things that interest me the most here are specific to an emacs DE, the rest are pretty similar to defaults. If I switch to EXWM (which I will definitely try at some point) this might be helpful
+ - [ ] SPEAKING OF EXWM, I MUST TRY IT. But although its Emacs and I will be comfortable in it from the get go, its definitely going to be time consuming so I am stalling it for now cause I dont want to spend all my time there. 
+ - [ ] Flyspell dictionary check. Togglable english and greek dictionaries
+ - [ ] Become an elisp guru and manage to write a correct function that finds the company-backend used and if its the latex one, makes the idle time significantly smaller, but then fixes it, if its anything else. I tried it but struggled to get a correct condition for my if statement. Its something to look into for the future though. 
   
 :CONTENTS:
 
@@ -101,7 +103,7 @@ The first section has to do with packages installed from melpa, the second with 
 #+RESULTS:
 
 * Sensible Defaults
-Change some Emacs defaults to things I consider more sensible.
+Change some Emacs defaults to things I consider more sensible for my use cases.
 This includes: 
 + Activating gcmh mode, which helps improve my startup time (Note that to truly get a benefit from this it needs to be very early on in the config). 
 + Setting my theme to doom's variant of solarized-dark. I like it more than the default solarized-dark in melpa (you can get it from the doom-themes package).
@@ -113,6 +115,8 @@ This includes:
 + Moving backup and autosave files to a tmp folder inside my .emacs.d so my directories look like less of a mess.
 + Adding the helpful package which makes documentations better (installing from MELPA didnt work so I needed to do the manual install)
 + Changed my modeline to the doom-modeline. It looks better than the default modeline in Emacs imo
++ Changing yes-no prompts to y-n, because its simply easier to type than yes-no.
++ Hide elements such as asterisks when writing a bold word by default. In the [[*Utilities][Utilities]] section of the config, I also define a function which toggles this behaviour
 
 #+BEGIN_SRC elisp
 
@@ -145,8 +149,12 @@ This includes:
   (use-package doom-modeline
     :ensure t
     :init (doom-modeline-mode 1)
-    :config (setq doom-modeline-minor-modes t
+    :config (setq doom-modeline-minor-modes nil
 		  doom-modeline-enable-word-count t))
+
+  (defalias 'yes-or-no-p 'y-or-n-p)
+
+  (setq org-hide-emphasis-markers t)
 
 #+END_SRC
 
@@ -154,7 +162,7 @@ This includes:
 : t
 
 * Evil Mode
-Enabling Evil Mode, my preffered editing mode for Emacs, with the evil-collection loaded. It helps me with defining evil type keybindings for more programs, which I like. Then I also load evil-org which is a different third party program for evil keys inside org as evil-collection doesn't have that. 
+Enabling Evil Mode, my preffered editing mode for Emacs, with the evil-collection loaded. It helps me with defining evil type keybindings for more programs, which I like. Then I also load evil-org which is a package for evil keys inside org as evil-collection doesn't have that. 
 
 #+BEGIN_SRC elisp
 
@@ -186,6 +194,7 @@ This enables:
 + Enabling vterm-toggle, a package which helps with not getting a milion vterms open (with a run-or-raise behaviour)
 + Remove the warnings Emacs gives when opening large files or following vc controlled symlinks. I dont need them and they can be annoying.
 + Changing the heading and title font to match my global font and resizing them so 1st tier headings and titles actually stand out like they should.
++ A function to toggle the behaviour of markup elements such as visible asterisks when writing a message in bold. I dont like seeing them usually, but its good to have a function which toggle this behaviour
 
 #+BEGIN_SRC elisp
 
@@ -211,6 +220,13 @@ This enables:
 		      (org-level-8 . 1.1)))
 	(set-face-attribute (car face) nil :font "Source Code Pro" :weight 'regular :height (cdr face)))
 
+  (defun org-toggle-emphasis ()
+    "Toggle hiding/showing of org emphasize markers."
+    (interactive)
+    (if org-hide-emphasis-markers
+	(set-variable 'org-hide-emphasis-markers nil)
+      (set-variable 'org-hide-emphasis-markers t)))
+
 #+END_SRC
 
 #+RESULTS:
@@ -222,7 +238,7 @@ This is the "heart" of my config being all the keybindings I have set for my per
 | Keybinding   | Action                                                                                                                                             |
 |--------------+----------------------------------------------------------------------------------------------------------------------------------------------------|
 | SPC !        | Create a prompt for inputing a single shell command. This is easier than opening a terminal emulator for quick tasks                               |
-| SPC P        | Opens the package install prompt                                                                                                                   |
+| SPC p        | Opens the package install prompt                                                                                                                   |
 | SPC o        | Starts the octave client. I use octave a lot for my lessons so this is a must for me                                                               |
 | SPC H        | Create a horizontal split inside Emacs                                                                                                             |
 | SPC V        | Create a vertical split inside Emacs                                                                                                               |
@@ -278,7 +294,7 @@ This is the "heart" of my config being all the keybindings I have set for my per
    :states 'normal
    :keymaps 'override
     "!" 'shell-command
-    "P" 'package-install
+    "p" 'package-install
     "o" '(inferior-octave :which-key "octave")
     "D" 'dired
     "d" '(:ignore t :which-key "Dired functions")
@@ -331,7 +347,7 @@ This is the "heart" of my config being all the keybindings I have set for my per
 | , e        | Org export dispatch command for exporting to pdf or html.                                                                                            |
 | , y        | Pastes a photograph from my clipboard, very helptful to speed up adding photos to my documents                                                       |
 | , c        | Open an ivy menu to choose a citation to add to an article                                                                                           |
-| , h        | Invoke a custom command which hides the properties of org headings. Check Org-agenda section for more details                                        |
+| , h        | Invoke a custom command which hides the properties of org headings. Check [[*Org-agenda and TODOs][Org-agenda and TODOs]] for more details                                      |
 | , s        | Store a link from an org buffer to insert to another buffer. I mainly use this with Roam to add links to headings                                    |
 | , I        | Insert a link stored from org-store-link. Again used mostly with Roam                                                                                |
 | , S        | Custom command to export .svg to .pdf files. This is a prerequisite for the Inkscape integration with Emacs to work. This is better explained in     |
@@ -339,7 +355,7 @@ This is the "heart" of my config being all the keybindings I have set for my per
 | , i        | Toggle whether images on an org document are visible or not.                                                                                         |
 | , p        | Activate org-tree-slide-mode an org minor mode which enables you to do presentations from inside org                                                 |
 | , j        | In org-tree-slide go to the next "slide" meaning org-heading                                                                                         |
-| , k        | Same as above but for the previous "slide"                                                                                                |
+| , k        | Same as above but for the previous "slide"                                                                                                           |
 |------------+------------------------------------------------------------------------------------------------------------------------------------------------------|
 | *To-Dos*   | You can do a lot with to-do items in Org. These are the commands I have keybound which are specific to to-do management. They are under , t          |
 |------------+------------------------------------------------------------------------------------------------------------------------------------------------------|
@@ -376,14 +392,16 @@ This is the "heart" of my config being all the keybindings I have set for my per
        "y" 'org-download-clipboard
        "r" '(:ignore t :which-key "Org-Roam commands")
        "r i" 'org-roam-insert
-       "h" '(ad/org-cycle-hide-drawers :which-key "Hide properties drawers")
+       "h" '(org-cycle-hide-drawers :which-key "Hide properties drawers")
        "s" 'org-store-link
        "I" 'org-insert-link
        "S" '(ad/org-svg-pdf-export :which-key "Export svg files to pdf")
        "i" 'org-toggle-inline-images
        "p" 'org-tree-slide-mode
        "j" '(org-tree-slide-move-next-tree :which-key "Next Slide")
-       "k" '(org-tree-slide-move-previous-tree :which-key "Previous Slide"))
+       "k" '(org-tree-slide-move-previous-tree :which-key "Previous Slide")
+       "p" '(org-plot/gnuplot :which-key "Plot table data")
+       "f" 'org-footnote-action)
 
   (general-define-key
    :states 'normal
@@ -502,12 +520,6 @@ This is the "heart" of my config being all the keybindings I have set for my per
     (setq wolfram-alpha-app-id "U9PERG-KTPL49AWA2")
     (global-undo-tree-mode 1)
 
-    (add-hook 'after-init-hook 'global-company-mode)
-    (add-hook 'company-mode-hook '(lambda ()
-				    (add-to-list 'company-backends 'company-math-symbols-latex)
-				    (setq company-math-allow-latex-symbols-in-faces t)
-				    (setq company-minimum-prefix-length 2)))
-
     (use-package magit-todos-mode
       :hook magit-mode)
     (require 'calfw-git)
@@ -529,10 +541,17 @@ This is the "heart" of my config being all the keybindings I have set for my per
 		      "sxiv"
 		      '(file))
 	     (list (openwith-make-extension-regexp
-		    '("docx" "doc" "xlsx" "xls" "ppt" "odt"))
+		    '("docx" "doc" "xlsx" "xls" "ppt" "odt" "ods"))
 		   "libreoffice"
 		   '(file))))
 	    (openwith-mode 1))
+
+    (use-package projectile
+      :ensure t
+      :init
+      (projectile-mode +1)
+      :bind (:map projectile-mode-map
+		  ("M-p" . projectile-command-map)))
 
   #+END_SRC
 
@@ -574,7 +593,7 @@ Some settings I want for Emacs's Org-mode which I use extensively (like for writ
    + Making latex view my bibtex bibliography and export it properly. I took this from the org-ref docs as originally I wasnt getting proper bibliographic entries. I t works with this.
    + I tell org that its odt export should be converted to docx as if I am exporting to a rich text editors format, its for a collaboration and most people I know use that format. If its a personal project I always export to a latex pdf because it looks better.
    + Defining a function which supresses the confirmation message for tangling an org document's source code and hooking it to the after save hook in org-mode. If I understand it correctly, it should automatically tangle after saving, if thats possible, which is handy for things such as this configuration.
-   + I have a custom function which I hook to the org-mode-hook (so it activates every time a new org mode buffer is opened) which automatically displays images I have added to the buffer, creates previews for latex code in the document and toggles truncate-lines so that I can see the entire text when opening the buffer (really can't understand why its not nil by default in org documents)
+   + I have a custom lambda function which I hook to the org-mode-hook (so it activates every time a new org mode buffer is opened) which automatically displays images I have added to the buffer, creates previews for latex code in the document and toggles truncate-lines so that I can see the entire text when opening the buffer (really can't understand why its not nil by default in org documents)
      
 #+BEGIN_SRC elisp
   (add-to-list 'org-file-apps '("\\.pdf\\'" . emacs))
@@ -608,7 +627,7 @@ Some settings I want for Emacs's Org-mode which I use extensively (like for writ
 
      (setq org-noter-always-create-frame nil)
 
-     (defun ad/org-cycle-hide-drawers (state)
+     (defun org-cycle-hide-drawers (state)
        "Hide all the :PROPERTIES: drawers when called with the 'all argument. Mainly for hiding them in crammed org-noter files"
        (interactive "MEnter 'all for hiding :PROPERTIES: drawers in an org buffer: ")
        (when (and (derived-mode-p 'org-mode)
@@ -662,13 +681,16 @@ More languages to evaluate with org-babel (by default, only elisp is evaluated).
        (haskell . t)
        (octave . t)
        (latex . t)
+       (gnuplot . t)
   )
      )
 
 #+END_SRC
 
+#+RESULTS:
+
 ** Org-agenda and TODOs
-    I set everything I need for TODOs and the org-agenda in this section. In the Keybindings section of the config you can see the keybindings I have set for each action while here are the configurations I want to make. This helps keep this consistent by having those keybindings in that section. I track all my todo files in one directory, my org_roam directory (more on that in the next section, its an important part of my workflow). So I want every todo defined in that directory to be loaded inside Org-agenda.
+    I set everything I need for TODOs and the org-agenda in this section. In [[*Org mode keybindings][Org mode keybindings]] you can see the keybindings I have set for each action while here are the configurations I want to make. This helps keep this consistent by having those keybindings in that section. I track all my todo files in one directory, my org_roam directory (more on that in the next section, its an important part of my workflow). So I want every todo defined in that directory to be loaded inside Org-agenda.
 
    I define a custom function org-make-todo which makes an item todo, gives it a priority and effort value. I like this for initialization of a todo file as it helps with organizing tasks with which one is more urgent and which is harder outside of the already existing file system to manage different kinds of todos.
 
@@ -690,6 +712,7 @@ More languages to evaluate with org-babel (by default, only elisp is evaluated).
 	    '("~/org_roam"))
 
   (defun ad/org-make-todo ()
+    "Set todo keyword, priority, effort and tags for a todo item. This is very useful for initialising todo items"
     (interactive)
     (org-todo)
     (org-priority)
@@ -876,7 +899,7 @@ More languages to evaluate with org-babel (by default, only elisp is evaluated).
   
   #+BEGIN_SRC elisp
 
-    (defun ad/org-inkscape-img()
+    (defun ad/org-inkscape-img ()
 	(interactive "P")
 	(setq string (read-from-minibuffer "Insert image name: "))
 	;; if images folder not exists create it
@@ -913,29 +936,29 @@ More languages to evaluate with org-babel (by default, only elisp is evaluated).
   #+RESULTS:
   : org-svg-pdf-export
  
-* Projectile
-  Projectile is a promising package for project management. I havent really found the need for this, but its good for managing large projects such as my dotfiles repo and working more efficient in it. I have much more to configure inside it but this is enough for now.
+* Company
+  Company is a minor mode, which I enable globally, which allows for autocompletions. This is useful when programming, or writing latex for completing what you want, but also can speed up the writing of long words. The lambda I add to the company-mode-hook adds latex autocompletions and allows them to be used anywhere. It also makes the minimum prefix 2 letters long, which is better than the default 3 imo, especially when auto completing latex. 
   
   #+BEGIN_SRC elisp
 
-    (use-package projectile
-      :ensure t
-      :init
-      (projectile-mode +1)
-      :bind (:map projectile-mode-map
-		  ("M-p" . projectile-command-map)))
+    (add-hook 'after-init-hook 'global-company-mode)
+    (add-hook 'company-mode-hook '(lambda ()
+				    (add-to-list 'company-backends 'company-math-symbols-latex)
+				    (setq company-math-allow-latex-symbols-in-faces t)
+				    (setq company-minimum-prefix-length 2)))
 
   #+END_SRC
-
-  #+RESULTS:
-  : projectile-command-map
   
+  #+RESULTS:
+  | ad/company-latex | (lambda nil (when company-backend company-math-symbols-latex (let (company-idle-delay 0.01)))) |
+ 
 * Other Major Modes
 Some other extensions inside my Emacs config that require some changes for their major modes to function as I want them. This currently includes:
 - Ebuku
 - PDF Tools
 - Octave
 - Emacs Application Framework
+- Elisp
   
 ** Ebuku
   Ebuku is the Emacs major mode for buku, a simple terminal bookmark manager. Since I store all my bookmarks there, this gives me a way to launch my favourite pages from inside Emacs, which is a utility I deem very useful. For some reason, evil-collections keybindings didn't work by default so I enabled them manually (this is the first package I have had this happen to me with)
@@ -991,6 +1014,15 @@ And after these changes, my emacs pdf-viewer looks like this. I didn't know what
 
    #+END_SRC
   
+** Elisp
+   Elisp is the internal language of Emacs. I enable eldoc-mode in Elisp and ielm which is just awesome for writing elisp. 
+   
+   #+BEGIN_SRC elisp
+
+     (add-hook 'emacs-lisp-mode-hook 'eldoc-mode)
+     (add-hook 'ielm-mode-hook 'eldoc-mode)
+
+   #+END_SRC
 * Custom Variables
 These are some variables automatically generated by the "M-x customize" menu. Its better not to play around with this section of the config file as to not mess something up accidentally. 
 

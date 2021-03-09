@@ -38,9 +38,11 @@ Defining them here helps if I want to use them in multiple locations of my confi
   file_manager = "thunar" # I mostly use dired inside emacs for file management, but this exists as a gui file manager in case I need it
   music_player = "spotify"
   calculator = "qalculate-gtk"
-  pdf_reader = "zathura"
   screenshots = "flameshot gui"
+  run_launcher = 'dmenu_run -fn "Source Code Pro Bold" -i -nb "#073642" -sb "#005858" -nf "#839496" -sf "#58002c" -p "Launch program"'
 #+END_SRC
+
+#+RESULTS:
 
 * Hooks
 Defining two hooks I want for my config. The first is my autostart script (you can find it inside of this repo) which I want to be called the first time I login to qtile. It launches things like network manager and picom.
@@ -131,7 +133,7 @@ Some notes about them are:
 
 #+BEGIN_SRC python
   Key2("M-<Return>", lazy.spawn(terminal), desc="Launch terminal"),
-  Key2("M-r", lazy.spawn("rofi -show run"),
+  Key2("M-r", lazy.spawn(run_launcher),
       desc="Spawn a command using a prompt widget"),
   Key2("M-S-b", lazy.spawn(min_browser), desc="Launch minimal browser"),
   Key2("M-C-b", lazy.spawn(full_browser), desc="Launch full browser"),
@@ -146,7 +148,6 @@ Some notes about them are:
   Key2("M-C-a", lazy.spawn("pavucontrol"), desc="Launch audio control"),
   Key2("M-C-g", lazy.spawn("geogebra"), desc="Launch geogebra"),
   Key2("M-C-i", lazy.spawn("inkscape"), desc="Launch inkscape"),
-  Key2("M-C-z", lazy.spawn(pdf_reader), desc="Launch pdf reader"),
 #+END_SRC
 
 ** Multimedia Keys
