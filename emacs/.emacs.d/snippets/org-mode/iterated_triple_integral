@@ -2,4 +2,4 @@
 # name: iterated_triple_integral
 # key: itint
 # --
-$\int_{}^{} \int_{}^{} \int_{}^{} f(x,y,z) \,dx\,dy\,dz$
+\int_{$1}^{$2} \int_{$3}^{$4} \int_{$5}^{$6} $7 \,dx\,dy\,dz

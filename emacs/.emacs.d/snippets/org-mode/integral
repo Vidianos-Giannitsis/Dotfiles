@@ -2,4 +2,4 @@
 # name: integral
 # key: int
 # --
-\int_{}^{} \,dx
+\int_{$1}^{$2} $3 \,d$4

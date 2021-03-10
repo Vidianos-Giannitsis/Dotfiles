@@ -4,10 +4,11 @@
 #+INFOJS_OPT: view:t toc:t ltoc:t mouse:underline buttons:0 path:http://thomasf.github.io/solarized-css/org-info.min.js
 #+HTML_HEAD: <link rel="stylesheet" type="text/css" href="http://thomasf.github.io/solarized-css/solarized-dark.min.css" />
 
-* COMMENT Things to do [2/4]
+* COMMENT Things to do [2/5]
   - [X] Learn to use footnotes in Emacs (org-footnote-action)
   - [X] Make /italics/ and *bold* hide the slashes and asterisks so they look seamless in my org buffers
-  - [ ] Play around with org-ref more but this time, for referencing diagrams and equations. My citation workflow could possibly use more, but its not truly lacking I would say so these are the focuses.
+  - [ ] Play around with org-ref more but this time, for referencing diagrams and equations. My citation workflow could possibly use more, but its not truly lacking I would say so these are the focuses. For some ideas: Read the help menu in M-x org-ref-help. Possibly keybind org-ref-insert-ref-link and org-ref-insert-link. I should also figure out why org-ref-ivy doesn't work (or doesnt exist or something). If I cant find it I have no problem with the helm alternative though.
+  - [ ] Set up counsel-spotify. I found this package looking at counsel packages and it basically allows me to control spotify from Emacs using counsel, which is truly a dream come true. I need to create an app here https://developer.spotify.com/dashboard/applications and then set the variables counsel-spotify-client-id and counsel-spotify-client-secret.
   - [ ] The picture below shows the special characters inside a snippet. With them I can make my latex snippets MUCH better. This is going to help incredibly in the long run and is something I am urgently interested in working in. 
 	#+DOWNLOADED: screenshot @ 2021-03-09 20:50:07
 	[[file:COMMENT_Things_to_do_\[1/4\]/2021-03-09_20-50-07_screenshot.png]]
@@ -937,7 +938,7 @@ More languages to evaluate with org-babel (by default, only elisp is evaluated).
   : org-svg-pdf-export
  
 * Company
-  Company is a minor mode, which I enable globally, which allows for autocompletions. This is useful when programming, or writing latex for completing what you want, but also can speed up the writing of long words. The lambda I add to the company-mode-hook adds latex autocompletions and allows them to be used anywhere. It also makes the minimum prefix 2 letters long, which is better than the default 3 imo, especially when auto completing latex. 
+  Company is a minor mode, which I enable globally, which allows for autocompletions. This is useful when programming, or writing latex for completing what you want, but also can speed up the writing of long words. The lambda I add to the company-mode-hook adds latex autocompletions and allows them to be used anywhere. It also makes the minimum prefix 2 letters long, which is better than the default 3 imo, especially when auto completing latex. It also sets up company to read and give autocompletions for citations from my master .bib file in Zotero. I usually enter them with the ivy-bibtex package (my current default action is add citation there) but this is worth a try. 
   
   #+BEGIN_SRC elisp
 
@@ -945,7 +946,10 @@ More languages to evaluate with org-babel (by default, only elisp is evaluated).
     (add-hook 'company-mode-hook '(lambda ()
 				    (add-to-list 'company-backends 'company-math-symbols-latex)
 				    (setq company-math-allow-latex-symbols-in-faces t)
+				    (add-to-list 'company-backends 'company-bibtex)
+				    (setq company-bibtex-bibliography '("~/org_roam/Zotero_library.bib"))
 				    (setq company-minimum-prefix-length 2)))
+
 
   #+END_SRC
   

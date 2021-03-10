@@ -3,5 +3,5 @@
 # key: elisp
 # --
 #+BEGIN_SRC elisp
-
+$0
 #+END_SRC

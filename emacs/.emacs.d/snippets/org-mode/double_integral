@@ -2,4 +2,4 @@
 # name: double_integral
 # key: dint
 # --
-$\iint_D  \,dx\,dy$
+\iint_D $0 \,dx\,dy

@@ -1,5 +1,5 @@
 # -*- mode: snippet -*-
 # name: laplace
-# key: \lap
+# key: \l
 # --
 \mathcal{L}

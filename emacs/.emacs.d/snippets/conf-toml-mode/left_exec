@@ -1,0 +1,9 @@
+# -*- mode: snippet -*-
+# name: left_exec
+# key: ex
+# --
+[[keybind]]
+command = "Execute"
+value = ""
+modifier = ["modkey"]
+key = ""

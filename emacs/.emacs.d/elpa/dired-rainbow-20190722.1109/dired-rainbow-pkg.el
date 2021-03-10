@@ -1,0 +1,2 @@
+;;; Generated package description from /home/vidianos/.emacs.d/elpa/dired-rainbow-20190722.1109/dired-rainbow.el  -*- no-byte-compile: t -*-
+(define-package "dired-rainbow" "20190722.1109" "Extended file highlighting according to its type" '((dash "2.5.0") (dired-hacks-utils "0.0.1")) :commit "d1a2bda6aa8f890cb367297ed93aee6d3b5ba388" :authors '(("Matus Goljer" . "matus.goljer@gmail.com")) :maintainer '("Matus Goljer" . "matus.goljer@gmail.com") :keywords '("files"))

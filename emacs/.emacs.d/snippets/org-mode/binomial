@@ -2,4 +2,4 @@
 # name: binomial
 # key: bin
 # --
-\binom{}{}
+\binom{$1}{$2}

@@ -2,4 +2,4 @@
 # name: iterated_double_integral
 # key: idint
 # --
-$\int_{}^{} \int_{}^{} f(x,y) \,dx\,dy$
+\int_{$1}^{$2} \int_{$3}^{$4} $5 \,dx\,dy

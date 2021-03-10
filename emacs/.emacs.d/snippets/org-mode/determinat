@@ -1,5 +1,0 @@
-# -*- mode: snippet -*-
-# name: determinant
-# key: det
-# --
-\begin{vmatrix}        \end{vmatrix}

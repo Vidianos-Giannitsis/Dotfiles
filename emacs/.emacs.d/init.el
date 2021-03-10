@@ -535,6 +535,8 @@
 (add-hook 'company-mode-hook '(lambda ()
 				(add-to-list 'company-backends 'company-math-symbols-latex)
 				(setq company-math-allow-latex-symbols-in-faces t)
+				(add-to-list 'company-backends 'company-bibtex)
+				(setq company-bibtex-bibliography '("~/org_roam/Zotero_library.bib"))
 				(setq company-minimum-prefix-length 2)))
 
 (require 'ebuku)

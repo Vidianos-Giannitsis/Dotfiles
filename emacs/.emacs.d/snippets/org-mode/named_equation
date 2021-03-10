@@ -1,0 +1,9 @@
+# -*- mode: snippet -*-
+# name: named_equation
+# key: neq
+# --
+\begin{equation}
+\tag{$1}
+$2
+\label{$3}
+\end{equation}

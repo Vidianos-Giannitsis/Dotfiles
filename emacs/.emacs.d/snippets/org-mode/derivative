@@ -1,0 +1,5 @@
+# -*- mode: snippet -*-
+# name: derivative
+# key: dev
+# --
+\left \frac{d $1}{d $2} \right)_{$3}
