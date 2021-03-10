@@ -102,6 +102,9 @@
       (set-variable 'org-hide-emphasis-markers nil)
     (set-variable 'org-hide-emphasis-markers t)))
 
+(setq counsel-spotify-client-id "0df2796a793b41dc91711eb9f85c0e77")
+(setq counsel-spotify-client-secret "bcdbb823795640248ff2c29eedadb800")
+
 (general-create-definer my-leader-def
 			:prefix "SPC")
 
@@ -147,7 +150,15 @@
   "c g" '(cfw:git-open-calendar :which-key "Open calendar with git commit history")
   "r i" '(org-roam-jump-to-index :which-key "Go to the master index file")
   "l" '(linum-mode :which-key "Line numbers")
-  "e" 'ielm)
+  "e" 'ielm
+  "s" '(:ignore t :which-key "Counsel-spotify commands")
+  "s n" 'counsel-spotify-next
+  "s p" 'counsel-spotify-previous
+  "s t" 'counsel-spotify-toggle-play-pause
+  "s s" '(:ignore t :which-key "Search for")
+  "s s t" 'counsel-spotify-search-track
+  "s s p" 'counsel-spotify-search-playlist
+  "s s a" 'counsel-spotify-search-artist)
 
 (general-create-definer org-leader-def
       :prefix ",")

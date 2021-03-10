@@ -4,12 +4,12 @@
 #+INFOJS_OPT: view:t toc:t ltoc:t mouse:underline buttons:0 path:http://thomasf.github.io/solarized-css/org-info.min.js
 #+HTML_HEAD: <link rel="stylesheet" type="text/css" href="http://thomasf.github.io/solarized-css/solarized-dark.min.css" />
 
-* COMMENT Things to do [2/5]
+* COMMENT Things to do [3/5]
   - [X] Learn to use footnotes in Emacs (org-footnote-action)
   - [X] Make /italics/ and *bold* hide the slashes and asterisks so they look seamless in my org buffers
   - [ ] Play around with org-ref more but this time, for referencing diagrams and equations. My citation workflow could possibly use more, but its not truly lacking I would say so these are the focuses. For some ideas: Read the help menu in M-x org-ref-help. Possibly keybind org-ref-insert-ref-link and org-ref-insert-link. I should also figure out why org-ref-ivy doesn't work (or doesnt exist or something). If I cant find it I have no problem with the helm alternative though.
   - [ ] Set up counsel-spotify. I found this package looking at counsel packages and it basically allows me to control spotify from Emacs using counsel, which is truly a dream come true. I need to create an app here https://developer.spotify.com/dashboard/applications and then set the variables counsel-spotify-client-id and counsel-spotify-client-secret.
-  - [ ] The picture below shows the special characters inside a snippet. With them I can make my latex snippets MUCH better. This is going to help incredibly in the long run and is something I am urgently interested in working in. 
+  - [X] The picture below shows the special characters inside a snippet. With them I can make my latex snippets MUCH better. This is going to help incredibly in the long run and is something I am urgently interested in working in. 
 	#+DOWNLOADED: screenshot @ 2021-03-09 20:50:07
 	[[file:COMMENT_Things_to_do_\[1/4\]/2021-03-09_20-50-07_screenshot.png]]
  
@@ -228,63 +228,77 @@ This enables:
 	(set-variable 'org-hide-emphasis-markers nil)
       (set-variable 'org-hide-emphasis-markers t)))
 
+  (setq counsel-spotify-client-id "0df2796a793b41dc91711eb9f85c0e77")
+  (setq counsel-spotify-client-secret "bcdbb823795640248ff2c29eedadb800")
+
 #+END_SRC
 
 #+RESULTS:
+: bcdbb823795640248ff2c29eedadb800
 
 * Keybindings
 This is the "heart" of my config being all the keybindings I have set for my personal config. This is heavily customised as I personally am not a fun of the default Emacs keybindings as the control key is not in an ergonomic position to click (and personally I dont like the solution of making Caps-Lock act as control or something similar) and I also find some of them a little too chaotic. Below is a table explaining them. When the keys are seperated with a space, you need to press one after the other while when seperated with a "-" you press all the keys together. Space (SPC) is set as my global leader key so most of my general keybindings start with it. This is heavily influenced by the way spacemacs does it because I used spacemacs before this and I liked the idea. I manage these leader keys with the general.el package. I also have "," for org-mode specific commands (which can only be ran from an org mode buffer) as they are too many to have in the same leader key. I can also nest leader keys inside other leader keys, like how r is the leader key for org-roam commands both in the general keybindings and the org specific keybindings. For these nested leader keys, I have a keybinding with the leader key which is set to :ignore t so that I can have a :which-key argument which allows me to describe the leader key's function inside the which-key menu (which is awesome). I also have :which-key arguments for commands whose names I dont find very self explanatory (such as counsel-imenu, which is better described for me as jump to heading). 
 
 ** Global keybindings, defined with the space leader key
-| Keybinding   | Action                                                                                                                                             |
-|--------------+----------------------------------------------------------------------------------------------------------------------------------------------------|
-| SPC !        | Create a prompt for inputing a single shell command. This is easier than opening a terminal emulator for quick tasks                               |
-| SPC p        | Opens the package install prompt                                                                                                                   |
-| SPC o        | Starts the octave client. I use octave a lot for my lessons so this is a must for me                                                               |
-| SPC H        | Create a horizontal split inside Emacs                                                                                                             |
-| SPC V        | Create a vertical split inside Emacs                                                                                                               |
-| SPC m        | Open magit, the emacs git client                                                                                                                   |
-| SPC Enter    | Opens vterm, my preffered Emacs terminal, for when needed                                                                                          |
-| SPC t        | Toggles Emacs's default behaviour concerning what to do when it runs out of space in a line. I always want it to wrap around to the next line and  |
-|              | continue the text there, so I need to toggle this in a some buffers (such as Org)                                                                  |
-| SPC T        | Executes org-babel-tangle, which is the command used to tangle source code blocks to your config file (the way you make literate config files)     |
-| SPC b        | Open the counsel-switch-buffer menu which allows switching buffers with relative ease (also has a preview of the buffer which is a neat feature)   |
-| SPC g        | Go to a specific page inside a pdf                                                                                                                 |
-| SPC R        | If Emacs crashes for some reason, this command restores the backup Emacs kept for this file (almost always results to no data-loss)                |
-| SPC a        | Opens org-agenda. Technically an org command, but I want to be able to use it globally and not only in Emacs                                       |
-| SPC C        | Activates the calc menu (originally C-x *). The two options I use from here are "c" for the classic calc major mode and "e" for embedded mode      |
-| SPC w        | Query WolframAlpha from inside Emacs. Wolfram Alpha is a website which helps with advanced mathematical calculations. Its very helpful to have     |
-| SPC B        | Open the Ivy Bibtex menu to open an article saved to my Zotero database                                                                            |
-| SPC h        | Jump to heading with Counsel                                                                                                                       |
-| SPC l        | Activates linum mode which turns on line numbers                                                                                                   |
-| SPC e        | Opens an ielm buffer. ielm is for interactively running elisp in the current emacs session. It can be very helpful                                 |
-|--------------+----------------------------------------------------------------------------------------------------------------------------------------------------|
-| *Dired*      | Dired is the Emacs file manager, below are commands specific to dired (bound to SPC d)                                                             |
-|--------------+----------------------------------------------------------------------------------------------------------------------------------------------------|
-| SPC D        | Asks for a directory and opens dired in that directory                                                                                             |
-| SPC d j      | Opens dired in the current working directory. This is faster than simply calling dired when you want to switch between files in the same directory |
-| SPC d h      | Toggle visibility of dotfiles inside dired. In the dired section I set them to be hidden by default, and this toggles that behaviour               |
-| SPC d f      | Find a file inside a directory. I usually prefer just using dired but this can prove useful in folders with a lot of "chaos"                       |
-|--------------+----------------------------------------------------------------------------------------------------------------------------------------------------|
-| *Org-Roam*   | I use Org-roam for my notetaking. Its got a lot of useful commands. The letter r is reserved for it (SPC r for general and , r for org-specific)   |
-|--------------+----------------------------------------------------------------------------------------------------------------------------------------------------|
-| SPC r f      | Find file inside the org-roam dir. If it doesn't exist create it. Since this system follows a non hierarchical sorting system, the org_roam        |
-|              | folder (which contains all these files) is cluttered. So this is the best way to find the file you are looking for. Also creates the file if it    |
-|              | doesn't find it in the system.                                                                                                                     |
-| SPC r b      | Choose a citation and add a note specific to it. Follows the "orb-template" variable                                                               |
-|--------------+----------------------------------------------------------------------------------------------------------------------------------------------------|
-| *Roam-Daily* | Org-roam has the ability to create daily notes for various subjects. SPC j commands create/open the various daily notes                            |
-|--------------+----------------------------------------------------------------------------------------------------------------------------------------------------|
-| SPC j c t    | Capture a daily note for today                                                                                                                     |
-| SPC j f t    | Find the daily notes created for today (creates the file if it doesnt exist)                                                                       |
-| SPC j c d    | Open the calendar and prompt for a date. Then capture a daily note for the chosen date                                                             |
-| SPC j f d    | Open the calendar and prompt for a date. Then find the daily note for that date and show it. Creates it if it doesnt exist                         |
-|--------------+----------------------------------------------------------------------------------------------------------------------------------------------------|
-| *Calfw*      | Calfw is a calendar for Emacs. Its pretty cool. It also has an interface with org-agenda todos and one with git commits in it (bound to SPC c)     |
-|--------------+----------------------------------------------------------------------------------------------------------------------------------------------------|
-| SPC c b      | Open the classic calendar buffer of calfw                                                                                                          |
-| SPC c o      | Open the org-mode calendar view. This is a calfw buffer which shows org todo items. It can act as an agenda view as well, seems legit              |
-| SPC c g      | Open the git commit calendar view. This is a calfw buffer that also shows your most recent git commits. Its a cool view I reckon.                  |
+| Keybinding | Action                                                                                                                                               |
+|------------+------------------------------------------------------------------------------------------------------------------------------------------------------|
+| SPC !      | Create a prompt for inputing a single shell command. This is easier than opening a terminal emulator for quick tasks                                 |
+| SPC p      | Opens the package install prompt                                                                                                                     |
+| SPC o      | Starts the octave client. I use octave a lot for my lessons so this is a must for me                                                                 |
+| SPC H      | Create a horizontal split inside Emacs                                                                                                               |
+| SPC V      | Create a vertical split inside Emacs                                                                                                                 |
+| SPC m      | Open magit, the emacs git client                                                                                                                     |
+| SPC Enter  | Opens vterm, my preffered Emacs terminal, for when needed                                                                                            |
+| SPC t      | Toggles Emacs's default behaviour concerning what to do when it runs out of space in a line. I always want it to wrap around to the next line and    |
+|            | continue the text there, so I need to toggle this in a some buffers (such as Org)                                                                    |
+| SPC T      | Executes org-babel-tangle, which is the command used to tangle source code blocks to your config file (the way you make literate config files)       |
+| SPC b      | Open the counsel-switch-buffer menu which allows switching buffers with relative ease (also has a preview of the buffer which is a neat feature)     |
+| SPC g      | Go to a specific page inside a pdf                                                                                                                   |
+| SPC R      | If Emacs crashes for some reason, this command restores the backup Emacs kept for this file (almost always results to no data-loss)                  |
+| SPC a      | Opens org-agenda. Technically an org command, but I want to be able to use it globally and not only in Emacs                                         |
+| SPC C      | Activates the calc menu (originally C-x *). The two options I use from here are "c" for the classic calc major mode and "e" for embedded mode        |
+| SPC w      | Query WolframAlpha from inside Emacs. Wolfram Alpha is a website which helps with advanced mathematical calculations. Its very helpful to have       |
+| SPC B      | Open the Ivy Bibtex menu to open an article saved to my Zotero database                                                                              |
+| SPC h      | Jump to heading with Counsel                                                                                                                         |
+| SPC l      | Activates linum mode which turns on line numbers                                                                                                     |
+| SPC e      | Opens an ielm buffer. ielm is for interactively running elisp in the current emacs session. It can be very helpful                                   |
+|------------+------------------------------------------------------------------------------------------------------------------------------------------------------|
+| *Dired*      | Dired is the Emacs file manager, below are commands specific to dired (bound to SPC d)                                                               |
+|------------+------------------------------------------------------------------------------------------------------------------------------------------------------|
+| SPC D      | Asks for a directory and opens dired in that directory                                                                                               |
+| SPC d j    | Opens dired in the current working directory. This is faster than simply calling dired when you want to switch between files in the same directory   |
+| SPC d h    | Toggle visibility of dotfiles inside dired. In the dired section I set them to be hidden by default, and this toggles that behaviour                 |
+| SPC d f    | Find a file inside a directory. I usually prefer just using dired but this can prove useful in folders with a lot of "chaos"                         |
+|------------+------------------------------------------------------------------------------------------------------------------------------------------------------|
+| *Org-Roam*   | I use Org-roam for my notetaking. Its got a lot of useful commands. The letter r is reserved for it (SPC r for general and , r for org-specific)     |
+|------------+------------------------------------------------------------------------------------------------------------------------------------------------------|
+| SPC r f    | Find file inside the org-roam dir. If it doesn't exist create it. Since this system follows a non hierarchical sorting system, the org_roam          |
+|            | folder (which contains all these files) is cluttered. So this is the best way to find the file you are looking for. Also creates the file if it      |
+|            | doesn't find it in the system.                                                                                                                       |
+| SPC r b    | Choose a citation and add a note specific to it. Follows the "orb-template" variable                                                                 |
+|------------+------------------------------------------------------------------------------------------------------------------------------------------------------|
+| *Roam-Daily* | Org-roam has the ability to create daily notes for various subjects. SPC j commands create/open the various daily notes                              |
+|------------+------------------------------------------------------------------------------------------------------------------------------------------------------|
+| SPC j c t  | Capture a daily note for today                                                                                                                       |
+| SPC j f t  | Find the daily notes created for today (creates the file if it doesnt exist)                                                                         |
+| SPC j c d  | Open the calendar and prompt for a date. Then capture a daily note for the chosen date                                                               |
+| SPC j f d  | Open the calendar and prompt for a date. Then find the daily note for that date and show it. Creates it if it doesnt exist                           |
+|------------+------------------------------------------------------------------------------------------------------------------------------------------------------|
+| *Calfw*      | Calfw is a calendar for Emacs. Its pretty cool. It also has an interface with org-agenda todos and one with git commits in it (bound to SPC c)       |
+|------------+------------------------------------------------------------------------------------------------------------------------------------------------------|
+| SPC c b    | Open the classic calendar buffer of calfw                                                                                                            |
+| SPC c o    | Open the org-mode calendar view. This is a calfw buffer which shows org todo items. It can act as an agenda view as well, seems legit                |
+| SPC c g    | Open the git commit calendar view. This is a calfw buffer that also shows your most recent git commits. Its a cool view I reckon.                    |
+|------------+------------------------------------------------------------------------------------------------------------------------------------------------------|
+| *Spotify*    | There is a package called counsel-spotify which gives Emacs some good control over your spotify client using Ivy and Counsel for completions (SPC s) |
+|------------+------------------------------------------------------------------------------------------------------------------------------------------------------|
+| SPC s n    | Go to the next track in the playlist                                                                                                                 |
+| SPC s p    | Go to the previous track in the playlist                                                                                                             |
+| SPC s t    | Toggle play/pause state of the current song                                                                                                          |
+| *SPC s s*    | Spotify Search Commands                                                                                                                              |
+| SPC s s t  | Search spotify using Counsel for a track                                                                                                             |
+| SPC s s a  | Search spotify using Counsel for a specific artist                                                                                                   |
+| SPC s s p  | Search spotify using Counsel for a playlist                                                                                                          |
 
 #+BEGIN_SRC elisp
 
@@ -333,7 +347,15 @@ This is the "heart" of my config being all the keybindings I have set for my per
     "c g" '(cfw:git-open-calendar :which-key "Open calendar with git commit history")
     "r i" '(org-roam-jump-to-index :which-key "Go to the master index file")
     "l" '(linum-mode :which-key "Line numbers")
-    "e" 'ielm)
+    "e" 'ielm
+    "s" '(:ignore t :which-key "Counsel-spotify commands")
+    "s n" 'counsel-spotify-next
+    "s p" 'counsel-spotify-previous
+    "s t" 'counsel-spotify-toggle-play-pause
+    "s s" '(:ignore t :which-key "Search for")
+    "s s t" 'counsel-spotify-search-track
+    "s s p" 'counsel-spotify-search-playlist
+    "s s a" 'counsel-spotify-search-artist)
 
 #+END_SRC
 
