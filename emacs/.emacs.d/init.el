@@ -133,9 +133,11 @@
   "R" 'recover-this-file
   "m" 'magit
   "B" 'ivy-bibtex
-  "r" '(:ignore t :which-key "Org-Roam commands")
+  "r" '(:ignore t :which-key "Org Roam/Ref commands")
   "r f" 'org-roam-find-file
-  "r b" 'orb-insert
+  "r c" 'orb-insert
+  "r b" 'isbn-to-bibtex
+  "r a" 'doi-utils-add-bibtex-entry-from-doi
   "j" '(:ignore t :which-key "Daily notes")
   "j f" '(:ignore t :which-key "Find daily note")
   "j c" '(:ignore t :which-key "Capture daily note")
@@ -177,8 +179,11 @@
      "t v" 'org-tags-view
      "t t" 'org-set-tags-command
      "y" 'org-download-clipboard
-     "r" '(:ignore t :which-key "Org-Roam commands")
+     "r" '(:ignore t :which-key "Org Roam/Ref commands")
      "r i" 'org-roam-insert
+     "r c" 'org-ref-ivy-insert-cite-link
+     "r r" 'org-ref-ivy-insert-ref-link
+     "r l" 'org-ref-ivy-insert-label-link
      "h" '(org-cycle-hide-drawers :which-key "Hide properties drawers")
      "s" 'org-store-link
      "I" 'org-insert-link
@@ -449,6 +454,9 @@
       orb-file-field-extensions '("pdf"))
 
 (setq org-roam-dailies-directory "~/org_roam/daily")
+
+(use-package org-ref
+  :config (org-ref-ivy-cite-completion))
 
 (setq ivy-bibtex-default-action 'ivy-bibtex-insert-citation)
 
