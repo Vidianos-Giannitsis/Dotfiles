@@ -185,29 +185,19 @@ screens = [
 
 mouse = [
     Drag([mod], "Button1", lazy.window.set_position_floating(),
-         start=lazy.window.get_position()),
+	 start=lazy.window.get_position()),
     Drag([mod], "Button3", lazy.window.set_size_floating(),
-         start=lazy.window.get_size()),
+	 start=lazy.window.get_size()),
     Click([mod], "Button2", lazy.window.bring_to_front())
 ]
 
 floating_layout = layout.Floating(float_rules=[
     # Run the utility of `xprop` to see the wm class and name of an X client.
-    {'wmclass': 'confirm'},
-    {'wmclass': 'dialog'},
-    {'wmclass': 'download'},
-    {'wmclass': 'error'},
-    {'wmclass': 'file_progress'},
-    {'wmclass': 'notification'},
-    {'wmclass': 'splash'},
-    {'wmclass': 'toolbar'},
-    {'wmclass': 'confirmreset'},  # gitk
-    {'wmclass': 'makebranch'},  # gitk
-    {'wmclass': 'maketag'},  # gitk
-    {'wname': 'branchdialog'},  # gitk
-    {'wname': 'pinentry'},  # GPG key password entry
-    {'wmclass': 'ssh-askpass'},  # ssh-askpass
+    *layout.Floating.default_float_rules,
+    Match(title='Qalculate!'),  # qalculate-gtk
 ])
+
+focus_on_window_activation = "smart"
 
 dgroups_key_binder = None
 dgroups_app_rules = []  # type: List

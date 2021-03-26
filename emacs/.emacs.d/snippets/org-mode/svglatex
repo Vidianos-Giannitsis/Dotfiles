@@ -1,0 +1,12 @@
+# -*- mode: snippet -*-
+# name: svglatex
+# key: svg
+# --
+#+BEGIN_SRC latex
+\begin{figure}
+    \centering
+    \def\svgwidth{\columnwidth}
+    \scalebox{0.8}{\input{$1.pdf_tex}}
+    \caption{$2}
+\end{figure}
+#+END_SRC

@@ -4,18 +4,21 @@
 #+INFOJS_OPT: view:t toc:t ltoc:t mouse:underline buttons:0 path:http://thomasf.github.io/solarized-css/org-info.min.js
 #+HTML_HEAD: <link rel="stylesheet" type="text/css" href="http://thomasf.github.io/solarized-css/solarized-dark.min.css" />
 
-* COMMENT Things to do [4/4]
-  - [X] Learn to use footnotes in Emacs (org-footnote-action)
-  - [X] Make /italics/ and *bold* hide the slashes and asterisks so they look seamless in my org buffers
-  - [X] Play around with org-ref more but this time, for referencing diagrams and equations. My citation workflow could possibly use more, but its not truly lacking I would say so these are the focuses. For some ideas: Read the help menu in M-x org-ref-help. Possibly keybind org-ref-insert-ref-link and org-ref-insert-link. I should also figure out why org-ref-ivy doesn't work (or doesnt exist or something). If I cant find it I have no problem with the helm alternative though. *Probably done*
-  - [X] Set up counsel-spotify. I found this package looking at counsel packages and it basically allows me to control spotify from Emacs using counsel, which is truly a dream come true. I need to create an app here https://developer.spotify.com/dashboard/applications and then set the variables counsel-spotify-client-id and counsel-spotify-client-secret.
- 
-* COMMENT Long term ideas for things I can try [0/8]
+* COMMENT Project Management in Emacs
+   I want to start learning more things about managing my projects in Emacs. There are some built-in project features in Emacs and the projectile package helps a lot with project management. This isn't currently urgent but its usability is sure to arise soon. Being able to export a latex file which draws info from multiple other files inside the projects directory is awesome. Looking into the future, this is probably going to be the most efficient way to get to writing my diploma thesis and any other big project I want to manage.
+   
+   Obviously there are a lot of things to do here, but here is a non exhaustive list of things to play around with in the spirit of project management. The order isnt strict but its the order in which I predict I will do these
+   - [ ] Research the generals of project manangement and set important variables with the built-in features of project management in Emacs
+   - [ ] Do the same, but for projectile, which helps an already set up project infrastructure a lot
+   - [ ] Create a "playground" test project for trying out things
+   - [ ] Think of a use-case for project management which is going to be in the near future and make it happen
+   - [ ] Go deep in project management and start using the more advanced features Emacs provides
+   
+* COMMENT Long term ideas for things I can try [0/7]
 These are interesting packages to check in the long term. But nothing to hurry with, as I dont need any of them urgently.
  - [ ] ERC is an IRC client for Emacs. Elfeed is an RSS reader for emacs. EMMS is a music player for Emacs. I could get around to configuring them in case I start using them
  - [ ] There are a lot of eshell configuration options which I can try if I ever get around to using eshell.
  - [ ] There is a mastodon package for Emacs (I am assuming to run mastodon from inside Emacs). If I try out mastodon, I cant see why I shouldn't use this.
- - [ ] I could go down the rabbit hole of playing around with projectile. It looks interesting, but I am unsure if I want to spend my time on it. May move it to the long term ideas soon.
  - [ ] https://github.com/daedreth/UncleDavesEmacs/blob/master/config.org An emacs DE config. The things that interest me the most here are specific to an emacs DE, the rest are pretty similar to defaults. If I switch to EXWM (which I will definitely try at some point) this might be helpful
  - [ ] SPEAKING OF EXWM, I MUST TRY IT. But although its Emacs and I will be comfortable in it from the get go, its definitely going to be time consuming so I am stalling it for now cause I dont want to spend all my time there. 
  - [ ] Flyspell dictionary check. Togglable english and greek dictionaries
@@ -183,7 +186,6 @@ Enabling Evil Mode, my preffered editing mode for Emacs, with the evil-collectio
 
   #+END_SRC
 
-
 * Utilities
 General utilities that I want enabled when editing, or changes to the way emacs opens some programs.
 This enables:
@@ -231,7 +233,7 @@ This enables:
 #+END_SRC
 
 #+RESULTS:
-: bcdbb823795640248ff2c29eedadb800
+| apply | tab-jump-out | 1 |
 
 * Keybindings
 This is the "heart" of my config being all the keybindings I have set for my personal config. This is heavily customised as I personally am not a fun of the default Emacs keybindings as the control key is not in an ergonomic position to click (and personally I dont like the solution of making Caps-Lock act as control or something similar) and I also find some of them a little too chaotic. Below is a table explaining them. When the keys are seperated with a space, you need to press one after the other while when seperated with a "-" you press all the keys together. Space (SPC) is set as my global leader key so most of my general keybindings start with it. This is heavily influenced by the way spacemacs does it because I used spacemacs before this and I liked the idea. I manage these leader keys with the general.el package. I also have "," for org-mode specific commands (which can only be ran from an org mode buffer) as they are too many to have in the same leader key. I can also nest leader keys inside other leader keys, like how r is the leader key for org-roam commands both in the general keybindings and the org specific keybindings. For these nested leader keys, I have a keybinding with the leader key which is set to :ignore t so that I can have a :which-key argument which allows me to describe the leader key's function inside the which-key menu (which is awesome). I also have :which-key arguments for commands whose names I dont find very self explanatory (such as counsel-imenu, which is better described for me as jump to heading). 
@@ -625,7 +627,7 @@ Some settings I want for Emacs's Org-mode which I use extensively (like for writ
    + Making latex view my bibtex bibliography and export it properly. I took this from the org-ref docs as originally I wasnt getting proper bibliographic entries. I t works with this.
    + I tell org that its odt export should be converted to docx as if I am exporting to a rich text editors format, its for a collaboration and most people I know use that format. If its a personal project I always export to a latex pdf because it looks better.
    + Defining a function which supresses the confirmation message for tangling an org document's source code and hooking it to the after save hook in org-mode. If I understand it correctly, it should automatically tangle after saving, if thats possible, which is handy for things such as this configuration.
-   + I have a custom lambda function which I hook to the org-mode-hook (so it activates every time a new org mode buffer is opened) which automatically displays images I have added to the buffer, creates previews for latex code in the document and toggles truncate-lines so that I can see the entire text when opening the buffer (really can't understand why its not nil by default in org documents)
+   + I have a custom lambda function which I hook to the org-mode-hook (so it activates every time a new org mode buffer is opened) which automatically displays images I have added to the buffer, creates previews for latex code in the document, toggles truncate-lines so that I can see the entire text when opening the buffer (really can't understand why its not nil by default in org documents) and activates tab-jump-out-mode so I can tab out of brackets/quotes etc. 
      
 #+BEGIN_SRC elisp
   (add-to-list 'org-file-apps '("\\.pdf\\'" . emacs))
@@ -644,12 +646,13 @@ Some settings I want for Emacs's Org-mode which I use extensively (like for writ
   (add-hook 'org-mode-hook '(lambda ()
 			      (toggle-truncate-lines)
 			      (org-latex-preview)
-			      (org-toggle-inline-images)))
+			      (org-toggle-inline-images)
+			      (tab-jump-out-mode)))
 
 #+END_SRC
 
 #+RESULTS:
-| ad/org-initialise | org-truncate-latex | (lambda nil (add-hook 'after-save-hook #'org-babel-tangle-dont-ask 'run-at-end 'only-in-org-mode)) | turn-on-org-cdlatex | (lambda nil (org-bullets-mode 1)) | evil-org-mode | (closure (org--rds reftex-docstruct-symbol org-element-greater-elements org-clock-history org-agenda-current-date org-with-time org-defdecode org-def org-read-date-inactive org-ans2 org-ans1 org-columns-current-fmt-compiled org-clock-current-task org-clock-effort org-agenda-skip-function org-agenda-skip-comment-trees org-agenda-archives-mode org-end-time-was-given org-time-was-given org-log-note-extra org-log-note-purpose org-log-post-message org-last-inserted-timestamp org-last-changed-timestamp org-entry-property-inherited-from org-blocked-by-checkboxes org-state org-agenda-headline-snapshot-before-repeat org-agenda-start-on-weekday org-agenda-buffer-tmp-name org-priority-regexp org-mode-abbrev-table org-mode-syntax-table buffer-face-mode-face org-tbl-menu org-org-menu org-struct-menu org-entities org-last-state org-id-track-globally org-clock-start-time texmathp-why remember-data-file org-agenda-tags-todo-honor-ignore-options iswitchb-temp-buflist calc-embedded-open-mode calc-embedded-open-formula calc-embedded-close-formula align-mode-rules-list org-emphasis-alist org-emphasis-regexp-components org-export-registered-backends org-modules org-babel-load-languages org-id-overriding-file-name org-indent-indentation-per-level org-element-paragraph-separate ffap-url-regexp org-inlinetask-min-level t) nil (add-hook 'change-major-mode-hook 'org-show-all 'append 'local)) | #[0 \300\301\302\303\304$\207 [add-hook change-major-mode-hook org-babel-show-result-all append local] 5] | org-babel-result-hide-spec | org-babel-hide-all-hashes | (closure (org-agenda-skip-regexp org-table1-hline-regexp org-table-tab-recognizes-table.el org-table-dataline-regexp org-table-any-border-regexp org-agenda-restriction-lock-overlay org-agenda-overriding-restriction org-agenda-diary-file org-complex-heading-regexp t) nil (setq imenu-create-index-function 'org-imenu-get-tree)) |
+| org-ref-org-menu | (lambda nil (toggle-truncate-lines) (org-latex-preview) (org-toggle-inline-images)) | (lambda nil (add-hook 'after-save-hook #'(lambda nil (let ((org-confirm-babel-evaluate nil)) (org-babel-tangle)))) 'run-at-end 'only-in-org-mode) | turn-on-org-cdlatex | (lambda nil (org-superstar-mode) (org-superstar-configure-like-org-bullets)) | evil-org-mode | #[0 \300\301\302\303\304$\207 [add-hook change-major-mode-hook org-show-all append local] 5] | #[0 \300\301\302\303\304$\207 [add-hook change-major-mode-hook org-babel-show-result-all append local] 5] | org-babel-result-hide-spec | org-babel-hide-all-hashes | #[0 \301\211\207 [imenu-create-index-function org-imenu-get-tree] 2] | org-ref-setup-label-finders |
 	    
 ** Org Noter
    
@@ -878,7 +881,7 @@ More languages to evaluate with org-babel (by default, only elisp is evaluated).
      (setq org-roam-capture-templates
 	   '(("d" "default" plain (function org-roam-capture--get-point)
 	     "%?"
-	     :file-name "%<%d-%m-%Y %H:%M>-${slug}"
+	     :file-name "%<%d-%m-%Y_%H:%M>-${slug}"
 	     :unnarrowed t
 	     :head "#+title: ${title}\nglatex\n
      - tags ::  ")))
@@ -963,12 +966,16 @@ More languages to evaluate with org-babel (by default, only elisp is evaluated).
 	    (setq command (concat "/usr/bin/inkscape -D --export-latex --export-type=\"pdf\" " dirname "/" "*.svg"))
 	    (shell-command command))))
 
-    ;(add-to-list 'org-export-before-processing-hook #'org-svg-pdf-export)
+    (defun ad/svglatex (file_name)
+      "Prompts for a file name (without any file prefix), takes an svg with that file name and exports the file as a latex compatible pdf file"
+      (interactive "MEnter svg file name: ")
+      (setq export (concat "inkscape -D " file_name".svg -o " file_name".pdf --export-latex"))
+      (shell-command export))
 
   #+END_SRC
 
   #+RESULTS:
-  : org-svg-pdf-export
+  : ad/svglatex
  
 * Company
   Company is a minor mode, which I enable globally, which allows for autocompletions. This is useful when programming, or writing latex for completing what you want, but also can speed up the writing of long words. The lambda I add to the company-mode-hook adds latex autocompletions and allows them to be used anywhere. It also makes the minimum prefix 2 letters long, which is better than the default 3 imo, especially when auto completing latex. It also sets up company to read and give autocompletions for citations from my master .bib file in Zotero. I usually enter them with the ivy-bibtex package (my current default action is add citation there) but this is worth a try. 

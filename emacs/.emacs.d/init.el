@@ -315,7 +315,8 @@
 (add-hook 'org-mode-hook '(lambda ()
 			    (toggle-truncate-lines)
 			    (org-latex-preview)
-			    (org-toggle-inline-images)))
+			    (org-toggle-inline-images)
+			    (tab-jump-out-mode)))
 
 (setq org-noter-always-create-frame nil)
 
@@ -484,7 +485,7 @@
 (setq org-roam-capture-templates
       '(("d" "default" plain (function org-roam-capture--get-point)
 	"%?"
-	:file-name "%<%d-%m-%Y %H:%M>-${slug}"
+	:file-name "%<%d-%m-%Y_%H:%M>-${slug}"
 	:unnarrowed t
 	:head "#+title: ${title}\nglatex\n
 - tags ::  ")))
@@ -548,7 +549,11 @@
 	(setq command (concat "/usr/bin/inkscape -D --export-latex --export-type=\"pdf\" " dirname "/" "*.svg"))
 	(shell-command command))))
 
-;(add-to-list 'org-export-before-processing-hook #'org-svg-pdf-export)
+(defun ad/svglatex (file_name)
+  "Prompts for a file name (without any file prefix), takes an svg with that file name and exports the file as a latex compatible pdf file"
+  (interactive "MEnter svg file name: ")
+  (setq export (concat "inkscape -D " file_name".svg -o " file_name".pdf --export-latex"))
+  (shell-command export))
 
 (add-hook 'after-init-hook 'global-company-mode)
 (add-hook 'company-mode-hook '(lambda ()

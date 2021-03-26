@@ -32,7 +32,7 @@ var images = [
   "1450074394745.jpg"
 ];
 var searchs = [
-  ["!g", "https://www.google.ch/#q="],
+  ["!g", "https://www.google.com/search?q="],
   ["!y", "https://www.youtube.com/results?search_query="],
   ["!a", "https://wiki.archlinux.org/index.php?search="],
   ["!r", "https://www.reddit.com/search/?q="],
@@ -96,11 +96,12 @@ var favorites = [
   ],
   [ "Other Games",
     [
-      ["LolChess Main", "https://lolchess.gg/profile/eune/auroradraco", "lcm"],
+      ["LolChess Account", "https://lolchess.gg/profile/eune/auroradraco", "lcm"],
       ["Lutris", "https://lutris.net/", "lt"],
       ["Proton", "https://www.protondb.com/", "pr"],
       ["Dod", "https://www.dod.gr", "d"],
-      ["LolChess Smurf", "https://lolchess.gg/profile/eune/spiritualbanana", "lcs"]
+      ["DuelingBook", "https://www.duelingbook.com/", "db"],
+      ["Pack Opener", "https://db.ygoprodeck.com/pack-open/", "po"]
     ]
   ]
 ];
