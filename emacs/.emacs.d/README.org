@@ -30,7 +30,8 @@ These are interesting packages to check in the long term. But nothing to hurry w
 
 * About this config
 
-Emacs has truly become that one tool that has molded exceptionally to my workflow, that I can no longer live without it. I use it for most of my tasks at this point. This is a vanilla GNU Emacs install with a ton of configurations. I initially used Spacemacs, but the mentality of vanilla fits more with me. Its a blank slate on which I can do anything I want. Spacemacs felt like a different person's vision so I wanted to move to my own Emacs config so I can truly feel its mine. I feel I have succeeded at this in making it truly personal. Its definitely not the best config I have seen, nor is it for everyone, but for me, it does everything I want. And its truly incredible at doing all that. I can not imagine a better workflow than this. Thats why although its far from perfect, for what I use it, I can truly consider it a masterpiece in its own right as no other program can get even close to this. 
+Emacs... Emacs, its truly an incredible program. Its the most extensible program I have seen for sure. It allows you to change basically everything, until you have an environment which suits you perfectly. I use it for most of my tasks at this point. This is a vanilla GNU Emacs install (actually you can't really call it vanilla Emacs at this point, I think its got more things than some emacs distros like doom) with a ton of configurations. I initially used Spacemacs, but the mentality of vanilla fits more with me. Its a blank slate on which I can do anything I want.
+Spacemacs felt like a different person's vision so I wanted to move to my own Emacs config so I can truly feel its mine. I feel I have succeeded at this in making it truly personal. Its definitely not the best config I have seen, nor is it for everyone, but for me, it does everything I want. And its truly incredible at doing all that. I can not imagine a better workflow than this. Thats why although its far from perfect, for what I use it, I just adore it. 
 
 I have drawn inspiration from a lot of other init.el's but the most apparent one is the spacemacs keybindings. I was a spacemacs user for a few months before deciding to start using this personal config for Emacs. I found its keybindings very ergonomic and although most things arent exactly the way they are done in spacemacs, the inspiration is apparent. For example the Space and , keys are leader keys which I use a lot (space for general commands and , for mode specific, currently only org though).
 
@@ -244,6 +245,9 @@ This enables:
 
   #+END_SRC
   
+** COMMENT For my own convenience, a link to the keybindings.org file
+   The link above points to keybindings.org in git. For my convenience, while editing this file I want a clickable link to my keybindings file, outside of the command I have for it. [[~/.emacs.d/libs/keybindings.org]]
+   
 * Dired
   Dired is Emacs's built in file manager (stands for directory editor) As dired is my Emacs startup screen as mentioned before, I have some customisations for it which are pretty neat.
   I have configured it to include:
@@ -617,7 +621,7 @@ More languages to evaluate with org-babel (by default, only elisp is evaluated).
 	     "%?"
 	     :file-name "%<%d-%m-%Y_%H:%M>-${slug}"
 	     :unnarrowed t
-	     :head "#+title: ${title}\nglatex\n
+	     :head "#+title: ${title}\nglatex_roam\n
      - tags ::  ")))
 
      (setq org-roam-dailies-capture-templates
@@ -661,6 +665,35 @@ More languages to evaluate with org-babel (by default, only elisp is evaluated).
    | w    | workout                          | entry | #'org-roam-capture--get-point | * %? | :file-name | daily/%<%Y-%m-%d> | :head | #+title: Fleeting notes for %<%Y-%m-%d> |
    | :olp | (Workout Regimes)                |       |                               |      |            |                   |       |                                         |
 
+* Skeletons
+  Skeletons are a very neat feature of Emacs. Think of a snippet and a template, now combine them and you have a skeleton. A skeleton is bound to a key which when pressed enters a piece of text. This is helpful when initialising a file whose format is certain. I currently use this for initialising my lab reports which have a rather standard format all the time.
+
+  #+BEGIN_SRC elisp
+
+    (define-skeleton lab-skeleton
+      "A skeleton which I use for initialising my lab reports which have standard formatting"
+      ""
+      "#+TITLE:"str"\n"
+      "glatex\n"
+      "ab\n\n"
+
+      "* Εισαγωγή\n\n"
+
+      "* Πειραματικό Μέρος\n\n"
+
+      "* Αποτελέσματα - Συζήτηση\n\n"
+
+      "* Συμπεράσματα\n\n"
+
+      "* Βιβλιογραφία\n"
+      "bibliography:~/org_roam/zotero_library.bib\n"
+      "bibliographystyle:unsrt")
+
+  #+END_SRC
+
+  #+RESULTS:
+  : lab-skeleton
+  
 * Inkscape x Emacs
   This ection is about integration of Emacs's org-mode with Inkscape. Essentially the first function, opens Inkscape, lets you draw whatever you desire and then creates a latex code area with the figure, ready to be imported. But, since saved the file as a .svg we need the second function, which exports the .svg to pdf so it can be imported properly to the Latex document Org exports.
 

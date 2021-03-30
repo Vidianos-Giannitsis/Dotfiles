@@ -88,7 +88,8 @@
      "j" '(org-tree-slide-move-next-tree :which-key "Next Slide")
      "k" '(org-tree-slide-move-previous-tree :which-key "Previous Slide")
      "p" '(org-plot/gnuplot :which-key "Plot table data")
-     "f" 'org-footnote-action)
+     "f" 'org-footnote-action
+     "S" '(lab-skeleton :which-key "Insert my lab report template"))
 
 (general-define-key
  :states 'normal
@@ -127,3 +128,5 @@
  :keymaps 'override
  "u" 'undo-tree-undo
  "C-r" 'undo-tree-redo)
+
+(provide 'keybindings)

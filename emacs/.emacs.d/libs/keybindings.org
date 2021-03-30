@@ -158,6 +158,7 @@
 | , p        | Activate org-tree-slide-mode an org minor mode which enables you to do presentations from inside org                                                 |
 | , j        | In org-tree-slide go to the next "slide" meaning org-heading                                                                                         |
 | , k        | Same as above but for the previous "slide"                                                                                                           |
+| , S        | Insert my lab skeleton. When I play around with this feature more, this will become a leader key to insert all my skeletons. But I only have one now |
 |------------+------------------------------------------------------------------------------------------------------------------------------------------------------|
 | *To-Dos*     | You can do a lot with to-do items in Org. These are the commands I have keybound which are specific to to-do management. They are under , t          |
 |------------+------------------------------------------------------------------------------------------------------------------------------------------------------|
@@ -210,7 +211,8 @@
        "j" '(org-tree-slide-move-next-tree :which-key "Next Slide")
        "k" '(org-tree-slide-move-previous-tree :which-key "Previous Slide")
        "p" '(org-plot/gnuplot :which-key "Plot table data")
-       "f" 'org-footnote-action)
+       "f" 'org-footnote-action
+       "S" '(lab-skeleton :which-key "Insert my lab report template"))
 
   (general-define-key
    :states 'normal
@@ -282,3 +284,9 @@
 
 #+END_SRC
 
+** Providing the package to be loade in init.el
+   #+BEGIN_SRC elisp
+
+     (provide 'keybindings)
+
+   #+END_SRC

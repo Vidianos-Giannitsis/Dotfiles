@@ -360,7 +360,7 @@
 	"%?"
 	:file-name "%<%d-%m-%Y_%H:%M>-${slug}"
 	:unnarrowed t
-	:head "#+title: ${title}\nglatex\n
+	:head "#+title: ${title}\nglatex_roam\n
 - tags ::  ")))
 
 (setq org-roam-dailies-capture-templates
@@ -391,6 +391,25 @@
 	 :file-name "daily/%<%Y-%m-%d>"
 	 :head "#+title: Fleeting notes for %<%Y-%m-%d>\n"
 	 :olp ("Workout Regimes"))))
+
+(define-skeleton lab-skeleton
+  "A skeleton which I use for initialising my lab reports which have standard formatting"
+  ""
+  "#+TITLE:"str"\n"
+  "glatex\n"
+  "ab\n\n"
+
+  "* Εισαγωγή\n\n"
+
+  "* Πειραματικό Μέρος\n\n"
+
+  "* Αποτελέσματα - Συζήτηση\n\n"
+
+  "* Συμπεράσματα\n\n"
+
+  "* Βιβλιογραφία\n"
+  "bibliography:~/org_roam/zotero_library.bib\n"
+  "bibliographystyle:unsrt")
 
 (defun org-inkscape-img ()
     (interactive "P")
