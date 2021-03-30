@@ -236,280 +236,14 @@ This enables:
 | apply | tab-jump-out | 1 |
 
 * Keybindings
-This is the "heart" of my config being all the keybindings I have set for my personal config. This is heavily customised as I personally am not a fun of the default Emacs keybindings as the control key is not in an ergonomic position to click (and personally I dont like the solution of making Caps-Lock act as control or something similar) and I also find some of them a little too chaotic. Below is a table explaining them. When the keys are seperated with a space, you need to press one after the other while when seperated with a "-" you press all the keys together. Space (SPC) is set as my global leader key so most of my general keybindings start with it. This is heavily influenced by the way spacemacs does it because I used spacemacs before this and I liked the idea. I manage these leader keys with the general.el package. I also have "," for org-mode specific commands (which can only be ran from an org mode buffer) as they are too many to have in the same leader key. I can also nest leader keys inside other leader keys, like how r is the leader key for org-roam commands both in the general keybindings and the org specific keybindings. For these nested leader keys, I have a keybinding with the leader key which is set to :ignore t so that I can have a :which-key argument which allows me to describe the leader key's function inside the which-key menu (which is awesome). I also have :which-key arguments for commands whose names I dont find very self explanatory (such as counsel-imenu, which is better described for me as jump to heading). 
+  This is my absolute favourite section of this entire config. But its a very big part of my config and I considered it more prudent to include it as its own file. You can find keybindings.org in this directory, which is the literate configuration of my keybindings and inside the libs folder (which contains all the external elisp "libraries" I have installed manually) you can find the keybindings.el file which I require in this section of the config to load. It acts as if it was an external package for Emacs which helps make this config more tidy. 
 
-** Global keybindings, defined with the space leader key
-| Keybinding | Action                                                                                                                                               |
-|------------+------------------------------------------------------------------------------------------------------------------------------------------------------|
-| SPC !      | Create a prompt for inputing a single shell command. This is easier than opening a terminal emulator for quick tasks                                 |
-| SPC p      | Opens the package install prompt                                                                                                                     |
-| SPC o      | Starts the octave client. I use octave a lot for my lessons so this is a must for me                                                                 |
-| SPC H      | Create a horizontal split inside Emacs                                                                                                               |
-| SPC V      | Create a vertical split inside Emacs                                                                                                                 |
-| SPC m      | Open magit, the emacs git client                                                                                                                     |
-| SPC Enter  | Opens vterm, my preffered Emacs terminal, for when needed                                                                                            |
-| SPC t      | Toggles Emacs's default behaviour concerning what to do when it runs out of space in a line. I always want it to wrap around to the next line and    |
-|            | continue the text there, so I need to toggle this in a some buffers (such as Org)                                                                    |
-| SPC T      | Executes org-babel-tangle, which is the command used to tangle source code blocks to your config file (the way you make literate config files)       |
-| SPC b      | Open the counsel-switch-buffer menu which allows switching buffers with relative ease (also has a preview of the buffer which is a neat feature)     |
-| SPC g      | Go to a specific page inside a pdf                                                                                                                   |
-| SPC R      | If Emacs crashes for some reason, this command restores the backup Emacs kept for this file (almost always results to no data-loss)                  |
-| SPC a      | Opens org-agenda. Technically an org command, but I want to be able to use it globally and not only in Emacs                                         |
-| SPC C      | Activates the calc menu (originally C-x *). The two options I use from here are "c" for the classic calc major mode and "e" for embedded mode        |
-| SPC w      | Query WolframAlpha from inside Emacs. Wolfram Alpha is a website which helps with advanced mathematical calculations. Its very helpful to have       |
-| SPC B      | Open the Ivy Bibtex menu to open an article saved to my Zotero database                                                                              |
-| SPC h      | Jump to heading with Counsel                                                                                                                         |
-| SPC l      | Activates linum mode which turns on line numbers                                                                                                     |
-| SPC e      | Opens an ielm buffer. ielm is for interactively running elisp in the current emacs session. It can be very helpful                                   |
-|------------+------------------------------------------------------------------------------------------------------------------------------------------------------|
-| *Dired*      | Dired is the Emacs file manager, below are commands specific to dired (bound to SPC d)                                                               |
-|------------+------------------------------------------------------------------------------------------------------------------------------------------------------|
-| SPC D      | Asks for a directory and opens dired in that directory                                                                                               |
-| SPC d j    | Opens dired in the current working directory. This is faster than simply calling dired when you want to switch between files in the same directory   |
-| SPC d h    | Toggle visibility of dotfiles inside dired. In the dired section I set them to be hidden by default, and this toggles that behaviour                 |
-| SPC d f    | Find a file inside a directory. I usually prefer just using dired but this can prove useful in folders with a lot of "chaos"                         |
-|------------+------------------------------------------------------------------------------------------------------------------------------------------------------|
-| *Org-Roam*   | I use Org-roam for my notetaking. Its got a lot of useful commands. The letter r is reserved for it (SPC r for general and , r for org-specific)     |
-| *References* | Besides Org-roam, r makes a lot of sense as the leader key for references. The two are definitely related so this isn't a problem imo                |
-|------------+------------------------------------------------------------------------------------------------------------------------------------------------------|
-| SPC r f    | Find file inside the org-roam dir. If it doesn't exist create it. Since this system follows a non hierarchical sorting system, the org_roam          |
-|            | folder (which contains all these files) is cluttered. So this is the best way to find the file you are looking for. Also creates the file if it      |
-|            | doesn't find it in the system.                                                                                                                       |
-| SPC r c    | Choose a citation and add a note specific to it. Follows the "orb-template" variable                                                                 |
-| SPC r i    | Jump to the "master" index file specified in Org-Roam                                                                                                |
-| SPC r b    | Query for a book's ISBN and insert a bibtex entry matching that book in a .bib file of your choice                                                   |
-| SPC r a    | Query for an article's DOI and insert a bibtex entry matching that article in a .bib file of your choice                                             |
-|------------+------------------------------------------------------------------------------------------------------------------------------------------------------|
-| *Roam-Daily* | Org-roam has the ability to create daily notes for various subjects. SPC j commands create/open the various daily notes                              |
-|------------+------------------------------------------------------------------------------------------------------------------------------------------------------|
-| SPC j c t  | Capture a daily note for today                                                                                                                       |
-| SPC j f t  | Find the daily notes created for today (creates the file if it doesnt exist)                                                                         |
-| SPC j c d  | Open the calendar and prompt for a date. Then capture a daily note for the chosen date                                                               |
-| SPC j f d  | Open the calendar and prompt for a date. Then find the daily note for that date and show it. Creates it if it doesnt exist                           |
-|------------+------------------------------------------------------------------------------------------------------------------------------------------------------|
-| *Calfw*      | Calfw is a calendar for Emacs. Its pretty cool. It also has an interface with org-agenda todos and one with git commits in it (bound to SPC c)       |
-|------------+------------------------------------------------------------------------------------------------------------------------------------------------------|
-| SPC c b    | Open the classic calendar buffer of calfw                                                                                                            |
-| SPC c o    | Open the org-mode calendar view. This is a calfw buffer which shows org todo items. It can act as an agenda view as well, seems legit                |
-| SPC c g    | Open the git commit calendar view. This is a calfw buffer that also shows your most recent git commits. Its a cool view I reckon.                    |
-|------------+------------------------------------------------------------------------------------------------------------------------------------------------------|
-| *Spotify*    | There is a package called counsel-spotify which gives Emacs some good control over your spotify client using Ivy and Counsel for completions (SPC s) |
-|------------+------------------------------------------------------------------------------------------------------------------------------------------------------|
-| SPC s n    | Go to the next track in the playlist                                                                                                                 |
-| SPC s p    | Go to the previous track in the playlist                                                                                                             |
-| SPC s t    | Toggle play/pause state of the current song                                                                                                          |
-| *SPC s s*    | Spotify Search Commands                                                                                                                              |
-| SPC s s t  | Search spotify using Counsel for a track                                                                                                             |
-| SPC s s a  | Search spotify using Counsel for a specific artist                                                                                                   |
-| SPC s s p  | Search spotify using Counsel for a playlist                                                                                                          |
+  #+BEGIN_SRC elisp
 
-#+BEGIN_SRC elisp
+    (require 'keybindings)
 
-  (general-create-definer my-leader-def
-			  :prefix "SPC")
-
-  (my-leader-def
-   :states 'normal
-   :keymaps 'override
-    "!" 'shell-command
-    "p" 'package-install
-    "o" '(inferior-octave :which-key "octave")
-    "D" 'dired
-    "d" '(:ignore t :which-key "Dired functions")
-    "d f" 'counsel-find-file
-    "d h" 'dired-hide-dotfiles-mode
-    "d j" '(dired-jump :which-key "Open dired in the current buffer's directory")
-    "t" 'toggle-truncate-lines
-    "T" 'org-babel-tangle
-    "RET" 'vterm-toggle
-    "<C-return>" 'vterm 
-    "b" 'counsel-switch-buffer
-    "a" 'org-agenda
-    "g" 'pdf-view-goto-page
-    "H" 'split-window-horizontally
-    "V" 'split-window-vertically
-    "C" '(calc-dispatch :which-key "Open the M-x calc menu")
-    "w" 'wolfram-alpha
-    "R" 'recover-this-file
-    "m" 'magit
-    "B" 'ivy-bibtex
-    "r" '(:ignore t :which-key "Org Roam/Ref commands")
-    "r f" 'org-roam-find-file
-    "r c" 'orb-insert
-    "r b" 'isbn-to-bibtex
-    "r a" 'doi-utils-add-bibtex-entry-from-doi
-    "j" '(:ignore t :which-key "Daily notes")
-    "j f" '(:ignore t :which-key "Find daily note")
-    "j c" '(:ignore t :which-key "Capture daily note")
-    "j c t" 'org-roam-dailies-capture-today
-    "j f t" 'org-roam-dailies-find-today
-    "j c d" 'org-roam-dailies-capture-date
-    "j f d" 'org-roam-dailies-find-date
-    "h" '(counsel-imenu :which-key "Jump to heading")
-    "c" '(:ignore t :which-key "Calendar Commands")
-    "c b" 'cfw:open-calendar-buffer
-    "c o" '(cfw:open-org-calendar :which-key "Open calendar with scheduled to-dos")
-    "c g" '(cfw:git-open-calendar :which-key "Open calendar with git commit history")
-    "r i" '(org-roam-jump-to-index :which-key "Go to the master index file")
-    "l" '(linum-mode :which-key "Line numbers")
-    "e" 'ielm
-    "s" '(:ignore t :which-key "Counsel-spotify commands")
-    "s n" 'counsel-spotify-next
-    "s p" 'counsel-spotify-previous
-    "s t" 'counsel-spotify-toggle-play-pause
-    "s s" '(:ignore t :which-key "Search for")
-    "s s t" 'counsel-spotify-search-track
-    "s s p" 'counsel-spotify-search-playlist
-    "s s a" 'counsel-spotify-search-artist)
-
-#+END_SRC
-
-#+RESULTS:
-
-** Org mode keybindings
-| Keybinding | Action                                                                                                                                               |
-|------------+------------------------------------------------------------------------------------------------------------------------------------------------------|
-| , l        | Makes latex fragments inside org, render as pictures showing the equation. Helps ensure I havent typed something wrong without the need to export.   |
-|            | Its also great if you prefer to view a document from the org buffer and not a pdf (for the various utilities you have inside org)                    |
-| , n        | Opens org-noter, my favourite tool for notetaking from pdfs                                                                                          |
-| , e        | Org export dispatch command for exporting to pdf or html.                                                                                            |
-| , y        | Pastes a photograph from my clipboard, very helptful to speed up adding photos to my documents                                                       |
-| , h        | Invoke a custom command which hides the properties of org headings. Check [[*Org-agenda and TODOs][Org-agenda and TODOs]] for more details                                      |
-| , s        | Store a link from an org buffer to insert to another buffer. I mainly use this with Roam to add links to headings                                    |
-| , I        | Insert a link stored from org-store-link. Again used mostly with Roam                                                                                |
-| , S        | Custom command to export .svg to .pdf files. This is a prerequisite for the Inkscape integration with Emacs to work. This is better explained in     |
-|            | the Inkscape x Emacs section of the config, which is specifically made for this functionality                                                        |
-| , i        | Toggle whether images on an org document are visible or not.                                                                                         |
-| , p        | Activate org-tree-slide-mode an org minor mode which enables you to do presentations from inside org                                                 |
-| , j        | In org-tree-slide go to the next "slide" meaning org-heading                                                                                         |
-| , k        | Same as above but for the previous "slide"                                                                                                           |
-|------------+------------------------------------------------------------------------------------------------------------------------------------------------------|
-| *To-Dos*     | You can do a lot with to-do items in Org. These are the commands I have keybound which are specific to to-do management. They are under , t          |
-|------------+------------------------------------------------------------------------------------------------------------------------------------------------------|
-| , t p      | Changes a tasks priority                                                                                                                             |
-| , t c      | Changes the todo state of an item                                                                                                                    |
-| , t t      | Changes a tasks tags                                                                                                                                 |
-| , t v      | Search for all tasks with a specific tag                                                                                                             |
-| , t m      | Activates my custom make-todo function which sets todo state, effort, tags and priority for a task. I prefer it for todo initialization              |
-| , t s      | Schedules a todo task to a specific date and time                                                                                                    |
-|------------+------------------------------------------------------------------------------------------------------------------------------------------------------|
-| *Org-Roam*   | I use Org-roam for my notetaking. Its got a lot of useful commands. The letter r is reserved for it (SPC r for general and , r for org-specific)     |
-| *Org-Ref*    | Since the only , r command I currently need for roam is roam-insert I decided to add Org-ref commands to r as well. It makes sense                   |
-|------------+------------------------------------------------------------------------------------------------------------------------------------------------------|
-| , r i      | Insert a backlink to connect to notes together in org-roam                                                                                           |
-| Grave      | Open the Org-Roam sidebar. The grave key is the one under Escape. Its an "underused" key, but its in a convenient position imo so I like it for this |
-|            | kind of utility.                                                                                                                                     |
-| , r c      | Insert a citation link with org-ref using ivy                                                                                                        |
-| , r r      | Insert a reference link with org-ref                                                                                                                 |
-| , r l      | Insert a label link with org-ref                                                                                                                     |
-
-#+BEGIN_SRC elisp
-  (general-create-definer org-leader-def
-	:prefix ",")
-
-      (org-leader-def
-       :states 'normal
-       :keymaps 'org-mode-map
-       "l" 'org-latex-preview
-       "n" 'org-noter
-       "e" 'org-export-dispatch
-       "t" '(:ignore t :which-key "To-do management")
-       "t s" 'org-schedule
-       "t c" 'org-todo
-       "t m" '(ad/org-make-todo :which-key "Initialise to-do item")
-       "t p" 'org-priority
-       "t v" 'org-tags-view
-       "t t" 'org-set-tags-command
-       "y" 'org-download-clipboard
-       "r" '(:ignore t :which-key "Org Roam/Ref commands")
-       "r i" 'org-roam-insert
-       "r c" 'org-ref-ivy-insert-cite-link
-       "r r" 'org-ref-ivy-insert-ref-link
-       "r l" 'org-ref-ivy-insert-label-link
-       "h" '(org-cycle-hide-drawers :which-key "Hide properties drawers")
-       "s" 'org-store-link
-       "I" 'org-insert-link
-       "S" '(ad/org-svg-pdf-export :which-key "Export svg files to pdf")
-       "i" 'org-toggle-inline-images
-       "p" 'org-tree-slide-mode
-       "j" '(org-tree-slide-move-next-tree :which-key "Next Slide")
-       "k" '(org-tree-slide-move-previous-tree :which-key "Previous Slide")
-       "p" '(org-plot/gnuplot :which-key "Plot table data")
-       "f" 'org-footnote-action)
-
-  (general-define-key
-   :states 'normal
-   :keymaps 'org-mode-map
-   "`" 'org-roam)
-
-#+END_SRC
-
-#+RESULTS:
-
-** Other keybindings, either mode specific or general, that function without the space key
-| Keybinding | Action                                                                                                                                             |
-|------------+----------------------------------------------------------------------------------------------------------------------------------------------------|
-| C-h keys   | I change the primary C-h keybindings to their alternatives from the helpful package. They have more info than the default help menus (which are    |
-|            | already incredible) so they are excellent for function/variable documentation without needing to look online.                                      |
-| C-c C-d    | Lookup the current symbol at point. Not exactly sure of its use but its recommended in the helpful github repo so I added it                       |
-| M-d        | Open my Emacs config. This is very useful for when hacking on Emacs so I can quickly go to my configuration file whenever I want to do any kind of |
-|            | hacking on my config without the need to find the full path to this file.                                                                          |
-| M-C-r      | Simply restarts Emacs. Always good to have a restart function                                                                                      |
-| M-m        | Query for a man page. Man pages are essential for app documentation for many Linux programs so it's cool to be able to query for one in emacs      |
-| M-b        | Open Ebuku, the buku bookmark manager's Emacs major mode from where I can open my bookmarks from inside Emacs                                      |
-|------------+----------------------------------------------------------------------------------------------------------------------------------------------------|
-| *Pdf View* | PDF View is the best Emacs pdf reader. I set some keybindings specific to it                                                                       |
-|------------+----------------------------------------------------------------------------------------------------------------------------------------------------|
-| c          | In pdf-view mode. Kill the buffer. Sometimes, pdfs dont properly refresh unless killed, so it can be helpful to have this.                         |
-| i          | If pdf-view is in an org-noter buffer, this allows for a note to be added in the matching org buffer                                               |
-| a t        | Add a text annotation to a pdf directly                                                                                                            |
-| a m        | Add a markup annotation to a pdf directly                                                                                                          |
-|------------+----------------------------------------------------------------------------------------------------------------------------------------------------|
-| *Dired*    | Some dired mode keybindings which I consider should be defaults                                                                                    |
-|------------+----------------------------------------------------------------------------------------------------------------------------------------------------|
-| C-+        | Creates a new empty file inside the current working directory                                                                                      |
-| h          | Go up one directory in Dired                                                                                                                       |
-| l          | Jump one directory forward in Dired                                                                                                                |
-
-#+BEGIN_SRC elisp
-      (general-define-key
-   :states 'normal
-   :keymaps 'pdf-view-mode-map
-   "i" 'org-noter-insert-note
-   "c" 'kill-current-buffer
-   "a" '(:ignore t :which-key "Add annotation")
-   "a t" 'pdf-annot-add-text-annotation
-   "a m" 'pdf-annot-add-markup-annotation)
-
-    (global-set-key (kbd "M-b") 'ebuku)
-    (global-set-key (kbd "M-C-r") 'restart-emacs)
-    (global-set-key (kbd "M-d") (lambda() (interactive)(find-file "~/.emacs.d/README.org")))
-    (global-set-key (kbd "M-m") 'man)
-
-  (general-define-key
-   :states 'normal
-   :keymaps 'dired-mode-map
-   "C-+" 'dired-create-empty-file
-   "h" 'dired-up-directory
-   "l" 'dired-find-file)
-
-  (global-set-key (kbd "C-h f") #'helpful-callable)
-  (global-set-key (kbd "C-h v") #'helpful-variable)
-  (global-set-key (kbd "C-h k") #'helpful-key)
-  (global-set-key (kbd "C-c C-d") #'helpful-at-point)
-  (global-set-key (kbd "C-h F") #'helpful-function)
-  (global-set-key (kbd "C-h C") #'helpful-command)
-
-  (general-define-key
-   :states 'normal
-   :keymaps 'override
-   "u" 'undo-tree-undo
-   "C-r" 'undo-tree-redo)
-
-#+END_SRC
-
-#+RESULTS:
-
+  #+END_SRC
+  
 * Dired
   Dired is Emacs's built in file manager (stands for directory editor) As dired is my Emacs startup screen as mentioned before, I have some customisations for it which are pretty neat.
   I have configured it to include:
@@ -746,7 +480,7 @@ More languages to evaluate with org-babel (by default, only elisp is evaluated).
     (setq org-agenda-files
 	    '("~/org_roam"))
 
-  (defun ad/org-make-todo ()
+  (defun org-make-todo ()
     "Set todo keyword, priority, effort and tags for a todo item. This is very useful for initialising todo items"
     (interactive)
     (org-todo)
@@ -936,7 +670,7 @@ More languages to evaluate with org-babel (by default, only elisp is evaluated).
   
   #+BEGIN_SRC elisp
 
-    (defun ad/org-inkscape-img ()
+    (defun org-inkscape-img ()
 	(interactive "P")
 	(setq string (read-from-minibuffer "Insert image name: "))
 	;; if images folder not exists create it
@@ -958,7 +692,7 @@ More languages to evaluate with org-babel (by default, only elisp is evaluated).
     (add-to-list 'org-latex-packages-alist '("" "booktabs"))
     (add-to-list 'org-latex-packages-alist '("" "import"))
 
-    (defun ad/org-svg-pdf-export ()
+    (defun org-svg-pdf-export ()
       (interactive)
       (setq dirname (concat (f-base (buffer-file-name)) "-org-img"))
       (if (file-directory-p dirname)
@@ -966,7 +700,7 @@ More languages to evaluate with org-babel (by default, only elisp is evaluated).
 	    (setq command (concat "/usr/bin/inkscape -D --export-latex --export-type=\"pdf\" " dirname "/" "*.svg"))
 	    (shell-command command))))
 
-    (defun ad/svglatex (file_name)
+    (defun svglatex (file_name)
       "Prompts for a file name (without any file prefix), takes an svg with that file name and exports the file as a latex compatible pdf file"
       (interactive "MEnter svg file name: ")
       (setq export (concat "inkscape -D " file_name".svg -o " file_name".pdf --export-latex"))

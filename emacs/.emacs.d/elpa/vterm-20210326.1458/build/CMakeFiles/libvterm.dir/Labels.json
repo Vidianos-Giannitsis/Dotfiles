@@ -1,0 +1,43 @@
+{
+	"sources" : 
+	[
+		{
+			"file" : "/home/vidianos/.emacs.d/elpa/vterm-20210326.1458/build/CMakeFiles/libvterm"
+		},
+		{
+			"file" : "/home/vidianos/.emacs.d/elpa/vterm-20210326.1458/build/CMakeFiles/libvterm.rule"
+		},
+		{
+			"file" : "/home/vidianos/.emacs.d/elpa/vterm-20210326.1458/build/CMakeFiles/libvterm-complete.rule"
+		},
+		{
+			"file" : "/home/vidianos/.emacs.d/elpa/vterm-20210326.1458/build/libvterm-prefix/src/libvterm-stamp/libvterm-install.rule"
+		},
+		{
+			"file" : "/home/vidianos/.emacs.d/elpa/vterm-20210326.1458/build/libvterm-prefix/src/libvterm-stamp/libvterm-mkdir.rule"
+		},
+		{
+			"file" : "/home/vidianos/.emacs.d/elpa/vterm-20210326.1458/build/libvterm-prefix/src/libvterm-stamp/libvterm-download.rule"
+		},
+		{
+			"file" : "/home/vidianos/.emacs.d/elpa/vterm-20210326.1458/build/libvterm-prefix/src/libvterm-stamp/libvterm-update.rule"
+		},
+		{
+			"file" : "/home/vidianos/.emacs.d/elpa/vterm-20210326.1458/build/libvterm-prefix/src/libvterm-stamp/libvterm-patch.rule"
+		},
+		{
+			"file" : "/home/vidianos/.emacs.d/elpa/vterm-20210326.1458/build/libvterm-prefix/src/libvterm-stamp/libvterm-configure.rule"
+		},
+		{
+			"file" : "/home/vidianos/.emacs.d/elpa/vterm-20210326.1458/build/libvterm-prefix/src/libvterm-stamp/libvterm-build.rule"
+		}
+	],
+	"target" : 
+	{
+		"labels" : 
+		[
+			"libvterm"
+		],
+		"name" : "libvterm"
+	}
+}

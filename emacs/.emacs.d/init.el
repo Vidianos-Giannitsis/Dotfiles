@@ -105,134 +105,7 @@
 (setq counsel-spotify-client-id "0df2796a793b41dc91711eb9f85c0e77")
 (setq counsel-spotify-client-secret "bcdbb823795640248ff2c29eedadb800")
 
-(general-create-definer my-leader-def
-			:prefix "SPC")
-
-(my-leader-def
- :states 'normal
- :keymaps 'override
-  "!" 'shell-command
-  "p" 'package-install
-  "o" '(inferior-octave :which-key "octave")
-  "D" 'dired
-  "d" '(:ignore t :which-key "Dired functions")
-  "d f" 'counsel-find-file
-  "d h" 'dired-hide-dotfiles-mode
-  "d j" '(dired-jump :which-key "Open dired in the current buffer's directory")
-  "t" 'toggle-truncate-lines
-  "T" 'org-babel-tangle
-  "RET" 'vterm-toggle
-  "<C-return>" 'vterm 
-  "b" 'counsel-switch-buffer
-  "a" 'org-agenda
-  "g" 'pdf-view-goto-page
-  "H" 'split-window-horizontally
-  "V" 'split-window-vertically
-  "C" '(calc-dispatch :which-key "Open the M-x calc menu")
-  "w" 'wolfram-alpha
-  "R" 'recover-this-file
-  "m" 'magit
-  "B" 'ivy-bibtex
-  "r" '(:ignore t :which-key "Org Roam/Ref commands")
-  "r f" 'org-roam-find-file
-  "r c" 'orb-insert
-  "r b" 'isbn-to-bibtex
-  "r a" 'doi-utils-add-bibtex-entry-from-doi
-  "j" '(:ignore t :which-key "Daily notes")
-  "j f" '(:ignore t :which-key "Find daily note")
-  "j c" '(:ignore t :which-key "Capture daily note")
-  "j c t" 'org-roam-dailies-capture-today
-  "j f t" 'org-roam-dailies-find-today
-  "j c d" 'org-roam-dailies-capture-date
-  "j f d" 'org-roam-dailies-find-date
-  "h" '(counsel-imenu :which-key "Jump to heading")
-  "c" '(:ignore t :which-key "Calendar Commands")
-  "c b" 'cfw:open-calendar-buffer
-  "c o" '(cfw:open-org-calendar :which-key "Open calendar with scheduled to-dos")
-  "c g" '(cfw:git-open-calendar :which-key "Open calendar with git commit history")
-  "r i" '(org-roam-jump-to-index :which-key "Go to the master index file")
-  "l" '(linum-mode :which-key "Line numbers")
-  "e" 'ielm
-  "s" '(:ignore t :which-key "Counsel-spotify commands")
-  "s n" 'counsel-spotify-next
-  "s p" 'counsel-spotify-previous
-  "s t" 'counsel-spotify-toggle-play-pause
-  "s s" '(:ignore t :which-key "Search for")
-  "s s t" 'counsel-spotify-search-track
-  "s s p" 'counsel-spotify-search-playlist
-  "s s a" 'counsel-spotify-search-artist)
-
-(general-create-definer org-leader-def
-      :prefix ",")
-
-    (org-leader-def
-     :states 'normal
-     :keymaps 'org-mode-map
-     "l" 'org-latex-preview
-     "n" 'org-noter
-     "e" 'org-export-dispatch
-     "t" '(:ignore t :which-key "To-do management")
-     "t s" 'org-schedule
-     "t c" 'org-todo
-     "t m" '(ad/org-make-todo :which-key "Initialise to-do item")
-     "t p" 'org-priority
-     "t v" 'org-tags-view
-     "t t" 'org-set-tags-command
-     "y" 'org-download-clipboard
-     "r" '(:ignore t :which-key "Org Roam/Ref commands")
-     "r i" 'org-roam-insert
-     "r c" 'org-ref-ivy-insert-cite-link
-     "r r" 'org-ref-ivy-insert-ref-link
-     "r l" 'org-ref-ivy-insert-label-link
-     "h" '(org-cycle-hide-drawers :which-key "Hide properties drawers")
-     "s" 'org-store-link
-     "I" 'org-insert-link
-     "S" '(ad/org-svg-pdf-export :which-key "Export svg files to pdf")
-     "i" 'org-toggle-inline-images
-     "p" 'org-tree-slide-mode
-     "j" '(org-tree-slide-move-next-tree :which-key "Next Slide")
-     "k" '(org-tree-slide-move-previous-tree :which-key "Previous Slide")
-     "p" '(org-plot/gnuplot :which-key "Plot table data")
-     "f" 'org-footnote-action)
-
-(general-define-key
- :states 'normal
- :keymaps 'org-mode-map
- "`" 'org-roam)
-
-(general-define-key
- :states 'normal
- :keymaps 'pdf-view-mode-map
- "i" 'org-noter-insert-note
- "c" 'kill-current-buffer
- "a" '(:ignore t :which-key "Add annotation")
- "a t" 'pdf-annot-add-text-annotation
- "a m" 'pdf-annot-add-markup-annotation)
-
-  (global-set-key (kbd "M-b") 'ebuku)
-  (global-set-key (kbd "M-C-r") 'restart-emacs)
-  (global-set-key (kbd "M-d") (lambda() (interactive)(find-file "~/.emacs.d/README.org")))
-  (global-set-key (kbd "M-m") 'man)
-
-(general-define-key
- :states 'normal
- :keymaps 'dired-mode-map
- "C-+" 'dired-create-empty-file
- "h" 'dired-up-directory
- "l" 'dired-find-file)
-
-(global-set-key (kbd "C-h f") #'helpful-callable)
-(global-set-key (kbd "C-h v") #'helpful-variable)
-(global-set-key (kbd "C-h k") #'helpful-key)
-(global-set-key (kbd "C-c C-d") #'helpful-at-point)
-(global-set-key (kbd "C-h F") #'helpful-function)
-(global-set-key (kbd "C-h C") #'helpful-command)
-
-(general-define-key
- :states 'normal
- :keymaps 'override
- "u" 'undo-tree-undo
- "C-r" 'undo-tree-redo)
+(require 'keybindings)
 
 (require 'dired-x)
 
@@ -381,7 +254,7 @@
   (setq org-agenda-files
 	  '("~/org_roam"))
 
-(defun ad/org-make-todo ()
+(defun org-make-todo ()
   "Set todo keyword, priority, effort and tags for a todo item. This is very useful for initialising todo items"
   (interactive)
   (org-todo)
@@ -519,7 +392,7 @@
 	 :head "#+title: Fleeting notes for %<%Y-%m-%d>\n"
 	 :olp ("Workout Regimes"))))
 
-(defun ad/org-inkscape-img ()
+(defun org-inkscape-img ()
     (interactive "P")
     (setq string (read-from-minibuffer "Insert image name: "))
     ;; if images folder not exists create it
@@ -541,7 +414,7 @@
 (add-to-list 'org-latex-packages-alist '("" "booktabs"))
 (add-to-list 'org-latex-packages-alist '("" "import"))
 
-(defun ad/org-svg-pdf-export ()
+(defun org-svg-pdf-export ()
   (interactive)
   (setq dirname (concat (f-base (buffer-file-name)) "-org-img"))
   (if (file-directory-p dirname)
@@ -549,7 +422,7 @@
 	(setq command (concat "/usr/bin/inkscape -D --export-latex --export-type=\"pdf\" " dirname "/" "*.svg"))
 	(shell-command command))))
 
-(defun ad/svglatex (file_name)
+(defun svglatex (file_name)
   "Prompts for a file name (without any file prefix), takes an svg with that file name and exports the file as a latex compatible pdf file"
   (interactive "MEnter svg file name: ")
   (setq export (concat "inkscape -D " file_name".svg -o " file_name".pdf --export-latex"))

@@ -131,7 +131,7 @@
 	   ("John Wiegley" . "jwiegley@gmail.com"))
 	  (:keywords "async"))])
  (auctex .
-	 [(13 0 4)
+	 [(13 0 5)
 	  ((emacs
 	    (24 3))
 	   (cl-lib
@@ -897,17 +897,15 @@
 	 (:maintainer nil . "akrl@sdf.org")
 	 (:url . "https://gitlab.com/koral/gcmh"))])
  (ggtags .
-	 [(0 8 13)
+	 [(0 9 0)
 	  ((emacs
-	    (24))
-	   (cl-lib
-	    (0 5)))
-	  "emacs frontend to GNU Global source code tagging system" single
-	  ((:keywords "tools" "convenience")
+	    (25)))
+	  "emacs frontend to GNU Global source code tagging system" tar
+	  ((:url . "https://github.com/leoliu/ggtags")
+	   (:maintainer "Leo Liu" . "sdl.web@gmail.com")
 	   (:authors
 	    ("Leo Liu" . "sdl.web@gmail.com"))
-	   (:maintainer "Leo Liu" . "sdl.web@gmail.com")
-	   (:url . "https://github.com/leoliu/ggtags"))])
+	   (:keywords "tools" "convenience"))])
  (gited .
 	[(0 6 0)
 	 ((emacs
@@ -1425,12 +1423,12 @@
 	      ("Michael Abraham Shulman" . "viritrilbia@gmail.com"))
 	     (:keywords "convenience" "faces" "languages" "tools"))])
  (modus-operandi-theme .
-		       [(0 13 1)
+		       [(0 13 2)
 			((emacs
 			  (26 1))
 			 (modus-themes
 			  (1 2 4)))
-			"Accessible light theme (WCAG AAA)" tar
+			"Accessible light theme (WCAG AAA) [DEPRECATED]" tar
 			((:url . "https://gitlab.com/protesilaos/modus-themes")
 			 (:maintainer "Protesilaos Stavrou" . "info@protesilaos.com")
 			 (:authors
@@ -1447,12 +1445,12 @@
 		  ("Protesilaos Stavrou" . "info@protesilaos.com"))
 		 (:keywords "faces" "theme" "accessibility"))])
  (modus-vivendi-theme .
-		      [(0 13 1)
+		      [(0 13 2)
 		       ((emacs
 			 (26 1))
 			(modus-themes
 			 (1 2 4)))
-		       "Accessible light theme (WCAG AAA)" tar
+		       "Accessible dark theme (WCAG AAA) [DEPRECATED]" tar
 		       ((:url . "https://gitlab.com/protesilaos/modus-themes")
 			(:maintainer "Protesilaos Stavrou" . "info@protesilaos.com")
 			(:authors
@@ -2092,15 +2090,15 @@
 	(:keywords "sequences")
 	(:url . "http://elpa.gnu.org/packages/seq.html"))])
  (setup .
-	[(0 1 1)
+	[(0 1 2)
 	 ((emacs
-	   (24 4)))
+	   (26 1)))
 	 "Helpful Configuration Macro" tar
-	 ((:maintainer "Philip K." . "philipk@posteo.net")
+	 ((:url . "https://git.sr.ht/~zge/setup")
+	  (:maintainer "Philip K." . "philipk@posteo.net")
 	  (:authors
 	   ("Philip K." . "philipk@posteo.net"))
-	  (:keywords "lisp" "local")
-	  (:url . "https://elpa.gnu.org/packages/setup.html"))])
+	  (:keywords "lisp" "local"))])
  (shelisp .
 	  [(0 9 1)
 	   nil "execute elisp in shell" single
