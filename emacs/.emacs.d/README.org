@@ -236,7 +236,7 @@ This enables:
 | apply | tab-jump-out | 1 |
 
 * Keybindings
-  This is my absolute favourite section of this entire config. But its a very big part of my config and I considered it more prudent to include it as its own file. You can find [[~/.emacs.d/libs/keybindings.org][keybindings.org]] inside the libs directory (which contains all the external elisp "libraries" I have installed manually), which is the literate configuration of my keybindings. There you will also find the keybindings.el file which I require in this section of the config to load. It acts as if it was an external package for Emacs which helps make this config more tidy. 
+  This is my absolute favourite section of this entire config. But its a very big part of my config and I considered it more prudent to include it as its own file. You can find [[https://github.com/AuroraDragoon/Dotfiles/blob/master/emacs/.emacs.d/libs/keybindings.org][keybindings.org]] inside the libs directory (which contains all the external elisp "libraries" I have installed manually), which is the literate configuration of my keybindings. There you will also find the keybindings.el file which I require in this section of the config to load. It acts as if it was an external package for Emacs which helps make this config more tidy. 
 
   #+BEGIN_SRC elisp
 
