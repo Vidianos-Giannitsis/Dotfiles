@@ -1,0 +1,156 @@
+* CalcTeX
+CalcTeX is a GNU Emacs minor mode that turns the [[https://www.gnu.org/software/emacs/manual/html_mono/calc.html][Emacs Calculator]] into a WYSIWYG
+editor for LaTeX formulas.
+
+#+ATTR_ORG: :width 200/250/300/400/500/600
+[[file:demos/normal.gif]]
+
+** Why a WYSIWYG equation editor?
+Much [[https://www.latex-project.org/about/][has]] [[https://www.quora.com/What-are-the-benefits-of-using-LaTeX-over-a-traditional-WYSIWYG-editor][been]] [[https://www.latex-project.org/about/][written]] about the virtues of LaTeX /not/ being a
+What-You-See-Is-What-You-Get markup system. These arguments, however convincing
+you find them, deal with LaTeX as a language for writing /text/ in. I have never
+seen any kind of argument that the LaTeX development cycle is beneficial for
+writing mathematics.
+
+On the contrary, editing mathematics in LaTeX is, frankly, horrible. The
+experience bears zero resemblance to writing on the page. Whereas editing text
+on the computer is faster than handwriting, editing mathematics lags far behind
+in terms of user experience. Consider the difference between writing out an
+integral by hand,
+
+#+ATTR_ORG: :width 200
+[[file:resources/cos_theta.png]]
+
+and typing the LaTeX source for that same formula:
+
+#+begin_src latex
+\int_0^\pi \cos\theta \,\mathrm{d}\theta
+#+end_src
+
+The handwritten formula flows out of one's pen, and is a pleasure to write. On
+the other hand, nothing about the LaTeX source code is ergonomic. The backslash
+key is hard to reach, and long macro names and curly braces obscure the form of
+the equation. When typing the formula, there is no visual feedback to remind you
+where you are in the formula, alert you to any mistakes, or provide opportunity
+for reflecting on the content of what you're typing.
+
+*** A Tool of Thought
+A good editor should be a [[http://www.eecg.toronto.edu/~jzhu/csc326/readings/iverson.pdf][tool of thought]]. Mathematical notation is the most
+refined and sophisticated tool of thought in human history. When writing math on
+the computer, we deserve an editor that *augments* the tool of mathematical
+notation, not one that suffocates it.
+
+*** No clicking
+WYSIWYG equation editors typically provide large menus of clickable buttons.
+A more powerful, Emacs-y alternative is key commands. CalcTeX is a display mode
+for Emacs Calc, which provides a huge number of key commands for manipulating
+equations.
+
+* Installation
+** MacOS
+#+begin_src bash :tangle macos_install.sh :exports none
+#!/bin/bash
+#+end_src
+
+Ensure that you have the ~latex~ and ~tlmgr~ binaries installed and on
+your ~$PATH~. The easiest way to install them is via the BasicTeX version of the
+TeXLive distribution, which installs all the binaries but omits 2.5GB of CTAN
+packages:
+
+#+begin_src bash :tangle macos_install.sh
+brew cask install basictex
+#+end_src
+
+#+begin_src bash :tangle macos_env.sh :exports none
+export PATH=/Library/TeX/texbin:$PATH
+#+end_src
+
+#+begin_src bash :tangle macos_install.sh :exports none
+source macos_env.sh
+#+end_src
+
+You'll need to reload your shell to get the TeXLive binaries on your ~PATH~.
+Check that you have them installed:
+#+begin_src bash :tangle macos_install.sh
+latex -version
+tlmgr -version
+#+end_src
+
+** LaTeX Packages
+#+begin_src bash :tangle latex_install.sh :exports none
+#!/bin/bash
+source env.sh
+#+end_src
+
+CalcTeX makes use of a few LaTeX packages. To run CalcTeX with the default
+settings, make sure that you have the following LaTeX packages installed:
+- ~dvipng~
+- ~xparse~
+- ~xcolor~
+- ~soul~
+- ~adjustbox~
+- ~collectbox~
+- ~amsmath~
+- ~amssymb~
+- ~siunitx~
+
+If you are using TeXLive, you can install these with ~tlmgr~:
+
+#+begin_src bash :tangle latex_install.sh
+sudo tlmgr update --self
+sudo tlmgr install dvipng l3packages xcolor soul adjustbox collectbox amsmath amssymb siunitx
+#+end_src
+
+You should now be able to run
+
+#+begin_src bash :tangle latex_install.sh
+dvipng -version
+#+end_src
+
+Alternatively, you can modify the value of the ~calctex-format-latex-header~ 
+variable:
+
+#+begin_src elisp
+(setq calctex-format-latex-header "...")
+#+end_src
+
+However, be aware that doing so may compromise some facilities of CalcTeX,
+particularly its selection handling.
+
+* Usage
+To fire up calc, invoke ~M-x calc~, or ~C-x * c~. ~calctex-mode~ will toggle the
+minor mode in the calc buffer. You can type ~'~ for Algebraic entry mode, or
+type a numeral to begin a numeric entry. Refer to the [[https://www.gnu.org/software/emacs/manual/html_mono/calc.html][Calc manual]] for the many
+mathematical commands that are available.
+
+** Integrating with documents
+CalcTeX is designed to be used in conjunction with calc's [[https://www.gnu.org/software/emacs/manual//html_node/calc/Embedded-Mode.html#Embedded-Mode][Embedded Mode]]. In a
+LaTeX or Org buffer, move point to a LaTeX formula environment, and type 
+~C-x * e~ to invoke embedded mode. This will couple the top of the calc stack to the
+contents of the equation in the buffer you are editing.
+
+** Display options
+*** Scaling
+CalcTeX currently offers two image format options: ~png~ and ~imagemagick~. The
+default is ~imagemagick~, unless your Emacs is compiled without support. To
+disable ~imagemagick~ even if it is supported:
+
+#+begin_src elisp
+(setq calctex-iamgemagick-enabledp nil)
+#+end_src
+
+Note that disabling ~imagemagick~ may have negative effects on the image quality
+on some displays: it disables downscaling the rendered image, which is sometimes
+necessary for a sharp image.
+
+The scaling factor applied by ~imagemagick~ is controlled by the variables
+~calctex-base-imagemagick-png-scaling~ and ~calctex-imagemagick-png-scaling~.
+The first controls the amount by which the "base" dots-per-inch value of
+~calctex-base-dpi~ is increased, to improve resolution of the rendered image.
+This will have an immediate effect on the size of the overlay that appears in
+the buffer, which can be corrected by adjusting ~calctex-imagemagick-png-scaling~.
+*** Other
+The variable ~calctex-foreground-darken-percent~ adjusts the foreground color of
+the rendered images. The default color is the same as the foreground color of
+the default face. This may appear too light for the font used by LaTeX, so it
+may be darkened or lightened to improve the match with the rest of the buffer.
