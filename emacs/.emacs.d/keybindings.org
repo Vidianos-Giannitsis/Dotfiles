@@ -1,1 +1,0 @@
-/home/vidianos/dotfiles/emacs/.emacs.d/libs/keybindings.org
