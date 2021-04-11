@@ -30,16 +30,16 @@ Defining them here helps if I want to use them in multiple locations of my confi
 
 #+BEGIN_SRC python
   mod = "mod4"
-  terminal = guess_terminal()
+  terminal = "tilix"
   editor = "emacs"
-  min_browser = "qutebrowser"
-  full_browser = "brave"
+  browser_1 = "firefox"
+  browser_2 = "brave"
   office = "libreoffice"
   file_manager = "thunar" # I mostly use dired inside emacs for file management, but this exists as a gui file manager in case I need it
   music_player = "spotify"
   calculator = "qalculate-gtk"
   screenshots = "flameshot gui"
-  run_launcher = 'dmenu_run -fn "Source Code Pro Bold" -i -nb "#073642" -sb "#005858" -nf "#839496" -sf "#58002c" -p "Launch program"'
+  run_launcher = 'dmenu_run -fn "Source Code Pro Bold" -i -nb "#44475a" -sb "#bd93f9" -nf "#839496" -sf "#f8f8f2" -p "Launch program"'
 #+END_SRC
 
 #+RESULTS:
@@ -135,8 +135,8 @@ Some notes about them are:
   Key2("M-<Return>", lazy.spawn(terminal), desc="Launch terminal"),
   Key2("M-r", lazy.spawn(run_launcher),
       desc="Spawn a command using a prompt widget"),
-  Key2("M-S-b", lazy.spawn(min_browser), desc="Launch minimal browser"),
-  Key2("M-C-b", lazy.spawn(full_browser), desc="Launch full browser"),
+  Key2("M-S-b", lazy.spawn(browser_2), desc="Launch secondary browser"),
+  Key2("M-C-b", lazy.spawn(browser_1), desc="Launch main browser"),
   Key2("M-C-f", lazy.spawn(file_manager), desc="Launch file manager"),
   Key2("M-C-e", lazy.spawn(editor), desc="Launch Emacs"),
   Key2("M-C-l", lazy.spawn(office), desc="Launch an office suite"),
@@ -154,9 +154,9 @@ Some notes about them are:
 By default in a tiling window manager alot of the multimedia keys of your keyboard wont work as intended. These are the keys in the top row of your keyboard which are usually reffered to as f keys. These include volume and brightness control as well as the PrintScreen button (usually denoted as PrtSc) launching my screenshot utility program.
 
 #+BEGIN_SRC python
-    Key2("<XF86AudioRaiseVolume>", lazy.spawn("amixer set Master 5%+ unmute"), desc="Raise Volume and unmute if muted"),
-    Key2("<XF86AudioLowerVolume>", lazy.spawn("amixer set Master 5%- unmute"), desc="Lower Volume and unmute if muted"),
-    Key2("<XF86AudioMute>", lazy.spawn("amixer set Master toggle"), desc="Mute audio"),
+    Key2("<XF86AudioRaiseVolume>", lazy.spawn("amixer -c 1 sset Master 5%+ unmute"), desc="Raise Volume and unmute if muted"),
+    Key2("<XF86AudioLowerVolume>", lazy.spawn("amixer -c 1 sset Master 5%- unmute"), desc="Lower Volume and unmute if muted"),
+    Key2("<XF86AudioMute>", lazy.spawn("amixer -c sset Master toggle"), desc="Mute audio"),
     Key2("<XF86MonBrightnessUp>", lazy.spawn("xbacklight -inc 10"), desc="Raise Brightness"),
     Key2("<XF86MonBrightnessDown>", lazy.spawn("xbacklight -dec 10"), desc="Lower Brightness"),
     Key2("<Print>", lazy.spawn(screenshots), desc="Screenshot util"),
@@ -243,10 +243,10 @@ On the right side of the bar, I have RAM and CPU usage, which combining textboxe
 #+BEGIN_SRC python
   widget_defaults = dict(
       font='Source Code Pro',
-      fontsize=11,
+      fontsize=16,
       padding=2,
-      background="#002b36",
-      foreground="#fdf6e3",
+      background="#282a36",
+      foreground="#f8f8f2",
   )
   extension_defaults = widget_defaults.copy()
 
@@ -254,28 +254,28 @@ On the right side of the bar, I have RAM and CPU usage, which combining textboxe
       Screen(
 	  bottom=bar.Bar(
 	      [
-		  widget.CurrentLayout(background="074231"),
+		  widget.CurrentLayout(background="#3e4c53"),
 		  widget.Sep(foreground="#421307", size_percent=100),
 		  widget.GroupBox(),
 		  widget.Prompt(),
 		  widget.WindowName(),
 		  widget.Sep(foreground="#421307", size_percent=100),
-		  widget.TextBox("RAM: ", background="#074231"),
-		  widget.Memory(background="#074231"),
-		  widget.TextBox(",", background="#074231"),
-		  widget.CPU(background="#074231"),
-		  widget.TextBox("Volume: ", background="071942"),
-		  widget.PulseVolume(background="071942"),
-		  widget.TextBox("Battery: ", background="#074231"),
+		  widget.TextBox("RAM: ", background="#3e4c53"),
+		  widget.Memory(background="#3e4c53"),
+		  widget.TextBox(",", background="#3e4c53"),
+		  widget.CPU(background="#3e4c53"),
+		  widget.TextBox("Volume: ", background="#393345"),
+		  widget.PulseVolume(background="#393345"),
+		  widget.TextBox("Battery: ", background="#3e4c53"),
 		  widget.Battery(low_percentage = 0.2,
 				 notify_below = 0.15,
 				 update_interval = 30,
 				 discharge_char = '↓',
 				 charge_char = '↑',
-				 background="#074231",
+				 background="#3e4c53",
 				 ),
-		  widget.TextBox("", background="071942"),
-		  widget.Clock(format='%a %d-%m-%Y %I:%M %p', background="071942"),
+		  widget.TextBox("", background="#393345"),
+		  widget.Clock(format='%a %d-%m-%Y %I:%M %p', background="#393345"),
 		  widget.Sep(foreground="#421307", size_percent=100),
 		  widget.Systray(),
 	      ],

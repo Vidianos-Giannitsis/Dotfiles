@@ -234,15 +234,16 @@
 | M-C-r      | Simply restarts Emacs. Always good to have a restart function                                                                                      |
 | M-m        | Query for a man page. Man pages are essential for app documentation for many Linux programs so it's cool to be able to query for one in emacs      |
 | M-b        | Open Ebuku, the buku bookmark manager's Emacs major mode from where I can open my bookmarks from inside Emacs                                      |
+| M-Tab      | Jump out of parentheses. Tab is too overloaded from CDLatex, Yasnippet, Company all using it. So this functionality is in a similar keybinding     |
 |------------+----------------------------------------------------------------------------------------------------------------------------------------------------|
-| *Pdf View* | PDF View is the best Emacs pdf reader. I set some keybindings specific to it                                                                       |
+| *Pdf View*   | PDF View is the best Emacs pdf reader. I set some keybindings specific to it                                                                       |
 |------------+----------------------------------------------------------------------------------------------------------------------------------------------------|
 | c          | In pdf-view mode. Kill the buffer. Sometimes, pdfs dont properly refresh unless killed, so it can be helpful to have this.                         |
 | i          | If pdf-view is in an org-noter buffer, this allows for a note to be added in the matching org buffer                                               |
 | a t        | Add a text annotation to a pdf directly                                                                                                            |
 | a m        | Add a markup annotation to a pdf directly                                                                                                          |
 |------------+----------------------------------------------------------------------------------------------------------------------------------------------------|
-| *Dired*    | Some dired mode keybindings which I consider should be defaults                                                                                    |
+| *Dired*      | Some dired mode keybindings which I consider should be defaults                                                                                    |
 |------------+----------------------------------------------------------------------------------------------------------------------------------------------------|
 | C-+        | Creates a new empty file inside the current working directory                                                                                      |
 | h          | Go up one directory in Dired                                                                                                                       |
@@ -282,9 +283,14 @@
    "u" 'undo-tree-undo
    "C-r" 'undo-tree-redo)
 
+  (general-define-key
+   :states 'insert
+   :keymaps 'override
+   "<M-tab>" 'tab-jump-out)
+
 #+END_SRC
 
-** Providing the package to be loade in init.el
+** Providing the package to be loaded in init.el
    #+BEGIN_SRC elisp
 
      (provide 'keybindings)

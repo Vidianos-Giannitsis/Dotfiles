@@ -1,2 +1,0 @@
-;;; Generated package description from /home/vidianos/.emacs.d/elpa/dired-collapse-20210110.1714/dired-collapse.el  -*- no-byte-compile: t -*-
-(define-package "dired-collapse" "20210110.1714" "Collapse unique nested paths in dired listing" '((dash "2.10.0") (f "0.19.0") (dired-hacks-utils "0.0.1")) :commit "d1a2bda6aa8f890cb367297ed93aee6d3b5ba388" :authors '(("Matúš Goljer" . "matus.goljer@gmail.com")) :maintainer '("Matúš Goljer" . "matus.goljer@gmail.com") :keywords '("files"))

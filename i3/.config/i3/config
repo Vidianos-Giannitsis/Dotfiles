@@ -6,7 +6,7 @@
 set $mod Mod4
 
 # Setting the wallpaper
-exec --no-startup-id nitrogen --set-scaled ~/Pictures/Sol_manjaro.png
+exec --no-startup-id nitrogen --set-scaled /usr/share/backgrounds/Xplo_by_Hugo_Cliff.png
 
 # Starting picom
 exec --no-startup-id picom --config ~/.config/picom.conf

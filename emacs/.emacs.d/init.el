@@ -22,7 +22,7 @@
 
 (gcmh-mode 1)
 
-(load-theme 'doom-solarized-dark t)
+(load-theme 'doom-dracula t)
 
 (menu-bar-mode -1)
 (toggle-scroll-bar -1)
@@ -56,6 +56,8 @@
 
 (setq org-hide-emphasis-markers t)
 
+(set-face-attribute 'default nil :height 140 :family "Source Code Pro")
+
 (setq evil-collection-setup-minibuffer t)
 (setq evil-want-keybinding nil)
 (when (require 'evil-collection nil t)
@@ -79,7 +81,7 @@
 (yas-global-mode 1)
 
 (require 'general)
-(require 'vterm-toggle)
+;(require 'vterm-toggle)
 
 (setq large-file-warning-threshold nil)
 (setq vc-follow-symlinks t)
@@ -174,7 +176,7 @@
 
 (add-to-list 'org-file-apps '("\\.pdf\\'" . emacs))
 
-(setq org-format-latex-options '(:foreground default :background default :scale 1.3 :html-foreground "Black" :html-background "Transparent" :html-scale 1.0 :matchers))
+(setq org-format-latex-options '(:foreground default :background default :scale 1.8 :html-foreground "Black" :html-background "Transparent" :html-scale 1.0 :matchers))
 
 (setq org-latex-pdf-process (list "latexmk -shell-escape -bibtex -f -pdf %f"))
 
@@ -185,11 +187,12 @@
 								     (org-babel-tangle))))
 					      'run-at-end 'only-in-org-mode))
 
+(setq org-image-actual-width nil)
+
 (add-hook 'org-mode-hook '(lambda ()
 			    (toggle-truncate-lines)
 			    (org-latex-preview)
-			    (org-toggle-inline-images)
-			    (tab-jump-out-mode)))
+			    (org-toggle-inline-images)))
 
 (setq org-noter-always-create-frame nil)
 
@@ -314,18 +317,12 @@
 (setq org-roam-directory "~/org_roam")
 
 (add-hook 'after-init-hook 'org-roam-mode)
-(add-hook 'after-init-hook 'org-roam-bibtex-mode)
 
 (setq bibtex-completion-bibliography
-      '("~/org_roam/Zotero_library.bib"))
-(setq reftex-default-bibliography '("~/org_roam/Zotero_library.bib"))
+      '("~/Sync/My_Library.bib"))
+(setq reftex-default-bibliography '("~/Sync/My_Library.bib"))
 
 (setq bibtex-completion-additional-search-fields '(keywords abstract))
-
-(setq orb-preformat-keywords
-      '("citekey" "title" "author" "keywords" "abstract" "entry-type" "file")
-      orb-process-file-keyword t
-      orb-file-field-extensions '("pdf"))
 
 (setq org-roam-dailies-directory "~/org_roam/daily")
 
@@ -337,23 +334,6 @@
 (ivy-add-actions
  'ivy-bibtex
  '(("p" ivy-bibtex-open-any "Open pdf, url or DOI")))
-
-(setq orb-templates
-      '(("r" "ref" plain (function org-roam-capture--get-point)
-	 ""
-	 :file-name "${citekey}"
-	 :head "#+TITLE: ${title}\nglatex\n#+ROAM_KEY: ${ref}
-
-* Ref Info
-:PROPERTIES:
-:Custom_ID: ${citekey}
-:AUTHOR: ${author}
-:NOTER_DOCUMENT: ${file} ;
-:END:
-#+BEGIN_abstract\n${abstract}\n#+END_abstract
-
-- tags ::
-- keywords :: ${keywords}")))
 
 (setq org-roam-capture-templates
       '(("d" "default" plain (function org-roam-capture--get-point)

@@ -129,4 +129,9 @@
  "u" 'undo-tree-undo
  "C-r" 'undo-tree-redo)
 
+(general-define-key
+ :states 'insert
+ :keymaps 'override
+ "<M-tab>" 'tab-jump-out)
+
 (provide 'keybindings)

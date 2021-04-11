@@ -49,18 +49,18 @@ var favorites = [
     [
       ["Chemeng" , "https://www.chemeng.ntua.gr/", "ch"],
       ["MyCourses" , "https://mycourses.ntua.gr/index.php", "mc"],
+      ["ChemengCourses" , "https://courses.chemeng.ntua.gr/", "cc"],
       ["Submissions" , "https://www.chemeng.ntua.gr/submission/", "cs"],
       ["Wolfram Alpha" , "https://www.wolframalpha.com", "wa"],
       ["Chemeng Forum" , "https://forum.chemeng.ntua.gr/", "cf"],
-      ["Science Direct" , "https://www.sciencedirect.com/", "sc"],
-      ["ChemengCourses" , "https://courses.chemeng.ntua.gr/", "cc"]
+      ["Science Direct" , "https://www.sciencedirect.com/", "sc"]
     ]
   ],
   [ "Socials",
     [
       ["Messenger" , "https://www.messenger.com", "ms"],
       ["Twitch" , "https://www.twitch.tv", "tw"],
-      ["Personal Github" , "https://github.com/AuroraDragoon", "gh"],
+      ["Personal Github" , "https://github.com/Vidianos-Giannitsis", "gh"],
       ["Youtube" , "https://www.youtube.com/", "yt"],
       ["Discord" , "https://discord.com/channels/@me", "dc"],
       ["Instagram" , "https://instagram.com/", "in"]
@@ -86,12 +86,10 @@ var favorites = [
   ],
   [ "Pokemon",
     [
-      ["PokemonShowdown", "https://play.pokemonshowdown.com/", "ps"],
+      ["Showdown", "https://play.pokemonshowdown.com/", "ps"],
       ["Smogon", "https://smogon.com", "sm"],
       ["Damage Calc", "https://calc.pokemonshowdown.com/index.html", "calc"],
-      ["EV training guide", "https://bulbapedia.bulbagarden.net/wiki/List_of_Pok%C3%A9mon_by_effort_value_yield", "ev"],
-      ["Unbound Learnsets", "https://github.com/Skeli789/Dynamic-Pokemon-Expansion/blob/Unbound/src/Learnsets.c", "ul"],
-      ["Unbound Egg Moves", "https://github.com/Skeli789/Dynamic-Pokemon-Expansion/blob/Unbound/src/Egg_Moves.c", "ue"]
+      ["EV training guide", "https://bulbapedia.bulbagarden.net/wiki/List_of_Pok%C3%A9mon_by_effort_value_yield", "ev"]
     ]
   ],
   [ "Other Games",
