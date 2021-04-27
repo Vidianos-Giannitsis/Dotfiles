@@ -111,8 +111,7 @@
 
 (require 'dired-x)
 
-(use-package all-the-icons-dired
-  :hook (dired-mode . all-the-icons-dired-mode))
+(add-hook 'dired-mode-hook 'treemacs-icons-dired-mode)
 
 (use-package dired-hide-dotfile
   :hook (dired-mode . dired-hide-dotfiles-mode))
@@ -120,15 +119,13 @@
 (use-package dired-collapse
   :hook (dired-mode . dired-collapse-mode))
 
-(setq all-the-icons-dired-monochrome nil)
-
 (show-paren-mode 1)
 (electric-pair-mode 1)
 (setq wolfram-alpha-app-id "U9PERG-KTPL49AWA2")
 (global-undo-tree-mode 1)
 
-(use-package magit-todos-mode
-  :hook magit-mode)
+;(use-package magit-todos-mode
+ ; :hook magit-mode)
 (require 'calfw-git)
 (require 'calfw-org)
 
@@ -173,6 +170,8 @@
 (add-hook 'org-mode-hook 'turn-on-org-cdlatex)
 
 (require 'org-tree-slide)
+
+(require 'ox-beamer)
 
 (add-to-list 'org-file-apps '("\\.pdf\\'" . emacs))
 
@@ -321,6 +320,7 @@
 (setq bibtex-completion-bibliography
       '("~/Sync/My_Library.bib"))
 (setq reftex-default-bibliography '("~/Sync/My_Library.bib"))
+(setq bibtex-completion-library-path '("~/Sync/Zotero_pdfs"))
 
 (setq bibtex-completion-additional-search-fields '(keywords abstract))
 
@@ -388,7 +388,7 @@
   "* Συμπεράσματα\n\n"
 
   "* Βιβλιογραφία\n"
-  "bibliography:~/org_roam/zotero_library.bib\n"
+  "bibliography:~/Sync/My_Library.bib\n"
   "bibliographystyle:unsrt")
 
 (defun org-inkscape-img ()
@@ -432,8 +432,7 @@
 				(add-to-list 'company-backends 'company-math-symbols-latex)
 				(setq company-math-allow-latex-symbols-in-faces t)
 				(add-to-list 'company-backends 'company-bibtex)
-				(setq company-bibtex-bibliography '("~/org_roam/Zotero_library.bib"))
-				(setq company-minimum-prefix-length 2)))
+				(setq company-bibtex-bibliography '("~/org_roam/Zotero_library.bib"))))
 
 (require 'ebuku)
 (require 'evil-collection-ebuku)

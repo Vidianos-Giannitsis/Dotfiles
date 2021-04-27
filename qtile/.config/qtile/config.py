@@ -87,8 +87,8 @@ Key2("M-C-i", lazy.spawn("inkscape"), desc="Launch inkscape"),
 Key2("<XF86AudioRaiseVolume>", lazy.spawn("amixer -c 1 sset Master 5%+ unmute"), desc="Raise Volume and unmute if muted"),
     Key2("<XF86AudioLowerVolume>", lazy.spawn("amixer -c 1 sset Master 5%- unmute"), desc="Lower Volume and unmute if muted"),
     Key2("<XF86AudioMute>", lazy.spawn("amixer -c sset Master toggle"), desc="Mute audio"),
-    Key2("<XF86MonBrightnessUp>", lazy.spawn("xbacklight -inc 10"), desc="Raise Brightness"),
-    Key2("<XF86MonBrightnessDown>", lazy.spawn("xbacklight -dec 10"), desc="Lower Brightness"),
+    Key2("<XF86MonBrightnessUp>", lazy.spawn("sudo brightnessctl -q s +10%"), desc="Raise Brightness"),
+    Key2("<XF86MonBrightnessDown>", lazy.spawn("sudo brightnessctl -q s 10%-"), desc="Lower Brightness"),
     Key2("<Print>", lazy.spawn(screenshots), desc="Screenshot util"),
 ]
 

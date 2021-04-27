@@ -3,9 +3,11 @@
 #+HTML_HEAD: <link rel="stylesheet" type="text/css" href="http://thomasf.github.io/solarized-css/solarized-dark.min.css" />
 
 * Introduction
-Welcome to my dotfile repository. This was made both for me to use as a backup for my most important dotfiles, but also to share them to the community so anyone can use any part of my configuration they like. 
+Welcome to my dotfile repository. I know why you are here so I won't bother you with having to look for it. Here is my literate emacs config https://github.com/Vidianos-Giannitsis/Dotfiles/tree/master/emacs/.emacs.d. Its probably the most interesting and unique part of this config and the only one I truly feel is worth checking out. But if you want, read on for the rest of my dots.
 
-For anyone wondering, I manage my dotfiles using GNU Stow, and write all my READMEs in Emacs's Org-mode (like the file you are reading right now :D). This is the simplest way I have found for doing this.
+With that out of the way, lets start with why this github repository even exists in the first place. This was made both for me to use as a backup for my most important dotfiles, but also to share them to the community so anyone can use any part of my configuration they like. 
+
+For anyone wondering, I manage my dotfiles using GNU Stow, and write all my READMEs in Emacs's Org-mode (like the file you are reading right now :D). This is the simplest way I have found for doing this. Lastly, since its an important part of my config, but not included in my dotfiles, I should mention that my GTK theme is Dracula and my icon theme is also Dracula.
 
 To start using any of my configurations you need to git clone it to an empty directory, and then from inside that directory, run "stow name_of_file" and it will neatly create a symlink to the directory needed which should work perfectly (DISCLAIMER: MAKE SURE TO BACKUP YOUR CURRENT CONFIG). Else, feel free, to only copy the parts you want, thats what I would do as well, as I like my config to be personalised. 
 
@@ -14,10 +16,8 @@ Below, is an explanation of every directory inside the repo.
 
 I only have specific READMEs for i3, qtile and emacs (the latter two being literate config files of those programs) as the others dont need much more than a description inside this file. Everything you need for them is explained here.
 
-Lastly, since its an important part of my config, but not included in my dotfiles, I should mention that my GTK theme is SolArc-Dark and my icon theme Solarized-Deluxe-Iconpack.
-
 ** Emacs
-   Lets start with Emacs, my absolute favourite program which I use for as much as possible. If you find this git repo it was probably due to these. The in my opinion best part of my dotfiles. I was a spacemacs user for some time before switching to this config, so it is reminiscent to that in some ways. Of course, as you can expect, this is also a literate config file inside the README of the repo which documents very well everything that happens inside it. Emacs is that one tool that you can literally mold to your workflow perfectly as you can make it whatever you want really. I want to say that at least for me, its truly a work of art. Enjoy it.
+   Lets start with Emacs, my absolute favourite program which I use for as much as possible. If you find this git repo it was probably due to this. The in my opinion best part of my dotfiles. I was a spacemacs user for some time before switching to this config, so it is reminiscent to that in some ways. Of course, as you can expect, this is also a literate config file inside the README of the repo which documents very well everything that happens inside it. Emacs is that one tool that you can literally mold to your workflow perfectly as you can make it whatever you want really. I want to say that at least for me, its truly a work of art. Enjoy it.
 
 The repo, has quite a few things, as its my entire /.emacs.d. Outside of README and init.el, other places of importance are: 
 + /libs where I have my load-path for packages not installed through MELPA but manually. Special mention to keybindings.org, which is part of my Emacs config containing my custom keybindings. Split from the main config for being two long
@@ -35,6 +35,8 @@ eval "$(starship init bash)"
 #+END_SRC
 
 ** Zathura
+   *WARNING: I have stopped using Zathura so this section is outdated compared to the rest of my config*
+   
 Zathura is one of the pdf viewers I use currently. Its a great minimal vim-like (yes, I am an emacs user, but I love the vim keybindings and use them wherever I can. My emacs has evil mode by default cause I prefer it to default emacs) pdf viewer. My config doesn't include much. I just change its colours to the solarized theme (its a common  theme between my applications as you will see as I love it). I love its look like this. I mostly use pdftools inside Emacs these days, but having both Zathura and qpdfview is useful in case I need them. 
 
 This is how a pdf renders, with these colours in zathura, I didn't know what pdf to show here so have a page of my Latex symbols cheatsheet
@@ -51,8 +53,9 @@ i3, together with qtile, are currently my two favourite tiling window managers. 
 
 Inside the repo, you will find a README file explaining some things about the config file (I dont have a literate config for it as its formatting is so easy I never considered it important, but there are some things I would like to explain), the i3 folder, which contains my i3 config file and a folder for i3blocks, with which I customise all the widgets in my i3bar.
 
-This is the look of my current i3 config (although, the programs are what truly completes the config, this is mainly for my bg picture and the i3 bar)
+This is the look of my current i3 config (although, the programs are what truly completes the config, this is mainly for my bg picture and the i3 bar). 
 [[https://github.com/AuroraDragoon/Dotfiles/blob/master/screenshots/i3.png]]
+This is rather outdated as I basically only use Qtile currently. Also since changing to a new pc, something broke in my i3bar and not using i3 much, I disregarded it and its kinda broken now. I probably dont have something installed but I am too bored to bother as I barely ever use i3 after discovering qtile, which I consider superior. 
 
 ** Qtile
 Qtile, is my other heavily configured tiling window manager and actually the one I use as my daily driver for the most part. This one is configured in python in a format not as simple as i3's (although its still very easy and understandable), so its README file is a literate config file, so looking at that instead of config.py is heavily encouraged. Together with the config, is a shell script which I use to autostart certain applications (things like picom and network manager are included there). Outside of this, there isn't much else to say about this, everything is included in the README file. 

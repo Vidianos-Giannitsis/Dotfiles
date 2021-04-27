@@ -30,8 +30,7 @@ These are interesting packages to check in the long term. But nothing to hurry w
 
 * About this config
 
-Emacs... Emacs, its truly an incredible program. Its the most extensible program I have seen for sure. It allows you to change basically everything, until you have an environment which suits you perfectly. I use it for most of my tasks at this point. This is a vanilla GNU Emacs install (actually you can't really call it vanilla Emacs at this point, I think its got more things than some emacs distros like doom) with a ton of configurations. I initially used Spacemacs, but the mentality of vanilla fits more with me. Its a blank slate on which I can do anything I want.
-Spacemacs felt like a different person's vision so I wanted to move to my own Emacs config so I can truly feel its mine. I feel I have succeeded at this in making it truly personal. Its definitely not the best config I have seen, nor is it for everyone, but for me, it does everything I want. And its truly incredible at doing all that. I can not imagine a better workflow than this. Thats why although its far from perfect, for what I use it, I just adore it. 
+Welcome kind stranger, to my Emacs config. This is the heart of my dotfiles and of my entire computer workflow. Mostly everything I do in a computer with only a few excuses, stems from here and I absolutely love it. Emacs is the most extensible program I have ever seen. It allows you to change basically everything, until you have an environment which suits you perfectly. This is a vanilla GNU Emacs install with a ton of configurations. Actually its not even vanilla Emacs at this point, as its probably got more things than some emacs distros like doom, but it uses the tabula rasa that is vanilla emacs and customises it with this extremely long config file to make it into my own Emacs. Vanilla Emacs is all about creating a computer environment with consistency between all your tasks which is 100% customisable. I doubt there is a single thing in Emacs that can't be changed. And for that very reason I absolutely love it. Its truly the perfect workflow for me as I have handcrafted it from scratch. 
 
 I have drawn inspiration from a lot of other init.el's but the most apparent one is the spacemacs keybindings. I was a spacemacs user for a few months before deciding to start using this personal config for Emacs. I found its keybindings very ergonomic and although most things arent exactly the way they are done in spacemacs, the inspiration is apparent. For example the Space and , keys are leader keys which I use a lot (space for general commands and , for mode specific, currently only org though).
 
@@ -108,7 +107,7 @@ The first section has to do with packages installed from melpa, the second with 
 Change some Emacs defaults to things I consider more sensible for my use cases.
 This includes: 
 + Activating gcmh mode, which helps improve my startup time (Note that to truly get a benefit from this it needs to be very early on in the config). 
-+ Setting my theme to doom's variant of solarized-dark. I like it more than the default solarized-dark in melpa (you can get it from the doom-themes package).
++ Setting my theme to doom's variant of dracula. I initially didnt switch to dracula because Emacs' default dracula is not appealing to me, but after trying the doom variant I fell in love with it (you can get it from the doom-themes package).
 + Disabling some features which I dislike personally like the bars that comes by default, and the annoying sounds emacs makes when you type sth wrong.
 + Activating which-key-mode, which is a popup prompt to display how to complete an emacs command.
 + Changing the startup screen to dired because I consider it way more productive than the default.
@@ -119,6 +118,7 @@ This includes:
 + Changed my modeline to the doom-modeline. It looks better than the default modeline in Emacs imo
 + Changing yes-no prompts to y-n, because its simply easier to type than yes-no.
 + Hide elements such as asterisks when writing a bold word by default. In the [[*Utilities][Utilities]] section of the config, I also define a function which toggles this behaviour
++ Set my font to Source Code Pro with the right font size for me.
 
 #+BEGIN_SRC elisp
 
@@ -193,10 +193,10 @@ General utilities that I want enabled when editing, or changes to the way emacs 
 This enables:
 + Enabling yasnippet snippets.
 + Enabling general, a package that helps me define keybindings easier.
-+ Enabling vterm-toggle, a package which helps with not getting a milion vterms open (with a run-or-raise behaviour)
 + Remove the warnings Emacs gives when opening large files or following vc controlled symlinks. I dont need them and they can be annoying.
 + Changing the heading and title font to match my global font and resizing them so 1st tier headings and titles actually stand out like they should.
 + A function to toggle the behaviour of markup elements such as visible asterisks when writing a message in bold. I dont like seeing them usually, but its good to have a function which toggle this behaviour
++ Setting the spotify id which counsel needs to be able to control spotify through Emacs.
 
 #+BEGIN_SRC elisp
 
@@ -238,7 +238,7 @@ This enables:
 | apply | tab-jump-out | 1 |
 
 * Keybindings
-  This is my absolute favourite section of this entire config. But its a very big part of my config and I considered it more prudent to include it as its own file. You can find [[https://github.com/AuroraDragoon/Dotfiles/blob/master/emacs/.emacs.d/libs/keybindings.org][keybindings.org]] inside the libs directory (which contains all the external elisp "libraries" I have installed manually), which is the literate configuration of my keybindings. There you will also find the keybindings.el file which I require in this section of the config to load. It acts as if it was an external package for Emacs which helps make this config more tidy. 
+  This is my absolute favourite section of this entire config. But its a very big part of my config and I considered it more prudent to include it as its own file. You can find [[https://github.com/AuroraDragoon/Dotfiles/blob/master/emacs/.emacs.d/libs/keybindings.org][keybindings.org]] inside the libs directory (which contains all the external elisp "libraries" I have installed manually). The org file is the literate configuration of my keybindings. In that directory you will also find the keybindings.el file which I require in this section of the config to load. It acts as if it was an external package for Emacs which helps make this config more tidy. 
 
   #+BEGIN_SRC elisp
 
@@ -253,14 +253,13 @@ This enables:
   Dired is Emacs's built in file manager (stands for directory editor) As dired is my Emacs startup screen as mentioned before, I have some customisations for it which are pretty neat.
   I have configured it to include:
   + Icons alongside each file which represent what type of file it is.
-  + Hiding dotfiles by default (Pressing SPC and then h, will show all the dotfiles in the directory but I find hiding them better for initial behaviour).
+  + Hiding dotfiles by default (The keychord SPC d h, will show all the dotfiles in the directory but I find hiding them better for initial behaviour).
   + Added the functionality of when a folder has a single item, directly go to that item (open if its file, display the directory if its a directory). This is how you vieew folders in github, which behaviour I really like it so since I found a package with this behaviour (dired-collapse) I added it to my config and hooked it to dired mode. 
 
   #+BEGIN_SRC elisp
-    (require 'dired-x)
+     (require 'dired-x)
 
-    (use-package all-the-icons-dired
-      :hook (dired-mode . all-the-icons-dired-mode))
+    (add-hook 'dired-mode-hook 'treemacs-icons-dired-mode)
 
     (use-package dired-hide-dotfile
       :hook (dired-mode . dired-hide-dotfiles-mode))
@@ -268,23 +267,20 @@ This enables:
     (use-package dired-collapse
       :hook (dired-mode . dired-collapse-mode))
 
-    (setq all-the-icons-dired-monochrome nil)
   #+END_SRC
 
   This is how Dired ends up looking after these changes
   [[https://github.com/AuroraDragoon/Dotfiles/blob/master/screenshots/dired.png]]
 
 * Useful Minor Modes
-  I enable a lot of minor modes on startup and I also set some up for use. This section documents these modes. Which-key and Ivy are omitted from this section as they fit more in the [[*Sensible Defaults][Sensible Defaults]] section.
+  I enable a lot of minor modes on startup and I also set some up for use. This section documents these modes. Which-key and Ivy are omitted from this section as they fit more in the [[*Sensible Defaults][Sensible Defaults]] section because every sensible person would enable which key and a completion framework such as Ivy for better Emacs usage.
 + When adding a bracket or quote add its pair as well for quicker editing.
 + When the cursor is on one bracket, highlight its matching bracket.
 + Setting my wolfram alpha ID for use in emacs which allows me to query the website from inside Emacs
 + Activating undo-tree-mode everywhere.
-+ Activate company-mode everywhere. Helpful autocompletions, I dont see why not.
-+ Change some Company-specific variables when company is activated. This activates autocompletion for latex symbols and allows to use them in org-mode. It also makes the autocompletion start from the second character typed (mostly important for latex autocompletions to start after the first character following the \)
-+ Hooking magit-todos to magit-mode. This allows me to see todos in a git repo inside the git status.
 + Calfw is a calendar app for Emacs. Calfw-git allows you to see your git commit history inside of calfw while calfw-org shows org-todos in a calendar interface.
 + Audio files, obscure image files and MS/Libre Office documents don't open properly inside Emacs. I set up openwith to open them with external files.
++ Loading projectile, to remind me to play around with it some day.
   
   #+BEGIN_SRC elisp
 
@@ -293,8 +289,8 @@ This enables:
     (setq wolfram-alpha-app-id "U9PERG-KTPL49AWA2")
     (global-undo-tree-mode 1)
 
-    (use-package magit-todos-mode
-      :hook magit-mode)
+    ;(use-package magit-todos-mode
+     ; :hook magit-mode)
     (require 'calfw-git)
     (require 'calfw-org)
 
@@ -332,7 +328,7 @@ This enables:
   : t
   
 * Org-mode
-Some settings I want for Emacs's Org-mode which I use extensively (like for writing this literate config file). Its split in sections cause its too huge otherwise. I change way too many stuff in Org :D. 
+Some settings (now using the word some here might be an underestimation, as with the keybindings in a seperate file this is about half my config, but I like Org) I want for Emacs's Org-mode which I use extensively (like for writing this literate config file). Its split in sections cause its too huge otherwise. 
 
 ** Setting up external packages for org
    This first section is about some packages I load for org, which are very helpful for my workflow, such as:
@@ -341,6 +337,7 @@ Some settings I want for Emacs's Org-mode which I use extensively (like for writ
    + I activate calctex and activate it when I go into calc's embedded mode. Its a neat package that allows me to type a formula inside calc and renders it automatically into latex. Latex snippets are what I use mostly (you can find them inside the snippets directory of my .emacs.d but if you want to draw inspiration from somewhere there are much better sources tbh).
    + I activate org-cdlatex-mode which makes typing latex equations easier inside org and massively improves speed of typing equations together with snippets for org
    + Also add org-tree-slide from presentations inside Org
+   + Require the org export beamer package so beamer export options are there by default
      
 #+BEGIN_SRC elisp
 
@@ -357,16 +354,21 @@ Some settings I want for Emacs's Org-mode which I use extensively (like for writ
   (add-hook 'org-mode-hook 'turn-on-org-cdlatex)
 
   (require 'org-tree-slide)
+
+  (require 'ox-beamer)
 #+END_SRC
+
+#+RESULTS:
+: ox-beamer
 
 ** Org mode utilities
    I change some more things inside org to fix some annoying default behaviours.
-   + When exporting to pdf, org defaults to your system's default pdf viewer (zathura in my case). Since I am in an Emacs buffer editing the file, its more convenient to open the pdf inside Emacs with pdf-tools.
-   + I write a lot of equations in my documents usually with latex and the normal size of those inside org (available with org-latex-preview) is a bit small for my liking so after playing around with it a bit I scaled it up to 1.3 of the original which I consider a very sensible size
-   + Making latex view my bibtex bibliography and export it properly. I took this from the org-ref docs as originally I wasnt getting proper bibliographic entries. I t works with this.
+   + When exporting to pdf, org defaults to your system's default pdf viewer. Since I am in an Emacs buffer editing the file, its more convenient to open the pdf inside Emacs with pdf-tools.
+   + I write a lot of equations in my documents usually with latex and the normal size of those inside org (available with org-latex-preview) is a bit small for my liking so after playing around with it a bit I scaled it up to 1.8 of the original which I consider a very sensible size
+   + Making latex view my bibtex bibliography and export it properly. I took this from the org-ref docs as originally I wasnt getting proper bibliographic entries. It works with this.
    + I tell org that its odt export should be converted to docx as if I am exporting to a rich text editors format, its for a collaboration and most people I know use that format. If its a personal project I always export to a latex pdf because it looks better.
    + Defining a function which supresses the confirmation message for tangling an org document's source code and hooking it to the after save hook in org-mode. If I understand it correctly, it should automatically tangle after saving, if thats possible, which is handy for things such as this configuration.
-   + I have a custom lambda function which I hook to the org-mode-hook (so it activates every time a new org mode buffer is opened) which automatically displays images I have added to the buffer, creates previews for latex code in the document, toggles truncate-lines so that I can see the entire text when opening the buffer (really can't understand why its not nil by default in org documents) and activates tab-jump-out-mode so I can tab out of brackets/quotes etc. 
+   + I have a custom lambda function which I hook to the org-mode-hook (so it activates every time a new org mode buffer is opened) which automatically displays images I have added to the buffer, creates previews for latex code in the document, toggles truncate-lines so that I can see the entire text when opening the buffer (really can't understand why its not nil by default in org documents). 
      
 #+BEGIN_SRC elisp
   (add-to-list 'org-file-apps '("\\.pdf\\'" . emacs))
@@ -465,7 +467,7 @@ More languages to evaluate with org-babel (by default, only elisp is evaluated).
 #+RESULTS:
 
 ** Org-agenda and TODOs
-    I set everything I need for TODOs and the org-agenda in this section. In [[*Org mode keybindings][Org mode keybindings]] you can see the keybindings I have set for each action while here are the configurations I want to make. This helps keep this consistent by having those keybindings in that section. I track all my todo files in one directory, my org_roam directory (more on that in the next section, its an important part of my workflow). So I want every todo defined in that directory to be loaded inside Org-agenda.
+    I set everything I need for TODOs and the org-agenda in this section. In my keybindings file you can see the keybindings I have set for each action while here are the configurations I want to make. This helps keep this consistent by having those keybindings in that section. I track all my todo files in one directory, my org_roam directory (more on that in the next section, its an important part of my workflow). So I want every todo defined in that directory to be loaded inside Org-agenda.
 
    I define a custom function org-make-todo which makes an item todo, gives it a priority and effort value. I like this for initialization of a todo file as it helps with organizing tasks with which one is more urgent and which is harder outside of the already existing file system to manage different kinds of todos.
 
@@ -589,12 +591,13 @@ More languages to evaluate with org-babel (by default, only elisp is evaluated).
 ** Initialisation Variables
    This section is all about the initialisation of variables. These are essential for the packages to work most of the time. More in detail,
    - I define the org_roam directory
-   - Activate org-roam and orb after emacs's init so I can use their commands from anywhere, anytime
+   - Activate org-roam after emacs's init so I can use their commands from anywhere, anytime
    - Zotero exports a .bib file with all my references (the main way it "talks" to Emacs). I "tell" ivy-bibtex and org-ref the location of this file for usage in their various commands.
    - I allow ivy-bibtex to query by keywords or abstract. Can be useful
-   - I then define the fields of a bibtex file that get queried to create a file with the notes of a reference and set the variable that controls if they should be used to true (already default behaviour though so not truly needed). These are defined here and then formatted in the orb-template. The third variable is about what extnsion the "file" section uses.
    - I define the directory in which org-roam-dailies should be put
-   - Lastly, I make the default action of ivy-bibtex, inserting the citation of the chosen reference. Personally, its the action I use most as opening the link/pdf to the reference (which is the original default) is more easily done from Zotero imo. In Emacs I find more utility in inserting the citation in my own documents. 
+   - I configure org-ref to use ivy-completions for its commands
+   - I make the default action of ivy-bibtex, inserting the citation of the chosen reference. Personally, its the action I use most as opening the link/pdf to the reference (which is the original default) is more easily done from Zotero imo. In Emacs I find more utility in inserting the citation in my own documents.
+   - Since opening the pdf, url or DOI of a bibtex entry is no longer the default action in my config, I bind it to the letter p in the options menu of Ivy-bibtex
 
    #+BEGIN_SRC elisp
 
@@ -605,6 +608,7 @@ More languages to evaluate with org-babel (by default, only elisp is evaluated).
      (setq bibtex-completion-bibliography
 	   '("~/Sync/My_Library.bib"))
      (setq reftex-default-bibliography '("~/Sync/My_Library.bib"))
+     (setq bibtex-completion-library-path '("~/Sync/Zotero_pdfs"))
 
      (setq bibtex-completion-additional-search-fields '(keywords abstract))
 
@@ -623,7 +627,7 @@ More languages to evaluate with org-babel (by default, only elisp is evaluated).
     #+RESULTS:
 
 ** Templates
-   This section is about the various templates used by the org-roam workflow. These are orb-templates, org-roam-capture-templates, org-roam-dailies-capture-templates
+   This section is about the various templates used by the org-roam workflow. These are org-roam-capture-templates, org-roam-dailies-capture-templates
 
    #+BEGIN_SRC elisp
   
@@ -697,7 +701,7 @@ More languages to evaluate with org-babel (by default, only elisp is evaluated).
       "* Συμπεράσματα\n\n"
 
       "* Βιβλιογραφία\n"
-      "bibliography:~/org_roam/zotero_library.bib\n"
+      "bibliography:~/Sync/My_Library.bib\n"
       "bibliographystyle:unsrt")
 
   #+END_SRC
@@ -706,7 +710,7 @@ More languages to evaluate with org-babel (by default, only elisp is evaluated).
   : lab-skeleton
   
 * Inkscape x Emacs
-  This ection is about integration of Emacs's org-mode with Inkscape. Essentially the first function, opens Inkscape, lets you draw whatever you desire and then creates a latex code area with the figure, ready to be imported. But, since saved the file as a .svg we need the second function, which exports the .svg to pdf so it can be imported properly to the Latex document Org exports.
+  This section is about integration of Emacs's org-mode with Inkscape. Essentially the first function, opens Inkscape, lets you draw whatever you desire and then creates a latex code area with the figure, ready to be imported. But, since saved the file as a .svg we need the second function, which exports the .svg to pdf so it can be imported properly to the Latex document Org exports.
 
   In a nutshell, you can use Inkscape to seamlessly create good looking graphs/shapes inside your org documents, which can prove very useful in some cases. I take no credit for this. I "stole" the idea from [[https://www.reddit.com/r/emacs/comments/lo9ov0/latex_export_with_inkscape_images_and_drawio/][this]] excellent reddit post. I recommend you check that post out and not this section. The only problem I had with it is that the author initially planned for the second function to not be interactive but simply hooked to the org-export-before-processing-hook. This should work, but for some reason (at least in my config) this hook simply doesn't exist on startup creating an error while loading my init.el. After testing I noticed that if you export a file once in an emacs session, the hook is created and this works perfectly. But since I can't get it on startup and its tedious to do otherwise, I just made the function interactive so I can call it from the M-x menu and from a custom keybinding. If you however don't have this issue, the fix (as can be seen in the reddit post, which I recommend at least checking out) is removing the (interactive) (which isn't mandatory, but you wont need to call the function if its hooked to the correct hook) and adding a variable arg as the function's argument (this is needed for the hook to call the function correctly, but isn't needed if the function is called interactively).
 
@@ -756,7 +760,7 @@ More languages to evaluate with org-babel (by default, only elisp is evaluated).
   : ad/svglatex
  
 * Company
-  Company is a minor mode, which I enable globally, which allows for autocompletions. This is useful when programming, or writing latex for completing what you want, but also can speed up the writing of long words. The lambda I add to the company-mode-hook adds latex autocompletions and allows them to be used anywhere. It also makes the minimum prefix 2 letters long, which is better than the default 3 imo, especially when auto completing latex. It also sets up company to read and give autocompletions for citations from my master .bib file in Zotero. I usually enter them with the ivy-bibtex package (my current default action is add citation there) but this is worth a try. 
+  Company is a minor mode, which I enable globally, which allows for autocompletions. This is useful when programming, or writing latex for completing what you want, but also can speed up the writing of long words. The lambda I add to the company-mode-hook adds latex autocompletions and allows them to be used anywhere. It also sets up company to read and give autocompletions for citations from my master .bib file in Zotero. I usually enter them with the ivy-bibtex package (my current default action is add citation there) but this is worth a try. 
   
   #+BEGIN_SRC elisp
 
@@ -765,14 +769,12 @@ More languages to evaluate with org-babel (by default, only elisp is evaluated).
 				    (add-to-list 'company-backends 'company-math-symbols-latex)
 				    (setq company-math-allow-latex-symbols-in-faces t)
 				    (add-to-list 'company-backends 'company-bibtex)
-				    (setq company-bibtex-bibliography '("~/org_roam/Zotero_library.bib"))
-				    (setq company-minimum-prefix-length 2)))
-
+				    (setq company-bibtex-bibliography '("~/org_roam/Zotero_library.bib"))))
 
   #+END_SRC
   
   #+RESULTS:
-  | ad/company-latex | (lambda nil (when company-backend company-math-symbols-latex (let (company-idle-delay 0.01)))) |
+  | (lambda nil (add-to-list 'company-backends 'company-math-symbols-latex) (setq company-math-allow-latex-symbols-in-faces t) (add-to-list 'company-backends 'company-bibtex) (setq company-bibtex-bibliography '(~/org_roam/Zotero_library.bib))) | company-mode-set-explicitly | (lambda nil (add-to-list 'company-backends 'company-math-symbols-latex) (setq company-math-allow-latex-symbols-in-faces t) (add-to-list 'company-backends 'company-bibtex) (setq company-bibtex-bibliography '(~/org_roam/Zotero_library.bib)) (setq company-minimum-prefix-length 2)) |
  
 * Other Major Modes
 Some other extensions inside my Emacs config that require some changes for their major modes to function as I want them. This currently includes:
@@ -794,7 +796,7 @@ Some other extensions inside my Emacs config that require some changes for their
   
 ** PDF Tools
 
-Configuration for PDF-tools, my favourite built-in Emacs pdf viewer. I set it as the default pdf viewer for Emacs and enable the midnight minor mode for it as it makes it match my theme.
+Configuration for PDF-tools, my favourite Emacs pdf viewer. I set it as the default pdf viewer for Emacs and enable the midnight minor mode for it as it makes it match my dark theme which is cool.
 
 #+BEGIN_SRC elisp
 
@@ -811,9 +813,6 @@ Configuration for PDF-tools, my favourite built-in Emacs pdf viewer. I set it as
 
 #+RESULTS:
 | pdf-tools-enable-minor-modes | pdf-view-midnight-minor-mode |
-
-And after these changes, my emacs pdf-viewer looks like this. I didn't know what pdf to use so I put a LibreTexts document for Equations of States, which is close to my studies. xDD
-[[https://github.com/AuroraDragoon/Dotfiles/blob/master/screenshots/pdf_view.png]]
 
 ** Octave
    Octave is a very powerful piece of software for mathematical computations. You can edit octave scripts inside of Emacs and also run an instance of Octave to execute them. But I ran into some problems with it. Some files with the .m extension weren't being opened in the Octave major mode, so I fix that.
@@ -846,7 +845,7 @@ And after these changes, my emacs pdf-viewer looks like this. I didn't know what
 
    #+END_SRC
 * Custom Variables
-These are some variables automatically generated by the "M-x customize" menu. Its better not to play around with this section of the config file as to not mess something up accidentally. 
+These are some variables automatically generated by the "M-x customize" menu. Its better not to play around with this section of the config file as to not mess something up accidentally. I honestly almost never set something with the customize menu because I prefer writing it manually in my config. Gives me a sense of order really. 
 
 #+BEGIN_SRC elisp
 ;; CUSTOM VARIABLES

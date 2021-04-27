@@ -1,0 +1,5 @@
+# -*- mode: snippet -*-
+# name: pot_grad
+# key: pg
+# --
+\frac{\partial φ}{\partial x}

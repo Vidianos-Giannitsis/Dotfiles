@@ -1,0 +1,5 @@
+# -*- mode: snippet -*-
+# name: underbar
+# key: \u
+# --
+\underbar{$0}
