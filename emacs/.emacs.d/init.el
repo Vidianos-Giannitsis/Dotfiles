@@ -18,7 +18,7 @@
   (auto-package-update-delete-old-versions t)
   :config
   (auto-package-update-maybe)
-  (auto-package-update-at-time "09:00"))
+  (auto-package-update-at-time "10:00"))
 
 (gcmh-mode 1)
 
@@ -81,7 +81,7 @@
 (yas-global-mode 1)
 
 (require 'general)
-;(require 'vterm-toggle)
+(require 'vterm-toggle)
 
 (setq large-file-warning-threshold nil)
 (setq vc-follow-symlinks t)
@@ -192,6 +192,8 @@
 			    (toggle-truncate-lines)
 			    (org-latex-preview)
 			    (org-toggle-inline-images)))
+
+(setq org-preview-latex-default-process 'dvisvgm)
 
 (setq org-noter-always-create-frame nil)
 
@@ -394,7 +396,7 @@
 (defun org-inkscape-img ()
     (interactive "P")
     (setq string (read-from-minibuffer "Insert image name: "))
-    ;; if images folder not exists create it
+    ;; if images folder doesn't exist create it
     (setq dirname (concat (f-base (buffer-file-name)) "-org-img"))
     (if (not (file-directory-p dirname))
 	(make-directory dirname))
@@ -424,7 +426,7 @@
 (defun svglatex (file_name)
   "Prompts for a file name (without any file prefix), takes an svg with that file name and exports the file as a latex compatible pdf file"
   (interactive "MEnter svg file name: ")
-  (setq export (concat "inkscape -D " file_name".svg -o " file_name".pdf --export-latex"))
+  (setq export (concat "inkscape -D " file_name".svg" file_name".pdf --export-latex"))
   (shell-command export))
 
 (add-hook 'after-init-hook 'global-company-mode)

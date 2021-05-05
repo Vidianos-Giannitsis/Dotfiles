@@ -55,7 +55,11 @@
   "s s" '(:ignore t :which-key "Search for")
   "s s t" 'counsel-spotify-search-track
   "s s p" 'counsel-spotify-search-playlist
-  "s s a" 'counsel-spotify-search-artist)
+  "s s a" 'counsel-spotify-search-artist
+  "e" '(:ignore t :which-key "Evaluate Emacs-Lisp")
+  "e b" 'eval-buffer
+  "e e" 'eval-expression
+  "e f" 'eval-defun)
 
 (general-create-definer org-leader-def
       :prefix ",")
@@ -133,5 +137,10 @@
  :states 'insert
  :keymaps 'override
  "<M-tab>" 'tab-jump-out)
+
+(general-define-key
+ :states 'visual
+ :keymaps 'override
+ "e r" 'eval-region)
 
 (provide 'keybindings)

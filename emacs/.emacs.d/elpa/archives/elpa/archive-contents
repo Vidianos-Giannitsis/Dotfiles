@@ -129,11 +129,9 @@
 			 (:maintainer "Thien-Thi Nguyen" . "ttn@gnu.org")
 			 (:url . "http://www.gnuvola.org/software/aa2u/"))])
  (async .
-	[(1 9 3)
-	 ((cl-lib
-	   (0 5))
-	  (nadvice
-	   (0 3)))
+	[(1 9 5)
+	 ((emacs
+	   (24 3)))
 	 "Asynchronous processing in Emacs" tar
 	 ((:url . "https://github.com/jwiegley/emacs-async")
 	  (:maintainer "John Wiegley" . "jwiegley@gmail.com")
@@ -141,7 +139,7 @@
 	   ("John Wiegley" . "jwiegley@gmail.com"))
 	  (:keywords "async"))])
  (auctex .
-	 [(13 0 8)
+	 [(13 0 11)
 	  ((emacs
 	    (24 3)))
 	  "Integrated environment for *TeX*" tar
@@ -295,12 +293,12 @@
 		("Stefan Monnier" . "monnier@iro.umontreal.ca"))
 	       (:maintainer "Stefan Monnier" . "monnier@iro.umontreal.ca"))])
  (cl-lib .
-	 [(0 6 1)
-	  nil "Forward cl-lib compatibility library for Emacs<24.3" single
-	  ((:url . "http://elpa.gnu.org/packages/cl-lib.html")
+	 [(0 7)
+	  nil "Forward cl-lib compatibility library for Emacs<24.3" tar
+	  ((:maintainer "Stefan Monnier" . "monnier@iro.umontreal.ca")
 	   (:authors
 	    ("Stefan Monnier" . "monnier@iro.umontreal.ca"))
-	   (:maintainer "Stefan Monnier" . "monnier@iro.umontreal.ca"))])
+	   (:url . "https://elpa.gnu.org/packages/cl-lib.html"))])
  (cl-print .
 	   [(1 0)
 	    ((emacs
@@ -402,7 +400,7 @@
 		      ("Jackson Ray Hamilton" . "jackson@jacksonrayhamilton.com"))
 		     (:keywords "convenience" "faces" "tools"))])
  (corfu .
-	[(0 2)
+	[(0 6)
 	 ((emacs
 	   (27 1)))
 	 "Completion Overlay Region FUnction" tar
@@ -795,9 +793,11 @@
 		    ("Matthew L. Fidler" . "matthew.fidler@gmail.com"))
 		   (:keywords "convenience"))])
  (excorporate .
-	      [(0 9 5)
+	      [(0 9 6)
 	       ((emacs
 		 (24 1))
+		(cl-lib
+		 (0 6 1))
 		(fsm
 		 (0 2 1))
 		(soap-client
@@ -1770,7 +1770,7 @@
 	   ("Mario Lang" . "mlang@delysid.org"))
 	  (:maintainer "Mario Lang" . "mlang@delysid.org"))])
  (posframe .
-	   [(1 0 1)
+	   [(1 0 2)
 	    ((emacs
 	      (26)))
 	    "Pop a posframe (just a frame) at point" tar
@@ -1780,7 +1780,7 @@
 	      ("Feng Shu" . "tumashu@163.com"))
 	     (:keywords "convenience" "tooltip"))])
  (project .
-	  [(0 5 4)
+	  [(0 6 0)
 	   ((emacs
 	     (26 1))
 	    (xref
@@ -1805,7 +1805,7 @@
 	       ("Scott Andrew Borton" . "scott@pp.htv.fi"))
 	      (:maintainer "John Darrington" . "john@darrington.wattle.id.au"))])
  (pyim .
-       [(3 6)
+       [(3 7 2)
 	((emacs
 	  (24 4))
 	 (async
@@ -2386,7 +2386,7 @@
 	  ("Oleh Krehel" . "ohwoeowho@gmail.com"))
 	 (:keywords "convenience"))])
  (tramp .
-	[(2 5 0 3)
+	[(2 5 0 4)
 	 ((emacs
 	   (25 1)))
 	 "Transparent Remote Access, Multiple Protocol" tar
@@ -2532,7 +2532,7 @@
 		  ("Wilson Snyder" . "wsnyder@wsnyder.org"))
 		 (:keywords "languages"))])
  (vertico .
-	  [(0 5)
+	  [(0 8)
 	   ((emacs
 	     (27 1)))
 	   "VERTical Interactive COmpletion" tar
@@ -2720,11 +2720,11 @@
 	("Mattias Engdegård" . "mattiase@acm.org"))
        (:keywords "lisp" "regexps"))])
  (xref .
-       [(1 0 4)
+       [(1 1 0)
 	((emacs
-	  (26 3)))
-	"Cross-referencing commands" single
-	((:url . "http://elpa.gnu.org/packages/xref.html"))])
+	  (26 1)))
+	"Cross-referencing commands" tar
+	((:url . "https://elpa.gnu.org/packages/xref.html"))])
  (yasnippet .
 	    [(0 14 0)
 	     ((cl-lib

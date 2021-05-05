@@ -22,7 +22,6 @@ These are interesting packages to check in the long term. But nothing to hurry w
  - [ ] https://github.com/daedreth/UncleDavesEmacs/blob/master/config.org An emacs DE config. The things that interest me the most here are specific to an emacs DE, the rest are pretty similar to defaults. If I switch to EXWM (which I will definitely try at some point) this might be helpful
  - [ ] SPEAKING OF EXWM, I MUST TRY IT. But although its Emacs and I will be comfortable in it from the get go, its definitely going to be time consuming so I am stalling it for now cause I dont want to spend all my time there. 
  - [ ] Flyspell dictionary check. Togglable english and greek dictionaries
- - [ ] Become an elisp guru and manage to write a correct function that finds the company-backend used and if its the latex one, makes the idle time significantly smaller, but then fixes it, if its anything else. I tried it but struggled to get a correct condition for my if statement. Its something to look into for the future though. 
   
 :CONTENTS:
 
@@ -97,7 +96,7 @@ The first section has to do with packages installed from melpa, the second with 
     (auto-package-update-delete-old-versions t)
     :config
     (auto-package-update-maybe)
-    (auto-package-update-at-time "09:00"))
+    (auto-package-update-at-time "10:00"))
 
 #+END_SRC
 
@@ -165,7 +164,7 @@ This includes:
 : t
 
 * Evil Mode
-Enabling Evil Mode, my preffered editing mode for Emacs, with the evil-collection loaded. It helps me with defining evil type keybindings for more programs, which I like. Then I also load evil-org which is a package for evil keys inside org as evil-collection doesn't have that. 
+Enabling Evil Mode, my preffered editing mode for Emacs, with the evil-collection loaded. It helps me with defining vim type keybindings for more programs, which I like. Then I also load evil-org which is a package for evil keys inside org as evil-collection doesn't have that. 
 
 #+BEGIN_SRC elisp
 
@@ -206,7 +205,7 @@ This enables:
   (yas-global-mode 1)
 
   (require 'general)
-  ;(require 'vterm-toggle)
+  (require 'vterm-toggle)
 
   (setq large-file-warning-threshold nil)
   (setq vc-follow-symlinks t)
@@ -391,10 +390,11 @@ Some settings (now using the word some here might be an underestimation, as with
 			      (org-latex-preview)
 			      (org-toggle-inline-images)))
 
+  (setq org-preview-latex-default-process 'dvisvgm)
 #+END_SRC
 
 #+RESULTS:
-| org-ref-org-menu | (lambda nil (toggle-truncate-lines) (org-latex-preview) (org-toggle-inline-images)) | (lambda nil (add-hook 'after-save-hook #'(lambda nil (let ((org-confirm-babel-evaluate nil)) (org-babel-tangle)))) 'run-at-end 'only-in-org-mode) | turn-on-org-cdlatex | (lambda nil (org-superstar-mode) (org-superstar-configure-like-org-bullets)) | evil-org-mode | #[0 \300\301\302\303\304$\207 [add-hook change-major-mode-hook org-show-all append local] 5] | #[0 \300\301\302\303\304$\207 [add-hook change-major-mode-hook org-babel-show-result-all append local] 5] | org-babel-result-hide-spec | org-babel-hide-all-hashes | #[0 \301\211\207 [imenu-create-index-function org-imenu-get-tree] 2] | org-ref-setup-label-finders |
+: dvisvgm
 	    
 ** Org Noter
    
@@ -721,7 +721,7 @@ More languages to evaluate with org-babel (by default, only elisp is evaluated).
     (defun org-inkscape-img ()
 	(interactive "P")
 	(setq string (read-from-minibuffer "Insert image name: "))
-	;; if images folder not exists create it
+	;; if images folder doesn't exist create it
 	(setq dirname (concat (f-base (buffer-file-name)) "-org-img"))
 	(if (not (file-directory-p dirname))
 	    (make-directory dirname))
@@ -751,13 +751,13 @@ More languages to evaluate with org-babel (by default, only elisp is evaluated).
     (defun svglatex (file_name)
       "Prompts for a file name (without any file prefix), takes an svg with that file name and exports the file as a latex compatible pdf file"
       (interactive "MEnter svg file name: ")
-      (setq export (concat "inkscape -D " file_name".svg -o " file_name".pdf --export-latex"))
+      (setq export (concat "inkscape -D " file_name".svg" file_name".pdf --export-latex"))
       (shell-command export))
 
   #+END_SRC
 
   #+RESULTS:
-  : ad/svglatex
+  : svglatex
  
 * Company
   Company is a minor mode, which I enable globally, which allows for autocompletions. This is useful when programming, or writing latex for completing what you want, but also can speed up the writing of long words. The lambda I add to the company-mode-hook adds latex autocompletions and allows them to be used anywhere. It also sets up company to read and give autocompletions for citations from my master .bib file in Zotero. I usually enter them with the ivy-bibtex package (my current default action is add citation there) but this is worth a try. 

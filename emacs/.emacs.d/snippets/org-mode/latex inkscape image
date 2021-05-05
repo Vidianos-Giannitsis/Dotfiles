@@ -2,4 +2,4 @@
 # name: latex inkscape image
 # key: img
 # --
-`(ad/org-inkscape-img)`
+`(org-inkscape-img)`
