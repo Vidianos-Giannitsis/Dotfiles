@@ -30,7 +30,7 @@
 | SPC B            | Open the Ivy Bibtex menu to open an article saved to my Zotero database                                                                              |
 | SPC h            | Jump to heading with Counsel                                                                                                                         |
 | SPC l            | Activates linum mode which turns on line numbers                                                                                                     |
-| SPC e            | Opens an ielm buffer. ielm is for interactively running elisp in the current emacs session. It can be very helpful                                   |
+| SPC i            | Opens an ielm buffer. ielm is for interactively running elisp in the current emacs session. It can be very helpful                                   |
 |------------------+------------------------------------------------------------------------------------------------------------------------------------------------------|
 | *Dired*            | Dired is the Emacs file manager, below are commands specific to dired (bound to SPC d)                                                               |
 |------------------+------------------------------------------------------------------------------------------------------------------------------------------------------|
@@ -170,6 +170,8 @@
 | , j        | In org-tree-slide go to the next "slide" meaning org-heading                                                                                         |
 | , k        | Same as above but for the previous "slide"                                                                                                           |
 | , S        | Insert my lab skeleton. When I play around with this feature more, this will become a leader key to insert all my skeletons. But I only have one now |
+| , T        | Activate toc-org mode. This is a minor mode that adds a table of contents which auto updates on saving under every heading with a :TOC: tag.         |
+|            | This is used on my README files for github but since I only need it per buffer on README files I dont hook it to org mode                            |
 |------------+------------------------------------------------------------------------------------------------------------------------------------------------------|
 | *To-Dos*     | You can do a lot with to-do items in Org. These are the commands I have keybound which are specific to to-do management. They are under , t          |
 |------------+------------------------------------------------------------------------------------------------------------------------------------------------------|
@@ -224,7 +226,8 @@
        "k" '(org-tree-slide-move-previous-tree :which-key "Previous Slide")
        "p" '(org-plot/gnuplot :which-key "Plot table data")
        "f" 'org-footnote-action
-       "S" '(lab-skeleton :which-key "Insert my lab report template"))
+       "S" '(lab-skeleton :which-key "Insert my lab report template")
+       "T" '(toc-org-mode :which-key "Insert ToC"))
 
   (general-define-key
    :states 'normal
@@ -295,7 +298,8 @@
    :states 'normal
    :keymaps 'override
    "u" 'undo-tree-undo
-   "C-r" 'undo-tree-redo)
+   "C-r" 'undo-tree-redo
+   "=" 'math-at-point)
 
   (general-define-key
    :states 'insert

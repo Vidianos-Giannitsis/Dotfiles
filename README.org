@@ -16,7 +16,20 @@ Below, is an explanation of every directory inside the repo.
 
 I only have specific READMEs for i3, qtile and emacs (the latter two being literate config files of those programs) as the others dont need much more than a description inside this file. Everything you need for them is explained here.
 
-** Emacs
+** Table of Contents                                                    :TOC:
+- [[#introduction][Introduction]]
+- [[#structure][Structure]]
+- [[#emacs][Emacs]]
+- [[#bashrc--starship][Bashrc & Starship]]
+- [[#zathura][Zathura]]
+- [[#alacritty][Alacritty]]
+- [[#i3][i3]]
+- [[#qtile][Qtile]]
+- [[#picom][Picom]]
+- [[#rofi][Rofi]]
+- [[#brave][Brave]]
+
+* Emacs
    Lets start with Emacs, my absolute favourite program which I use for as much as possible. If you find this git repo it was probably due to this. The in my opinion best part of my dotfiles. I was a spacemacs user for some time before switching to this config, so it is reminiscent to that in some ways. Of course, as you can expect, this is also a literate config file inside the README of the repo which documents very well everything that happens inside it. Emacs is that one tool that you can literally mold to your workflow perfectly as you can make it whatever you want really. I want to say that at least for me, its truly a work of art. Enjoy it.
 
 The repo, has quite a few things, as its my entire /.emacs.d. Outside of README and init.el, other places of importance are: 
@@ -25,7 +38,7 @@ The repo, has quite a few things, as its my entire /.emacs.d. Outside of README 
 
 For the rest, like some screenshots of different emacs buffers refer to Emacs's README inside this repo, have fun!
 
-** Bashrc & Starship
+* Bashrc & Starship
 I have my .bashrc, which albeit not being heavily configured, has some things I want to have by default in my shell so I keep it here.
 
 Starship is my current bash prompt and its config file is also included in this. To activate it you need to add this command to your .bashrc. Mine is not heavily configured but its nice to add it either way. Will work on it eventually.
@@ -34,7 +47,7 @@ Starship is my current bash prompt and its config file is also included in this.
 eval "$(starship init bash)"
 #+END_SRC
 
-** Zathura
+* Zathura
    *WARNING: I have stopped using Zathura so this section is outdated compared to the rest of my config*
    
 Zathura is one of the pdf viewers I use currently. Its a great minimal vim-like (yes, I am an emacs user, but I love the vim keybindings and use them wherever I can. My emacs has evil mode by default cause I prefer it to default emacs) pdf viewer. My config doesn't include much. I just change its colours to the solarized theme (its a common  theme between my applications as you will see as I love it). I love its look like this. I mostly use pdftools inside Emacs these days, but having both Zathura and qpdfview is useful in case I need them. 
@@ -42,13 +55,13 @@ Zathura is one of the pdf viewers I use currently. Its a great minimal vim-like 
 This is how a pdf renders, with these colours in zathura, I didn't know what pdf to show here so have a page of my Latex symbols cheatsheet
 [[https://github.com/AuroraDragoon/Dotfiles/blob/master/screenshots/zathura.png]]
 
-** Alacritty
+* Alacritty
 Alacritty is my preferred terminal emulator. There isnt much more than defaults and changing the color scheme to solarized-dark, but still worth keeping
 
 This is how my alacritty terminal looks, with neofetch in the screenshot so its not so empty.
 [[https://github.com/AuroraDragoon/Dotfiles/blob/master/screenshots/neofetch.png]]
 
-** i3
+* i3
 i3, together with qtile, are currently my two favourite tiling window managers. They are configured specifically to my liking, but feel free to take the ideas and maybe change the specifics. i3 was the first tiling window manager I got into, because of its excellent documentation (seriously, its probably the best docs I have ever seen for a piece of software) and ease of configuring (configured in plain text which makes it very easy) and I would definitely recommend it for anyone else new to programming and tiling window managers.
 
 Inside the repo, you will find a README file explaining some things about the config file (I dont have a literate config for it as its formatting is so easy I never considered it important, but there are some things I would like to explain), the i3 folder, which contains my i3 config file and a folder for i3blocks, with which I customise all the widgets in my i3bar.
@@ -57,28 +70,28 @@ This is the look of my current i3 config (although, the programs are what truly 
 [[https://github.com/AuroraDragoon/Dotfiles/blob/master/screenshots/i3.png]]
 This is rather outdated as I basically only use Qtile currently. Also since changing to a new pc, something broke in my i3bar and not using i3 much, I disregarded it and its kinda broken now. I probably dont have something installed but I am too bored to bother as I barely ever use i3 after discovering qtile, which I consider superior. 
 
-** Qtile
+* Qtile
 Qtile, is my other heavily configured tiling window manager and actually the one I use as my daily driver for the most part. This one is configured in python in a format not as simple as i3's (although its still very easy and understandable), so its README file is a literate config file, so looking at that instead of config.py is heavily encouraged. Together with the config, is a shell script which I use to autostart certain applications (things like picom and network manager are included there). Outside of this, there isn't much else to say about this, everything is included in the README file. 
 
 This is the look of my current qtile config (but, as with i3, its not that you see much here, its mostly for the bar and background)
 [[https://github.com/AuroraDragoon/Dotfiles/blob/master/screenshots/qtile.png]]
 
-** Picom
-   Picom is my compositor currently. The main thing I set in it is a small fading effect. I have also played around with different opacity settings, but I do think that 100% is the best for me. These arent the biggest of changes but they add a little bit of eye candy to my desktop which I like. Its nothing big, but certainly worth keeping.
+* Picom
+  Picom is my compositor currently. The main thing I set in it is a small fading effect. I have also played around with different opacity settings, but I do think that 100% is the best for me. These arent the biggest of changes but they add a little bit of eye candy to my desktop which I like. Its nothing big, but certainly worth keeping.
 
-** Rofi
-   Look, I have tried and like both Rofi and Dmenu. I am a big fan of keybinding all of my favourite programs to different keybindings so it doesnt find the most usage but its always good to have it here just in case. My config changes the colours and makes the rofi box slightly smaller because it was too large imo. Dmenu doesnt have a section here or a file at all in this repo because thats suckless for you. I just have a one-liner for dmenu. 
+* Rofi
+  Look, I have tried and like both Rofi and Dmenu. I am a big fan of keybinding all of my favourite programs to different keybindings so it doesnt find the most usage but its always good to have it here just in case. My config changes the colours and makes the rofi box slightly smaller because it was too large imo. Dmenu doesnt have a section here or a file at all in this repo because thats suckless for you. I just have a one-liner for dmenu. 
    
-** Brave
-   While not a dotfile in the general sense, I have some configurations for brave which I want in this repository. Inside the "brave" folder, there is the configuration for my brave start page. By default, Brave wont allow you to change the start page, but by using the Custom New Tab URL addon for chromium browsers and linking to the html file inside that folder, that file will become your new start page. I also note the plugins I use on my setup.
+* Brave
+  While not a dotfile in the general sense, I have some configurations for brave which I want in this repository. Inside the "brave" folder, there is the configuration for my brave start page. By default, Brave wont allow you to change the start page, but by using the Custom New Tab URL addon for chromium browsers and linking to the html file inside that folder, that file will become your new start page. I also note the plugins I use on my setup.
 
-   The start page is a customised version of the start page inside this github repo [[https://github.com/Cel51/startpage]] personalised for me. I love how I can add all my bookmarks split in sections so I can view them on the startpage. Its also awesome how it adds a small terminal window which with the shortcut displayed left of the name, prefixed with f I can launch any of those bookmarks. The other "killer" feature of the startpage is its search bar can use multiple search engines so I can query websites such as the Arch Wiki, WolframAlpha, Youtube and Google Scholar which I use fairly often. To use that press ! and a letter (usually the first letter of the website). You can see the full list of search engines inside /script/var.js (you can also see all my bookmarks and their shortcuts there). This eases the process imo and I really like how its done in this startpage. There is also supposed to be an RSS feader on the start page but I personally couldnt get it to work (not that I tried hard, but I couldn't get it to work in the little time I tried).
-   It looks like this [[https://github.com/AuroraDragoon/Dotfiles/blob/master/screenshots/start_page.png]]
+  The start page is a customised version of the start page inside this github repo [[https://github.com/Cel51/startpage]] personalised for me. I love how I can add all my bookmarks split in sections so I can view them on the startpage. Its also awesome how it adds a small terminal window which with the shortcut displayed left of the name, prefixed with f I can launch any of those bookmarks. The other "killer" feature of the startpage is its search bar can use multiple search engines so I can query websites such as the Arch Wiki, WolframAlpha, Youtube and Google Scholar which I use fairly often. To use that press ! and a letter (usually the first letter of the website). You can see the full list of search engines inside /script/var.js (you can also see all my bookmarks and their shortcuts there). This eases the process imo and I really like how its done in this startpage. There is also supposed to be an RSS feader on the start page but I personally couldnt get it to work (not that I tried hard, but I couldn't get it to work in the little time I tried).
+  It looks like this [[https://github.com/AuroraDragoon/Dotfiles/blob/master/screenshots/start_page.png]]
 
-   For plugins,
-   - I use Vimium for keybindings inside brave
-   - Darkreader for global dark theme
-   - Bukubrow which is a plugin for managing my Buku bookmarks which I prefer from Chrome's default bookmark system and I can also uneffortlessly transition to other browsers (as the database is in my file system and not on brave). Furthermore these bookmarks are available for use from Emacs or my terminal, although tbh I mostly use browser bookmarks when I have a browser open so I mostly use this extension. Its still helpful to have them though I believe.
-   - I also use the Zotero plugin to save articles that I am interested in or that I want to read for a uni project inside the Zotero database. It also makes it very easy for me to add citations to everything I used using Zotero so its very powerful generally.
-   - Lastly, for finding the articles I want, I use the google scholar addon. 
-   - Outside of those it matches my GTK theme for coloring.
+  For plugins,
+  - I use Vimium for keybindings inside brave
+  - Darkreader for global dark theme
+  - Bukubrow which is a plugin for managing my Buku bookmarks which I prefer from Chrome's default bookmark system and I can also uneffortlessly transition to other browsers (as the database is in my file system and not on brave). Furthermore these bookmarks are available for use from Emacs or my terminal, although tbh I mostly use browser bookmarks when I have a browser open so I mostly use this extension. Its still helpful to have them though I believe.
+  - I also use the Zotero plugin to save articles that I am interested in or that I want to read for a uni project inside the Zotero database. It also makes it very easy for me to add citations to everything I used using Zotero so its very powerful generally.
+  - Lastly, for finding the articles I want, I use the google scholar addon. 
+  - Outside of those it matches my GTK theme for coloring.

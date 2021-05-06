@@ -35,18 +35,15 @@ I have drawn inspiration from a lot of other init.el's but the most apparent one
 
 Note that I know little to no elisp yet (I am in the process of learning though), so some things are probably not done in the most efficient way possible, but everything I have set has its desired behaviour, which is enough for me.
 
-I hope you will find something useful here that you can put to your emacs config as well. Below, is the Table of Contents for my config as it has grown to be quite lengthy. Enjoy!!
+I hope you will find something useful here that you can put to your emacs config as well. 
 
-:CONTENTS:
+* Table of Contents                                                     :TOC:
 - [[#about-this-config][About this config]]
 - [[#packages][Packages]]
 - [[#sensible-defaults][Sensible Defaults]]
 - [[#evil-mode][Evil Mode]]
 - [[#utilities][Utilities]]
 - [[#keybindings][Keybindings]]
-  - [[#global-keybindings-defined-with-the-space-leader-key][Global keybindings, defined with the space leader key]]
-  - [[#org-mode-keybindings][Org mode keybindings]]
-  - [[#other-keybindings-either-mode-specific-or-general-that-function-without-the-space-key][Other keybindings, either mode specific or general, that function without the space key]]
 - [[#dired][Dired]]
 - [[#useful-minor-modes][Useful Minor Modes]]
 - [[#org-mode][Org-mode]]
@@ -55,17 +52,19 @@ I hope you will find something useful here that you can put to your emacs config
   - [[#org-noter][Org Noter]]
   - [[#org-babel][Org Babel]]
   - [[#org-agenda-and-todos][Org-agenda and TODOs]]
-- [[#org-roam-references-and-the-zettelkasten-workflow][Org Roam, References and the Zettelkasten Workflow]]
+- [[#org-roam-references-and-the-zettelkasten-workflow][Org-Roam, References and the Zettelkasten Workflow]]
   - [[#initialisation-variables][Initialisation Variables]]
   - [[#templates][Templates]]
+- [[#skeletons][Skeletons]]
 - [[#inkscape-x-emacs][Inkscape x Emacs]]
+- [[#company][Company]]
 - [[#other-major-modes][Other Major Modes]]
   - [[#ebuku][Ebuku]]
   - [[#pdf-tools][PDF Tools]]
   - [[#octave][Octave]]
   - [[#emacs-application-framework][Emacs Application Framework]]
+  - [[#elisp][Elisp]]
 - [[#custom-variables][Custom Variables]]
-:END:
 
 * Packages
   :PROPERTIES:
@@ -231,6 +230,8 @@ This enables:
   (setq counsel-spotify-client-id "0df2796a793b41dc91711eb9f85c0e77")
   (setq counsel-spotify-client-secret "bcdbb823795640248ff2c29eedadb800")
 
+  (require 'math-at-point)
+
 #+END_SRC
 
 #+RESULTS:
@@ -258,7 +259,11 @@ This enables:
   #+BEGIN_SRC elisp
      (require 'dired-x)
 
-    (add-hook 'dired-mode-hook 'treemacs-icons-dired-mode)
+    ;(add-hook 'dired-mode-hook 'treemacs-icons-dired-mode)
+
+    (use-package all-the-icons-dired
+      :hook (dired-mode . all-the-icons-dired-mode)
+      :config (setq all-the-icons-dired-monochrome nil))
 
     (use-package dired-hide-dotfile
       :hook (dired-mode . dired-hide-dotfiles-mode))
@@ -333,9 +338,9 @@ Some settings (now using the word some here might be an underestimation, as with
    This first section is about some packages I load for org, which are very helpful for my workflow, such as:
    + Better headings for org, as I am not a fan of the default asterisks.
    + I load org-download after org, this is a helpful addon which allows me to paste photos on my clipboard to org, which makes adding photos to org documents much faster.
-   + I activate calctex and activate it when I go into calc's embedded mode. Its a neat package that allows me to type a formula inside calc and renders it automatically into latex. Latex snippets are what I use mostly (you can find them inside the snippets directory of my .emacs.d but if you want to draw inspiration from somewhere there are much better sources tbh).
+   + I activate calctex and activate it when I go into calc's embedded mode. Its a neat package that allows me to type a formula inside calc and renders it automatically into latex. Latex snippets are what I use mostly but this is a very neat package and I had to include it here (you can find them inside the snippets directory of my .emacs.d but if you want to draw inspiration from somewhere there are much better sources tbh).
    + I activate org-cdlatex-mode which makes typing latex equations easier inside org and massively improves speed of typing equations together with snippets for org
-   + Also add org-tree-slide from presentations inside Org
+   + I add org-tree-slide for presentations inside Org
    + Require the org export beamer package so beamer export options are there by default
      
 #+BEGIN_SRC elisp

@@ -9,6 +9,22 @@ Welcome to my literate qtile config. This was written in Emacs's org-mode with t
 
 Feel free to use any part you like in your own qtile configuration, for that is the reason for uploading this.
 
+* Table of Contents                                                     :TOC:
+- [[#about-this-config][About this config]]
+- [[#imports][Imports]]
+- [[#variables][Variables]]
+- [[#hooks][Hooks]]
+- [[#keybindings][Keybindings]]
+  - [[#layout-manipulation][Layout manipulation]]
+  - [[#window-and-window-manager-manipulation][Window and window manager manipulation]]
+  - [[#my-favourite-programs][My favourite programs]]
+  - [[#multimedia-keys][Multimedia Keys]]
+- [[#workspaces][Workspaces]]
+- [[#layouts][Layouts]]
+- [[#qtile-bar][Qtile Bar]]
+- [[#floating-windows][Floating Windows]]
+- [[#others][Others]]
+
 * Imports
 Not much to say here, importing some necessary packages for qtile to have all the functionality I want. Some were here by default, while I added some others.
 

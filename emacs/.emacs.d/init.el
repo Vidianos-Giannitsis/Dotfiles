@@ -107,11 +107,17 @@
 (setq counsel-spotify-client-id "0df2796a793b41dc91711eb9f85c0e77")
 (setq counsel-spotify-client-secret "bcdbb823795640248ff2c29eedadb800")
 
+(require 'math-at-point)
+
 (require 'keybindings)
 
 (require 'dired-x)
 
-(add-hook 'dired-mode-hook 'treemacs-icons-dired-mode)
+;(add-hook 'dired-mode-hook 'treemacs-icons-dired-mode)
+
+(use-package all-the-icons-dired
+  :hook (dired-mode . all-the-icons-dired-mode)
+  :config (setq all-the-icons-dired-monochrome nil))
 
 (use-package dired-hide-dotfile
   :hook (dired-mode . dired-hide-dotfiles-mode))
