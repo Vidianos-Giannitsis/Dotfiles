@@ -163,6 +163,9 @@
   :bind (:map projectile-mode-map
 	      ("M-p" . projectile-command-map)))
 
+(setq flyspell-default-dictionary "greek")
+(add-hook 'flyspell-mode 'flyspell-buffer)
+
 (add-hook 'org-mode-hook #'(lambda ()
 			       (org-superstar-mode)
 			       (org-superstar-configure-like-org-bullets)))
@@ -195,7 +198,7 @@
 (setq org-image-actual-width nil)
 
 (add-hook 'org-mode-hook '(lambda ()
-			    (toggle-truncate-lines)
+			    (visual-line-mode)
 			    (org-latex-preview)
 			    (org-toggle-inline-images)))
 

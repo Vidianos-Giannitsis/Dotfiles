@@ -32,15 +32,16 @@
 | SPC l            | Activates linum mode which turns on line numbers                                                                                                     |
 | SPC i            | Opens an ielm buffer. ielm is for interactively running elisp in the current emacs session. It can be very helpful                                   |
 |------------------+------------------------------------------------------------------------------------------------------------------------------------------------------|
-| *Dired*            | Dired is the Emacs file manager, below are commands specific to dired (bound to SPC d)                                                               |
+| *Dired*            | Dired is the Emacs file manager, below are commands specific to dired (bound to SPC d) or commands to quickly jump to important files                |
 |------------------+------------------------------------------------------------------------------------------------------------------------------------------------------|
 | SPC D            | Asks for a directory and opens dired in that directory                                                                                               |
 | SPC d j          | Opens dired in the current working directory. This is faster than simply calling dired when you want to switch between files in the same directory   |
 | SPC d h          | Toggle visibility of dotfiles inside dired. In the dired section I set them to be hidden by default, and this toggles that behaviour                 |
 | SPC d f          | Find a file inside a directory. I usually prefer just using dired but this can prove useful in folders with a lot of "chaos"                         |
-| SPC d c          | Open my Emacs config. This is very useful for when hacking on Emacs so I can quickly go to my configuration file whenever I want to do any kind of   |
-|                  | hacking on my config without the need to find the full path to this file.                                                                            |
+| SPC d c          | Open my Emacs config.                                                                                                                                |
 | SPC d k          | Open the file which stores all my Emacs keybindings (this file). This is split from my main config as its too long, but its a very important file    |
+| SPC d u          | Open dired on the current semester's folder                                                                                                          |
+| SPC d q          | Open my Qtile config.                                                                                                                                |
 |------------------+------------------------------------------------------------------------------------------------------------------------------------------------------|
 | *Org-Roam*         | I use Org-roam for my notetaking. Its got a lot of useful commands. The letter r is reserved for it (SPC r for general and , r for org-specific)     |
 | *References*       | Besides Org-roam, r makes a lot of sense as the leader key for references. The two are definitely related so this isn't a problem imo                |
@@ -101,6 +102,8 @@
     "d j" '(dired-jump :which-key "Open dired in the current buffer's directory")
     "d c" '((lambda() (interactive)(find-file "~/.emacs.d/README.org")) :which-key "Jump to literate Emacs config")
     "d k" '((lambda() (interactive)(find-file "~/.emacs.d/libs/keybindings.org")) :which-key "Jump to Emacs keybindings config file")
+    "d u" '((lambda() (interactive)(dired "~/Documents/4o_εξάμηνο")) :which-key "Jump to Uni folder")
+    "d q" '((lambda() (interactive)(find-file "~/.config/qtile/README.org")) :which-key "Jump to literate Qtile config")
     "t" 'toggle-truncate-lines
     "T" 'org-babel-tangle
     "RET" 'vterm-toggle
@@ -172,6 +175,7 @@
 | , S        | Insert my lab skeleton. When I play around with this feature more, this will become a leader key to insert all my skeletons. But I only have one now |
 | , T        | Activate toc-org mode. This is a minor mode that adds a table of contents which auto updates on saving under every heading with a :TOC: tag.         |
 |            | This is used on my README files for github but since I only need it per buffer on README files I dont hook it to org mode                            |
+| , b        | Prompt for adding fancy beamer blocks for presentations                                                                                              |
 |------------+------------------------------------------------------------------------------------------------------------------------------------------------------|
 | *To-Dos*     | You can do a lot with to-do items in Org. These are the commands I have keybound which are specific to to-do management. They are under , t          |
 |------------+------------------------------------------------------------------------------------------------------------------------------------------------------|
@@ -227,7 +231,8 @@
        "p" '(org-plot/gnuplot :which-key "Plot table data")
        "f" 'org-footnote-action
        "S" '(lab-skeleton :which-key "Insert my lab report template")
-       "T" '(toc-org-mode :which-key "Insert ToC"))
+       "T" '(toc-org-mode :which-key "Insert ToC")
+       "b" 'org-beamer-select-environment)
 
   (general-define-key
    :states 'normal

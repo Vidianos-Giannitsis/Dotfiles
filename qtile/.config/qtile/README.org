@@ -46,7 +46,7 @@ Defining them here helps if I want to use them in multiple locations of my confi
 
 #+BEGIN_SRC python
   mod = "mod4"
-  terminal = "tilix"
+  terminal = "alacritty"
   editor = "emacs"
   browser_1 = "firefox"
   browser_2 = "brave"
@@ -164,6 +164,7 @@ Some notes about them are:
   Key2("M-C-a", lazy.spawn("pavucontrol"), desc="Launch audio control"),
   Key2("M-C-g", lazy.spawn("geogebra"), desc="Launch geogebra"),
   Key2("M-C-i", lazy.spawn("inkscape"), desc="Launch inkscape"),
+  Key2("M-S-c", lazy.spawn("tuxedo-control-center"), desc="Launch computer settings manager"),
 #+END_SRC
 
 ** Multimedia Keys

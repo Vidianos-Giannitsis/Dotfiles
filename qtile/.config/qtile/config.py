@@ -9,7 +9,7 @@ import os
 import subprocess
 
 mod = "mod4"
-terminal = "tilix"
+terminal = "alacritty"
 editor = "emacs"
 browser_1 = "firefox"
 browser_2 = "brave"
@@ -83,6 +83,7 @@ Key2("M-C-t", lazy.spawn("thunderbird"), desc="Launch email client"),
 Key2("M-C-a", lazy.spawn("pavucontrol"), desc="Launch audio control"),
 Key2("M-C-g", lazy.spawn("geogebra"), desc="Launch geogebra"),
 Key2("M-C-i", lazy.spawn("inkscape"), desc="Launch inkscape"),
+Key2("M-S-c", lazy.spawn("tuxedo-control-center"), desc="Launch computer settings manager"),
 
 Key2("<XF86AudioRaiseVolume>", lazy.spawn("amixer -c 1 sset Master 5%+ unmute"), desc="Raise Volume and unmute if muted"),
     Key2("<XF86AudioLowerVolume>", lazy.spawn("amixer -c 1 sset Master 5%- unmute"), desc="Lower Volume and unmute if muted"),

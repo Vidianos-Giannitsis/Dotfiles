@@ -33,7 +33,7 @@ Welcome kind stranger, to my Emacs config. This is the heart of my dotfiles and 
 
 I have drawn inspiration from a lot of other init.el's but the most apparent one is the spacemacs keybindings. I was a spacemacs user for a few months before deciding to start using this personal config for Emacs. I found its keybindings very ergonomic and although most things arent exactly the way they are done in spacemacs, the inspiration is apparent. For example the Space and , keys are leader keys which I use a lot (space for general commands and , for mode specific, currently only org though).
 
-Note that I know little to no elisp yet (I am in the process of learning though), so some things are probably not done in the most efficient way possible, but everything I have set has its desired behaviour, which is enough for me.
+Note that I am no elisp ninja and know just enough to write this config in a simple way, so some things are probably not done in the most efficient way possible, but everything I have set has its desired behaviour, which is enough for me.
 
 I hope you will find something useful here that you can put to your emacs config as well. 
 
@@ -285,6 +285,7 @@ This enables:
 + Calfw is a calendar app for Emacs. Calfw-git allows you to see your git commit history inside of calfw while calfw-org shows org-todos in a calendar interface.
 + Audio files, obscure image files and MS/Libre Office documents don't open properly inside Emacs. I set up openwith to open them with external files.
 + Loading projectile, to remind me to play around with it some day.
++ Make the default flyspell dictionary greek and run flyspell on the whole buffer when flyspell mode is activated. I find spellchecking software to be very annoying and intrusive in my typical writing workflow so I dont want this to activate when I enter text buffers. Rather, I want to be able to run this once, when I am done with the writing and fix any errors at that point. This does just that
   
   #+BEGIN_SRC elisp
 
@@ -325,6 +326,9 @@ This enables:
       (projectile-mode +1)
       :bind (:map projectile-mode-map
 		  ("M-p" . projectile-command-map)))
+
+    (setq flyspell-default-dictionary "greek")
+    (add-hook 'flyspell-mode 'flyspell-buffer)
 
   #+END_SRC
 
@@ -391,11 +395,12 @@ Some settings (now using the word some here might be an underestimation, as with
   (setq org-image-actual-width nil)
 
   (add-hook 'org-mode-hook '(lambda ()
-			      (toggle-truncate-lines)
+			      (visual-line-mode)
 			      (org-latex-preview)
 			      (org-toggle-inline-images)))
 
   (setq org-preview-latex-default-process 'dvisvgm)
+
 #+END_SRC
 
 #+RESULTS:

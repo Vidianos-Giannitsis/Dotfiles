@@ -14,6 +14,8 @@
   "d j" '(dired-jump :which-key "Open dired in the current buffer's directory")
   "d c" '((lambda() (interactive)(find-file "~/.emacs.d/README.org")) :which-key "Jump to literate Emacs config")
   "d k" '((lambda() (interactive)(find-file "~/.emacs.d/libs/keybindings.org")) :which-key "Jump to Emacs keybindings config file")
+  "d u" '((lambda() (interactive)(dired "~/Documents/4o_εξάμηνο")) :which-key "Jump to Uni folder")
+  "d q" '((lambda() (interactive)(find-file "~/.config/qtile/README.org")) :which-key "Jump to literate Qtile config")
   "t" 'toggle-truncate-lines
   "T" 'org-babel-tangle
   "RET" 'vterm-toggle
@@ -94,7 +96,8 @@
      "p" '(org-plot/gnuplot :which-key "Plot table data")
      "f" 'org-footnote-action
      "S" '(lab-skeleton :which-key "Insert my lab report template")
-     "T" '(toc-org-mode :which-key "Insert ToC"))
+     "T" '(toc-org-mode :which-key "Insert ToC")
+     "b" 'org-beamer-select-environment)
 
 (general-define-key
  :states 'normal
