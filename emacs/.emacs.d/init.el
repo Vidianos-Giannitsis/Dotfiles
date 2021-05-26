@@ -25,7 +25,7 @@
 (load-theme 'doom-dracula t)
 
 (menu-bar-mode -1)
-(toggle-scroll-bar -1)
+(scroll-bar-mode -1)
 (tool-bar-mode -1)
 (setq ring-bell-function 'ignore)
 
@@ -56,7 +56,17 @@
 
 (setq org-hide-emphasis-markers t)
 
-(set-face-attribute 'default nil :height 140 :family "Source Code Pro")
+(defun set-font-faces ()
+  "Needed to set up my fonts to work with the emacs daemon"
+  (set-face-attribute 'default nil :height 140 :family "Source Code Pro"))
+
+(if (daemonp)
+    (add-hook 'after-make-frame-functions
+	      (lambda (frame)
+		(setq doom-modeline-icon t)
+		(with-selected-frame frame
+		  (set-font-faces))))
+  (set-font-faces))
 
 (setq evil-collection-setup-minibuffer t)
 (setq evil-want-keybinding nil)
@@ -108,6 +118,7 @@
 (setq counsel-spotify-client-secret "bcdbb823795640248ff2c29eedadb800")
 
 (require 'math-at-point)
+(require 'molar-mass)
 
 (require 'keybindings)
 
@@ -200,6 +211,7 @@
 (add-hook 'org-mode-hook '(lambda ()
 			    (visual-line-mode)
 			    (org-latex-preview)
+			    (org-fragtog-mode)
 			    (org-toggle-inline-images)))
 
 (setq org-preview-latex-default-process 'dvisvgm)
@@ -388,7 +400,7 @@
   ""
   "#+TITLE:"str"\n"
   "glatex\n"
-  "ab\n\n"
+  "ab\n\pagebreak\n\n"
 
   "* Εισαγωγή\n\n"
 
@@ -401,6 +413,15 @@
   "* Βιβλιογραφία\n"
   "bibliography:~/Sync/My_Library.bib\n"
   "bibliographystyle:unsrt")
+
+(defun org-scratchpad ()
+  "Yank the entire document, delete it and save the buffer. This is very useful for my scratchpad setup"
+  (interactive)
+  (evil-yank-characters (point-min) (point-max))
+  (delete-region (point-min) (point-max))
+  (save-buffer))
+
+(add-to-list 'warning-suppress-types '(yasnippet backquote-change))
 
 (defun org-inkscape-img ()
     (interactive "P")
@@ -435,7 +456,7 @@
 (defun svglatex (file_name)
   "Prompts for a file name (without any file prefix), takes an svg with that file name and exports the file as a latex compatible pdf file"
   (interactive "MEnter svg file name: ")
-  (setq export (concat "inkscape -D " file_name".svg" file_name".pdf --export-latex"))
+  (setq export (concat "inkscape --export-latex --export-pdf=" file_name ".pdf" file_name ".svg" ))
   (shell-command export))
 
 (add-hook 'after-init-hook 'global-company-mode)

@@ -21,7 +21,6 @@ These are interesting packages to check in the long term. But nothing to hurry w
  - [ ] There is a mastodon package for Emacs (I am assuming to run mastodon from inside Emacs). If I try out mastodon, I cant see why I shouldn't use this.
  - [ ] https://github.com/daedreth/UncleDavesEmacs/blob/master/config.org An emacs DE config. The things that interest me the most here are specific to an emacs DE, the rest are pretty similar to defaults. If I switch to EXWM (which I will definitely try at some point) this might be helpful
  - [ ] SPEAKING OF EXWM, I MUST TRY IT. But although its Emacs and I will be comfortable in it from the get go, its definitely going to be time consuming so I am stalling it for now cause I dont want to spend all my time there. 
- - [ ] Flyspell dictionary check. Togglable english and greek dictionaries
   
 :CONTENTS:
 
@@ -116,7 +115,7 @@ This includes:
 + Changed my modeline to the doom-modeline. It looks better than the default modeline in Emacs imo
 + Changing yes-no prompts to y-n, because its simply easier to type than yes-no.
 + Hide elements such as asterisks when writing a bold word by default. In the [[*Utilities][Utilities]] section of the config, I also define a function which toggles this behaviour
-+ Set my font to Source Code Pro with the right font size for me.
++ Set my font to Source Code Pro with the right font size for me. To use daemon mode properly, this needs a bit more code.
 
 #+BEGIN_SRC elisp
 
@@ -125,7 +124,7 @@ This includes:
   (load-theme 'doom-dracula t)
 
   (menu-bar-mode -1)
-  (toggle-scroll-bar -1)
+  (scroll-bar-mode -1)
   (tool-bar-mode -1)
   (setq ring-bell-function 'ignore)
 
@@ -156,11 +155,21 @@ This includes:
 
   (setq org-hide-emphasis-markers t)
 
-  (set-face-attribute 'default nil :height 140 :family "Source Code Pro")
+  (defun set-font-faces ()
+    "Needed to set up my fonts to work with the emacs daemon"
+    (set-face-attribute 'default nil :height 140 :family "Source Code Pro"))
+
+  (if (daemonp)
+      (add-hook 'after-make-frame-functions
+		(lambda (frame)
+		  (setq doom-modeline-icon t)
+		  (with-selected-frame frame
+		    (set-font-faces))))
+    (set-font-faces))
 #+END_SRC
 
 #+RESULTS:
-: t
+| (lambda (frame) (setq doom-modeline-icon t) (with-selected-frame frame (set-font-faces))) | evil-init-esc | (lambda (frame) (setq doom-modeline-icon t) (let ((old-frame (selected-frame)) (old-buffer (current-buffer))) (unwind-protect (progn (select-frame frame 'norecord) (set-font-faces)) (if (frame-live-p old-frame) (progn (select-frame old-frame 'norecord))) (if (buffer-live-p old-buffer) (progn (set-buffer old-buffer)))))) | doom-modeline-refresh-font-width-cache | doom-modeline-set-selected-window | x-dnd-init-frame |
 
 * Evil Mode
 Enabling Evil Mode, my preffered editing mode for Emacs, with the evil-collection loaded. It helps me with defining vim type keybindings for more programs, which I like. Then I also load evil-org which is a package for evil keys inside org as evil-collection doesn't have that. 
@@ -195,6 +204,7 @@ This enables:
 + Changing the heading and title font to match my global font and resizing them so 1st tier headings and titles actually stand out like they should.
 + A function to toggle the behaviour of markup elements such as visible asterisks when writing a message in bold. I dont like seeing them usually, but its good to have a function which toggle this behaviour
 + Setting the spotify id which counsel needs to be able to control spotify through Emacs.
++ Loading small utility packages such as math at point (which makes doing calculations in Emacs faster) and molar-mass (a Molar mass calculator for Emacs)
 
 #+BEGIN_SRC elisp
 
@@ -231,11 +241,12 @@ This enables:
   (setq counsel-spotify-client-secret "bcdbb823795640248ff2c29eedadb800")
 
   (require 'math-at-point)
+  (require 'molar-mass)
 
 #+END_SRC
 
 #+RESULTS:
-| apply | tab-jump-out | 1 |
+: molar-mass
 
 * Keybindings
   This is my absolute favourite section of this entire config. But its a very big part of my config and I considered it more prudent to include it as its own file. You can find [[https://github.com/AuroraDragoon/Dotfiles/blob/master/emacs/.emacs.d/libs/keybindings.org][keybindings.org]] inside the libs directory (which contains all the external elisp "libraries" I have installed manually). The org file is the literate configuration of my keybindings. In that directory you will also find the keybindings.el file which I require in this section of the config to load. It acts as if it was an external package for Emacs which helps make this config more tidy. 
@@ -397,6 +408,7 @@ Some settings (now using the word some here might be an underestimation, as with
   (add-hook 'org-mode-hook '(lambda ()
 			      (visual-line-mode)
 			      (org-latex-preview)
+			      (org-fragtog-mode)
 			      (org-toggle-inline-images)))
 
   (setq org-preview-latex-default-process 'dvisvgm)
@@ -700,7 +712,7 @@ More languages to evaluate with org-babel (by default, only elisp is evaluated).
       ""
       "#+TITLE:"str"\n"
       "glatex\n"
-      "ab\n\n"
+      "ab\n\pagebreak\n\n"
 
       "* Εισαγωγή\n\n"
 
@@ -719,8 +731,30 @@ More languages to evaluate with org-babel (by default, only elisp is evaluated).
   #+RESULTS:
   : lab-skeleton
   
+* Emacs Scratchpad
+  Ever wanted to write some text somewhere besides Emacs and got annoyed because you want your snippets and in general your emacs customisations in that text interface without needing to jump to Emacs. The emacs scratchpad solves this issue. This is the part of the setup needed in my init.el, while the rest of the project lies in my qtile's config.py . If you are interested on the topic, you can check this(insert link to the org file which explains the scratchpad) file for more details.
+
+  The Emacs part is basically just a function which allows me to copy all the text in a buffer, then delete it and save the buffer. As such, I can open the scratchpad instance of Emacs on an empty file, write something, and then easily cut it from the document to paste it in the other interface. For ease of use I considered it easier to "bind" this command to a snippet rather than a keybinding. As such, pressing "done" and expanding with yasnippet will run the org-scratchpad command. The other command in this block suppreses a warning that triggers when this command is expanded from a snippet. I know very well what I am doing to the buffer and I dont need a warning for it. 
+  
+  #+BEGIN_SRC elisp
+
+    (defun org-scratchpad ()
+      "Yank the entire document, delete it and save the buffer. This is very useful for my scratchpad setup"
+      (interactive)
+      (evil-yank-characters (point-min) (point-max))
+      (delete-region (point-min) (point-max))
+      (save-buffer))
+
+    (add-to-list 'warning-suppress-types '(yasnippet backquote-change))
+
+  #+END_SRC
+
+  #+RESULTS:
+  | yasnippet | backquote-change |
+  | :warning  |                  |
+  
 * Inkscape x Emacs
-  This section is about integration of Emacs's org-mode with Inkscape. Essentially the first function, opens Inkscape, lets you draw whatever you desire and then creates a latex code area with the figure, ready to be imported. But, since saved the file as a .svg we need the second function, which exports the .svg to pdf so it can be imported properly to the Latex document Org exports.
+  This section is about integration of Emacs' org-mode with Inkscape. Essentially the first function, opens Inkscape, lets you draw whatever you desire and then creates a latex code area with the figure, ready to be imported. But, since saved the file as a .svg we need the second function, which exports the .svg to pdf so it can be imported properly to the Latex document Org exports.
 
   In a nutshell, you can use Inkscape to seamlessly create good looking graphs/shapes inside your org documents, which can prove very useful in some cases. I take no credit for this. I "stole" the idea from [[https://www.reddit.com/r/emacs/comments/lo9ov0/latex_export_with_inkscape_images_and_drawio/][this]] excellent reddit post. I recommend you check that post out and not this section. The only problem I had with it is that the author initially planned for the second function to not be interactive but simply hooked to the org-export-before-processing-hook. This should work, but for some reason (at least in my config) this hook simply doesn't exist on startup creating an error while loading my init.el. After testing I noticed that if you export a file once in an emacs session, the hook is created and this works perfectly. But since I can't get it on startup and its tedious to do otherwise, I just made the function interactive so I can call it from the M-x menu and from a custom keybinding. If you however don't have this issue, the fix (as can be seen in the reddit post, which I recommend at least checking out) is removing the (interactive) (which isn't mandatory, but you wont need to call the function if its hooked to the correct hook) and adding a variable arg as the function's argument (this is needed for the hook to call the function correctly, but isn't needed if the function is called interactively).
 
@@ -761,7 +795,7 @@ More languages to evaluate with org-babel (by default, only elisp is evaluated).
     (defun svglatex (file_name)
       "Prompts for a file name (without any file prefix), takes an svg with that file name and exports the file as a latex compatible pdf file"
       (interactive "MEnter svg file name: ")
-      (setq export (concat "inkscape -D " file_name".svg" file_name".pdf --export-latex"))
+      (setq export (concat "inkscape --export-latex --export-pdf=" file_name ".pdf" file_name ".svg" ))
       (shell-command export))
 
   #+END_SRC

@@ -1,0 +1,142 @@
+#+TITLE: My Emacs "Scratchpad" configuration
+
+* Table of Contents                                                     :TOC:
+- [[#what-is-the-purpose-of-this][What is the purpose of this?]]
+- [[#the-org-scratchpad-command][The 'org-scratchpad' command]]
+- [[#setting-this-up-on-the-wm-side][Setting this up on the WM side]]
+  - [[#qtile][Qtile]]
+- [[#general-use-case][General use case]]
+
+* What is the purpose of this?
+  Are you a long time Emacs user? Then you know the feeling. You need to write text somewhere that isn't Emacs and you simply don't like the interface and wish you were in Emacs. Maybe you miss your snippets, the look of your Emacs environment or some other utility Emacs provides. Typically there are 2 solutions. You either accept it and write what you need there despite not liking the environment or you open Emacs in a placeholder file, write what you need and then delete that file. Or even keep it because you cant bother.
+
+  Neither one is ideal really, so I was personally looking for a different solution. And as a tiling window manager user, I thought why not use an emacs scratchpad which opens in such a placeholder file by default. That way I can get a small emacs window anywhere open in this placeholder file. To my dissapointment, I couldn't find any documentation (or other implementation) of what I wanted so I started playing around with the idea from scratch. For those of you who dont know what a scratchpad is, its a floating program which spawns with predefined dimensions in a predefined location in the screen and is hidden when not focused (at least by default). When hidden, its not closed but rather in a hidden scratchpad workspace ready to be reopened. This is very helpful for what I want for this. Different tiling window managers manage these in slightly different ways keeping the central concept the same. For those of you in floating window managers/complete desktop environments, I don't know if anything similar is possible but if someone knows I would be happy to see it happen, albeit not using one of these myself. 
+
+  This git repo acts as a way to share this idea with the community and as a tutorial for others, as I would have loved to find one and I don't think I am not the first one to think of this. In the rest of this document I will go into much detail with how I approached this so if you are interested you can try this. I have currently only developed this idea for the qtile wm (which is my current daily driver). I do however plan to try this on other window managers and request from you the community to help me with this. If you like the idea but use a different window manager, feel free to try and make a version of this for your window manager and create a pull request here for me to add your code and comments about your setup. I will try to be very responsive. I plan to publish an i3 version of this soon (will probably be my next project) and during the summer I want to try AwesomeWM and EXWM so I might try and implement it in those window managers as well.
+
+  I hope this is helpful for some of you and I hope to collaborate with you if you implement it for a different wm. For now enjoy!
+
+* General use case
+  Now, in the introduction I assumed you know the feeling of needing to write text somewhere besides Emacs and not wanting to do so cause things just work better in Emacs. But you may not have felt that. You are probably a weirdo then, but in that case, I can give you some use cases that I have found this important in.
+
+  First one, has got to be anything including latex code. I write a lot of latex and without my snippets and the cdlatex minor mode, everything latex related feels hella painful to do. Not to mention I really miss my latex previews org mode provides outside of emacs. Now I usually won't need to write latex outside of emacs, but there are cases where I would, for example, want to share some latex to someone over any texting app (like discord for example) or even an email (and no, I am too lazy to set up mu4e, stop judging me, it will take a lot of time and I am delegating it to the summer after my exams where I will have much more time. And its possible that I will procrastinate even more with this being done). In those cases, it feels like a huge pain to write anything there. Another instance of this is inside inkscape. Inkscape's svgs can be exported with latex as pdfs and inserted into a latex document. There, any latex code inside the picture gets rendered and properly typeset by latex. So, a lot of the time, its very useful to add latex code to any svg in Inkscape.  
+
+  Besides latex, org has other very useful utilities when writing any document. So when you need to write a large piece of text such as a reddit post, long discord reply, or email (yes, writing this makes me seriously consider setting up mu4e more, but I really am lazy) you can write it in your comfortable org-mode environment and not in those unfriendly ones. Another example is when you need to add something to a document sent to you as a .docx from a collaborator, where I personally prefer emacs 10 times over those rich-text editors which have so many useless things visible on the screen which simply cant be removed. This case is the only one where I could see creating an actual file a viable option, but this is also very useful there. 
+
+  Well, now I can't think of any more, but I am almost certain there are other use cases as well. These were ample reasons for me to make this anyways. And I hope you all will also like it.
+  
+* The 'org-scratchpad' command
+  So, now that you have a faint idea of what this is about, I will guide you through my thought process of how this all got developed and give you the necessary code snippets to do this with your own setup. I hope it will be helpful.
+
+  First thing I thought of, before any of the specifics of the actual scratchpad, I looked at emacs. I thought, I need a buffer file which will store all the text I want to write, but after I am done with it I want it to be emptied, so it can be used again with ease. I also want an easier way of yanking the entire document with as little user input as possible. Luckily for me, Emacs has the concept of "killing" text which is deleting it from the buffer, but always storing it in the clipboard. Emacs also happens to have 2 very helpful variables for this concept. "point-min" and "point-max" are built-in variables of Emacs which (as you can probably assume) store the first and the last point inside a document. As such, yanking, or deleting a region between these two points will act on the entire document.
+
+  Enter "org-scratchpad". A command, which does simply this. When called interactively on a buffer it yanks the whole document (putting it on the clipboard), then deletes it all and afterwards saves the buffer bringing it to its original, empty state. The text that was yanked can then be pasted anywhere you want. Below is the code I used to define this function. I use evil, so naturally, I thought of checking which command yanks text with my evil keybindings and I found "evil-yank-characters". I am certain there is a way to do this without depending on evil, but this is fine for me so I left it at that. If you however dont use evil, feel free to recommend a function without dependencies on evil and I will add it here. For me, I prefer to use the evil command as I am a big fan of evil-mode.
+  
+    #+BEGIN_SRC elisp
+
+    (defun org-scratchpad ()
+      "Yank the entire document, delete it and save the buffer. This is very useful for my scratchpad setup"
+      (interactive)
+      (evil-yank-characters (point-min) (point-max))
+      (delete-region (point-min) (point-max))
+      (save-buffer))
+
+  #+END_SRC
+
+  Having this command set up is a very important part of this setup as it allows for copying the text and reverting the file to its original state seamlessly. Now, how to call this command in a way that doesn't slow you down. I thought that it would be beneficial to stay in insert mode and not initate a command in normal mode to do this as it would be more comfortable. And as such I thought of binding this command to a snippet. This tutorial assumes you know how yasnippet works (as I think it will mostly be useful for people who use emacs a lot, and most of us know how snippets work) and as such I wont explain it much. Here is the code for it
+
+  #+BEGIN_SRC snippet
+# -*- mode: snippet -*-
+# name: scratchpad
+# key: done
+# --
+`(org-scratchpad)`
+  #+END_SRC
+
+  This file is located in my org-mode snippets for emacs. As you probably know, surrounding arbitrary lisp with backticks in yasnippet means evaluating that elisp. Meaning when this snippet is expanded, org-scratchpad gets evaluated on the buffer yanking, deleting and saving it. The key for expanding this is "done". I thought its probably a good idea so I can remember it. So when you are "done" writing what you want, you "tell" emacs done and it does all the work for you.
+
+  When doing this though, yasnippet gives you some kind of warning (probably that the snippet you called changed the buffer significantly or something). Ι want to supress that warning as I know what the snippet I just expanded did. For that you need another line of elisp on your init.el
+
+  #+BEGIN_SRC elisp
+    (add-to-list 'warning-suppress-types '(yasnippet backquote-change))
+  #+END_SRC
+  
+  With that, I basically considered the hardcore Emacs part complete. After that, I needed to play around with qtile and create the emacs scratchpad. It sounds very easy to do, but I did various cool experiments first, to figure out what exactly I wanted and I have concluded in a fairly good state. All these are explained in the section so read on!
+  
+* Setting this up on the WM side
+** Qtile
+   So, lets start with the easy and obvious part. Creating a scratchpad for emacs which always opens on a random placeholder file (mine is called scratchpad.org). In qtile, scratchpad windows are defined inside the scratchpad group (aka workspace). So here is a basic setup (including the rest of my groups for visibility).
+   
+   #+BEGIN_SRC python
+  groups = [
+      ScratchPad("scratchpad", [
+	  DropDown("music", "spotify", opacity=0.8, height=0.8, weight=0.8),
+	  DropDown("term", "alacritty", opacity=0.8),
+	  DropDown("calc", "qalculate-gtk", opacity=0.8),
+	  DropDown("emacs", "emacs scratchpad.org") ]),
+      Group("1"),
+      Group("2"),
+      Group("3"),
+      Group("4"),
+      Group("5"),
+      Group("6"),
+      Group("7"),
+      Group("8"),
+      Group("9"),
+  ]
+   #+END_SRC
+
+   You can also play around with things such as the window's opacity, dimensions and location on the screen. Playing around a bit with the numbers, we can reach this state for example
+
+   #+BEGIN_SRC python
+	  DropDown("emacs", "emacs scratchpad.org", width=0.4, height=0.5, y=0.5, x=0.5, opacity=0.8) ]),
+   #+END_SRC
+   
+   Next lets bind this to a keybinding which brings this scratchpad up (I am using Mod+e for this).
+
+   #+BEGIN_SRC python
+     Key2("M-e", lazy.group['scratchpad'].dropdown_toggle('emacs')),
+   #+END_SRC
+   where Key2 is the keybinding function from the EzKey library which I imported as Key2 for ease of use. Note that for this to work, it needs to be in the keys array (where you have all your keybindings). For reference, here is the code snippet which adds the scratchpad keybindings to my keys
+
+   #+BEGIN_SRC python
+  keys.extend([Key2("M-C-s", lazy.group['scratchpad'].dropdown_toggle('music')),
+	       Key2("M-S-<Return>", lazy.group['scratchpad'].dropdown_toggle('term')),
+	       Key2("M-C-c", lazy.group['scratchpad'].dropdown_toggle('calc')),
+	       Key2("M-e", lazy.group['scratchpad'].dropdown_toggle('emacs')),
+	       ])
+   #+END_SRC
+
+   Now lets talk about 2 great ideas that I had while playing around which unfortunately didnt pan out so well.
+
+   I thought that it would make a lot of sense if I ran this as an "emacsclient" as I start the emacs daemon with my window manager anyways and it would cut down the startup time of emacs when launching the scratchpad. Unfortunately, when this client is created it overrides the scratchpad config and launches as a regular, tiled window which never gets hidden (essentially acting like its not a scratchpad) which is by no means what I wanted. This is why you see the scratchpad launching emacs and not an emacsclient which I would consider easier to play with. But, with the scratchpad being open at basically all times in the hidden scratchpad workspace (besides the first time its launched), you only need to wait the startup time once, so its really not a big deal.
+
+   Second one was binding this Emacs scratchpad to a mouse binding (I was thinking of Alt+left click). This would make a lot of sense as when you want to type somewhere besides emacs you will typically click a text box to start writing. I thought it would make a lot of sense if I bound this to Alt+click so when I click on a text box with alt it opens this. Unfortunately this one didnt work either. When clicking, it showed that something tried to open, but it remained hidden. I assume it lost focus the moment it was launched with this. So I just settled with M-e as the keybinding to use.
+
+   Lastly, there is a third neat idea I tried, which you cant really say was a failure, but it didnt pan out exactly how I would have liked it. I wanted this scratchpad to always be centered on the mouse cursor. What I accomplished as a final result is that it centers on where the cursor was on startup (usually middle of screen) and to change that you need to restart qtile (and then the scratchpad will be centered on the position of the cursor during the restart). So lets get to how I did this and why I am almost certain it cant be done (at least in qtile) without changing how the window manager works (something I dont really have the knowledge to do). 
+
+   Firstly import the "pyautogui" library, from which we will use the pyautogui.position function to get the position of the cursor. I have no clue if this is the best solution or not, but googling how to get the cursors position in python gave me this library so I settled with it. For starters you can do this 
+
+   #+BEGIN_SRC python
+     x1,y1 = pyautogui.position()
+     x2 = x1/1920 - 0.2
+     y2 = y1/1080 - 0.25
+   #+END_SRC
+   
+   So, lets explain this a bit. Qtile, inside the dropdown window configurations defines two variables x and y. These define the top left corner of the scratchpad window and are given as a fraction of the screens resolution. Pyautogui gives the position of the cursor, but not as a fraction, and I want the scratchpad centered on the cursor position, not have the edge of the window be there. So I divide the x,y variables gotten from that function with my current screens resolution and subtract width/2 from the x and height/2 from the y. This way, these x,y coordinates are valid for use inside the dropdown configs of qtile and they create a scratchpad which is centered on the cursor. This worked well this far. Then I wanted to make it open on the location of the mouse every time it was opened. Here is where the tough part started really.
+
+   As I am not a programmer it took me some time to figure out how to interactively get the coordinates of the mouse. For some of you, it may have been obvious that this can be done with a function, whose output I can make the x and y variables of the dropdown window. Thus I created the cursor_pos function seen below, and I changed my emacs scratchpad's settings to look a little bit like this.
+
+   #+BEGIN_SRC python
+  def cursor_pos():
+      x1, y1=pyautogui.position()
+      return [x1/1920 - 0.2, y1/1080 - 0.25]
+
+ DropDown("emacs", "emacs scratchpad.org", width=0.4, height=0.5, y=cursor_pos()[1], x=cursor_pos()[0], opacity=0.8) ]),
+
+   #+END_SRC
+
+   with the dropdown obviously being in the context of groups as shown above. This is what made me realise that this wont work. In theory, what this should do is every time the scratchpad is created, get the coordinates of the cursor and open an emacs window there. But unfortunately it doesn't work like that. I realised that qtile reads these variables only once and keeps their values for the whole session. When its restarted, it reads config.py again meaning it obtains the dimensions of the emacs scratchpad again. But unless you do that, it wont reobtain the dimensions. But this is ample for me as restarting qtile isnt even that bothersome if you want it so much and with qtile moving the cursor to where the scratchpad opens its not even that problematic to be honest. But it would have been a cool feature to develop what so ever, if it was possible without changing qtile radically, which I dont know how to do.
+
+   Hopefully, if I try it in other window managers, it may work as I originally expected it, which would be lit. Or if someone else finds this and can do it for any window manager (even qtile if its actually possible) I would be glad to try it. 
+   

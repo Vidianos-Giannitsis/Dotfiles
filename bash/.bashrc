@@ -138,8 +138,8 @@ ex ()
 export YAOURT_COLORS="nb=1:pkg=1:ver=1;32:lver=1;45:installed=1;42:grp=1;34:od=1;41;5:votes=1;44:dsc=0:other=1;35"
 
 export ALTERNATE_EDITOR=""
-export EDITOR='emacs'
-export VISUAL="emacs"
+export EDITOR="emacsclient -c -a emacs"
+export VISUAL="emacsclient -c -a emacs"
 export BROWSER='brave'
 export PATH="$HOME/.cargo/bin:$HOME/qtile/bin:$PATH"
 #export PATH='/home/vidianos/.cargo/bin'
@@ -164,7 +164,8 @@ alias tlmgr='/usr/share/texmf-dist/scripts/texlive/tlmgr.pl --usermode'
 alias zotero='cd Zotero_linux-x86_64/ && ./zotero && cd'
 alias dmenu='dmenu_run -fn "Source Code Pro Bold" -i -nb "#073642" -sb "#005858" -nf "#839496" -sf "#58002c"'
 alias comsol='comsol -3drend sw'
-alias brightness='xrandr --output eDP --brightness'
+alias bright='sudo brightnessctl s'
+alias size='sudo du -a | sort -n -r | head -n 20'
 
 # Git command aliases
 alias gadd='git add'

@@ -29,15 +29,16 @@ Feel free to use any part you like in your own qtile configuration, for that is 
 Not much to say here, importing some necessary packages for qtile to have all the functionality I want. Some were here by default, while I added some others.
 
 #+BEGIN_SRC python
-from libqtile.command import lazy
-from typing import List  # noqa: F401
-from libqtile import bar, layout, widget, hook
-from libqtile.config import Click, Drag, Group, Screen, Key, Match, Rule, ScratchPad, DropDown
-from libqtile.config import EzKey as Key2
-from libqtile.lazy import lazy
-from libqtile.utils import guess_terminal
-import os
-import subprocess
+  from libqtile.command import lazy
+  from typing import List  # noqa: F401
+  from libqtile import bar, layout, widget, hook
+  from libqtile.config import Click, Drag, Group, Screen, Key, Match, Rule, ScratchPad, DropDown
+  from libqtile.config import EzKey as Key2
+  from libqtile.lazy import lazy
+  from libqtile.utils import guess_terminal
+  import os
+  import subprocess
+  import pyautogui
 #+END_SRC
 
 * Variables
@@ -47,7 +48,7 @@ Defining them here helps if I want to use them in multiple locations of my confi
 #+BEGIN_SRC python
   mod = "mod4"
   terminal = "alacritty"
-  editor = "emacs"
+  editor = "emacsclient -c -a emacs ~"
   browser_1 = "firefox"
   browser_2 = "brave"
   office = "libreoffice"
@@ -66,15 +67,16 @@ Defining two hooks I want for my config. The first is my autostart script (you c
 The second hook is my favourite calculator program "Qalculate". I really find it inefficient to tile that specific window so I always set it to float when launched.
 
 #+BEGIN_SRC python
-@hook.subscribe.startup_once
-def autostart():
-    home = os.path.expanduser('~/.config/qtile/autostart.sh')
-    subprocess.call([home])
+ @hook.subscribe.startup_once
+ def autostart():
+     home = os.path.expanduser('~/.config/qtile/autostart.sh')
+     subprocess.call([home])
 
-@hook.subscribe.client_new
-def floating_calc(c):
-    if c.name == "Qalculate!":
-        c.toggle_floating()
+ @hook.subscribe.client_new
+ def floating_calc(c):
+     if c.name == "Qalculate!":
+         c.toggle_floating()
+
 #+END_SRC
 
 * Keybindings
@@ -180,20 +182,30 @@ By default in a tiling window manager alot of the multimedia keys of your keyboa
 ]
 #+END_SRC
 
-* Workspaces
+* Workspaces/Scratchpads
 This is where all the workspace magic happens. The first section defines the names of my workspaces. I dont want something big that takes up a significant portion of my bar for the workspace names so they are simply named 1-9.
-
-I also define the Scratchpad workspace here, a hidden workspace for scratchpad windows. A scratchpad, is esentially a floating windows which disappears when it loses focus. This finds great usability in things like your terminal, music player or caclulator. I also set up keybindings to launch said programs. When pressed the program appears on your current workspace and when it loses focus it goes back to the Scratchpad workspace.
 
 I also bind Mod+any number from 1-9 to switch to that workspace and Mod-Shift-(1-9) to move the window with focus to that workspace.
 
+Then I define the Scratchpad workspace here, a hidden workspace for scratchpad windows. A scratchpad, is esentially a floating windows which disappears when it loses focus. This finds great usability in things like your terminal, music player or caclulator. I also set up keybindings to launch said programs. When pressed the program appears on your current workspace and when it loses focus it goes back to the Scratchpad workspace.
+
+** The Emacs scratchpad
+Lastly, there is the Emacs scratchpad contained here. This is a unique scratchpad that I have been working on so that I can always have a small Emacs window for writing text in any text box. This is a project I wanted to tackle as I havent found any relevant documentation, but consider it a very useful thing. This is split between this config and my emacs' init.el and is more carefully and fully detailed in this project(link the org file explaining the scratchpad in depth). 
+
+This part defines the very scratchpad and its dimensions and location on the screen as well as the keybinding which opens it. The interesting part is that I read the cursors position with the pyautogui library and do some necessary calculations to define the x and y dimensions of the scratchpad (which are on the edges of the window) in a way that the scratchpad is centered on the position of my cursor. I wanted to make this position update every time I open the scratchpad but I havent figured it out yet so for now it gets the cursor position once on startup and in every subsequent restart of qtile. The problem appears to be that qtile loads the dimensions of every scratchpad when it reads config.py and then when launching them recalls them from memory and not interactively. I tend to believe its not possible to interactively change this position (as I have tried a multitude of things which didnt appear to work) but I would be glad to be proved wrong as its a very cool concept to always center it on the cursor. 
+
 #+BEGIN_SRC python
+
+  def cursor_pos():
+      x1, y1=pyautogui.position()
+      return [x1/1920 - 0.2, y1/1080 - 0.25]
+
   groups = [
       ScratchPad("scratchpad", [
 	  DropDown("music", "spotify", opacity=0.8, height=0.8, weight=0.8),
 	  DropDown("term", "alacritty", opacity=0.8),
 	  DropDown("calc", "qalculate-gtk", opacity=0.8),
-	  DropDown("obs", "obs", opacity=0.8) ]),
+	  DropDown("emacs", "emacs scratchpad.org", width=0.4, height=0.5, y=cursor_pos()[1], x=cursor_pos()[0], opacity=0.8) ]),
       Group("1"),
       Group("2"),
       Group("3"),
@@ -217,7 +229,7 @@ I also bind Mod+any number from 1-9 to switch to that workspace and Mod-Shift-(1
   keys.extend([Key2("M-C-s", lazy.group['scratchpad'].dropdown_toggle('music')),
 	       Key2("M-S-<Return>", lazy.group['scratchpad'].dropdown_toggle('term')),
 	       Key2("M-C-c", lazy.group['scratchpad'].dropdown_toggle('calc')),
-	       Key2("M-S-o", lazy.group['scratchpad'].dropdown_toggle('obs')),
+	       Key2("M-e", lazy.group['scratchpad'].dropdown_toggle('emacs')),
 	       ])
 #+END_SRC
 
@@ -255,7 +267,7 @@ This is my configuration, for the qtile bar, which I would say is my favourite p
 
 On the left side of the bar, I have the Current Layout for qtile in green and then my workspace list and then the program I have open which have the default background colour. 
 
-On the right side of the bar, I have RAM and CPU usage, which combining textboxes and their outputs I made into one widget seemingly, the current volume of the laptop, its battery and the current date and time. Lastly, on the far right is my systray which stores things like network-manager and other things that stay in the systray upon opening (ex. Discord or flameshot). The battery specifically, displays an up arrow when recharging, a down arrow when discharging and its text turns red when under 20% to notify that the battery is low.
+On the right side of the bar, I have RAM and CPU usage, which combining textboxes and their outputs I made into one widget seemingly, the current volume of the laptop, its battery and the current date and time. Lastly, on the far right is my systray which stores things like network-manager and other things that stay in the systray upon opening (ex. Discord, flameshot). The battery specifically, displays an up arrow when recharging, a down arrow when discharging and its text turns red when under 20% to notify that the battery is low.
 
 #+BEGIN_SRC python
   widget_defaults = dict(
@@ -320,7 +332,6 @@ Some settings for floating windows on moving and resizing them and which things 
       Match(title='Qalculate!'),  # qalculate-gtk
   ])
 
-  focus_on_window_activation = "smart"
 #+END_SRC
 
 * Others

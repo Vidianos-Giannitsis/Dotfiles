@@ -32,16 +32,20 @@
 | SPC l            | Activates linum mode which turns on line numbers                                                                                                     |
 | SPC i            | Opens an ielm buffer. ielm is for interactively running elisp in the current emacs session. It can be very helpful                                   |
 |------------------+------------------------------------------------------------------------------------------------------------------------------------------------------|
-| *Dired*            | Dired is the Emacs file manager, below are commands specific to dired (bound to SPC d) or commands to quickly jump to important files                |
+| *Dired*            | Dired is the Emacs file manager, below are commands specific to dired (bound to SPC d)                                                               |
 |------------------+------------------------------------------------------------------------------------------------------------------------------------------------------|
 | SPC D            | Asks for a directory and opens dired in that directory                                                                                               |
 | SPC d j          | Opens dired in the current working directory. This is faster than simply calling dired when you want to switch between files in the same directory   |
 | SPC d h          | Toggle visibility of dotfiles inside dired. In the dired section I set them to be hidden by default, and this toggles that behaviour                 |
 | SPC d f          | Find a file inside a directory. I usually prefer just using dired but this can prove useful in folders with a lot of "chaos"                         |
-| SPC d c          | Open my Emacs config.                                                                                                                                |
-| SPC d k          | Open the file which stores all my Emacs keybindings (this file). This is split from my main config as its too long, but its a very important file    |
-| SPC d u          | Open dired on the current semester's folder                                                                                                          |
-| SPC d q          | Open my Qtile config.                                                                                                                                |
+|------------------+------------------------------------------------------------------------------------------------------------------------------------------------------|
+| *Quicmarks*        | You visit some files/directories very very often. Its very handy to have a keybinding to jump to them. These are called quickmarks (bound to SPC q)  |
+|------------------+------------------------------------------------------------------------------------------------------------------------------------------------------|
+| SPC q c          | Open my Emacs config.                                                                                                                                |
+| SPC q k          | Open the file which stores all my Emacs keybindings (this file). This is split from my main config as its too long, but its a very important file    |
+| SPC q u          | Open dired on the current semester's folder for Uni                                                                                                  |
+| SPC q q          | Open my Qtile config.                                                                                                                                |
+| SPC q h          | Open dired on my home directory                                                                                                                      |
 |------------------+------------------------------------------------------------------------------------------------------------------------------------------------------|
 | *Org-Roam*         | I use Org-roam for my notetaking. Its got a lot of useful commands. The letter r is reserved for it (SPC r for general and , r for org-specific)     |
 | *References*       | Besides Org-roam, r makes a lot of sense as the leader key for references. The two are definitely related so this isn't a problem imo                |
@@ -77,7 +81,7 @@
 | SPC s s a        | Search spotify using Counsel for a specific artist                                                                                                   |
 | SPC s s p        | Search spotify using Counsel for a playlist                                                                                                          |
 |------------------+------------------------------------------------------------------------------------------------------------------------------------------------------|
-| *Elisp Evaluation* | Emacs has a few commands for evaluating lisp in any buffer. You can eval a buffer, a function or even prompt for elisp in the minibuffer             |
+| *Elisp Evaluation* | Emacs has a few commands for evaluating lisp in any buffer. You can eval a buffer, a function or even prompt for elisp in the minibuffer (SPC e)     |
 |------------------+------------------------------------------------------------------------------------------------------------------------------------------------------|
 | SPC e b          | Evaluate all elisp in a buffer                                                                                                                       |
 | SPC e f          | Evaluate function                                                                                                                                    |
@@ -100,10 +104,12 @@
     "d f" 'counsel-find-file
     "d h" 'dired-hide-dotfiles-mode
     "d j" '(dired-jump :which-key "Open dired in the current buffer's directory")
-    "d c" '((lambda() (interactive)(find-file "~/.emacs.d/README.org")) :which-key "Jump to literate Emacs config")
-    "d k" '((lambda() (interactive)(find-file "~/.emacs.d/libs/keybindings.org")) :which-key "Jump to Emacs keybindings config file")
-    "d u" '((lambda() (interactive)(dired "~/Documents/4o_εξάμηνο")) :which-key "Jump to Uni folder")
-    "d q" '((lambda() (interactive)(find-file "~/.config/qtile/README.org")) :which-key "Jump to literate Qtile config")
+    "q" '(:ignore t :which-key "Quickmarks")
+    "q c" '((lambda() (interactive)(find-file "~/.emacs.d/README.org")) :which-key "Quickmark to literate Emacs config")
+    "q k" '((lambda() (interactive)(find-file "~/.emacs.d/libs/keybindings.org")) :which-key "Quickmark to Emacs keybindings config file")
+    "q u" '((lambda() (interactive)(dired "~/Documents/4o_εξάμηνο")) :which-key "Quickmark to Uni folder")
+    "q q" '((lambda() (interactive)(find-file "~/.config/qtile/README.org")) :which-key "Quickmark to literate Qtile config")
+    "q h" '((lambda() (interactive)(dired "~")) :which-key "Quickmark to home directory")
     "t" 'toggle-truncate-lines
     "T" 'org-babel-tangle
     "RET" 'vterm-toggle
@@ -170,8 +176,6 @@
 |            | the Inkscape x Emacs section of the config, which is specifically made for this functionality                                                        |
 | , i        | Toggle whether images on an org document are visible or not.                                                                                         |
 | , p        | Activate org-tree-slide-mode an org minor mode which enables you to do presentations from inside org                                                 |
-| , j        | In org-tree-slide go to the next "slide" meaning org-heading                                                                                         |
-| , k        | Same as above but for the previous "slide"                                                                                                           |
 | , S        | Insert my lab skeleton. When I play around with this feature more, this will become a leader key to insert all my skeletons. But I only have one now |
 | , T        | Activate toc-org mode. This is a minor mode that adds a table of contents which auto updates on saving under every heading with a :TOC: tag.         |
 |            | This is used on my README files for github but since I only need it per buffer on README files I dont hook it to org mode                            |
@@ -226,8 +230,6 @@
        "S" '(org-svg-pdf-export :which-key "Export svg files to pdf")
        "i" 'org-toggle-inline-images
        "p" 'org-tree-slide-mode
-       "j" '(org-tree-slide-move-next-tree :which-key "Next Slide")
-       "k" '(org-tree-slide-move-previous-tree :which-key "Previous Slide")
        "p" '(org-plot/gnuplot :which-key "Plot table data")
        "f" 'org-footnote-action
        "S" '(lab-skeleton :which-key "Insert my lab report template")
@@ -269,6 +271,12 @@
 | C-+        | Creates a new empty file inside the current working directory                                                                                         |
 | h          | Go up one directory in Dired                                                                                                                          |
 | l          | Jump one directory forward in Dired                                                                                                                   |
+|------------+-------------------------------------------------------------------------------------------------------------------------------------------------------|
+| *Org Mode*   | Probably the only org mode commands that I need outside of the comma modifier key. Changing slides in org-tree-slide feels annoying with a key        |
+|            | sequence so it just makes sense to add this                                                                                                   |
+|------------+-------------------------------------------------------------------------------------------------------------------------------------------------------|
+| C-j        | In org-tree-slide go to the next "slide" meaning org-heading                                                                                          |
+| C-k        | Same as above but for the previous "slide"                                                                                                            |
 |------------+-------------------------------------------------------------------------------------------------------------------------------------------------------|
 
 #+BEGIN_SRC elisp
@@ -316,6 +324,11 @@
    :keymaps 'override
    "e r" 'eval-region)
 
+  (general-define-key
+   :states 'normal
+   :keymaps 'org-mode-map
+   "C-j" '(org-tree-slide-move-next-tree :which-key "Next Slide")
+   "C-k" '(org-tree-slide-move-previous-tree :which-key "Previous Slide"))
 #+END_SRC
 
 #+RESULTS:

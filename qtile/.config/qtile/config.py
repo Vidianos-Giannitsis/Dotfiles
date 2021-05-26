@@ -7,10 +7,11 @@ from libqtile.lazy import lazy
 from libqtile.utils import guess_terminal
 import os
 import subprocess
+import pyautogui
 
 mod = "mod4"
 terminal = "alacritty"
-editor = "emacs"
+editor = "emacsclient -c -a emacs ~"
 browser_1 = "firefox"
 browser_2 = "brave"
 office = "libreoffice"
@@ -93,12 +94,16 @@ Key2("<XF86AudioRaiseVolume>", lazy.spawn("amixer -c 1 sset Master 5%+ unmute"),
     Key2("<Print>", lazy.spawn(screenshots), desc="Screenshot util"),
 ]
 
+def cursor_pos():
+    x1, y1=pyautogui.position()
+    return [x1/1920 - 0.2, y1/1080 - 0.25]
+
 groups = [
     ScratchPad("scratchpad", [
 	DropDown("music", "spotify", opacity=0.8, height=0.8, weight=0.8),
 	DropDown("term", "alacritty", opacity=0.8),
 	DropDown("calc", "qalculate-gtk", opacity=0.8),
-	DropDown("obs", "obs", opacity=0.8) ]),
+	DropDown("emacs", "emacs scratchpad.org", width=0.4, height=0.5, y=cursor_pos()[1], x=cursor_pos()[0], opacity=0.8) ]),
     Group("1"),
     Group("2"),
     Group("3"),
@@ -122,7 +127,7 @@ for i in "123456789":
 keys.extend([Key2("M-C-s", lazy.group['scratchpad'].dropdown_toggle('music')),
 	     Key2("M-S-<Return>", lazy.group['scratchpad'].dropdown_toggle('term')),
 	     Key2("M-C-c", lazy.group['scratchpad'].dropdown_toggle('calc')),
-	     Key2("M-S-o", lazy.group['scratchpad'].dropdown_toggle('obs')),
+	     Key2("M-e", lazy.group['scratchpad'].dropdown_toggle('emacs')),
 	     ])
 
 # Layouts
@@ -197,8 +202,6 @@ floating_layout = layout.Floating(float_rules=[
     *layout.Floating.default_float_rules,
     Match(title='Qalculate!'),  # qalculate-gtk
 ])
-
-focus_on_window_activation = "smart"
 
 dgroups_key_binder = None
 dgroups_app_rules = []  # type: List

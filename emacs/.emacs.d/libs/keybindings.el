@@ -12,10 +12,12 @@
   "d f" 'counsel-find-file
   "d h" 'dired-hide-dotfiles-mode
   "d j" '(dired-jump :which-key "Open dired in the current buffer's directory")
-  "d c" '((lambda() (interactive)(find-file "~/.emacs.d/README.org")) :which-key "Jump to literate Emacs config")
-  "d k" '((lambda() (interactive)(find-file "~/.emacs.d/libs/keybindings.org")) :which-key "Jump to Emacs keybindings config file")
-  "d u" '((lambda() (interactive)(dired "~/Documents/4o_εξάμηνο")) :which-key "Jump to Uni folder")
-  "d q" '((lambda() (interactive)(find-file "~/.config/qtile/README.org")) :which-key "Jump to literate Qtile config")
+  "q" '(:ignore t :which-key "Quickmarks")
+  "q c" '((lambda() (interactive)(find-file "~/.emacs.d/README.org")) :which-key "Quickmark to literate Emacs config")
+  "q k" '((lambda() (interactive)(find-file "~/.emacs.d/libs/keybindings.org")) :which-key "Quickmark to Emacs keybindings config file")
+  "q u" '((lambda() (interactive)(dired "~/Documents/4o_εξάμηνο")) :which-key "Quickmark to Uni folder")
+  "q q" '((lambda() (interactive)(find-file "~/.config/qtile/README.org")) :which-key "Quickmark to literate Qtile config")
+  "q h" '((lambda() (interactive)(dired "~")) :which-key "Quickmark to home directory")
   "t" 'toggle-truncate-lines
   "T" 'org-babel-tangle
   "RET" 'vterm-toggle
@@ -91,8 +93,6 @@
      "S" '(org-svg-pdf-export :which-key "Export svg files to pdf")
      "i" 'org-toggle-inline-images
      "p" 'org-tree-slide-mode
-     "j" '(org-tree-slide-move-next-tree :which-key "Next Slide")
-     "k" '(org-tree-slide-move-previous-tree :which-key "Previous Slide")
      "p" '(org-plot/gnuplot :which-key "Plot table data")
      "f" 'org-footnote-action
      "S" '(lab-skeleton :which-key "Insert my lab report template")
@@ -147,5 +147,11 @@
  :states 'visual
  :keymaps 'override
  "e r" 'eval-region)
+
+(general-define-key
+ :states 'normal
+ :keymaps 'org-mode-map
+ "C-j" '(org-tree-slide-move-next-tree :which-key "Next Slide")
+ "C-k" '(org-tree-slide-move-previous-tree :which-key "Previous Slide"))
 
 (provide 'keybindings)

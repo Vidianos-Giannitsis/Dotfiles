@@ -1,0 +1,5 @@
+# -*- mode: snippet -*-
+# name: scratchpad
+# key: done
+# --
+`(org-scratchpad)`

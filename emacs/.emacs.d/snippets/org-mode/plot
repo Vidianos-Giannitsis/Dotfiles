@@ -1,0 +1,5 @@
+# -*- mode: snippet -*-
+# name: plot
+# key: plot
+# --
+#+PLOT: title:$1 ind:$2 deps:($3) type:2d set:"xlabel '$4'" set:"ylabel '$5'" 
