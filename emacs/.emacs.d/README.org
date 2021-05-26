@@ -55,6 +55,7 @@ I hope you will find something useful here that you can put to your emacs config
   - [[#initialisation-variables][Initialisation Variables]]
   - [[#templates][Templates]]
 - [[#skeletons][Skeletons]]
+- [[#emacs-scratchpad][Emacs Scratchpad]]
 - [[#inkscape-x-emacs][Inkscape x Emacs]]
 - [[#company][Company]]
 - [[#other-major-modes][Other Major Modes]]
@@ -732,7 +733,7 @@ More languages to evaluate with org-babel (by default, only elisp is evaluated).
   : lab-skeleton
   
 * Emacs Scratchpad
-  Ever wanted to write some text somewhere besides Emacs and got annoyed because you want your snippets and in general your emacs customisations in that text interface without needing to jump to Emacs. The emacs scratchpad solves this issue. This is the part of the setup needed in my init.el, while the rest of the project lies in my qtile's config.py . If you are interested on the topic, you can check this(insert link to the org file which explains the scratchpad) file for more details.
+  Ever wanted to write some text somewhere besides Emacs and got annoyed because you want your snippets and in general your emacs customisations in that text interface without needing to jump to Emacs. The emacs scratchpad solves this issue. This is the part of the setup needed in my init.el, while the rest of the project lies in my qtile's config.py . If you are interested on the topic, you can check [[https://github.com/Vidianos-Giannitsis/Dotfiles/blob/master/Emacs_Scratchpad.org][this]] file for more details.
 
   The Emacs part is basically just a function which allows me to copy all the text in a buffer, then delete it and save the buffer. As such, I can open the scratchpad instance of Emacs on an empty file, write something, and then easily cut it from the document to paste it in the other interface. For ease of use I considered it easier to "bind" this command to a snippet rather than a keybinding. As such, pressing "done" and expanding with yasnippet will run the org-scratchpad command. The other command in this block suppreses a warning that triggers when this command is expanded from a snippet. I know very well what I am doing to the buffer and I dont need a warning for it. 
   

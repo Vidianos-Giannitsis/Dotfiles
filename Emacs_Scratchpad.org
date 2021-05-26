@@ -62,6 +62,8 @@
   #+END_SRC
   
   With that, I basically considered the hardcore Emacs part complete. After that, I needed to play around with qtile and create the emacs scratchpad. It sounds very easy to do, but I did various cool experiments first, to figure out what exactly I wanted and I have concluded in a fairly good state. All these are explained in the section so read on!
+
+  If you want to check out the rest of my emacs config it can be found [[https://github.com/Vidianos-Giannitsis/Dotfiles/tree/master/emacs/.emacs.d][here]]. This sections snippets are included in the *Emacs Scratchpad* section of that config.
   
 * Setting this up on the WM side
 ** Qtile
@@ -138,5 +140,9 @@
 
    with the dropdown obviously being in the context of groups as shown above. This is what made me realise that this wont work. In theory, what this should do is every time the scratchpad is created, get the coordinates of the cursor and open an emacs window there. But unfortunately it doesn't work like that. I realised that qtile reads these variables only once and keeps their values for the whole session. When its restarted, it reads config.py again meaning it obtains the dimensions of the emacs scratchpad again. But unless you do that, it wont reobtain the dimensions. But this is ample for me as restarting qtile isnt even that bothersome if you want it so much and with qtile moving the cursor to where the scratchpad opens its not even that problematic to be honest. But it would have been a cool feature to develop what so ever, if it was possible without changing qtile radically, which I dont know how to do.
 
-   Hopefully, if I try it in other window managers, it may work as I originally expected it, which would be lit. Or if someone else finds this and can do it for any window manager (even qtile if its actually possible) I would be glad to try it. 
+   Hopefully, if I try it in other window managers, it may work as I originally expected it, which would be lit. Or if someone else finds this and can do it for any window manager (even qtile if its actually possible) I would be glad to try it.
+
+   If you are interested for my full qtile config, to get more context of how these work you can find it [[https://github.com/Vidianos-Giannitsis/Dotfiles/tree/master/qtile/.config/qtile][here]].
+
+   This concludes this mini tutorial thingy. I hope you enjoyed it and it was at least interesting for you. 
    

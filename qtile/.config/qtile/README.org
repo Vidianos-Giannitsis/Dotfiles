@@ -19,7 +19,8 @@ Feel free to use any part you like in your own qtile configuration, for that is 
   - [[#window-and-window-manager-manipulation][Window and window manager manipulation]]
   - [[#my-favourite-programs][My favourite programs]]
   - [[#multimedia-keys][Multimedia Keys]]
-- [[#workspaces][Workspaces]]
+- [[#workspacesscratchpads][Workspaces/Scratchpads]]
+  - [[#the-emacs-scratchpad][The Emacs scratchpad]]
 - [[#layouts][Layouts]]
 - [[#qtile-bar][Qtile Bar]]
 - [[#floating-windows][Floating Windows]]
@@ -190,7 +191,7 @@ I also bind Mod+any number from 1-9 to switch to that workspace and Mod-Shift-(1
 Then I define the Scratchpad workspace here, a hidden workspace for scratchpad windows. A scratchpad, is esentially a floating windows which disappears when it loses focus. This finds great usability in things like your terminal, music player or caclulator. I also set up keybindings to launch said programs. When pressed the program appears on your current workspace and when it loses focus it goes back to the Scratchpad workspace.
 
 ** The Emacs scratchpad
-Lastly, there is the Emacs scratchpad contained here. This is a unique scratchpad that I have been working on so that I can always have a small Emacs window for writing text in any text box. This is a project I wanted to tackle as I havent found any relevant documentation, but consider it a very useful thing. This is split between this config and my emacs' init.el and is more carefully and fully detailed in this project(link the org file explaining the scratchpad in depth). 
+Lastly, there is the Emacs scratchpad contained here. This is a unique scratchpad that I have been working on so that I can always have a small Emacs window for writing text in any text box. This is a project I wanted to tackle as I havent found any relevant documentation, but consider it a very useful thing. This is split between this config and my emacs' init.el and is more carefully and fully detailed in [[https://github.com/Vidianos-Giannitsis/Dotfiles/blob/master/Emacs_Scratchpad.org][this file]]. 
 
 This part defines the very scratchpad and its dimensions and location on the screen as well as the keybinding which opens it. The interesting part is that I read the cursors position with the pyautogui library and do some necessary calculations to define the x and y dimensions of the scratchpad (which are on the edges of the window) in a way that the scratchpad is centered on the position of my cursor. I wanted to make this position update every time I open the scratchpad but I havent figured it out yet so for now it gets the cursor position once on startup and in every subsequent restart of qtile. The problem appears to be that qtile loads the dimensions of every scratchpad when it reads config.py and then when launching them recalls them from memory and not interactively. I tend to believe its not possible to interactively change this position (as I have tried a multitude of things which didnt appear to work) but I would be glad to be proved wrong as its a very cool concept to always center it on the cursor. 
 

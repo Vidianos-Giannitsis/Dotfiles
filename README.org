@@ -3,7 +3,9 @@
 #+HTML_HEAD: <link rel="stylesheet" type="text/css" href="http://thomasf.github.io/solarized-css/solarized-dark.min.css" />
 
 * Introduction
-Welcome to my dotfile repository. I know why you are here so I won't bother you with having to look for it. Here is my literate emacs config https://github.com/Vidianos-Giannitsis/Dotfiles/tree/master/emacs/.emacs.d. Its probably the most interesting and unique part of this config and the only one I truly feel is worth checking out. But if you want, read on for the rest of my dots.
+Welcome to my dotfile repository. I know why you are here so I won't bother you with having to look for it. [[https://github.com/Vidianos-Giannitsis/Dotfiles/tree/master/emacs/.emacs.d][Here]] is my literate emacs config. Its probably the most interesting and unique part of this config and the only one I truly feel is worth checking out. Actually, there is also this new project I have developed which is a good scratchpad setup for emacs, which I consider cool and innovative to an extent. You might want to check that one out as well. Its [[https://github.com/Vidianos-Giannitsis/Dotfiles/blob/master/Emacs_Scratchpad.org][located here]] if this is why you are here.
+
+But if for some reason neither one of these is what interests you, or you are just interested in checking out the rest of my dots, feel free to read on. 
 
 With that out of the way, lets start with why this github repository even exists in the first place. This was made both for me to use as a backup for my most important dotfiles, but also to share them to the community so anyone can use any part of my configuration they like. 
 
