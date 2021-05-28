@@ -141,8 +141,6 @@
 (setq wolfram-alpha-app-id "U9PERG-KTPL49AWA2")
 (global-undo-tree-mode 1)
 
-;(use-package magit-todos-mode
- ; :hook magit-mode)
 (require 'calfw-git)
 (require 'calfw-org)
 
@@ -156,11 +154,15 @@
 		  "ogm" "ogg" "mkv"))
 		"mpv"
 		'(file))
-(list (openwith-make-extension-regexp
+	 (list (openwith-make-extension-regexp
 		'("xbm" "pbm" "pgm" "ppm" "pnm"
 		  "gif" "bmp" "tif"))
-		  "sxiv"
-		  '(file))
+	       "sxiv"
+	       '(file))
+	 (list (openwith-make-extension-regexp
+		'("mph"))
+	       "comsol"
+	       '(file))
 	 (list (openwith-make-extension-regexp
 		'("docx" "doc" "xlsx" "xls" "ppt" "odt" "ods"))
 	       "libreoffice"
@@ -206,13 +208,13 @@
 								     (org-babel-tangle))))
 					      'run-at-end 'only-in-org-mode))
 
+(setq org-startup-with-latex-preview t)
+(setq org-startup-with-inline-images t)
 (setq org-image-actual-width nil)
 
 (add-hook 'org-mode-hook '(lambda ()
 			    (visual-line-mode)
-			    (org-latex-preview)
-			    (org-fragtog-mode)
-			    (org-toggle-inline-images)))
+			    (org-fragtog-mode)))
 
 (setq org-preview-latex-default-process 'dvisvgm)
 
@@ -358,10 +360,12 @@
  'ivy-bibtex
  '(("p" ivy-bibtex-open-any "Open pdf, url or DOI")))
 
+(setq org-roam-graph-exclude-matcher '("daily"))
+
 (setq org-roam-capture-templates
       '(("d" "default" plain (function org-roam-capture--get-point)
 	"%?"
-	:file-name "%<%d-%m-%Y_%H:%M>-${slug}"
+	:file-name "${slug}-%<%d-%m>"
 	:unnarrowed t
 	:head "#+title: ${title}\nglatex_roam\n
 - tags ::  ")))
@@ -394,6 +398,24 @@
 	 :file-name "daily/%<%Y-%m-%d>"
 	 :head "#+title: Fleeting notes for %<%Y-%m-%d>\n"
 	 :olp ("Workout Regimes"))))
+
+(require 'org-protocol)
+(require 'org-roam-protocol)
+
+(use-package org-roam-server
+  :ensure t
+  :config
+  (setq org-roam-server-host "127.0.0.1"
+	org-roam-server-port 8080
+	org-roam-server-authenticate nil
+	org-roam-server-export-inline-images t
+	org-roam-server-serve-files nil
+	org-roam-server-served-file-extensions '("pdf" "mp4" "ogv")
+	org-roam-server-network-poll t
+	org-roam-server-network-arrows nil
+	org-roam-server-network-label-truncate t
+	org-roam-server-network-label-truncate-length 60
+	org-roam-server-network-label-wrap-length 20))
 
 (define-skeleton lab-skeleton
   "A skeleton which I use for initialising my lab reports which have standard formatting"

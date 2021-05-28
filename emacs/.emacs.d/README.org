@@ -14,7 +14,7 @@
    - [ ] Think of a use-case for project management which is going to be in the near future and make it happen
    - [ ] Go deep in project management and start using the more advanced features Emacs provides
    
-* COMMENT Long term ideas for things I can try [0/7]
+* COMMENT Long term ideas for things I can try [0/5]
 These are interesting packages to check in the long term. But nothing to hurry with, as I dont need any of them urgently.
  - [ ] ERC is an IRC client for Emacs. Elfeed is an RSS reader for emacs. EMMS is a music player for Emacs. I could get around to configuring them in case I start using them
  - [ ] There are a lot of eshell configuration options which I can try if I ever get around to using eshell.
@@ -300,17 +300,15 @@ This enables:
 + Make the default flyspell dictionary greek and run flyspell on the whole buffer when flyspell mode is activated. I find spellchecking software to be very annoying and intrusive in my typical writing workflow so I dont want this to activate when I enter text buffers. Rather, I want to be able to run this once, when I am done with the writing and fix any errors at that point. This does just that
   
   #+BEGIN_SRC elisp
-
+    
     (show-paren-mode 1)
     (electric-pair-mode 1)
     (setq wolfram-alpha-app-id "U9PERG-KTPL49AWA2")
     (global-undo-tree-mode 1)
-
-    ;(use-package magit-todos-mode
-     ; :hook magit-mode)
+    
     (require 'calfw-git)
     (require 'calfw-org)
-
+    
     (use-package openwith
       :config
       (setq openwith-associations
@@ -321,31 +319,35 @@ This enables:
 		      "ogm" "ogg" "mkv"))
 		    "mpv"
 		    '(file))
-    (list (openwith-make-extension-regexp
+	     (list (openwith-make-extension-regexp
 		    '("xbm" "pbm" "pgm" "ppm" "pnm"
 		      "gif" "bmp" "tif"))
-		      "sxiv"
-		      '(file))
+		   "sxiv"
+		   '(file))
+	     (list (openwith-make-extension-regexp
+		    '("mph"))
+		   "comsol"
+		   '(file))
 	     (list (openwith-make-extension-regexp
 		    '("docx" "doc" "xlsx" "xls" "ppt" "odt" "ods"))
 		   "libreoffice"
 		   '(file))))
 	    (openwith-mode 1))
-
+    
     (use-package projectile
       :ensure t
       :init
       (projectile-mode +1)
       :bind (:map projectile-mode-map
 		  ("M-p" . projectile-command-map)))
-
+    
     (setq flyspell-default-dictionary "greek")
     (add-hook 'flyspell-mode 'flyspell-buffer)
-
+    
   #+END_SRC
 
   #+RESULTS:
-  : t
+  | flyspell-buffer |
   
 * Org-mode
 Some settings (now using the word some here might be an underestimation, as with the keybindings in a seperate file this is about half my config, but I like Org) I want for Emacs's Org-mode which I use extensively (like for writing this literate config file). Its split in sections cause its too huge otherwise. 
@@ -354,7 +356,7 @@ Some settings (now using the word some here might be an underestimation, as with
    This first section is about some packages I load for org, which are very helpful for my workflow, such as:
    + Better headings for org, as I am not a fan of the default asterisks.
    + I load org-download after org, this is a helpful addon which allows me to paste photos on my clipboard to org, which makes adding photos to org documents much faster.
-   + I activate calctex and activate it when I go into calc's embedded mode. Its a neat package that allows me to type a formula inside calc and renders it automatically into latex. Latex snippets are what I use mostly but this is a very neat package and I had to include it here (you can find them inside the snippets directory of my .emacs.d but if you want to draw inspiration from somewhere there are much better sources tbh).
+   + I activate calctex and activate it when I go into calc's embedded mode. Its a neat package that allows me to type a formula inside calc and renders it automatically into latex. Latex snippets are what I use mostly but this is a very neat package and I had to include it here.
    + I activate org-cdlatex-mode which makes typing latex equations easier inside org and massively improves speed of typing equations together with snippets for org
    + I add org-tree-slide for presentations inside Org
    + Require the org export beamer package so beamer export options are there by default
@@ -388,7 +390,10 @@ Some settings (now using the word some here might be an underestimation, as with
    + Making latex view my bibtex bibliography and export it properly. I took this from the org-ref docs as originally I wasnt getting proper bibliographic entries. It works with this.
    + I tell org that its odt export should be converted to docx as if I am exporting to a rich text editors format, its for a collaboration and most people I know use that format. If its a personal project I always export to a latex pdf because it looks better.
    + Defining a function which supresses the confirmation message for tangling an org document's source code and hooking it to the after save hook in org-mode. If I understand it correctly, it should automatically tangle after saving, if thats possible, which is handy for things such as this configuration.
-   + I have a custom lambda function which I hook to the org-mode-hook (so it activates every time a new org mode buffer is opened) which automatically displays images I have added to the buffer, creates previews for latex code in the document, toggles truncate-lines so that I can see the entire text when opening the buffer (really can't understand why its not nil by default in org documents). 
+   + I tell org to preview latex fragments and images by default when opening a document, as I use both extensively so this makes my life easier. I also change the "org-image-actual-width" variable, which makes images previewd in org to be able to change size if given the right headers. This is helpful for some images which are too large to be properly viewed in org so they can be scaled down and be properly visible.
+   + I have a custom lambda function which I hook to the org-mode-hook (so it activates every time a new org mode buffer is opened) which automatically activates the visual-line and org-fragtog minor modes. Visual line is for wrapping text to the next line once the current line is full, which is insanely useful for any org document in my opinion. Org-fragtog is a neat minor mode for latex previews. When on a latex equation it automatically shows the source code of it, allowing you to edit it, and then previews it once you leave the equation, which is very useful.
+   + I make the default process for creating latex previews dvisvgm. For the most part, both this and dvipng work flawlessly. But one specific latex package (chemfig) which I use from time to time cant preview things correctly in org with dvipng and previewing them as svgs with dvisvgm fixes that issue. Besides that, I havent really noticed any other major problems with either one. 
+   
      
 #+BEGIN_SRC elisp
   (add-to-list 'org-file-apps '("\\.pdf\\'" . emacs))
@@ -404,13 +409,13 @@ Some settings (now using the word some here might be an underestimation, as with
 								       (org-babel-tangle))))
 						'run-at-end 'only-in-org-mode))
 
+  (setq org-startup-with-latex-preview t)
+  (setq org-startup-with-inline-images t)
   (setq org-image-actual-width nil)
 
   (add-hook 'org-mode-hook '(lambda ()
 			      (visual-line-mode)
-			      (org-latex-preview)
-			      (org-fragtog-mode)
-			      (org-toggle-inline-images)))
+			      (org-fragtog-mode)))
 
   (setq org-preview-latex-default-process 'dvisvgm)
 
@@ -623,31 +628,34 @@ More languages to evaluate with org-babel (by default, only elisp is evaluated).
    - Since opening the pdf, url or DOI of a bibtex entry is no longer the default action in my config, I bind it to the letter p in the options menu of Ivy-bibtex
 
    #+BEGIN_SRC elisp
-
+     
      (setq org-roam-directory "~/org_roam")
-
+     
      (add-hook 'after-init-hook 'org-roam-mode)
-
+     
      (setq bibtex-completion-bibliography
 	   '("~/Sync/My_Library.bib"))
      (setq reftex-default-bibliography '("~/Sync/My_Library.bib"))
      (setq bibtex-completion-library-path '("~/Sync/Zotero_pdfs"))
-
+     
      (setq bibtex-completion-additional-search-fields '(keywords abstract))
-
+     
      (setq org-roam-dailies-directory "~/org_roam/daily")
-
+     
      (use-package org-ref
        :config (org-ref-ivy-cite-completion))
-
+     
      (setq ivy-bibtex-default-action 'ivy-bibtex-insert-citation)
-
+     
      (ivy-add-actions
       'ivy-bibtex
       '(("p" ivy-bibtex-open-any "Open pdf, url or DOI")))
+     
+     (setq org-roam-graph-exclude-matcher '("daily"))
     #+END_SRC
 
     #+RESULTS:
+    | daily |
 
 ** Templates
    This section is about the various templates used by the org-roam workflow. These are org-roam-capture-templates, org-roam-dailies-capture-templates
@@ -657,7 +665,7 @@ More languages to evaluate with org-babel (by default, only elisp is evaluated).
      (setq org-roam-capture-templates
 	   '(("d" "default" plain (function org-roam-capture--get-point)
 	     "%?"
-	     :file-name "%<%d-%m-%Y_%H:%M>-${slug}"
+	     :file-name "${slug}-%<%d-%m>"
 	     :unnarrowed t
 	     :head "#+title: ${title}\nglatex_roam\n
      - tags ::  ")))
@@ -702,6 +710,32 @@ More languages to evaluate with org-babel (by default, only elisp is evaluated).
    | :olp | (Random general notes)           |       |                               |      |            |                   |       |                                         |
    | w    | workout                          | entry | #'org-roam-capture--get-point | * %? | :file-name | daily/%<%Y-%m-%d> | :head | #+title: Fleeting notes for %<%Y-%m-%d> |
    | :olp | (Workout Regimes)                |       |                               |      |            |                   |       |                                         |
+
+** Org Roam Protocol and Server
+
+   #+BEGIN_SRC elisp
+     (require 'org-protocol)
+     (require 'org-roam-protocol)
+     
+     (use-package org-roam-server
+       :ensure t
+       :config
+       (setq org-roam-server-host "127.0.0.1"
+	     org-roam-server-port 8080
+	     org-roam-server-authenticate nil
+	     org-roam-server-export-inline-images t
+	     org-roam-server-serve-files nil
+	     org-roam-server-served-file-extensions '("pdf" "mp4" "ogv")
+	     org-roam-server-network-poll t
+	     org-roam-server-network-arrows nil
+	     org-roam-server-network-label-truncate t
+	     org-roam-server-network-label-truncate-length 60
+	     org-roam-server-network-label-wrap-length 20))
+     
+   #+END_SRC
+
+   #+RESULTS:
+   : t
 
 * Skeletons
   Skeletons are a very neat feature of Emacs. Think of a snippet and a template, now combine them and you have a skeleton. A skeleton is bound to a key which when pressed enters a piece of text. This is helpful when initialising a file whose format is certain. I currently use this for initialising my lab reports which have a rather standard format all the time.

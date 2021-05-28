@@ -18,6 +18,7 @@
   "q u" '((lambda() (interactive)(dired "~/Documents/4o_εξάμηνο")) :which-key "Quickmark to Uni folder")
   "q q" '((lambda() (interactive)(find-file "~/.config/qtile/README.org")) :which-key "Quickmark to literate Qtile config")
   "q h" '((lambda() (interactive)(dired "~")) :which-key "Quickmark to home directory")
+  "q o" '((lambda() (interactive)(dired "~/Documents/Octave")) :which-key "Quickmark to Octave directory")
   "t" 'toggle-truncate-lines
   "T" 'org-babel-tangle
   "RET" 'vterm-toggle
@@ -44,7 +45,7 @@
   "j f t" 'org-roam-dailies-find-today
   "j c d" 'org-roam-dailies-capture-date
   "j f d" 'org-roam-dailies-find-date
-  "h" '(counsel-imenu :which-key "Jump to heading")
+  "h" 'counsel-imenu
   "c" '(:ignore t :which-key "Calendar Commands")
   "c b" 'cfw:open-calendar-buffer
   "c o" '(cfw:open-org-calendar :which-key "Open calendar with scheduled to-dos")
