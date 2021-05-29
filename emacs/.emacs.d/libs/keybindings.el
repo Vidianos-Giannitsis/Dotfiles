@@ -38,6 +38,9 @@
   "r c" 'orb-insert
   "r b" 'isbn-to-bibtex
   "r a" 'doi-utils-add-bibtex-entry-from-doi
+  "r i" '(org-roam-jump-to-index :which-key "Go to the master index file")
+  "r g" 'org-roam-graph
+  "r s" 'org-roam-server-mode
   "j" '(:ignore t :which-key "Daily notes")
   "j f" '(:ignore t :which-key "Find daily note")
   "j c" '(:ignore t :which-key "Capture daily note")
@@ -50,7 +53,6 @@
   "c b" 'cfw:open-calendar-buffer
   "c o" '(cfw:open-org-calendar :which-key "Open calendar with scheduled to-dos")
   "c g" '(cfw:git-open-calendar :which-key "Open calendar with git commit history")
-  "r i" '(org-roam-jump-to-index :which-key "Go to the master index file")
   "l" '(linum-mode :which-key "Line numbers")
   "i" 'ielm
   "s" '(:ignore t :which-key "Counsel-spotify commands")
@@ -105,26 +107,6 @@
  :keymaps 'org-mode-map
  "`" 'org-roam)
 
-(general-define-key
- :states 'normal
- :keymaps 'pdf-view-mode-map
- "i" 'org-noter-insert-note
- "c" 'kill-current-buffer
- "a" '(:ignore t :which-key "Add annotation")
- "a t" 'pdf-annot-add-text-annotation
- "a m" 'pdf-annot-add-markup-annotation)
-
-  (global-set-key (kbd "M-b") 'ebuku)
-  (global-set-key (kbd "M-C-r") 'restart-emacs)
-  (global-set-key (kbd "M-m") 'man)
-
-(general-define-key
- :states 'normal
- :keymaps 'dired-mode-map
- "C-+" 'dired-create-empty-file
- "h" 'dired-up-directory
- "l" 'dired-find-file)
-
 (global-set-key (kbd "C-h f") #'helpful-callable)
 (global-set-key (kbd "C-h v") #'helpful-variable)
 (global-set-key (kbd "C-h k") #'helpful-key)
@@ -148,6 +130,32 @@
  :states 'visual
  :keymaps 'override
  "e r" 'eval-region)
+
+(evil-global-set-key 'motion "j" 'evil-next-visual-line)
+(evil-global-set-key 'motion "k" 'evil-previous-visual-line)
+
+(global-set-key (kbd "M-b") 'ebuku)
+(global-set-key (kbd "M-C-r") 'restart-emacs)
+(global-set-key (kbd "M-m") 'man)
+
+(general-define-key
+ :states 'normal
+ :keymaps 'pdf-view-mode-map
+ "i" 'org-noter-insert-note
+ "c" 'kill-current-buffer
+ "a" '(:ignore t :which-key "Add annotation")
+ "a t" 'pdf-annot-add-text-annotation
+ "a m" 'pdf-annot-add-markup-annotation)
+
+
+
+(general-define-key
+ :states 'normal
+ :keymaps 'dired-mode-map
+ "+" 'dired-create-empty-file
+ "C-+" 'dired-create-directory
+ "h" 'dired-up-directory
+ "l" 'dired-find-file)
 
 (general-define-key
  :states 'normal

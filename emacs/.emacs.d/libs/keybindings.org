@@ -9,6 +9,8 @@
   General has integration with which-key, so for some functions whose names I find not so self descriptive, I have a which-key statement, which gives me a special message instead of the command name for those commands. I can also nest leader keys inside other leader keys creating some larger "key-chords" using general. Those are for a group of commands, which have similar functionalities but differ in something. For example SPC c is for calendar commands (using the calfw.el package) while SPC r is for Org-Roam commands and commands about reference material. If you add the nested leader key to the original leader key's list of actions and set it to :ignore t as I have done below, you can set a which-key statement which describes what that leader key is about. For further understanding of what each command does, I have a table together with the source code below, which explains shortly what each keybinding does. Its great as a reference point for me and for anyone else checking this config out.
   
 ** Global keybindings, defined with the space leader key
+   These are my most important keybindings. They are on the override mode map meaning they take precedence over everything and can be used in normal mode. They are very general and not mode specific. All prefixed by the SPC key
+   
 | Keybinding       | Action                                                                                                                                               |
 |------------------+------------------------------------------------------------------------------------------------------------------------------------------------------|
 | SPC !            | Create a prompt for inputing a single shell command. This is easier than opening a terminal emulator for quick tasks                                 |
@@ -57,6 +59,8 @@
 | SPC r i          | Jump to the "master" index file specified in Org-Roam                                                                                                |
 | SPC r b          | Query for a book's ISBN and insert a bibtex entry matching that book in a .bib file of your choice                                                   |
 | SPC r a          | Query for an article's DOI and insert a bibtex entry matching that article in a .bib file of your choice                                             |
+| SPC r g          | Create a cool svg graphic which displays all the connections between the files in my org roam directory                                              |
+| SPC r s          | Start org-roam's server and watch the magic happen at http://127.0.0.1:8080/. Note that it needs the emacs-daemon to work properly                   |
 |------------------+------------------------------------------------------------------------------------------------------------------------------------------------------|
 | *Roam-Daily*       | Org-roam has the ability to create daily notes for various subjects. SPC j commands create/open the various daily notes                              |
 |------------------+------------------------------------------------------------------------------------------------------------------------------------------------------|
@@ -89,10 +93,10 @@
 |------------------+------------------------------------------------------------------------------------------------------------------------------------------------------|
 
 #+BEGIN_SRC elisp
-
+  
   (general-create-definer my-leader-def
 			  :prefix "SPC")
-
+  
   (my-leader-def
    :states 'normal
    :keymaps 'override
@@ -130,6 +134,9 @@
     "r c" 'orb-insert
     "r b" 'isbn-to-bibtex
     "r a" 'doi-utils-add-bibtex-entry-from-doi
+    "r i" '(org-roam-jump-to-index :which-key "Go to the master index file")
+    "r g" 'org-roam-graph
+    "r s" 'org-roam-server-mode
     "j" '(:ignore t :which-key "Daily notes")
     "j f" '(:ignore t :which-key "Find daily note")
     "j c" '(:ignore t :which-key "Capture daily note")
@@ -142,7 +149,6 @@
     "c b" 'cfw:open-calendar-buffer
     "c o" '(cfw:open-org-calendar :which-key "Open calendar with scheduled to-dos")
     "c g" '(cfw:git-open-calendar :which-key "Open calendar with git commit history")
-    "r i" '(org-roam-jump-to-index :which-key "Go to the master index file")
     "l" '(linum-mode :which-key "Line numbers")
     "i" 'ielm
     "s" '(:ignore t :which-key "Counsel-spotify commands")
@@ -157,12 +163,14 @@
     "e b" 'eval-buffer
     "e e" 'eval-expression
     "e f" 'eval-defun)
-
+  
 #+END_SRC
 
 #+RESULTS:
 
 ** Org mode keybindings
+   I initially planned for , to become the leader key for all major mode specific commands. In the end, the only one I use enough to need this many commands is org. So , is the leader key that signifies that this is an org mode command. And I have a lot of them.
+   
 | Keybinding | Action                                                                                                                                               |
 |------------+------------------------------------------------------------------------------------------------------------------------------------------------------|
 | , l        | Makes latex fragments inside org, render as pictures showing the equation. Helps ensure I havent typed something wrong without the need to export.   |
@@ -246,39 +254,84 @@
 
 #+RESULTS:
 
-** Other keybindings, either mode specific or general, that function without the space key
-| Keybinding | Action                                                                                                                                                |
-|------------+-------------------------------------------------------------------------------------------------------------------------------------------------------|
-| C-h keys   | I change the primary C-h keybindings to their alternatives from the helpful package. They have more info than the default help menus (which are       |
-|            | already incredible) so they are excellent for function/variable documentation without needing to look online.                                         |
-| C-c C-d    | Lookup the current symbol at point. Not exactly sure of its use but its recommended in the helpful github repo so I added it                          |
-| M-d        | Open my Emacs config. This is very useful for when hacking on Emacs so I can quickly go to my configuration file whenever I want to do any kind of    |
-|            | hacking on my config without the need to find the full path to this file.                                                                             |
-| M-C-r      | Simply restarts Emacs. Always good to have a restart function                                                                                         |
-| M-m        | Query for a man page. Man pages are essential for app documentation for many Linux programs so it's cool to be able to query for one in emacs         |
-| M-b        | Open Ebuku, the buku bookmark manager's Emacs major mode from where I can open my bookmarks from inside Emacs                                         |
-| M-Tab      | Jump out of parentheses. Tab is too overloaded from various packages using it. As such this is on something similar without overloading Tab even more |
-| e r        | *In visual mode* Evaluate the elisp in the selected region. Wanted to put it with the other eval functions but this needs to be in visual mode to work  |
-|------------+-------------------------------------------------------------------------------------------------------------------------------------------------------|
-| *Pdf View*   | PDF View is the best Emacs pdf reader. I set some keybindings specific to it                                                                          |
-|------------+-------------------------------------------------------------------------------------------------------------------------------------------------------|
-| c          | In pdf-view mode. Kill the buffer. Sometimes, pdfs dont properly refresh unless killed, so it can be helpful to have this.                            |
-| i          | If pdf-view is in an org-noter buffer, this allows for a note to be added in the matching org buffer                                                  |
-| a t        | Add a text annotation to a pdf directly                                                                                                               |
-| a m        | Add a markup annotation to a pdf directly                                                                                                             |
-|------------+-------------------------------------------------------------------------------------------------------------------------------------------------------|
-| *Dired*      | Some dired mode keybindings which I consider should be defaults                                                                                       |
-|------------+-------------------------------------------------------------------------------------------------------------------------------------------------------|
-| C-+        | Creates a new empty file inside the current working directory                                                                                         |
-| h          | Go up one directory in Dired                                                                                                                          |
-| l          | Jump one directory forward in Dired                                                                                                                   |
-|------------+-------------------------------------------------------------------------------------------------------------------------------------------------------|
-| *Org Mode*   | Probably the only org mode commands that I need outside of the comma modifier key. Changing slides in org-tree-slide feels annoying with a key        |
-|            | sequence so it just makes sense to add this                                                                                                   |
-|------------+-------------------------------------------------------------------------------------------------------------------------------------------------------|
-| C-j        | In org-tree-slide go to the next "slide" meaning org-heading                                                                                          |
-| C-k        | Same as above but for the previous "slide"                                                                                                            |
-|------------+-------------------------------------------------------------------------------------------------------------------------------------------------------|
+** General convenience keybindings
+   Some keybindings that I regularly use aren't under any leader key, but just there as general convenience things. This is that section of my keybindings
+
+   | Keybinding | Action                                                                                                                                                  |
+   |------------+---------------------------------------------------------------------------------------------------------------------------------------------------------|
+   | C-h keys   | I change the primary C-h keybindings to their alternatives from the helpful package. They have more info than the default help menus (which are         |
+   |            | already incredible) so they are excellent for function/variable documentation without needing to look online.                                           |
+   | C-c C-d    | Lookup the current symbol at point. Not exactly sure of its use but its recommended in the helpful github repo so I added it                            |
+   | M-Tab      | Jump out of parentheses. Tab is too overloaded from various packages using it. As such this is on something similar without overloading Tab even more   |
+   | e r        | *In visual mode* Evaluate the elisp in the selected region. Wanted to put it with the other eval functions but this needs to be in visual mode to work    |
+   | M-C-r      | Simply restarts Emacs. Always good to have a restart function                                                                                           |
+   | M-m        | Query for a man page. Man pages are essential for app documentation for many Linux programs so it's cool to be able to query for one in emacs           |
+   | M-b        | Open Ebuku, the buku bookmark manager's Emacs major mode from where I can open my bookmarks from inside Emacs                                           |
+   | j, k       | As I write a lot of prose, I have very long pieces of text, which Emacs considers a single line. I have rebound j and k to go up and down a visual line |
+   |------------+---------------------------------------------------------------------------------------------------------------------------------------------------------|
+
+   #+BEGIN_SRC elisp
+     
+     (global-set-key (kbd "C-h f") #'helpful-callable)
+     (global-set-key (kbd "C-h v") #'helpful-variable)
+     (global-set-key (kbd "C-h k") #'helpful-key)
+     (global-set-key (kbd "C-c C-d") #'helpful-at-point)
+     (global-set-key (kbd "C-h F") #'helpful-function)
+     (global-set-key (kbd "C-h C") #'helpful-command)
+     
+     (general-define-key
+      :states 'normal
+      :keymaps 'override
+      "u" 'undo-tree-undo
+      "C-r" 'undo-tree-redo
+      "=" 'math-at-point)
+     
+     (general-define-key
+      :states 'insert
+      :keymaps 'override
+      "<M-tab>" 'tab-jump-out)
+     
+     (general-define-key
+      :states 'visual
+      :keymaps 'override
+      "e r" 'eval-region)
+     
+     (evil-global-set-key 'motion "j" 'evil-next-visual-line)
+     (evil-global-set-key 'motion "k" 'evil-previous-visual-line)
+     
+     (global-set-key (kbd "M-b") 'ebuku)
+     (global-set-key (kbd "M-C-r") 'restart-emacs)
+     (global-set-key (kbd "M-m") 'man)
+   #+END_SRC
+
+   #+RESULTS:
+   : evil-previous-visual-line
+   
+** Other mode specific keybindings
+   This is all about some mode specific keybindings that I use regularly but arent under any leader key. 
+   
+| Keybinding | Action                                                                                                                                         |
+|------------+------------------------------------------------------------------------------------------------------------------------------------------------|
+| *Pdf View*   | PDF View is the best Emacs pdf reader. I set some keybindings specific to it                                                                   |
+|------------+------------------------------------------------------------------------------------------------------------------------------------------------|
+| c          | In pdf-view mode. Kill the buffer. Sometimes, pdfs dont properly refresh unless killed, so it can be helpful to have this.                     |
+| i          | If pdf-view is in an org-noter buffer, this allows for a note to be added in the matching org buffer                                           |
+| a t        | Add a text annotation to a pdf directly                                                                                                        |
+| a m        | Add a markup annotation to a pdf directly                                                                                                      |
+|------------+------------------------------------------------------------------------------------------------------------------------------------------------|
+| *Dired*      | Some dired mode keybindings which I consider should be defaults                                                                                |
+|------------+------------------------------------------------------------------------------------------------------------------------------------------------|
+| +          | Creates a new empty file inside the current working directory                                                                                  |
+| C-+        | Creates a new empty directory insider the current working directory                                                                            |
+| h          | Go up one directory in Dired                                                                                                                   |
+| l          | Jump one directory forward in Dired                                                                                                            |
+|------------+------------------------------------------------------------------------------------------------------------------------------------------------|
+| *Org Mode*   | Probably the only org mode commands that I need outside of the comma modifier key. Changing slides in org-tree-slide feels annoying with a key |
+|            | sequence so it just makes sense to add this                                                                                                    |
+|------------+------------------------------------------------------------------------------------------------------------------------------------------------|
+| C-j        | In org-tree-slide go to the next "slide" meaning org-heading                                                                                   |
+| C-k        | Same as above but for the previous "slide"                                                                                                     |
+|------------+------------------------------------------------------------------------------------------------------------------------------------------------|
 
 #+BEGIN_SRC elisp
       (general-define-key
@@ -289,47 +342,23 @@
    "a" '(:ignore t :which-key "Add annotation")
    "a t" 'pdf-annot-add-text-annotation
    "a m" 'pdf-annot-add-markup-annotation)
+  
 
-    (global-set-key (kbd "M-b") 'ebuku)
-    (global-set-key (kbd "M-C-r") 'restart-emacs)
-    (global-set-key (kbd "M-m") 'man)
-
+  
   (general-define-key
    :states 'normal
    :keymaps 'dired-mode-map
-   "C-+" 'dired-create-empty-file
+   "+" 'dired-create-empty-file
+   "C-+" 'dired-create-directory
    "h" 'dired-up-directory
    "l" 'dired-find-file)
-
-  (global-set-key (kbd "C-h f") #'helpful-callable)
-  (global-set-key (kbd "C-h v") #'helpful-variable)
-  (global-set-key (kbd "C-h k") #'helpful-key)
-  (global-set-key (kbd "C-c C-d") #'helpful-at-point)
-  (global-set-key (kbd "C-h F") #'helpful-function)
-  (global-set-key (kbd "C-h C") #'helpful-command)
-
-  (general-define-key
-   :states 'normal
-   :keymaps 'override
-   "u" 'undo-tree-undo
-   "C-r" 'undo-tree-redo
-   "=" 'math-at-point)
-
-  (general-define-key
-   :states 'insert
-   :keymaps 'override
-   "<M-tab>" 'tab-jump-out)
-
-  (general-define-key
-   :states 'visual
-   :keymaps 'override
-   "e r" 'eval-region)
-
+  
   (general-define-key
    :states 'normal
    :keymaps 'org-mode-map
    "C-j" '(org-tree-slide-move-next-tree :which-key "Next Slide")
    "C-k" '(org-tree-slide-move-previous-tree :which-key "Previous Slide"))
+  
 #+END_SRC
 
 #+RESULTS:
