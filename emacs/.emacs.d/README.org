@@ -208,18 +208,18 @@ This enables:
 + Loading small utility packages such as math at point (which makes doing calculations in Emacs faster) and molar-mass (a Molar mass calculator for Emacs)
 
 #+BEGIN_SRC elisp
-
+  
   (add-to-list 'load-path
 	       "~/.emacs.d/plugins/yasnippet")
   (require 'yasnippet)
   (yas-global-mode 1)
-
+  
   (require 'general)
   (require 'vterm-toggle)
-
+  
   (setq large-file-warning-threshold nil)
   (setq vc-follow-symlinks t)
-
+  
   (set-face-attribute 'org-document-title nil :font "Source Code Pro" :weight 'bold :height 1.3)
       (dolist (face '((org-level-1 . 1.2)
 		      (org-level-2 . 1.1)
@@ -230,24 +230,26 @@ This enables:
 		      (org-level-7 . 1.1)
 		      (org-level-8 . 1.1)))
 	(set-face-attribute (car face) nil :font "Source Code Pro" :weight 'regular :height (cdr face)))
-
+  
   (defun org-toggle-emphasis ()
     "Toggle hiding/showing of org emphasize markers."
     (interactive)
     (if org-hide-emphasis-markers
 	(set-variable 'org-hide-emphasis-markers nil)
       (set-variable 'org-hide-emphasis-markers t)))
-
+  
   (setq counsel-spotify-client-id "0df2796a793b41dc91711eb9f85c0e77")
   (setq counsel-spotify-client-secret "bcdbb823795640248ff2c29eedadb800")
-
+  
   (require 'math-at-point)
   (require 'molar-mass)
-
+  
+  (setq-default tab-jump-out-delimiters '(";" ")" "]" "}" "|" "'" "\"" "`" "."))
 #+END_SRC
 
 #+RESULTS:
-: molar-mass
+| ; | ) | ] | } |   |   | ' | " | ` | . |
+
 
 * Keybindings
   This is my absolute favourite section of this entire config. But its a very big part of my config and I considered it more prudent to include it as its own file. You can find [[https://github.com/AuroraDragoon/Dotfiles/blob/master/emacs/.emacs.d/libs/keybindings.org][keybindings.org]] inside the libs directory (which contains all the external elisp "libraries" I have installed manually). The org file is the literate configuration of my keybindings. In that directory you will also find the keybindings.el file which I require in this section of the config to load. It acts as if it was an external package for Emacs which helps make this config more tidy. 
@@ -270,19 +272,20 @@ This enables:
 
   #+BEGIN_SRC elisp
      (require 'dired-x)
-
+    
     ;(add-hook 'dired-mode-hook 'treemacs-icons-dired-mode)
-
+    
     (use-package all-the-icons-dired
       :hook (dired-mode . all-the-icons-dired-mode)
       :config (setq all-the-icons-dired-monochrome nil))
-
+    
     (use-package dired-hide-dotfile
       :hook (dired-mode . dired-hide-dotfiles-mode))
-
+    
     (use-package dired-collapse
       :hook (dired-mode . dired-collapse-mode))
-
+    
+    (setq dired-filter-prefix "f")
   #+END_SRC
 
   This is how Dired ends up looking after these changes
@@ -386,21 +389,13 @@ Some settings (now using the word some here might be an underestimation, as with
 ** Org mode utilities
    I change some more things inside org to fix some annoying default behaviours.
    + When exporting to pdf, org defaults to your system's default pdf viewer. Since I am in an Emacs buffer editing the file, its more convenient to open the pdf inside Emacs with pdf-tools.
-   + I write a lot of equations in my documents usually with latex and the normal size of those inside org (available with org-latex-preview) is a bit small for my liking so after playing around with it a bit I scaled it up to 1.8 of the original which I consider a very sensible size
-   + Making latex view my bibtex bibliography and export it properly. I took this from the org-ref docs as originally I wasnt getting proper bibliographic entries. It works with this.
    + I tell org that its odt export should be converted to docx as if I am exporting to a rich text editors format, its for a collaboration and most people I know use that format. If its a personal project I always export to a latex pdf because it looks better.
    + Defining a function which supresses the confirmation message for tangling an org document's source code and hooking it to the after save hook in org-mode. If I understand it correctly, it should automatically tangle after saving, if thats possible, which is handy for things such as this configuration.
-   + I tell org to preview latex fragments and images by default when opening a document, as I use both extensively so this makes my life easier. I also change the "org-image-actual-width" variable, which makes images previewd in org to be able to change size if given the right headers. This is helpful for some images which are too large to be properly viewed in org so they can be scaled down and be properly visible.
+   + I activate image preview by default inside org, as images are cool, I like images. I also change the "org-image-actual-width" variable, which makes images previewd in org to be able to change size if given the right headers. This is helpful for some images which are too large to be properly viewed in org so they can be scaled down and be properly visible.
    + I have a custom lambda function which I hook to the org-mode-hook (so it activates every time a new org mode buffer is opened) which automatically activates the visual-line and org-fragtog minor modes. Visual line is for wrapping text to the next line once the current line is full, which is insanely useful for any org document in my opinion. Org-fragtog is a neat minor mode for latex previews. When on a latex equation it automatically shows the source code of it, allowing you to edit it, and then previews it once you leave the equation, which is very useful.
-   + I make the default process for creating latex previews dvisvgm. For the most part, both this and dvipng work flawlessly. But one specific latex package (chemfig) which I use from time to time cant preview things correctly in org with dvipng and previewing them as svgs with dvisvgm fixes that issue. Besides that, I havent really noticed any other major problems with either one. 
-   
      
 #+BEGIN_SRC elisp
   (add-to-list 'org-file-apps '("\\.pdf\\'" . emacs))
-
-  (setq org-format-latex-options '(:foreground default :background default :scale 1.8 :html-foreground "Black" :html-background "Transparent" :html-scale 1.0 :matchers))
-
-  (setq org-latex-pdf-process (list "latexmk -shell-escape -bibtex -f -pdf %f"))
 
   (setq org-odt-preferred-output-format "docx")
 
@@ -409,7 +404,6 @@ Some settings (now using the word some here might be an underestimation, as with
 								       (org-babel-tangle))))
 						'run-at-end 'only-in-org-mode))
 
-  (setq org-startup-with-latex-preview t)
   (setq org-startup-with-inline-images t)
   (setq org-image-actual-width nil)
 
@@ -417,13 +411,74 @@ Some settings (now using the word some here might be an underestimation, as with
 			      (visual-line-mode)
 			      (org-fragtog-mode)))
 
-  (setq org-preview-latex-default-process 'dvisvgm)
-
 #+END_SRC
 
 #+RESULTS:
 : dvisvgm
 	    
+** Latex Stuff
+   I love Latex for writing mathematical equations. Org understands latex very well and can preview it. But I want some things changed in it. 
+    + I write a lot of equations in my documents usually with latex and the normal size of those inside org (available with org-latex-preview) is a bit small for my liking so after playing around with it a bit I scaled it up to 1.8 of the original which I consider a very sensible size
+    + Making latex view my bibtex bibliography and export it properly. I took this from the org-ref docs as originally I wasnt getting proper bibliographic entries. It works with this.
+    + I make the default process for creating latex previews dvisvgm. For the most part, both this and dvipng work flawlessly. But one specific latex package (chemfig) which I use from time to time cant preview things correctly in org with dvipng and previewing them as svgs with dvisvgm fixes that issue. Besides that, I havent really noticed any other major problems with either one.
+    + I tell org to preview latex fragments by default when opening a document, as I use them extensively so this makes my life easier.
+    + The rest was taken by John Kitchin's [[https://kitchingroup.cheme.cmu.edu/blog/2016/11/07/Better-equation-numbering-in-LaTeX-fragments-in-org-mode/][website]]. Its about equations in org not being properly numbered as the org latex preview takes them as independent fragments and not as a whole. This code snippet, makes org number equations properly using an advice on org-create-formula-image. Its very neat and I am glad to have found it. 
+
+   #+BEGIN_SRC elisp
+     (setq org-format-latex-options '(:foreground default :background default :scale 1.8 :html-foreground "Black" :html-background "Transparent" :html-scale 1.0 :matchers))
+     
+     (setq org-latex-pdf-process (list "latexmk -shell-escape -bibtex -f -pdf %f"))
+     
+     (setq org-preview-latex-default-process 'dvisvgm)
+     
+     (setq org-startup-with-latex-preview t)
+     
+     (defun org-renumber-environment (orig-func &rest args)
+       (let ((results '()) 
+	     (counter -1)
+	     (numberp))
+     
+	 (setq results (loop for (begin .  env) in 
+			     (org-element-map (org-element-parse-buffer) 'latex-environment
+			       (lambda (env)
+				 (cons
+				  (org-element-property :begin env)
+				  (org-element-property :value env))))
+			     collect
+			     (cond
+			      ((and (string-match "\\\\begin{equation}" env)
+				    (not (string-match "\\\\tag{" env)))
+			       (incf counter)
+			       (cons begin counter))
+			      ((string-match "\\\\begin{align}" env)
+			       (prog2
+				   (incf counter)
+				   (cons begin counter)                          
+				 (with-temp-buffer
+				   (insert env)
+				   (goto-char (point-min))
+				   ;; \\ is used for a new line. Each one leads to a number
+				   (incf counter (count-matches "\\\\$"))
+				   ;; unless there are nonumbers.
+				   (goto-char (point-min))
+				   (decf counter (count-matches "\\nonumber")))))
+			      (t
+			       (cons begin nil)))))
+     
+	 (when (setq numberp (cdr (assoc (point) results)))
+	   (setf (car args)
+		 (concat
+		  (format "\\setcounter{equation}{%s}\n" numberp)
+		  (car args)))))
+     
+       (apply orig-func args))
+     
+     (advice-add 'org-create-formula-image :around #'org-renumber-environment)
+     
+   #+END_SRC
+
+   #+RESULTS:
+   
 ** Org Noter
    
    Org-noter is an excellent program for annotating pdfs using org. Its main problem is that when you open it it creates its frame in a new emacs window which for me is inconvenient, so I change that behaviour to open the notes the current buffer. I also make another change. Because the typical file that includes a lot of org-noter annotations is crammed with :PROPERTIES: arguments I use a custom function to hide them. They can be useful so I dont hide them by default, but instead make the function interactive (can be called from M-x) and when given the 'all argument on the prompt hides all the :PROPERTIES: arguments. Below is the source code for these changes. Also, since I am not the one who wrote the function have a link to the stack-overflow page where this is answered [[https://stackoverflow.com/questions/17478260/completely-hide-the-properties-drawer-in-org-mode]]

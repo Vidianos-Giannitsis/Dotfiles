@@ -1,0 +1,8 @@
+# -*- mode: snippet -*-
+# name: beamer
+# key: beamer
+# --
+#+LATEX_HEADER: \usetheme{CambridgeUS}
+#+LATEX_HEADER: \usecolortheme{crane}
+#+OPTIONS: toc:nil
+#+LaTeX_CLASS_OPTIONS: [smaller,aspectratio=169]

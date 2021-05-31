@@ -120,6 +120,8 @@
 (require 'math-at-point)
 (require 'molar-mass)
 
+(setq-default tab-jump-out-delimiters '(";" ")" "]" "}" "|" "'" "\"" "`" "."))
+
 (require 'keybindings)
 
 (require 'dired-x)
@@ -135,6 +137,8 @@
 
 (use-package dired-collapse
   :hook (dired-mode . dired-collapse-mode))
+
+(setq dired-filter-prefix "f")
 
 (show-paren-mode 1)
 (electric-pair-mode 1)
@@ -197,10 +201,6 @@
 
 (add-to-list 'org-file-apps '("\\.pdf\\'" . emacs))
 
-(setq org-format-latex-options '(:foreground default :background default :scale 1.8 :html-foreground "Black" :html-background "Transparent" :html-scale 1.0 :matchers))
-
-(setq org-latex-pdf-process (list "latexmk -shell-escape -bibtex -f -pdf %f"))
-
 (setq org-odt-preferred-output-format "docx")
 
 (add-hook 'org-mode-hook (lambda () (add-hook 'after-save-hook #'(lambda ()
@@ -208,7 +208,6 @@
 								     (org-babel-tangle))))
 					      'run-at-end 'only-in-org-mode))
 
-(setq org-startup-with-latex-preview t)
 (setq org-startup-with-inline-images t)
 (setq org-image-actual-width nil)
 
@@ -216,7 +215,55 @@
 			    (visual-line-mode)
 			    (org-fragtog-mode)))
 
+(setq org-format-latex-options '(:foreground default :background default :scale 1.8 :html-foreground "Black" :html-background "Transparent" :html-scale 1.0 :matchers))
+
+(setq org-latex-pdf-process (list "latexmk -shell-escape -bibtex -f -pdf %f"))
+
 (setq org-preview-latex-default-process 'dvisvgm)
+
+(setq org-startup-with-latex-preview t)
+
+(defun org-renumber-environment (orig-func &rest args)
+  (let ((results '()) 
+	(counter -1)
+	(numberp))
+
+    (setq results (loop for (begin .  env) in 
+			(org-element-map (org-element-parse-buffer) 'latex-environment
+			  (lambda (env)
+			    (cons
+			     (org-element-property :begin env)
+			     (org-element-property :value env))))
+			collect
+			(cond
+			 ((and (string-match "\\\\begin{equation}" env)
+			       (not (string-match "\\\\tag{" env)))
+			  (incf counter)
+			  (cons begin counter))
+			 ((string-match "\\\\begin{align}" env)
+			  (prog2
+			      (incf counter)
+			      (cons begin counter)                          
+			    (with-temp-buffer
+			      (insert env)
+			      (goto-char (point-min))
+			      ;; \\ is used for a new line. Each one leads to a number
+			      (incf counter (count-matches "\\\\$"))
+			      ;; unless there are nonumbers.
+			      (goto-char (point-min))
+			      (decf counter (count-matches "\\nonumber")))))
+			 (t
+			  (cons begin nil)))))
+
+    (when (setq numberp (cdr (assoc (point) results)))
+      (setf (car args)
+	    (concat
+	     (format "\\setcounter{equation}{%s}\n" numberp)
+	     (car args)))))
+
+  (apply orig-func args))
+
+(advice-add 'org-create-formula-image :around #'org-renumber-environment)
 
 (setq org-noter-always-create-frame nil)
 

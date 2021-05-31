@@ -1,0 +1,11 @@
+# -*- mode: snippet -*-
+# name: minipage
+# key: split
+# --
+\begin{minipage}{.4\textwidth}
+$1
+\end{minipage}%
+\hfill\vline\hfill
+\begin{minipage}{.4\textwidth}
+$2
+\end{minipage}

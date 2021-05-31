@@ -1,0 +1,5 @@
+# -*- mode: snippet -*-
+# name: surface_integral
+# key: oint
+# --
+\oiint_{$1} $2 \,d$3

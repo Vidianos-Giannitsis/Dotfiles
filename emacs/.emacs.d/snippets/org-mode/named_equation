@@ -3,7 +3,6 @@
 # key: neq
 # --
 \begin{equation}
-\tag{$1}
-$2
-\label{eqn:$3}
+$1
+\label{eqn:$2}
 \end{equation}

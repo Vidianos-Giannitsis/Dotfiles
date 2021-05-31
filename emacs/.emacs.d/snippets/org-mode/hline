@@ -1,0 +1,5 @@
+# -*- mode: snippet -*-
+# name: hline
+# key: hline
+# --
+\noindent\rule{\textwidth}{1pt}

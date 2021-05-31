@@ -5,6 +5,9 @@
 #+LATEX_HEADER: \usepackage[LGR, T1]{fontenc}
 #+LATEX_HEADER: \usepackage[greek, english]{babel}
 #+LATEX_HEADER: \usepackage{alphabeta}
+#+LATEX_HEADER: \usepackage{esint}
+#+LATEX_HEADER: \usepackage{mathtools}
+#+LATEX_HEADER: \usepackage{esdiff}
 \renewcommand{\abstractname}{Περίληψη}
 \renewcommand{\tablename}{Πίνακας}
 \renewcommand{\figurename}{Σχήμα}

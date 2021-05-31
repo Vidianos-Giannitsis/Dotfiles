@@ -1,0 +1,5 @@
+# -*- mode: snippet -*-
+# name: pder
+# key: pder
+# --
+\diffp{$1}{$2}

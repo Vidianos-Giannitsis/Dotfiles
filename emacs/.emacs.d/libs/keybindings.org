@@ -106,7 +106,6 @@
     "D" 'dired
     "d" '(:ignore t :which-key "Dired functions")
     "d f" 'counsel-find-file
-    "d h" 'dired-hide-dotfiles-mode
     "d j" '(dired-jump :which-key "Open dired in the current buffer's directory")
     "q" '(:ignore t :which-key "Quickmarks")
     "q c" '((lambda() (interactive)(find-file "~/.emacs.d/README.org")) :which-key "Quickmark to literate Emacs config")
@@ -115,6 +114,7 @@
     "q q" '((lambda() (interactive)(find-file "~/.config/qtile/README.org")) :which-key "Quickmark to literate Qtile config")
     "q h" '((lambda() (interactive)(dired "~")) :which-key "Quickmark to home directory")
     "q o" '((lambda() (interactive)(dired "~/Documents/Octave")) :which-key "Quickmark to Octave directory")
+    "q s" '((lambda() (interactive)(dired "~/.emacs.d/snippets/org-mode")) :which-key "Quickmark to Org snippets")
     "t" 'toggle-truncate-lines
     "T" 'org-babel-tangle
     "RET" 'vterm-toggle
@@ -310,28 +310,37 @@
 ** Other mode specific keybindings
    This is all about some mode specific keybindings that I use regularly but arent under any leader key. 
    
-| Keybinding | Action                                                                                                                                         |
-|------------+------------------------------------------------------------------------------------------------------------------------------------------------|
-| *Pdf View*   | PDF View is the best Emacs pdf reader. I set some keybindings specific to it                                                                   |
-|------------+------------------------------------------------------------------------------------------------------------------------------------------------|
-| c          | In pdf-view mode. Kill the buffer. Sometimes, pdfs dont properly refresh unless killed, so it can be helpful to have this.                     |
-| i          | If pdf-view is in an org-noter buffer, this allows for a note to be added in the matching org buffer                                           |
-| a t        | Add a text annotation to a pdf directly                                                                                                        |
-| a m        | Add a markup annotation to a pdf directly                                                                                                      |
-|------------+------------------------------------------------------------------------------------------------------------------------------------------------|
-| *Dired*      | Some dired mode keybindings which I consider should be defaults                                                                                |
-|------------+------------------------------------------------------------------------------------------------------------------------------------------------|
-| +          | Creates a new empty file inside the current working directory                                                                                  |
-| C-+        | Creates a new empty directory insider the current working directory                                                                            |
-| h          | Go up one directory in Dired                                                                                                                   |
-| l          | Jump one directory forward in Dired                                                                                                            |
-|------------+------------------------------------------------------------------------------------------------------------------------------------------------|
-| *Org Mode*   | Probably the only org mode commands that I need outside of the comma modifier key. Changing slides in org-tree-slide feels annoying with a key |
-|            | sequence so it just makes sense to add this                                                                                                    |
-|------------+------------------------------------------------------------------------------------------------------------------------------------------------|
-| C-j        | In org-tree-slide go to the next "slide" meaning org-heading                                                                                   |
-| C-k        | Same as above but for the previous "slide"                                                                                                     |
-|------------+------------------------------------------------------------------------------------------------------------------------------------------------|
+| Keybinding    | Action                                                                                                                                            |
+|---------------+---------------------------------------------------------------------------------------------------------------------------------------------------|
+| *Pdf View*      | PDF View is the best Emacs pdf reader. I set some keybindings specific to it                                                                      |
+|---------------+---------------------------------------------------------------------------------------------------------------------------------------------------|
+| c             | In pdf-view mode. Kill the buffer. Sometimes, pdfs dont properly refresh unless killed, so it can be helpful to have this.                        |
+| i             | If pdf-view is in an org-noter buffer, this allows for a note to be added in the matching org buffer                                              |
+| a t           | Add a text annotation to a pdf directly                                                                                                           |
+| a m           | Add a markup annotation to a pdf directly                                                                                                         |
+|---------------+---------------------------------------------------------------------------------------------------------------------------------------------------|
+| *Dired*         | Some dired mode keybindings which I consider should be defaults                                                                                   |
+|---------------+---------------------------------------------------------------------------------------------------------------------------------------------------|
+| +             | Creates a new empty file inside the current working directory                                                                                     |
+| C-+           | Creates a new empty directory insider the current working directory                                                                               |
+| h             | Go up one directory in Dired                                                                                                                      |
+| l             | Jump one directory forward in Dired                                                                                                               |
+| H             | Toggle visibility of dotfiles in the current directory (hidden by default)                                                                        |
+| y             | Copy all marked files to a kill-ring to be pasted somewhere. Alternative copy command to dired-do-copy for other types of workflows               |
+| p             | Paste all files in the current dired-ranger-kill-ring (you add them with dired-ranger-copy) to the current directory                              |
+| *Dired-Subtree* | Dired subtree is a very neat dired package which allows you to view subdirectories of a directory in the current buffer. Uses s as its leader key |
+| s i           | Open the subdirectories of the directory on the cursor                                                                                            |
+| s r           | Close the subdirectories of a folder, if on a subdirectory of that folder                                                                         |
+| s n           | Narrow the dired buffer to show only this subdirectory                                                                                            |
+| <Tab>         | Fold/Unfold the subdirectories of a directory. Its a default keybinding but mentioned here because its about as useful as all these               |
+| g s           | Switch to super user (sudo) in the dired buffer. Run again to switch back to a regular user.                                                      |
+|---------------+---------------------------------------------------------------------------------------------------------------------------------------------------|
+| *Org Mode*      | Probably the only org mode commands that I need outside of the comma modifier key. Changing slides in org-tree-slide feels annoying with a key    |
+|               | sequence so it just makes sense to add this                                                                                                       |
+|---------------+---------------------------------------------------------------------------------------------------------------------------------------------------|
+| C-j           | In org-tree-slide go to the next "slide" meaning org-heading                                                                                      |
+| C-k           | Same as above but for the previous "slide"                                                                                                        |
+|---------------+---------------------------------------------------------------------------------------------------------------------------------------------------|
 
 #+BEGIN_SRC elisp
       (general-define-key
@@ -343,15 +352,22 @@
    "a t" 'pdf-annot-add-text-annotation
    "a m" 'pdf-annot-add-markup-annotation)
   
-
-  
+  (define-key dired-mode-map (kbd "+") nil)
   (general-define-key
    :states 'normal
    :keymaps 'dired-mode-map
-   "+" 'dired-create-empty-file
    "C-+" 'dired-create-directory
+   "+" 'dired-create-empty-file
    "h" 'dired-up-directory
-   "l" 'dired-find-file)
+   "l" 'dired-find-file
+   "H" 'dired-hide-dotfiles-mode
+   "y" 'dired-ranger-copy
+   "p" 'dired-ranger-paste
+   "g s" 'dired-toggle-sudo
+   "s" '(:ignore t :which-key "Dired-subtree functions")
+   "s i" 'dired-subtree-insert
+   "s r" 'dired-subtree-remove
+   "s n" 'dired-subtree-narrow)
   
   (general-define-key
    :states 'normal

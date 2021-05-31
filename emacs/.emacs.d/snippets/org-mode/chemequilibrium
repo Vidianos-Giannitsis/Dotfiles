@@ -1,0 +1,5 @@
+# -*- mode: snippet -*-
+# name: xrightleftharpoons
+# key: xrlh
+# --
+\xrightleftharpoons[$1]{$2}

@@ -10,7 +10,6 @@
   "D" 'dired
   "d" '(:ignore t :which-key "Dired functions")
   "d f" 'counsel-find-file
-  "d h" 'dired-hide-dotfiles-mode
   "d j" '(dired-jump :which-key "Open dired in the current buffer's directory")
   "q" '(:ignore t :which-key "Quickmarks")
   "q c" '((lambda() (interactive)(find-file "~/.emacs.d/README.org")) :which-key "Quickmark to literate Emacs config")
@@ -19,6 +18,7 @@
   "q q" '((lambda() (interactive)(find-file "~/.config/qtile/README.org")) :which-key "Quickmark to literate Qtile config")
   "q h" '((lambda() (interactive)(dired "~")) :which-key "Quickmark to home directory")
   "q o" '((lambda() (interactive)(dired "~/Documents/Octave")) :which-key "Quickmark to Octave directory")
+  "q s" '((lambda() (interactive)(dired "~/.emacs.d/snippets/org-mode")) :which-key "Quickmark to Org snippets")
   "t" 'toggle-truncate-lines
   "T" 'org-babel-tangle
   "RET" 'vterm-toggle
@@ -147,15 +147,22 @@
  "a t" 'pdf-annot-add-text-annotation
  "a m" 'pdf-annot-add-markup-annotation)
 
-
-
+(define-key dired-mode-map (kbd "+") nil)
 (general-define-key
  :states 'normal
  :keymaps 'dired-mode-map
- "+" 'dired-create-empty-file
  "C-+" 'dired-create-directory
+ "+" 'dired-create-empty-file
  "h" 'dired-up-directory
- "l" 'dired-find-file)
+ "l" 'dired-find-file
+ "H" 'dired-hide-dotfiles-mode
+ "y" 'dired-ranger-copy
+ "p" 'dired-ranger-paste
+ "g s" 'dired-toggle-sudo
+ "s" '(:ignore t :which-key "Dired-subtree functions")
+ "s i" 'dired-subtree-insert
+ "s r" 'dired-subtree-remove
+ "s n" 'dired-subtree-narrow)
 
 (general-define-key
  :states 'normal
