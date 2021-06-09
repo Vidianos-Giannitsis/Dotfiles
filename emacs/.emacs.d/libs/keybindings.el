@@ -39,7 +39,8 @@
   "r b" 'isbn-to-bibtex
   "r a" 'doi-utils-add-bibtex-entry-from-doi
   "r i" '(org-roam-jump-to-index :which-key "Go to the master index file")
-  "r g" 'org-roam-graph
+  "r G" 'org-roam-graph
+  "r g" 'counsel-rg
   "r s" 'org-roam-server-mode
   "j" '(:ignore t :which-key "Daily notes")
   "j f" '(:ignore t :which-key "Find daily note")
@@ -80,7 +81,6 @@
      "t" '(:ignore t :which-key "To-do management")
      "t s" 'org-schedule
      "t c" 'org-todo
-     "t m" '(org-make-todo :which-key "Initialise to-do item")
      "t p" 'org-priority
      "t v" 'org-tags-view
      "t t" 'org-set-tags-command

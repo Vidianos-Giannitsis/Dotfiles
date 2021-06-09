@@ -1,5 +1,5 @@
 # -*- mode: snippet -*-
-# name: pder
-# key: pder
+# name: pderivative
+# key: pd
 # --
 \diffp{$1}{$2}

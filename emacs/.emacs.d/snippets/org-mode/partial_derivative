@@ -2,4 +2,4 @@
 # name: partial_derivative 
 # key: pdev
 # --
-\left \frac{\partial $1}{\partial $2} \right)_{$3}
+\frac{\partial $1}{\partial $2}

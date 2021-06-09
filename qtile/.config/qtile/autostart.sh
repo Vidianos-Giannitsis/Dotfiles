@@ -4,5 +4,6 @@ nitrogen --set-scaled /usr/share/backgrounds/Xplo_by_Hugo_Cliff.png &
 volumeicon &
 nm-applet &
 picom --config ~/.config/picom.conf &
-emacs --daemon &
 lxpolkit &
+emacs --daemon &
+emacsclient -e "(org-roam-server-mode)"

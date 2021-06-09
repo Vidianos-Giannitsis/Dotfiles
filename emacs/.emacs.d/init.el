@@ -315,99 +315,52 @@
 )
    )
 
-(setq org-todo-keywords
-	'((sequence "TODO(t)"
-		    "ACTIVE(a)"
-		    "NEXT(n)"
-		    "WAIT(w)"
-		    "|"
-		    "DONE(d@)"
-		    "CANCELLED(c@)"
-		    )))
-
-  (setq org-agenda-files
-	  '("~/org_roam"))
-
-(defun org-make-todo ()
-  "Set todo keyword, priority, effort and tags for a todo item. This is very useful for initialising todo items"
-  (interactive)
-  (org-todo)
-  (org-priority)
-  (org-set-effort)
-  (org-set-tags-command))
-
-(org-super-agenda-mode 1)
-
-(add-hook 'org-agenda-mode-hook 'toggle-truncate-lines)
-
-(setq org-agenda-custom-commands
-      '(("q" "Quick Check for the day"
-	 ((agenda "" ((org-agenda-span 'day)
-		      (org-super-agenda-groups
-		       '((:name "Today"
-				:time-grid t
-				:date today
-				:scheduled today)))))
-	 (alltodo "" ((org-agenda-overriding-header "")
-		       (org-super-agenda-groups
-			'((:name "What I've been doing"
-				 :todo "ACTIVE")
-			  (:name "Plans for the foreseeable future"
-				 :todo "NEXT")
-			  (:name "You GOTTA check this one out"
-				 :priority "A")
-			  (:name "As easy as they get"
-				 :effort< "0:10")
-			  (:discard (:anything))))))))
-	("u" "University Projects"
-	 ((alltodo "" ((org-agenda-overriding-header "")
-		       (org-super-agenda-groups
-			'((:name "Currently Working on"
-				 :and (:tag "University" :todo "ACTIVE"))
-			  (:name "This one's next (probably)"
-				 :and (:priority "A" :tag "University"))
-			  (:name "Medium Priority Projects"
-				 :and (:tag "University" :priority "B"))
-			  (:name "Trivial Projects, I'ma do them at some point though :D"
-				 :and (:tag "University" :priority "C"))
-			  (:discard (:not (:tag "University")))))))))
-	("e" "Emacs Projects"
-	 ((alltodo "" ((org-agenda-overriding-header "")
-		       (org-super-agenda-groups
-			'((:name "Configuring Emacs, the Present"
-				 :and (:tag "Emacs" :todo "ACTIVE")
-				 :and (:tag "Emacs" :todo "NEXT"))
-			  (:name "What to add, What to add??"
-				 :and (:tag "Emacs" :priority "A"))
-			  (:name "Wow, this one's easy, lets do it"
-				 :and (:tag "Emacs" :effort< "0:15"))
-			  (:discard (:not (:tag "Emacs")))
-			  (:name "But wait, this was only the beginning. The real fun starts here!"
-				 :anything)))))))))
-
-(setq org-roam-directory "~/org_roam")
-
 (add-hook 'after-init-hook 'org-roam-mode)
 
+(setq org-roam-directory "~/org_roam"
+      org-roam-dailies-directory "~/org_roam/daily"
+      org-roam-graph-exclude-matcher '("daily" "ref"))
+
+(require 'org-protocol)
+(require 'org-roam-protocol)
+
+(use-package org-roam-server
+  :ensure t
+  :config
+  (setq org-roam-server-host "127.0.0.1"
+	org-roam-server-port 8080
+	org-roam-server-authenticate nil
+	org-roam-server-export-inline-images t
+	org-roam-server-serve-files nil
+	org-roam-server-served-file-extensions '("pdf" "mp4" "ogv")
+	org-roam-server-network-poll t
+	org-roam-server-network-arrows nil
+	org-roam-server-network-label-truncate t
+	org-roam-server-network-label-truncate-length 60
+	org-roam-server-network-label-wrap-length 20))
+
 (setq bibtex-completion-bibliography
-      '("~/Sync/My_Library.bib"))
-(setq reftex-default-bibliography '("~/Sync/My_Library.bib"))
-(setq bibtex-completion-library-path '("~/Sync/Zotero_pdfs"))
+      '("~/Sync/My_Library.bib")
+      reftex-default-bibliography '("~/Sync/My_Library.bib")
+      bibtex-completion-library-path '("~/Sync/Zotero_pdfs"))
 
 (setq bibtex-completion-additional-search-fields '(keywords abstract))
-
-(setq org-roam-dailies-directory "~/org_roam/daily")
 
 (use-package org-ref
   :config (org-ref-ivy-cite-completion))
 
 (setq ivy-bibtex-default-action 'ivy-bibtex-insert-citation)
-
 (ivy-add-actions
  'ivy-bibtex
- '(("p" ivy-bibtex-open-any "Open pdf, url or DOI")))
+ '(("o" ivy-bibtex-open-any "Open pdf, url or DOI")))
 
-(setq org-roam-graph-exclude-matcher '("daily"))
+(require 'org-roam-bibtex)
+(add-hook 'org-roam-mode-hook #'org-roam-bibtex-mode)
+
+(setq orb-insert-interface 'ivy-bibtex
+      orb-note-actions-interface 'ivy)
+
+(setq orb-preformat-keywords '("abstract" "citekey" "entry-type" "date" "pdf?" "note?" "file" "author" "editor" "author-abbrev" "editor-abbrev" "author-or-editor-abbrev" "keywords" "url"))
 
 (setq org-roam-capture-templates
       '(("d" "default" plain (function org-roam-capture--get-point)
@@ -415,7 +368,26 @@
 	:file-name "${slug}-%<%d-%m>"
 	:unnarrowed t
 	:head "#+title: ${title}\nglatex_roam\n
+- index ::
 - tags ::  ")))
+
+(setq orb-templates
+      '(("r" "ref" plain (function org-roam-capture--get-point) ""
+      :file-name "ref/${citekey}"
+      :unnarrowed t
+      :head "#+TITLE: ${title}\n#+ROAM_KEY: ${ref}\n
+*Keywords*: ${keywords}
+- tags ::  
+
+* Analysis of article
+:PROPERTIES:
+:URL: ${url}
+:NOTER_DOCUMENT: ${file}  
+:NOTER_PAGE:              
+:END:
+
+** Abstract
+      ${abstract}")))
 
 (setq org-roam-dailies-capture-templates
       '(("l" "lesson" entry
@@ -445,24 +417,6 @@
 	 :file-name "daily/%<%Y-%m-%d>"
 	 :head "#+title: Fleeting notes for %<%Y-%m-%d>\n"
 	 :olp ("Workout Regimes"))))
-
-(require 'org-protocol)
-(require 'org-roam-protocol)
-
-(use-package org-roam-server
-  :ensure t
-  :config
-  (setq org-roam-server-host "127.0.0.1"
-	org-roam-server-port 8080
-	org-roam-server-authenticate nil
-	org-roam-server-export-inline-images t
-	org-roam-server-serve-files nil
-	org-roam-server-served-file-extensions '("pdf" "mp4" "ogv")
-	org-roam-server-network-poll t
-	org-roam-server-network-arrows nil
-	org-roam-server-network-label-truncate t
-	org-roam-server-network-label-truncate-length 60
-	org-roam-server-network-label-wrap-length 20))
 
 (define-skeleton lab-skeleton
   "A skeleton which I use for initialising my lab reports which have standard formatting"

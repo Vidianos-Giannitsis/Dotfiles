@@ -4,28 +4,30 @@
 #+INFOJS_OPT: view:t toc:t ltoc:t mouse:underline buttons:0 path:http://thomasf.github.io/solarized-css/org-info.min.js
 #+HTML_HEAD: <link rel="stylesheet" type="text/css" href="http://thomasf.github.io/solarized-css/solarized-dark.min.css" />
 
-* COMMENT Project Management in Emacs
-   I want to start learning more things about managing my projects in Emacs. There are some built-in project features in Emacs and the projectile package helps a lot with project management. This isn't currently urgent but its usability is sure to arise soon. Being able to export a latex file which draws info from multiple other files inside the projects directory is awesome. Looking into the future, this is probably going to be the most efficient way to get to writing my diploma thesis and any other big project I want to manage.
-   
-   Obviously there are a lot of things to do here, but here is a non exhaustive list of things to play around with in the spirit of project management. The order isnt strict but its the order in which I predict I will do these
-   - [ ] Research the generals of project manangement and set important variables with the built-in features of project management in Emacs
-   - [ ] Do the same, but for projectile, which helps an already set up project infrastructure a lot
-   - [ ] Create a "playground" test project for trying out things
-   - [ ] Think of a use-case for project management which is going to be in the near future and make it happen
-   - [ ] Go deep in project management and start using the more advanced features Emacs provides
-   
-* COMMENT Long term ideas for things I can try [0/5]
+* COMMENT Ideas for things I can try [0/11]
 These are interesting packages to check in the long term. But nothing to hurry with, as I dont need any of them urgently.
  - [ ] ERC is an IRC client for Emacs. Elfeed is an RSS reader for emacs. EMMS is a music player for Emacs. I could get around to configuring them in case I start using them
  - [ ] There are a lot of eshell configuration options which I can try if I ever get around to using eshell.
  - [ ] There is a mastodon package for Emacs (I am assuming to run mastodon from inside Emacs). If I try out mastodon, I cant see why I shouldn't use this.
  - [ ] https://github.com/daedreth/UncleDavesEmacs/blob/master/config.org An emacs DE config. The things that interest me the most here are specific to an emacs DE, the rest are pretty similar to defaults. If I switch to EXWM (which I will definitely try at some point) this might be helpful
- - [ ] SPEAKING OF EXWM, I MUST TRY IT. But although its Emacs and I will be comfortable in it from the get go, its definitely going to be time consuming so I am stalling it for now cause I dont want to spend all my time there. 
-  
-:CONTENTS:
+ - [ ] SPEAKING OF EXWM, I MUST TRY IT. But although its Emacs and I will be comfortable in it from the get go, its definitely going to be time consuming so I am stalling it for now cause I dont want to spend all my time there.
+ - [ ] GNU Hyperbole is an interesting package to play around with
+ - [ ] I saw the mediator package on reddit and its possibly something to try
+ - [ ] Org-roam-bibtex was broken when I originally installed emacs on my new machine. I should fix it eventually
+ - [ ] Org-marginalia might be an interesting addon to my notetaking workflow with roam. Deft is a very good looking package which I might add to my workflow. I am not sure if roam makes it redundant though.
+ - [ ] Hugo looks great for generating static websites. Ox-Hugo is an emacs package for converting to org to hugo compatible markdown. Floating in reddit, you can find ways to export org roam notes to hugo. This may be a way to make my org-roam repository more easily portable to non emacs interfaces which would be cool
+ - [ ] Hugo looks great for generating static websites. Ox-Hugo is an emacs package for converting to org to hugo compatible markdown. Floating in reddit, you can find ways to export org roam notes to hugo. This may be a way to make my org-roam repository more easily portable to non emacs interfaces which would be cool. 
 
-:END:
-
+** COMMENT Project Management in Emacs
+    I want to start learning more things about managing my projects in Emacs. There are some built-in project features in Emacs and the projectile package helps a lot with project management. This isn't currently urgent but its usability is sure to arise soon. Being able to export a latex file which draws info from multiple other files inside the projects directory is awesome. Looking into the future, this is probably going to be the most efficient way to get to writing my diploma thesis and any other big project I want to manage.
+   
+    Obviously there are a lot of things to do here, but here is a non exhaustive list of things to play around with in the spirit of project management. The order isnt strict but its the order in which I predict I will do these
+    - [ ] Research the generals of project manangement and set important variables with the built-in features of project management in Emacs
+    - [ ] Do the same, but for projectile, which helps an already set up project infrastructure a lot
+    - [ ] Create a "playground" test project for trying out things
+    - [ ] Think of a use-case for project management which is going to be in the near future and make it happen
+    - [ ] Go deep in project management and start using the more advanced features Emacs provides
+   
 * About this config
 
 Welcome kind stranger, to my Emacs config. This is the heart of my dotfiles and of my entire computer workflow. Mostly everything I do in a computer with only a few excuses, stems from here and I absolutely love it. Emacs is the most extensible program I have ever seen. It allows you to change basically everything, until you have an environment which suits you perfectly. This is a vanilla GNU Emacs install with a ton of configurations. Actually its not even vanilla Emacs at this point, as its probably got more things than some emacs distros like doom, but it uses the tabula rasa that is vanilla emacs and customises it with this extremely long config file to make it into my own Emacs. Vanilla Emacs is all about creating a computer environment with consistency between all your tasks which is 100% customisable. I doubt there is a single thing in Emacs that can't be changed. And for that very reason I absolutely love it. Its truly the perfect workflow for me as I have handcrafted it from scratch. 
@@ -549,7 +551,7 @@ More languages to evaluate with org-babel (by default, only elisp is evaluated).
 
 #+RESULTS:
 
-** Org-agenda and TODOs
+** COMMENT Org-agenda and TODOs
     I set everything I need for TODOs and the org-agenda in this section. In my keybindings file you can see the keybindings I have set for each action while here are the configurations I want to make. This helps keep this consistent by having those keybindings in that section. I track all my todo files in one directory, my org_roam directory (more on that in the next section, its an important part of my workflow). So I want every todo defined in that directory to be loaded inside Org-agenda.
 
    I define a custom function org-make-todo which makes an item todo, gives it a priority and effort value. I like this for initialization of a todo file as it helps with organizing tasks with which one is more urgent and which is harder outside of the already existing file system to manage different kinds of todos.
@@ -640,135 +642,27 @@ More languages to evaluate with org-babel (by default, only elisp is evaluated).
   This section is about my Org-roam setup and my reference management inside org. It is based on the slip-box (Zettelkasten) workflow. The packages that are most relevant to this are Org-roam (obviously) bibtex-completion (ivy-bibtex in my case), org-ref, Org-roam-bibtex. Org Roam is a tool which helps you create your own network of notes. Its based on the Zettelkasten method and the Roam Research website. Everything is linked with one another. Bibtex completion (and the existence of .bib files in general) as well as Org-ref help manage bibliographic references inside org. I use Zotero as my reference manager in which I gather my bibliographies. It exports a .bib file which these two use. Org Roam Bibtex (ORB) is a package that combines all of these to help you add citation links from org-ref inside an org-roam buffer. This section includes all the customisations and settings of these packages.
   As seen in the [[*Keybindings][Keybindings]] section of the config, Roam and the Reference system both use the "r" leader key. Outside of it being handy because both start with the letter r, I think this makes sense because they are two connected concepts in my opinion. Thats why they are also in the same heading here.
 
-** COMMENT Org Roam Bibtex
-   This isnt working on my new machine so for now lets comment these out
+  Below are the initialisation variables for each of these packages and after them the capture templates I change in org-roam
 
-   #+BEGIN_SRC elisp
-
-     (add-hook 'after-init-hook 'org-roam-bibtex-mode)
-
-     (setq orb-preformat-keywords
-	   '("citekey" "title" "author" "keywords" "abstract" "entry-type" "file")
-	   orb-process-file-keyword t
-	   orb-file-field-extensions '("pdf"))
-
-     (setq orb-templates
-	   '(("r" "ref" plain (function org-roam-capture--get-point)
-	      ""
-	      :file-name "${citekey}"
-	      :head "#+TITLE: ${title}\nglatex\n#+ROAM_KEY: ${ref}
-
-	  ,,* Ref Info
-	  :PROPERTIES:
-	  :Custom_ID: ${citekey}
-	  :AUTHOR: ${author}
-	  :NOTER_DOCUMENT: ${file} ;
-	  :END:
-	  ,,#+BEGIN_abstract\n${abstract}\n#+END_abstract
-
-	  - tags ::
-	  - keywords :: ${keywords}")))
-
-   #+END_SRC
+** Org Roam, Protocols and the Org-Roam server
+   This is the general changes needed for org-roam to work as I want it to. It also sets up protocols and the org roam server.
    
-** Initialisation Variables
-   This section is all about the initialisation of variables. These are essential for the packages to work most of the time. More in detail,
+   In detail, 
    - I define the org_roam directory
    - Activate org-roam after emacs's init so I can use their commands from anywhere, anytime
-   - Zotero exports a .bib file with all my references (the main way it "talks" to Emacs). I "tell" ivy-bibtex and org-ref the location of this file for usage in their various commands.
-   - I allow ivy-bibtex to query by keywords or abstract. Can be useful
    - I define the directory in which org-roam-dailies should be put
-   - I configure org-ref to use ivy-completions for its commands
-   - I make the default action of ivy-bibtex, inserting the citation of the chosen reference. Personally, its the action I use most as opening the link/pdf to the reference (which is the original default) is more easily done from Zotero imo. In Emacs I find more utility in inserting the citation in my own documents.
-   - Since opening the pdf, url or DOI of a bibtex entry is no longer the default action in my config, I bind it to the letter p in the options menu of Ivy-bibtex
-
+   - I exclude the daily (where org-roam-dailies get placed) and ref (where ORB puts its notes) directories from the graph org roam can export as its pointless to view them imo.
+   - I require org-protocol and after that org-roam-protocol, which are very neat for capturing notes from random websites
+   - I set up org-roam-server, an excellent package which gives you an interactive visual representation of the org-roam directory and the connections between files in that directory.
+  
    #+BEGIN_SRC elisp
-     
-     (setq org-roam-directory "~/org_roam")
      
      (add-hook 'after-init-hook 'org-roam-mode)
      
-     (setq bibtex-completion-bibliography
-	   '("~/Sync/My_Library.bib"))
-     (setq reftex-default-bibliography '("~/Sync/My_Library.bib"))
-     (setq bibtex-completion-library-path '("~/Sync/Zotero_pdfs"))
+     (setq org-roam-directory "~/org_roam"
+	   org-roam-dailies-directory "~/org_roam/daily"
+	   org-roam-graph-exclude-matcher '("daily" "ref"))
      
-     (setq bibtex-completion-additional-search-fields '(keywords abstract))
-     
-     (setq org-roam-dailies-directory "~/org_roam/daily")
-     
-     (use-package org-ref
-       :config (org-ref-ivy-cite-completion))
-     
-     (setq ivy-bibtex-default-action 'ivy-bibtex-insert-citation)
-     
-     (ivy-add-actions
-      'ivy-bibtex
-      '(("p" ivy-bibtex-open-any "Open pdf, url or DOI")))
-     
-     (setq org-roam-graph-exclude-matcher '("daily"))
-    #+END_SRC
-
-    #+RESULTS:
-    | daily |
-
-** Templates
-   This section is about the various templates used by the org-roam workflow. These are org-roam-capture-templates, org-roam-dailies-capture-templates
-
-   #+BEGIN_SRC elisp
-  
-     (setq org-roam-capture-templates
-	   '(("d" "default" plain (function org-roam-capture--get-point)
-	     "%?"
-	     :file-name "${slug}-%<%d-%m>"
-	     :unnarrowed t
-	     :head "#+title: ${title}\nglatex_roam\n
-     - tags ::  ")))
-
-     (setq org-roam-dailies-capture-templates
-	   '(("l" "lesson" entry
-	      #'org-roam-capture--get-point
-	      "* %?"
-	      :file-name "daily/%<%Y-%m-%d>"
-	      :head "#+title: Fleeting notes for %<%Y-%m-%d>\n"
-	      :olp ("Lesson notes"))
-
-	     ("b" "bibliography" entry
-	      #'org-roam-capture--get-point
-	      "* %?"
-	      :file-name "daily/%<%Y-%m-%d>"
-	      :head "#+title: Fleeting notes for %<%Y-%m-%d>\n"
-	      :olp ("Notes on Articles, Books, etc."))
-
-	     ("g" "general" entry
-	      #'org-roam-capture--get-point
-	      "* %?"
-	      :file-name "daily/%<%Y-%m-%d>"
-	      :head "#+title: Fleeting notes for %<%Y-%m-%d>\n"
-	      :olp ("Random general notes"))
-
-	     ("w" "workout" entry
-	      #'org-roam-capture--get-point
-	      "* %?"
-	      :file-name "daily/%<%Y-%m-%d>"
-	      :head "#+title: Fleeting notes for %<%Y-%m-%d>\n"
-	      :olp ("Workout Regimes"))))
-
-   #+END_SRC
-   
-   #+RESULTS:
-   | l    | lesson                           | entry | #'org-roam-capture--get-point | * %? | :file-name | daily/%<%Y-%m-%d> | :head | #+title: Fleeting notes for %<%Y-%m-%d> |
-   | :olp | (Lesson notes)                   |       |                               |      |            |                   |       |                                         |
-   | b    | bibliography                     | entry | #'org-roam-capture--get-point | * %? | :file-name | daily/%<%Y-%m-%d> | :head | #+title: Fleeting notes for %<%Y-%m-%d> |
-   | :olp | (Notes on Articles, Books, etc.) |       |                               |      |            |                   |       |                                         |
-   | g    | general                          | entry | #'org-roam-capture--get-point | * %? | :file-name | daily/%<%Y-%m-%d> | :head | #+title: Fleeting notes for %<%Y-%m-%d> |
-   | :olp | (Random general notes)           |       |                               |      |            |                   |       |                                         |
-   | w    | workout                          | entry | #'org-roam-capture--get-point | * %? | :file-name | daily/%<%Y-%m-%d> | :head | #+title: Fleeting notes for %<%Y-%m-%d> |
-   | :olp | (Workout Regimes)                |       |                               |      |            |                   |       |                                         |
-
-** Org Roam Protocol and Server
-
-   #+BEGIN_SRC elisp
      (require 'org-protocol)
      (require 'org-roam-protocol)
      
@@ -787,10 +681,131 @@ More languages to evaluate with org-babel (by default, only elisp is evaluated).
 	     org-roam-server-network-label-truncate-length 60
 	     org-roam-server-network-label-wrap-length 20))
      
-   #+END_SRC
+     #+END_SRC
+     
+** Bibtex completion (Ivy) and Org Ref
+   Ivy Bibtex and org ref are two excellent packages for managing bibliography. The main thing I need to configure is the location of my master .bib file and pdfs (which are exported with Zotero). I also change some other variables where I see fit.
+   
+   In detail
+   - Zotero exports a .bib file with all my references (the main way it "talks" to Emacs). I "tell" ivy-bibtex and org-ref the location of this file for usage in their various commands.
+   - I allow ivy-bibtex to query by keywords or abstract. Can be useful
+   - I configure org-ref to use ivy-completions for its commands
+   - I make the default action of ivy-bibtex, inserting the citation of the chosen reference. Personally, its the action I use most as opening the link/pdf to the reference (which is the original default) is more easily done from Zotero imo. In Emacs I find more utility in inserting the citation in my own documents.
+   - Since opening the pdf, url or DOI of a bibtex entry is no longer the default action in my config, I bind it to the letter o in the options menu of Ivy-bibtex
+
+      #+BEGIN_SRC elisp
+	(setq bibtex-completion-bibliography
+	      '("~/Sync/My_Library.bib")
+	      reftex-default-bibliography '("~/Sync/My_Library.bib")
+	      bibtex-completion-library-path '("~/Sync/Zotero_pdfs"))
+       
+	(setq bibtex-completion-additional-search-fields '(keywords abstract))
+       
+	(use-package org-ref
+	  :config (org-ref-ivy-cite-completion))
+       
+	(setq ivy-bibtex-default-action 'ivy-bibtex-insert-citation)
+	(ivy-add-actions
+	 'ivy-bibtex
+	 '(("o" ivy-bibtex-open-any "Open pdf, url or DOI")))
+       
+     #+END_SRC
+
+    #+RESULTS:
+    | ivy-switch-buffer | ((f ivy--find-file-action find file) (j ivy--switch-buffer-other-window-action other window) (k ivy--kill-buffer-action kill) (r ivy--rename-buffer-action rename) (x counsel-open-buffer-file-externally open externally)) | t | ((i ivy--action-insert insert) (w ivy--action-copy copy)) | org-ref-ivy-insert-cite-link | ((b or-ivy-bibtex-open-entry Open bibtex entry) (B or-ivy-bibtex-copy-entry Copy bibtex entry) (p or-ivy-bibtex-open-pdf Open pdf) (n or-ivy-bibtex-open-notes Open notes) (u or-ivy-bibtex-open-url Open url) (d or-ivy-bibtex-open-doi Open doi) (k or-ivy-bibtex-set-keywords Add keywords) (e or-ivy-bibtex-email-entry Email entry) (f or-ivy-bibtex-insert-formatted-citation Insert formatted citation) (F or-ivy-bibtex-copy-formatted-citation Copy formatted citation) (a or-ivy-bibtex-add-entry Add bibtex entry)) | ivy-bibtex | ((p ivy-bibtex-open-pdf Open PDF file (if present)) (u ivy-bibtex-open-url-or-doi Open URL or DOI in browser) (c ivy-bibtex-insert-citation Insert citation) (r ivy-bibtex-insert-reference Insert reference) (k ivy-bibtex-insert-key Insert BibTeX key) (b ivy-bibtex-insert-bibtex Insert BibTeX entry) (a ivy-bibtex-add-PDF-attachment Attach PDF to email) (e ivy-bibtex-edit-notes Edit notes) (s ivy-bibtex-show-entry Show entry) (l ivy-bibtex-add-pdf-to-library Add PDF to library) (f (lambda (_candidate) (ivy-bibtex-fallback ivy-text)) Fallback options) (o ivy-bibtex-open-any Open pdf, url or DOI)) | swiper-isearch | ((w swiper-action-copy copy)) | swiper | ((w swiper-action-copy copy)) | counsel-describe-variable | ((I counsel-info-lookup-symbol info) (d counsel--find-symbol definition)) | counsel-describe-function | ((I counsel-info-lookup-symbol info) (d counsel--find-symbol definition)) | counsel-describe-symbol | ((I counsel-info-lookup-symbol info) (d counsel--find-symbol definition)) | counsel-M-x | ((d counsel--find-symbol definition) (h #[257 \301!!\207 [counsel-describe-function-function intern] 4 |
+
+** Org-Roam-Bibtex
+   Org roam bibtex is the final part of this workflow. It uses ivy-bibtex to query my .bib file and creates a note inside the org-roam directory according to the "orb-templates" variable specific to that file. This is a very useful part of the zettelkasten method which has to do with reference management inside your zettelkasten. 
+
+   - I require ORB and hook it to the org-roam-hook (roam is started in the after-init-hook).
+   - I make orb use the ivy completion framework for its tasks
+   - I add some new keywords to the orb-preformat-keywords variable which will be used in my template below.
+   
+   #+BEGIN_SRC elisp
+     (require 'org-roam-bibtex)
+     (add-hook 'org-roam-mode-hook #'org-roam-bibtex-mode)
+     
+     (setq orb-insert-interface 'ivy-bibtex
+	   orb-note-actions-interface 'ivy)
+     
+     (setq orb-preformat-keywords '("abstract" "citekey" "entry-type" "date" "pdf?" "note?" "file" "author" "editor" "author-abbrev" "editor-abbrev" "author-or-editor-abbrev" "keywords" "url"))
+     #+END_SRC
 
    #+RESULTS:
-   : t
+   | abstract | citekey | entry-type | date | pdf? | note? | file | author | editor | author-abbrev | editor-abbrev | author-or-editor-abbrev | keywords | url |
+   
+** Templates
+   This section is about the various templates used by the org-roam workflow. These are org-roam-capture-templates, orb-templates, org-roam-dailies-capture-templates
+
+   #+BEGIN_SRC elisp
+     
+     (setq org-roam-capture-templates
+	   '(("d" "default" plain (function org-roam-capture--get-point)
+	     "%?"
+	     :file-name "${slug}-%<%d-%m>"
+	     :unnarrowed t
+	     :head "#+title: ${title}\nglatex_roam\n
+     - index ::
+     - tags ::  ")))
+     
+     (setq orb-templates
+	   '(("r" "ref" plain (function org-roam-capture--get-point) ""
+	   :file-name "ref/${citekey}"
+	   :unnarrowed t
+	   :head "#+TITLE: ${title}\n#+ROAM_KEY: ${ref}\n
+     ,*Keywords*: ${keywords}
+     - tags ::  
+     
+     ,* Analysis of article
+     :PROPERTIES:
+     :URL: ${url}
+     :NOTER_DOCUMENT: ${file}  
+     :NOTER_PAGE:              
+     :END:
+     
+     ,** Abstract
+	   ${abstract}")))
+     
+     (setq org-roam-dailies-capture-templates
+	   '(("l" "lesson" entry
+	      #'org-roam-capture--get-point
+	      "* %?"
+	      :file-name "daily/%<%Y-%m-%d>"
+	      :head "#+title: Fleeting notes for %<%Y-%m-%d>\n"
+	      :olp ("Lesson notes"))
+     
+	     ("b" "bibliography" entry
+	      #'org-roam-capture--get-point
+	      "* %?"
+	      :file-name "daily/%<%Y-%m-%d>"
+	      :head "#+title: Fleeting notes for %<%Y-%m-%d>\n"
+	      :olp ("Notes on Articles, Books, etc."))
+     
+	     ("g" "general" entry
+	      #'org-roam-capture--get-point
+	      "* %?"
+	      :file-name "daily/%<%Y-%m-%d>"
+	      :head "#+title: Fleeting notes for %<%Y-%m-%d>\n"
+	      :olp ("Random general notes"))
+     
+	     ("w" "workout" entry
+	      #'org-roam-capture--get-point
+	      "* %?"
+	      :file-name "daily/%<%Y-%m-%d>"
+	      :head "#+title: Fleeting notes for %<%Y-%m-%d>\n"
+	      :olp ("Workout Regimes"))))
+     
+   #+END_SRC
+   
+   #+RESULTS:
+   | l    | lesson                           | entry | #'org-roam-capture--get-point | * %? | :file-name | daily/%<%Y-%m-%d> | :head | #+title: Fleeting notes for %<%Y-%m-%d> |
+   | :olp | (Lesson notes)                   |       |                               |      |            |                   |       |                                         |
+   | b    | bibliography                     | entry | #'org-roam-capture--get-point | * %? | :file-name | daily/%<%Y-%m-%d> | :head | #+title: Fleeting notes for %<%Y-%m-%d> |
+   | :olp | (Notes on Articles, Books, etc.) |       |                               |      |            |                   |       |                                         |
+   | g    | general                          | entry | #'org-roam-capture--get-point | * %? | :file-name | daily/%<%Y-%m-%d> | :head | #+title: Fleeting notes for %<%Y-%m-%d> |
+   | :olp | (Random general notes)           |       |                               |      |            |                   |       |                                         |
+   | w    | workout                          | entry | #'org-roam-capture--get-point | * %? | :file-name | daily/%<%Y-%m-%d> | :head | #+title: Fleeting notes for %<%Y-%m-%d> |
+   | :olp | (Workout Regimes)                |       |                               |      |            |                   |       |                                         |
 
 * Skeletons
   Skeletons are a very neat feature of Emacs. Think of a snippet and a template, now combine them and you have a skeleton. A skeleton is bound to a key which when pressed enters a piece of text. This is helpful when initialising a file whose format is certain. I currently use this for initialising my lab reports which have a rather standard format all the time.

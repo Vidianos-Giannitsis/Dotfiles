@@ -1,0 +1,5 @@
+# -*- mode: snippet -*-
+# name: xrightarrow
+# key: xra
+# --
+\xrightarrow{$0}
