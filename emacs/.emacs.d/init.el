@@ -29,6 +29,10 @@
 (tool-bar-mode -1)
 (setq ring-bell-function 'ignore)
 
+(setq display-time-format "%a %d/%m/%y %I:%M %p")
+(display-time-mode 1)
+(display-battery-mode 1)
+
 (which-key-mode 1)
 
 (setq inhibit-startup-screen t)
@@ -37,6 +41,14 @@
 (ivy-mode 1)
 (all-the-icons-ivy-setup)
 (global-set-key (kbd "M-x") #'counsel-M-x)
+(marginalia-mode 1)
+; Marginalia and ivy-rich have similar functions. Marginalia is mostly
+; for completion frameworks that dont have this functionality like
+; Ivy-rich. But marginalia feels so much smoother. Ivy-rich seems to
+; lag in some commands more than I would like
+;(require 'all-the-icons-ivy-rich)
+;(all-the-icons-ivy-rich-mode 1)
+;(ivy-rich-mode 1)
 
 (setq backup-directory-alist `(("." . ,(expand-file-name "tmp/backups/" user-emacs-directory))))
 (make-directory (expand-file-name "tmp/auto-saves/" user-emacs-directory) t)
@@ -122,6 +134,11 @@
 
 (setq-default tab-jump-out-delimiters '(";" ")" "]" "}" "|" "'" "\"" "`" "."))
 
+(require 'mediator)
+
+(ace-window-display-mode 1)
+(setq aw-keys '(?a ?s ?d ?f ?g ?h ?j ?k ?l))
+
 (require 'keybindings)
 
 (require 'dired-x)
@@ -198,6 +215,9 @@
 (require 'org-tree-slide)
 
 (require 'ox-beamer)
+(require 'ox-hugo)
+
+(require 'org-marginalia)
 
 (add-to-list 'org-file-apps '("\\.pdf\\'" . emacs))
 
@@ -213,7 +233,8 @@
 
 (add-hook 'org-mode-hook '(lambda ()
 			    (visual-line-mode)
-			    (org-fragtog-mode)))
+			    (org-fragtog-mode)
+			    (org-marginalia-mode)))
 
 (setq org-format-latex-options '(:foreground default :background default :scale 1.8 :html-foreground "Black" :html-background "Transparent" :html-scale 1.0 :matchers))
 
@@ -339,6 +360,8 @@
 	org-roam-server-network-label-truncate-length 60
 	org-roam-server-network-label-wrap-length 20))
 
+(org-roam-server-mode 1)
+
 (setq bibtex-completion-bibliography
       '("~/Sync/My_Library.bib")
       reftex-default-bibliography '("~/Sync/My_Library.bib")
@@ -352,7 +375,7 @@
 (setq ivy-bibtex-default-action 'ivy-bibtex-insert-citation)
 (ivy-add-actions
  'ivy-bibtex
- '(("o" ivy-bibtex-open-any "Open pdf, url or DOI")))
+ '(("p" ivy-bibtex-open-any "Open pdf, url or DOI")))
 
 (require 'org-roam-bibtex)
 (add-hook 'org-roam-mode-hook #'org-roam-bibtex-mode)
@@ -364,11 +387,21 @@
 
 (setq org-roam-capture-templates
       '(("d" "default" plain (function org-roam-capture--get-point)
-	"%?"
-	:file-name "${slug}-%<%d-%m>"
-	:unnarrowed t
-	:head "#+title: ${title}\nglatex_roam\n
-- index ::
+	 "%?"
+	 :file-name "${slug}-%<%d-%m>"
+	 :unnarrowed t
+	 :head "#+title: ${title}\nglatex_roam\n
+#+roam_tags:  
+- index ::  
+- tags ::  ")
+
+	("p" "private" plain (function org-roam-capture--get-point)
+	  "%?"
+	  :file-name "private/${slug}-%<%d-%m>"
+	  :unnarrowed t
+	  :head "#+title: ${title}\nglatex_roam\n
+#+roam_tags:  
+- index ::  
 - tags ::  ")))
 
 (setq orb-templates
@@ -376,10 +409,11 @@
       :file-name "ref/${citekey}"
       :unnarrowed t
       :head "#+TITLE: ${title}\n#+ROAM_KEY: ${ref}\n
-*Keywords*: ${keywords}
+#+roam_tags: literature
+- keywords :: ${keywords}
 - tags ::  
 
-* Analysis of article
+* Analysis of ${entry-type}
 :PROPERTIES:
 :URL: ${url}
 :NOTER_DOCUMENT: ${file}  
@@ -389,33 +423,42 @@
 ** Abstract
       ${abstract}")))
 
+(setq org-roam-capture-ref-templates
+      '(("r" "ref" plain (function org-roam-capture--get-point)
+	 "%?"
+	 :file-name "ref/${slug}"
+	 :unnarrowed t
+	 :head "#+title: ${title}\n#+roam_key: ${ref}
+#+roam_tags: literature
+- tags ::  ")))
+
 (setq org-roam-dailies-capture-templates
       '(("l" "lesson" entry
 	 #'org-roam-capture--get-point
 	 "* %?"
 	 :file-name "daily/%<%Y-%m-%d>"
-	 :head "#+title: Fleeting notes for %<%Y-%m-%d>\n"
+	 :head "#+title: Fleeting notes for %<%d-%m-%Y>\n#+roam_tags: daily\n"
 	 :olp ("Lesson notes"))
 
 	("b" "bibliography" entry
 	 #'org-roam-capture--get-point
 	 "* %?"
 	 :file-name "daily/%<%Y-%m-%d>"
-	 :head "#+title: Fleeting notes for %<%Y-%m-%d>\n"
+	 :head "#+title: Fleeting notes for %<%d-%m-%Y>\n#+roam_tags: daily\n"
 	 :olp ("Notes on Articles, Books, etc."))
 
 	("g" "general" entry
 	 #'org-roam-capture--get-point
 	 "* %?"
 	 :file-name "daily/%<%Y-%m-%d>"
-	 :head "#+title: Fleeting notes for %<%Y-%m-%d>\n"
+	 :head "#+title: Fleeting notes for %<%d-%m-%Y>\n#+roam_tags: daily\n"
 	 :olp ("Random general notes"))
 
 	("w" "workout" entry
 	 #'org-roam-capture--get-point
 	 "* %?"
 	 :file-name "daily/%<%Y-%m-%d>"
-	 :head "#+title: Fleeting notes for %<%Y-%m-%d>\n"
+	 :head "#+title: Fleeting notes for %<%d-%m-%Y>\n#+roam_tags: daily\n"
 	 :olp ("Workout Regimes"))))
 
 (define-skeleton lab-skeleton
@@ -514,6 +557,10 @@
 
 (add-hook 'emacs-lisp-mode-hook 'eldoc-mode)
 (add-hook 'ielm-mode-hook 'eldoc-mode)
+
+(setq deft-extensions '("org"))
+(setq deft-directory "~/org_roam")
+(setq deft-recursive t)
 
 ;; CUSTOM VARIABLES
 (custom-set-variables

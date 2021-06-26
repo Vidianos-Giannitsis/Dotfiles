@@ -390,7 +390,7 @@
 			("Ingo Lohmar" . "i.lohmar@gmail.com"))
 		       (:keywords "abbrev" "convenience" "matching"))])
  (consult .
-	  [(0 8)
+	  [(0 9)
 	   ((emacs
 	     (26 1)))
 	   "Consulting completing-read" tar
@@ -409,7 +409,7 @@
 		      ("Jackson Ray Hamilton" . "jackson@jacksonrayhamilton.com"))
 		     (:keywords "convenience" "faces" "tools"))])
  (corfu .
-	[(0 8)
+	[(0 9)
 	 ((emacs
 	   (27 1)))
 	 "Completion Overlay Region FUnction" tar
@@ -524,11 +524,11 @@
 	    (:maintainer "Phil Sainty" . "psainty@orcon.net.nz")
 	    (:url . "https://savannah.nongnu.org/projects/delight"))])
  (devdocs .
-	  [(0 1)
+	  [(0 2)
 	   ((emacs
 	     (27 1)))
 	   "Emacs viewer for DevDocs" tar
-	   ((:url . "https://github.com/astoff/devdocs")
+	   ((:url . "https://github.com/astoff/devdocs.el")
 	    (:maintainer "Augusto Stoffel" . "arstoffel@gmail.com")
 	    (:authors
 	     ("Augusto Stoffel" . "arstoffel@gmail.com"))
@@ -692,7 +692,7 @@
 	      (:maintainer "Markus Triska" . "triska@metalevel.at")
 	      (:url . "https://www.metalevel.at/ediprolog/"))])
  (eev .
-      [(20210607)
+      [(20210618)
        ((emacs
 	 (24 4)))
        "Support for e-scripts (eepitch blocks, elisp hyperlinks, etc)" tar
@@ -768,7 +768,7 @@
 		     (:keywords "languages" "lisp")
 		     (:url . "https://elpa.gnu.org/packages/elisp-benchmarks.html"))])
  (emms .
-       [(7 2)
+       [(7 5)
 	((cl-lib
 	  (0 5))
 	 (nadvice
@@ -1209,7 +1209,7 @@
 	       ("Oleh Krehel" . "ohwoeowho@gmail.com"))
 	      (:keywords "convenience"))])
  (ivy-posframe .
-	       [(0 6 0)
+	       [(0 6 1)
 		((emacs
 		  (26 0))
 		 (posframe
@@ -1394,7 +1394,7 @@
 	(:keywords "extensions" "lisp")
 	(:url . "https://elpa.gnu.org/packages/map.html"))])
  (marginalia .
-	     [(0 6)
+	     [(0 7)
 	      ((emacs
 		(26 1)))
 	      "Enrich existing commands with completion annotations" tar
@@ -1812,7 +1812,7 @@
 	   ("Mario Lang" . "mlang@delysid.org"))
 	  (:maintainer "Mario Lang" . "mlang@delysid.org"))])
  (posframe .
-	   [(1 0 3)
+	   [(1 0 4)
 	    ((emacs
 	      (26)))
 	    "Pop a posframe (just a frame) at point" tar
@@ -1847,14 +1847,14 @@
 	       ("Scott Andrew Borton" . "scott@pp.htv.fi"))
 	      (:maintainer "John Darrington" . "john@darrington.wattle.id.au"))])
  (pyim .
-       [(3 7 9)
+       [(3 8 2)
 	((emacs
 	  (24 4))
 	 (async
 	  (1 6))
 	 (xr
 	  (1 13)))
-	"A Chinese input method support quanpin, shuangpin, wubi and cangjie." tar
+	"A Chinese input method support quanpin, shuangpin, wubi, cangjie and rime." tar
 	((:url . "https://github.com/tumashu/pyim")
 	 (:maintainer "Feng Shu" . "tumashu@163.com")
 	 (:authors
@@ -2455,7 +2455,7 @@
 		("David Gonzalez Gandara" . "dggandara@member.fsf.org"))
 	       (:maintainer "David Gonzalez Gandara" . "dggandara@member.fsf.org"))])
  (transient .
-	    [(0 3 4)
+	    [(0 3 5)
 	     ((emacs
 	       (25 1)))
 	     "Transient commands" tar
@@ -2535,6 +2535,16 @@
 	   (:authors
 	    ("Yuan Fu" . "casouri@gmail.com"))
 	   (:keywords "convenience" "text" "table"))])
+ (vc-hgcmd .
+	   [(1 14)
+	    ((emacs
+	      (25 1)))
+	    "VC mercurial backend that uses hg command server" tar
+	    ((:url . "https://github.com/muffinmad/emacs-vc-hgcmd")
+	     (:maintainer "Andrii Kolomoiets" . "andreyk.mad@gmail.com")
+	     (:authors
+	      ("Andrii Kolomoiets" . "andreyk.mad@gmail.com"))
+	     (:keywords "vc"))])
  (vcard .
 	[(0 2 1)
 	 ((emacs
@@ -2574,7 +2584,7 @@
 		  ("Wilson Snyder" . "wsnyder@wsnyder.org"))
 		 (:keywords "languages"))])
  (vertico .
-	  [(0 11)
+	  [(0 12)
 	   ((emacs
 	     (27 1)))
 	   "VERTical Interactive COmpletion" tar

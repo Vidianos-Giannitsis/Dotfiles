@@ -4,19 +4,26 @@
 #+INFOJS_OPT: view:t toc:t ltoc:t mouse:underline buttons:0 path:http://thomasf.github.io/solarized-css/org-info.min.js
 #+HTML_HEAD: <link rel="stylesheet" type="text/css" href="http://thomasf.github.io/solarized-css/solarized-dark.min.css" />
 
-* COMMENT Ideas for things I can try [0/11]
-These are interesting packages to check in the long term. But nothing to hurry with, as I dont need any of them urgently.
+* COMMENT Ideas I want to implement soon [5/8]
+ - [X] I saw the mediator package on reddit and its possibly something to try
+ - [X] Org-marginalia might be an interesting addon to my notetaking workflow with roam.
+ - [X] Deft is a very good looking package which I would be interested in adding to my workflow. Only problem is it slows down with many files. Notdeft, is an alternative which is said to not slow down as much. I would like to look into both
+ - [ ] Hugo looks great for generating static websites. Ox-Hugo is an emacs package for converting to org to hugo compatible markdown. Floating in reddit, you can find ways to export org roam notes to hugo. This may be a way to make my org-roam repository more easily portable to non emacs interfaces which would be cool
+ - [ ] Version controlling my notes with github is an interesting concept. Git-timemachine is a package that allows me to see how my version controlled notes have evolved with time which makes it even cooler.
+ - [X] Set up an org-roam-capture-ref-template and start really integrating capturing websites to my workflow. I did ORB so this comes next for referencing.
+ - [X] I am thinking it would be useful to set up a private subdirectory in org-roam which wouldn't get exported with the rest of my notes. Might be useful for some kinds of notes to stay in org-roam but not be exported like the rest.
+ - [ ] Better window management for Emacs. Resizing, moving focus, other window commands etc. All these look really cool imo and I want to add them to my personal keybindings. Source https://github.com/daviwil/emacs-from-scratch/blob/aa344276b42f8abaf1fc7326c7ceda28ea5cf750/show-notes/Emacs-Tips-05.org
+
+* COMMENT Long term plans for things I can try in Emacs [0/8]
+  These are interesting packages to check in the long term. But nothing to hurry with, as I dont need any of them urgently.
  - [ ] ERC is an IRC client for Emacs. Elfeed is an RSS reader for emacs. EMMS is a music player for Emacs. I could get around to configuring them in case I start using them
  - [ ] There are a lot of eshell configuration options which I can try if I ever get around to using eshell.
  - [ ] There is a mastodon package for Emacs (I am assuming to run mastodon from inside Emacs). If I try out mastodon, I cant see why I shouldn't use this.
  - [ ] https://github.com/daedreth/UncleDavesEmacs/blob/master/config.org An emacs DE config. The things that interest me the most here are specific to an emacs DE, the rest are pretty similar to defaults. If I switch to EXWM (which I will definitely try at some point) this might be helpful
  - [ ] SPEAKING OF EXWM, I MUST TRY IT. But although its Emacs and I will be comfortable in it from the get go, its definitely going to be time consuming so I am stalling it for now cause I dont want to spend all my time there.
  - [ ] GNU Hyperbole is an interesting package to play around with
- - [ ] I saw the mediator package on reddit and its possibly something to try
- - [ ] Org-roam-bibtex was broken when I originally installed emacs on my new machine. I should fix it eventually
- - [ ] Org-marginalia might be an interesting addon to my notetaking workflow with roam. Deft is a very good looking package which I might add to my workflow. I am not sure if roam makes it redundant though.
- - [ ] Hugo looks great for generating static websites. Ox-Hugo is an emacs package for converting to org to hugo compatible markdown. Floating in reddit, you can find ways to export org roam notes to hugo. This may be a way to make my org-roam repository more easily portable to non emacs interfaces which would be cool
- - [ ] Hugo looks great for generating static websites. Ox-Hugo is an emacs package for converting to org to hugo compatible markdown. Floating in reddit, you can find ways to export org roam notes to hugo. This may be a way to make my org-roam repository more easily portable to non emacs interfaces which would be cool. 
+ - [ ] I should eventually give mu4e a try. I am very comfortable with thunderbird and dont need to switch, but there are apparent advantages to using emacs for email so I should try it evetually.
+ - [ ] Look more into the org-download-screenshot function. Copying something to the clipboard and pasting it to emacs is rather fast, but this function automatically pastes the screenshot as well, which I like. The problem is it needs to be invoked from Emacs and you cant change workspace after. There must be some way to call this with emacsclient from a different workspace.
 
 ** COMMENT Project Management in Emacs
     I want to start learning more things about managing my projects in Emacs. There are some built-in project features in Emacs and the projectile package helps a lot with project management. This isn't currently urgent but its usability is sure to arise soon. Being able to export a latex file which draws info from multiple other files inside the projects directory is awesome. Looking into the future, this is probably going to be the most efficient way to get to writing my diploma thesis and any other big project I want to manage.
@@ -27,6 +34,9 @@ These are interesting packages to check in the long term. But nothing to hurry w
     - [ ] Create a "playground" test project for trying out things
     - [ ] Think of a use-case for project management which is going to be in the near future and make it happen
     - [ ] Go deep in project management and start using the more advanced features Emacs provides
+  
+** EXWM ITS TIME
+   
    
 * About this config
 
@@ -109,6 +119,7 @@ This includes:
 + Activating gcmh mode, which helps improve my startup time (Note that to truly get a benefit from this it needs to be very early on in the config). 
 + Setting my theme to doom's variant of dracula. I initially didnt switch to dracula because Emacs' default dracula is not appealing to me, but after trying the doom variant I fell in love with it (you can get it from the doom-themes package).
 + Disabling some features which I dislike personally like the bars that comes by default, and the annoying sounds emacs makes when you type sth wrong.
++ Displaying time (in a specified format) and battery on my modeline which are useful info
 + Activating which-key-mode, which is a popup prompt to display how to complete an emacs command.
 + Changing the startup screen to dired because I consider it way more productive than the default.
 + Activating ivy-mode my favourite emacs completion framework. I feel its really counter-productive to not use a completion framework such as Ivy/Helm/Ido. I also activate the all-the-icons integration for ivy. This is primarily for my switch-buffer command. I like icons
@@ -121,47 +132,59 @@ This includes:
 + Set my font to Source Code Pro with the right font size for me. To use daemon mode properly, this needs a bit more code.
 
 #+BEGIN_SRC elisp
-
+  
   (gcmh-mode 1)
-
+  
   (load-theme 'doom-dracula t)
-
+  
   (menu-bar-mode -1)
   (scroll-bar-mode -1)
   (tool-bar-mode -1)
   (setq ring-bell-function 'ignore)
-
+  
+  (setq display-time-format "%a %d/%m/%y %I:%M %p")
+  (display-time-mode 1)
+  (display-battery-mode 1)
+  
   (which-key-mode 1)
-
+  
   (setq inhibit-startup-screen t)
   (add-hook 'after-init-hook 'dired-jump)
-
+  
   (ivy-mode 1)
   (all-the-icons-ivy-setup)
   (global-set-key (kbd "M-x") #'counsel-M-x)
-
+  (marginalia-mode 1)
+  ; Marginalia and ivy-rich have similar functions. Marginalia is mostly
+  ; for completion frameworks that dont have this functionality like
+  ; Ivy-rich. But marginalia feels so much smoother. Ivy-rich seems to
+  ; lag in some commands more than I would like
+  ;(require 'all-the-icons-ivy-rich)
+  ;(all-the-icons-ivy-rich-mode 1)
+  ;(ivy-rich-mode 1)
+  
   (setq backup-directory-alist `(("." . ,(expand-file-name "tmp/backups/" user-emacs-directory))))
   (make-directory (expand-file-name "tmp/auto-saves/" user-emacs-directory) t)
   (setq auto-save-list-file-prefix (expand-file-name "tmp/auto-saves/sessions/" user-emacs-directory)
 	auto-save-file-name-transforms `((".*" ,(expand-file-name "tmp/auto-saves/" user-emacs-directory) t)))
-
+  
   (require 'dash-functional)
   (require 'helpful)
-
+  
   (use-package doom-modeline
     :ensure t
     :init (doom-modeline-mode 1)
     :config (setq doom-modeline-minor-modes nil
 		  doom-modeline-enable-word-count t))
-
+  
   (defalias 'yes-or-no-p 'y-or-n-p)
-
+  
   (setq org-hide-emphasis-markers t)
-
+  
   (defun set-font-faces ()
     "Needed to set up my fonts to work with the emacs daemon"
     (set-face-attribute 'default nil :height 140 :family "Source Code Pro"))
-
+  
   (if (daemonp)
       (add-hook 'after-make-frame-functions
 		(lambda (frame)
@@ -208,6 +231,9 @@ This enables:
 + A function to toggle the behaviour of markup elements such as visible asterisks when writing a message in bold. I dont like seeing them usually, but its good to have a function which toggle this behaviour
 + Setting the spotify id which counsel needs to be able to control spotify through Emacs.
 + Loading small utility packages such as math at point (which makes doing calculations in Emacs faster) and molar-mass (a Molar mass calculator for Emacs)
++ Adding the dot to tab jump out delimiters. Sometimes you want to jump over a dot in a text and I like this besides jumping out of brackets
++ Loading mediator, a helpful package for dired which allows opening files with other programs. Its useful in some cases
++ Ace-window is a helpful package for switching focus between buffers really quickly. I set the keys used in it to be the home row keys instead of number keys as that is more convenient. I also activate a mode which shows which letter corresponds to each window in the mode line. 
 
 #+BEGIN_SRC elisp
   
@@ -247,10 +273,15 @@ This enables:
   (require 'molar-mass)
   
   (setq-default tab-jump-out-delimiters '(";" ")" "]" "}" "|" "'" "\"" "`" "."))
+  
+  (require 'mediator)
+  
+  (ace-window-display-mode 1)
+  (setq aw-keys '(?a ?s ?d ?f ?g ?h ?j ?k ?l))
 #+END_SRC
 
 #+RESULTS:
-| ; | ) | ] | } |   |   | ' | " | ` | . |
+| 97 | 115 | 100 | 102 | 103 | 104 | 106 | 107 | 108 |
 
 
 * Keybindings
@@ -367,26 +398,29 @@ Some settings (now using the word some here might be an underestimation, as with
    + Require the org export beamer package so beamer export options are there by default
      
 #+BEGIN_SRC elisp
-
+  
     (add-hook 'org-mode-hook #'(lambda ()
 				 (org-superstar-mode)
 				 (org-superstar-configure-like-org-bullets)))
-
+  
   (use-package org-download
     :after org)
-
+  
   (require 'calctex)
   (add-hook 'calc-embedded-new-formula-hook 'calctex-mode)
-
+  
   (add-hook 'org-mode-hook 'turn-on-org-cdlatex)
-
+  
   (require 'org-tree-slide)
-
+  
   (require 'ox-beamer)
+  (require 'ox-hugo)
+  
+  (require 'org-marginalia)
 #+END_SRC
 
 #+RESULTS:
-: ox-beamer
+: org-marginalia
 
 ** Org mode utilities
    I change some more things inside org to fix some annoying default behaviours.
@@ -394,29 +428,30 @@ Some settings (now using the word some here might be an underestimation, as with
    + I tell org that its odt export should be converted to docx as if I am exporting to a rich text editors format, its for a collaboration and most people I know use that format. If its a personal project I always export to a latex pdf because it looks better.
    + Defining a function which supresses the confirmation message for tangling an org document's source code and hooking it to the after save hook in org-mode. If I understand it correctly, it should automatically tangle after saving, if thats possible, which is handy for things such as this configuration.
    + I activate image preview by default inside org, as images are cool, I like images. I also change the "org-image-actual-width" variable, which makes images previewd in org to be able to change size if given the right headers. This is helpful for some images which are too large to be properly viewed in org so they can be scaled down and be properly visible.
-   + I have a custom lambda function which I hook to the org-mode-hook (so it activates every time a new org mode buffer is opened) which automatically activates the visual-line and org-fragtog minor modes. Visual line is for wrapping text to the next line once the current line is full, which is insanely useful for any org document in my opinion. Org-fragtog is a neat minor mode for latex previews. When on a latex equation it automatically shows the source code of it, allowing you to edit it, and then previews it once you leave the equation, which is very useful.
+   + I have a custom lambda function which I hook to the org-mode-hook (so it activates every time a new org mode buffer is opened) which automatically activates the visual-line and org-fragtog minor modes. Visual line is for wrapping text to the next line once the current line is full, which is insanely useful for any org document in my opinion. Org-fragtog is a neat minor mode for latex previews. When on a latex equation it automatically shows the source code of it, allowing you to edit it, and then previews it once you leave the equation, which is very useful. Org marginalia mode is for writing margin notes in org-buffers. I especially like this feature on org-roam notes. 
      
 #+BEGIN_SRC elisp
   (add-to-list 'org-file-apps '("\\.pdf\\'" . emacs))
-
+  
   (setq org-odt-preferred-output-format "docx")
-
+  
   (add-hook 'org-mode-hook (lambda () (add-hook 'after-save-hook #'(lambda ()
 								     (let ((org-confirm-babel-evaluate nil))
 								       (org-babel-tangle))))
 						'run-at-end 'only-in-org-mode))
-
+  
   (setq org-startup-with-inline-images t)
   (setq org-image-actual-width nil)
-
+  
   (add-hook 'org-mode-hook '(lambda ()
 			      (visual-line-mode)
-			      (org-fragtog-mode)))
-
+			      (org-fragtog-mode)
+			      (org-marginalia-mode)))
+  
 #+END_SRC
 
 #+RESULTS:
-: dvisvgm
+| (lambda nil (visual-line-mode) (org-fragtog-mode) (org-marginalia-mode)) | org-ref-org-menu | (lambda nil (visual-line-mode) (org-fragtog-mode)) | (lambda nil (add-hook 'after-save-hook #'(lambda nil (let ((org-confirm-babel-evaluate nil)) (org-babel-tangle)))) 'run-at-end 'only-in-org-mode) | turn-on-org-cdlatex | (lambda nil (org-superstar-mode) (org-superstar-configure-like-org-bullets)) | evil-org-mode | #[0 \300\301\302\303\304$\207 [add-hook change-major-mode-hook org-show-all append local] 5] | #[0 \300\301\302\303\304$\207 [add-hook change-major-mode-hook org-babel-show-result-all append local] 5] | org-babel-result-hide-spec | org-babel-hide-all-hashes | #[0 \301\211\207 [imenu-create-index-function org-imenu-get-tree] 2] | org-ref-setup-label-finders |
 	    
 ** Latex Stuff
    I love Latex for writing mathematical equations. Org understands latex very well and can preview it. But I want some things changed in it. 
@@ -681,6 +716,7 @@ More languages to evaluate with org-babel (by default, only elisp is evaluated).
 	     org-roam-server-network-label-truncate-length 60
 	     org-roam-server-network-label-wrap-length 20))
      
+     (org-roam-server-mode 1)
      #+END_SRC
      
 ** Bibtex completion (Ivy) and Org Ref
@@ -691,7 +727,7 @@ More languages to evaluate with org-babel (by default, only elisp is evaluated).
    - I allow ivy-bibtex to query by keywords or abstract. Can be useful
    - I configure org-ref to use ivy-completions for its commands
    - I make the default action of ivy-bibtex, inserting the citation of the chosen reference. Personally, its the action I use most as opening the link/pdf to the reference (which is the original default) is more easily done from Zotero imo. In Emacs I find more utility in inserting the citation in my own documents.
-   - Since opening the pdf, url or DOI of a bibtex entry is no longer the default action in my config, I bind it to the letter o in the options menu of Ivy-bibtex
+   - Since opening the pdf, url or DOI of a bibtex entry is no longer the default action in my config, I bind it to the letter p in the options menu of Ivy-bibtex
 
       #+BEGIN_SRC elisp
 	(setq bibtex-completion-bibliography
@@ -707,12 +743,12 @@ More languages to evaluate with org-babel (by default, only elisp is evaluated).
 	(setq ivy-bibtex-default-action 'ivy-bibtex-insert-citation)
 	(ivy-add-actions
 	 'ivy-bibtex
-	 '(("o" ivy-bibtex-open-any "Open pdf, url or DOI")))
+	 '(("p" ivy-bibtex-open-any "Open pdf, url or DOI")))
        
      #+END_SRC
 
     #+RESULTS:
-    | ivy-switch-buffer | ((f ivy--find-file-action find file) (j ivy--switch-buffer-other-window-action other window) (k ivy--kill-buffer-action kill) (r ivy--rename-buffer-action rename) (x counsel-open-buffer-file-externally open externally)) | t | ((i ivy--action-insert insert) (w ivy--action-copy copy)) | org-ref-ivy-insert-cite-link | ((b or-ivy-bibtex-open-entry Open bibtex entry) (B or-ivy-bibtex-copy-entry Copy bibtex entry) (p or-ivy-bibtex-open-pdf Open pdf) (n or-ivy-bibtex-open-notes Open notes) (u or-ivy-bibtex-open-url Open url) (d or-ivy-bibtex-open-doi Open doi) (k or-ivy-bibtex-set-keywords Add keywords) (e or-ivy-bibtex-email-entry Email entry) (f or-ivy-bibtex-insert-formatted-citation Insert formatted citation) (F or-ivy-bibtex-copy-formatted-citation Copy formatted citation) (a or-ivy-bibtex-add-entry Add bibtex entry)) | ivy-bibtex | ((p ivy-bibtex-open-pdf Open PDF file (if present)) (u ivy-bibtex-open-url-or-doi Open URL or DOI in browser) (c ivy-bibtex-insert-citation Insert citation) (r ivy-bibtex-insert-reference Insert reference) (k ivy-bibtex-insert-key Insert BibTeX key) (b ivy-bibtex-insert-bibtex Insert BibTeX entry) (a ivy-bibtex-add-PDF-attachment Attach PDF to email) (e ivy-bibtex-edit-notes Edit notes) (s ivy-bibtex-show-entry Show entry) (l ivy-bibtex-add-pdf-to-library Add PDF to library) (f (lambda (_candidate) (ivy-bibtex-fallback ivy-text)) Fallback options) (o ivy-bibtex-open-any Open pdf, url or DOI)) | swiper-isearch | ((w swiper-action-copy copy)) | swiper | ((w swiper-action-copy copy)) | counsel-describe-variable | ((I counsel-info-lookup-symbol info) (d counsel--find-symbol definition)) | counsel-describe-function | ((I counsel-info-lookup-symbol info) (d counsel--find-symbol definition)) | counsel-describe-symbol | ((I counsel-info-lookup-symbol info) (d counsel--find-symbol definition)) | counsel-M-x | ((d counsel--find-symbol definition) (h #[257 \301!!\207 [counsel-describe-function-function intern] 4 |
+    | ivy-switch-buffer | ((f ivy--find-file-action find file) (j ivy--switch-buffer-other-window-action other window) (k ivy--kill-buffer-action kill) (r ivy--rename-buffer-action rename)) | t | ((i ivy--action-insert insert) (w ivy--action-copy copy)) | org-ref-ivy-insert-cite-link | ((b or-ivy-bibtex-open-entry Open bibtex entry) (B or-ivy-bibtex-copy-entry Copy bibtex entry) (p or-ivy-bibtex-open-pdf Open pdf) (n or-ivy-bibtex-open-notes Open notes) (u or-ivy-bibtex-open-url Open url) (d or-ivy-bibtex-open-doi Open doi) (k or-ivy-bibtex-set-keywords Add keywords) (e or-ivy-bibtex-email-entry Email entry) (f or-ivy-bibtex-insert-formatted-citation Insert formatted citation) (F or-ivy-bibtex-copy-formatted-citation Copy formatted citation) (a or-ivy-bibtex-add-entry Add bibtex entry)) | ivy-bibtex | ((u ivy-bibtex-open-url-or-doi Open URL or DOI in browser) (c ivy-bibtex-insert-citation Insert citation) (r ivy-bibtex-insert-reference Insert reference) (k ivy-bibtex-insert-key Insert BibTeX key) (b ivy-bibtex-insert-bibtex Insert BibTeX entry) (a ivy-bibtex-add-PDF-attachment Attach PDF to email) (e ivy-bibtex-edit-notes Edit notes) (s ivy-bibtex-show-entry Show entry) (l ivy-bibtex-add-pdf-to-library Add PDF to library) (f (lambda (_candidate) (ivy-bibtex-fallback ivy-text)) Fallback options) (p ivy-bibtex-open-any Open pdf, url or DOI)) |
 
 ** Org-Roam-Bibtex
    Org roam bibtex is the final part of this workflow. It uses ivy-bibtex to query my .bib file and creates a note inside the org-roam directory according to the "orb-templates" variable specific to that file. This is a very useful part of the zettelkasten method which has to do with reference management inside your zettelkasten. 
@@ -735,17 +771,27 @@ More languages to evaluate with org-babel (by default, only elisp is evaluated).
    | abstract | citekey | entry-type | date | pdf? | note? | file | author | editor | author-abbrev | editor-abbrev | author-or-editor-abbrev | keywords | url |
    
 ** Templates
-   This section is about the various templates used by the org-roam workflow. These are org-roam-capture-templates, orb-templates, org-roam-dailies-capture-templates
+   This section is about the various templates used by the org-roam workflow. These are org-roam-capture-templates, orb-templates, org-roam-capture-ref-templates, org-roam-dailies-capture-templates
 
    #+BEGIN_SRC elisp
      
      (setq org-roam-capture-templates
 	   '(("d" "default" plain (function org-roam-capture--get-point)
-	     "%?"
-	     :file-name "${slug}-%<%d-%m>"
-	     :unnarrowed t
-	     :head "#+title: ${title}\nglatex_roam\n
-     - index ::
+	      "%?"
+	      :file-name "${slug}-%<%d-%m>"
+	      :unnarrowed t
+	      :head "#+title: ${title}\nglatex_roam\n
+     ,#+roam_tags:  
+     - index ::  
+     - tags ::  ")
+     
+	     ("p" "private" plain (function org-roam-capture--get-point)
+	       "%?"
+	       :file-name "private/${slug}-%<%d-%m>"
+	       :unnarrowed t
+	       :head "#+title: ${title}\nglatex_roam\n
+     ,#+roam_tags:  
+     - index ::  
      - tags ::  ")))
      
      (setq orb-templates
@@ -753,10 +799,11 @@ More languages to evaluate with org-babel (by default, only elisp is evaluated).
 	   :file-name "ref/${citekey}"
 	   :unnarrowed t
 	   :head "#+TITLE: ${title}\n#+ROAM_KEY: ${ref}\n
-     ,*Keywords*: ${keywords}
+     ,#+roam_tags: literature
+     - keywords :: ${keywords}
      - tags ::  
      
-     ,* Analysis of article
+     ,* Analysis of ${entry-type}
      :PROPERTIES:
      :URL: ${url}
      :NOTER_DOCUMENT: ${file}  
@@ -766,46 +813,48 @@ More languages to evaluate with org-babel (by default, only elisp is evaluated).
      ,** Abstract
 	   ${abstract}")))
      
+     (setq org-roam-capture-ref-templates
+	   '(("r" "ref" plain (function org-roam-capture--get-point)
+	      "%?"
+	      :file-name "ref/${slug}"
+	      :unnarrowed t
+	      :head "#+title: ${title}\n#+roam_key: ${ref}
+     ,#+roam_tags: literature
+     - tags ::  ")))
+     
      (setq org-roam-dailies-capture-templates
 	   '(("l" "lesson" entry
 	      #'org-roam-capture--get-point
 	      "* %?"
 	      :file-name "daily/%<%Y-%m-%d>"
-	      :head "#+title: Fleeting notes for %<%Y-%m-%d>\n"
+	      :head "#+title: Fleeting notes for %<%d-%m-%Y>\n#+roam_tags: daily\n"
 	      :olp ("Lesson notes"))
      
 	     ("b" "bibliography" entry
 	      #'org-roam-capture--get-point
 	      "* %?"
 	      :file-name "daily/%<%Y-%m-%d>"
-	      :head "#+title: Fleeting notes for %<%Y-%m-%d>\n"
+	      :head "#+title: Fleeting notes for %<%d-%m-%Y>\n#+roam_tags: daily\n"
 	      :olp ("Notes on Articles, Books, etc."))
      
 	     ("g" "general" entry
 	      #'org-roam-capture--get-point
 	      "* %?"
 	      :file-name "daily/%<%Y-%m-%d>"
-	      :head "#+title: Fleeting notes for %<%Y-%m-%d>\n"
+	      :head "#+title: Fleeting notes for %<%d-%m-%Y>\n#+roam_tags: daily\n"
 	      :olp ("Random general notes"))
      
 	     ("w" "workout" entry
 	      #'org-roam-capture--get-point
 	      "* %?"
 	      :file-name "daily/%<%Y-%m-%d>"
-	      :head "#+title: Fleeting notes for %<%Y-%m-%d>\n"
+	      :head "#+title: Fleeting notes for %<%d-%m-%Y>\n#+roam_tags: daily\n"
 	      :olp ("Workout Regimes"))))
      
    #+END_SRC
    
    #+RESULTS:
-   | l    | lesson                           | entry | #'org-roam-capture--get-point | * %? | :file-name | daily/%<%Y-%m-%d> | :head | #+title: Fleeting notes for %<%Y-%m-%d> |
-   | :olp | (Lesson notes)                   |       |                               |      |            |                   |       |                                         |
-   | b    | bibliography                     | entry | #'org-roam-capture--get-point | * %? | :file-name | daily/%<%Y-%m-%d> | :head | #+title: Fleeting notes for %<%Y-%m-%d> |
-   | :olp | (Notes on Articles, Books, etc.) |       |                               |      |            |                   |       |                                         |
-   | g    | general                          | entry | #'org-roam-capture--get-point | * %? | :file-name | daily/%<%Y-%m-%d> | :head | #+title: Fleeting notes for %<%Y-%m-%d> |
-   | :olp | (Random general notes)           |       |                               |      |            |                   |       |                                         |
-   | w    | workout                          | entry | #'org-roam-capture--get-point | * %? | :file-name | daily/%<%Y-%m-%d> | :head | #+title: Fleeting notes for %<%Y-%m-%d> |
-   | :olp | (Workout Regimes)                |       |                               |      |            |                   |       |                                         |
+   | l | lesson | entry | #'org-roam-capture--get-point | * %? | :file-name | daily/%<%Y-%m-%d> | :head | #+title: Fleeting notes for %<%d-%m-%Y> |
 
 * Skeletons
   Skeletons are a very neat feature of Emacs. Think of a snippet and a template, now combine them and you have a skeleton. A skeleton is bound to a key which when pressed enters a piece of text. This is helpful when initialising a file whose format is certain. I currently use this for initialising my lab reports which have a rather standard format all the time.
@@ -993,6 +1042,21 @@ Configuration for PDF-tools, my favourite Emacs pdf viewer. I set it as the defa
      (add-hook 'ielm-mode-hook 'eldoc-mode)
 
    #+END_SRC
+
+** Deft
+
+   #+BEGIN_SRC elisp
+     
+     (setq deft-extensions '("org"))
+     (setq deft-directory "~/org_roam")
+     (setq deft-recursive t)
+     
+   #+END_SRC
+
+   #+RESULTS:
+   : t
+
+
 * Custom Variables
 These are some variables automatically generated by the "M-x customize" menu. Its better not to play around with this section of the config file as to not mess something up accidentally. I honestly almost never set something with the customize menu because I prefer writing it manually in my config. Gives me a sense of order really. 
 

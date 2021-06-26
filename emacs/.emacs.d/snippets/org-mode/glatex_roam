@@ -7,4 +7,3 @@
 #+LATEX_HEADER: \usepackage{alphabeta}
 #+LATEX_HEADER: \usepackage{esint}
 #+LATEX_HEADER: \usepackage{mathtools}
-#+LATEX_HEADER: \usepackage{esdiff}

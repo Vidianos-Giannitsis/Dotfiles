@@ -1,2 +1,0 @@
-;;; Generated package description from /home/vidianos/.emacs.d/elpa/cfrs-20210529.1123/cfrs.el  -*- no-byte-compile: t -*-
-(define-package "cfrs" "20210529.1123" "Child-frame based read-string" '((emacs "26.1") (dash "2.11.0") (s "1.10.0") (posframe "0.6.0")) :commit "e16a01012545d378150432fa10684a2a7d1cc2d1" :authors '(("Alexander Miller" . "alexanderm@web.de")) :maintainer '("Alexander Miller" . "alexanderm@web.de") :url "https://github.com/Alexander-Miller/cfrs")

@@ -6,4 +6,5 @@ nm-applet &
 picom --config ~/.config/picom.conf &
 lxpolkit &
 emacs --daemon &
-emacsclient -e "(org-roam-server-mode)"
+blueman-applet &
+redshift-gtk &

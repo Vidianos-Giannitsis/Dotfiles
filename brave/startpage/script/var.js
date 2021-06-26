@@ -66,14 +66,14 @@ var favorites = [
       ["Instagram" , "https://instagram.com/", "in"]
     ]
   ],
-  [ "Emacs and friends",
+  [ "Documentation pages",
     [
 	["Emacs", "https://www.gnu.org/software/emacs/manual/html_node/emacs/index.html", "em"],
 	["Octave" , "https://octave.org/doc/v5.2.0/", "oc"],
 	["Org-Roam" , "https://www.orgroam.com/manual.html", "or"],
 	["Org-Roam-Bibtex" , "https://github.com/org-roam/org-roam-bibtex", "orb"],
 	["Qtile", "http://docs.qtile.org/en/latest/", "qt"],
-	["Org-Roam-Server", "http://127.0.0.1:8080/", "ors"]
+	["EXWM", "https://github.com/ch11ng/exwm/wiki", "ex"]
     ]
   ],
   [ "Reddit",
@@ -92,6 +92,7 @@ var favorites = [
 	["Dod", "https://www.dod.gr", "d"],
 	["LolChess Account", "https://lolchess.gg/profile/eune/auroradraco", "lcm"],
 	["Damage Calc", "https://calc.pokemonshowdown.com/index.html", "calc"],
+	["Proton", "https://www.protondb.com/", "pr"],
 	["EV training guide", "https://bulbapedia.bulbagarden.net/wiki/List_of_Pok%C3%A9mon_by_effort_value_yield", "ev"],
 	["DuelingBook", "https://www.duelingbook.com/", "db"],
 	["Pack Opener", "https://db.ygoprodeck.com/pack-open/", "po"]
@@ -100,11 +101,10 @@ var favorites = [
   ],
   [ "Other",
     [
-      ["Lutris", "https://lutris.net/", "lt"],
-      ["Proton", "https://www.protondb.com/", "pr"],
+	["Darebee", "https://darebee.com/", "d"],
+	["Org-Roam-Server", "http://127.0.0.1:8080/", "ors"]
           ]
   ]
 ];
 var feeds = [
-  ["Chemeng News", "https://feeds.feedburner.com/chemengntua"]
 ];
