@@ -29,8 +29,6 @@
 (tool-bar-mode -1)
 (setq ring-bell-function 'ignore)
 
-(setq display-time-format "%a %d/%m/%y %I:%M %p")
-(display-time-mode 1)
 (display-battery-mode 1)
 
 (which-key-mode 1)
@@ -79,6 +77,8 @@
 		(with-selected-frame frame
 		  (set-font-faces))))
   (set-font-faces))
+
+(setq-default major-mode 'org-mode)
 
 (setq evil-collection-setup-minibuffer t)
 (setq evil-want-keybinding nil)

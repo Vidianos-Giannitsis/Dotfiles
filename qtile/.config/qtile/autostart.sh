@@ -8,3 +8,4 @@ lxpolkit &
 emacs --daemon &
 blueman-applet &
 redshift-gtk &
+dunst &

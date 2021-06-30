@@ -249,13 +249,13 @@ MonadWide is the same as monadtall with the only difference being that 2 windows
 #+BEGIN_SRC python
 # Layouts
 layouts = [
-    layout.MonadTall(border_focus = "#005858", border_normal = "#002525"),
+    layout.MonadTall(border_focus = "#bd93f9", border_normal = "#002525"),
     # layout.Columns(),
     # layout.Bsp(),
     layout.Max(),
-    layout.Stack(num_stacks=2, border_focus = "#005858", border_normal = "#002525"),
+    layout.Stack(num_stacks=2, border_focus = "#bd93f9", border_normal = "#002525"),
     # layout.Matrix(),
-    layout.MonadWide(border_focus = "#005858", border_normal = "#002525"),
+    layout.MonadWide(border_focus = "#bd93f9", border_normal = "#002525"),
     # layout.RatioTile(),
     # layout.Tile(border_focus = "#005858", border_normal = "#002525", border_width ="2"),
     # layout.TreeTab(),

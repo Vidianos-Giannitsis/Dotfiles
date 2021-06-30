@@ -648,7 +648,7 @@
 	       ("Leo Liu" . "sdl.web@gmail.com"))
 	      (:keywords "killing" "convenience"))])
  (ebdb .
-       [(0 6 23)
+       [(0 6 24)
 	((emacs
 	  (25 1))
 	 (cl-lib
@@ -1313,7 +1313,7 @@
 	      ("Terrence Brannon" . "metaperl@gmail.com"))
 	     (:maintainer nil . "emacs-devel@gnu.org"))])
  (leaf .
-       [(4 4 8)
+       [(4 5 2)
 	((emacs
 	  (24 1)))
 	"Simplify your init.el configuration, extended use-package" tar
@@ -2305,7 +2305,7 @@
 		 ("Filipp Gunbin" . "fgunbin@fastmail.fm"))
 		(:maintainer "Filipp Gunbin" . "fgunbin@fastmail.fm"))])
  (sql-indent .
-	     [(1 5)
+	     [(1 6)
 	      ((cl-lib
 		(0 5)))
 	      "Support for indenting code in SQL files." tar
@@ -2315,7 +2315,7 @@
 		("Alex Harsanyi" . "AlexHarsanyi@gmail.com"))
 	       (:keywords "languages" "sql"))])
  (ssh-deploy .
-	     [(3 1 12)
+	     [(3 1 13)
 	      ((emacs
 		(25)))
 	      "Deployment via Tramp, global or per directory." tar
@@ -2428,7 +2428,7 @@
 	  ("Oleh Krehel" . "ohwoeowho@gmail.com"))
 	 (:keywords "convenience"))])
  (tramp .
-	[(2 5 0 5)
+	[(2 5 1)
 	 ((emacs
 	   (25 1)))
 	 "Transparent Remote Access, Multiple Protocol" tar

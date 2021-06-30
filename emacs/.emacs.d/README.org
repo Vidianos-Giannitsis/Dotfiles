@@ -4,15 +4,17 @@
 #+INFOJS_OPT: view:t toc:t ltoc:t mouse:underline buttons:0 path:http://thomasf.github.io/solarized-css/org-info.min.js
 #+HTML_HEAD: <link rel="stylesheet" type="text/css" href="http://thomasf.github.io/solarized-css/solarized-dark.min.css" />
 
-* COMMENT Ideas I want to implement soon [5/8]
+* COMMENT Ideas I want to implement soon [7/10]
  - [X] I saw the mediator package on reddit and its possibly something to try
  - [X] Org-marginalia might be an interesting addon to my notetaking workflow with roam.
  - [X] Deft is a very good looking package which I would be interested in adding to my workflow. Only problem is it slows down with many files. Notdeft, is an alternative which is said to not slow down as much. I would like to look into both
  - [ ] Hugo looks great for generating static websites. Ox-Hugo is an emacs package for converting to org to hugo compatible markdown. Floating in reddit, you can find ways to export org roam notes to hugo. This may be a way to make my org-roam repository more easily portable to non emacs interfaces which would be cool
- - [ ] Version controlling my notes with github is an interesting concept. Git-timemachine is a package that allows me to see how my version controlled notes have evolved with time which makes it even cooler.
+ - [X] Version controlling my notes with github is an interesting concept. Git-timemachine is a package that allows me to see how my version controlled notes have evolved with time which makes it even cooler.
  - [X] Set up an org-roam-capture-ref-template and start really integrating capturing websites to my workflow. I did ORB so this comes next for referencing.
  - [X] I am thinking it would be useful to set up a private subdirectory in org-roam which wouldn't get exported with the rest of my notes. Might be useful for some kinds of notes to stay in org-roam but not be exported like the rest.
- - [ ] Better window management for Emacs. Resizing, moving focus, other window commands etc. All these look really cool imo and I want to add them to my personal keybindings. Source https://github.com/daviwil/emacs-from-scratch/blob/aa344276b42f8abaf1fc7326c7ceda28ea5cf750/show-notes/Emacs-Tips-05.org
+ - [X] Better window management for Emacs. Resizing, moving focus, other window commands etc. All these look really cool imo and I want to add them to my personal keybindings. Source https://github.com/daviwil/emacs-from-scratch/blob/aa344276b42f8abaf1fc7326c7ceda28ea5cf750/show-notes/Emacs-Tips-05.org
+ - [ ] Tab bar mode looks interesting. Window managers may make it redundant (especially EXWM's window management) but its probably worth checking out as its also fully customisable (as with everything in emacs)
+ - [ ] Emacs dashboard could be interesting if I actually fully customize it, but I am lazy
 
 * COMMENT Long term plans for things I can try in Emacs [0/8]
   These are interesting packages to check in the long term. But nothing to hurry with, as I dont need any of them urgently.
@@ -25,7 +27,7 @@
  - [ ] I should eventually give mu4e a try. I am very comfortable with thunderbird and dont need to switch, but there are apparent advantages to using emacs for email so I should try it evetually.
  - [ ] Look more into the org-download-screenshot function. Copying something to the clipboard and pasting it to emacs is rather fast, but this function automatically pastes the screenshot as well, which I like. The problem is it needs to be invoked from Emacs and you cant change workspace after. There must be some way to call this with emacsclient from a different workspace.
 
-** COMMENT Project Management in Emacs
+** Project Management in Emacs
     I want to start learning more things about managing my projects in Emacs. There are some built-in project features in Emacs and the projectile package helps a lot with project management. This isn't currently urgent but its usability is sure to arise soon. Being able to export a latex file which draws info from multiple other files inside the projects directory is awesome. Looking into the future, this is probably going to be the most efficient way to get to writing my diploma thesis and any other big project I want to manage.
    
     Obviously there are a lot of things to do here, but here is a non exhaustive list of things to play around with in the spirit of project management. The order isnt strict but its the order in which I predict I will do these
@@ -119,7 +121,7 @@ This includes:
 + Activating gcmh mode, which helps improve my startup time (Note that to truly get a benefit from this it needs to be very early on in the config). 
 + Setting my theme to doom's variant of dracula. I initially didnt switch to dracula because Emacs' default dracula is not appealing to me, but after trying the doom variant I fell in love with it (you can get it from the doom-themes package).
 + Disabling some features which I dislike personally like the bars that comes by default, and the annoying sounds emacs makes when you type sth wrong.
-+ Displaying time (in a specified format) and battery on my modeline which are useful info
++ Displaying battery on my modeline partly because its useful info, but practically because it just looks good
 + Activating which-key-mode, which is a popup prompt to display how to complete an emacs command.
 + Changing the startup screen to dired because I consider it way more productive than the default.
 + Activating ivy-mode my favourite emacs completion framework. I feel its really counter-productive to not use a completion framework such as Ivy/Helm/Ido. I also activate the all-the-icons integration for ivy. This is primarily for my switch-buffer command. I like icons
@@ -130,6 +132,7 @@ This includes:
 + Changing yes-no prompts to y-n, because its simply easier to type than yes-no.
 + Hide elements such as asterisks when writing a bold word by default. In the [[*Utilities][Utilities]] section of the config, I also define a function which toggles this behaviour
 + Set my font to Source Code Pro with the right font size for me. To use daemon mode properly, this needs a bit more code.
++ Setting my default major mode to be org instead of the fundamental mode. In its core, org is plain text, but with more power, so I like it as an idea. 
 
 #+BEGIN_SRC elisp
   
@@ -142,8 +145,6 @@ This includes:
   (tool-bar-mode -1)
   (setq ring-bell-function 'ignore)
   
-  (setq display-time-format "%a %d/%m/%y %I:%M %p")
-  (display-time-mode 1)
   (display-battery-mode 1)
   
   (which-key-mode 1)
@@ -192,10 +193,13 @@ This includes:
 		  (with-selected-frame frame
 		    (set-font-faces))))
     (set-font-faces))
+  
+  (setq-default major-mode 'org-mode)
+  
 #+END_SRC
 
 #+RESULTS:
-| (lambda (frame) (setq doom-modeline-icon t) (with-selected-frame frame (set-font-faces))) | evil-init-esc | (lambda (frame) (setq doom-modeline-icon t) (let ((old-frame (selected-frame)) (old-buffer (current-buffer))) (unwind-protect (progn (select-frame frame 'norecord) (set-font-faces)) (if (frame-live-p old-frame) (progn (select-frame old-frame 'norecord))) (if (buffer-live-p old-buffer) (progn (set-buffer old-buffer)))))) | doom-modeline-refresh-font-width-cache | doom-modeline-set-selected-window | x-dnd-init-frame |
+: org-mode
 
 * Evil Mode
 Enabling Evil Mode, my preffered editing mode for Emacs, with the evil-collection loaded. It helps me with defining vim type keybindings for more programs, which I like. Then I also load evil-org which is a package for evil keys inside org as evil-collection doesn't have that. 
@@ -451,7 +455,7 @@ Some settings (now using the word some here might be an underestimation, as with
 #+END_SRC
 
 #+RESULTS:
-| (lambda nil (visual-line-mode) (org-fragtog-mode) (org-marginalia-mode)) | org-ref-org-menu | (lambda nil (visual-line-mode) (org-fragtog-mode)) | (lambda nil (add-hook 'after-save-hook #'(lambda nil (let ((org-confirm-babel-evaluate nil)) (org-babel-tangle)))) 'run-at-end 'only-in-org-mode) | turn-on-org-cdlatex | (lambda nil (org-superstar-mode) (org-superstar-configure-like-org-bullets)) | evil-org-mode | #[0 \300\301\302\303\304$\207 [add-hook change-major-mode-hook org-show-all append local] 5] | #[0 \300\301\302\303\304$\207 [add-hook change-major-mode-hook org-babel-show-result-all append local] 5] | org-babel-result-hide-spec | org-babel-hide-all-hashes | #[0 \301\211\207 [imenu-create-index-function org-imenu-get-tree] 2] | org-ref-setup-label-finders |
+| (lambda nil (visual-line-mode) (org-fragtog-mode) (org-marginalia-mode)) | org-ref-org-menu | (lambda nil (visual-line-mode) (org-fragtog-mode) (org-marginalia-mode) (org-hugo-auto-export-mode)) | (lambda nil (add-hook 'after-save-hook #'(lambda nil (let ((org-confirm-babel-evaluate nil)) (org-babel-tangle)))) 'run-at-end 'only-in-org-mode) | turn-on-org-cdlatex | (lambda nil (org-superstar-mode) (org-superstar-configure-like-org-bullets)) | evil-org-mode | #[0 \300\301\302\303\304$\207 [add-hook change-major-mode-hook org-show-all append local] 5] | #[0 \300\301\302\303\304$\207 [add-hook change-major-mode-hook org-babel-show-result-all append local] 5] | org-babel-result-hide-spec | org-babel-hide-all-hashes | #[0 \301\211\207 [imenu-create-index-function org-imenu-get-tree] 2] | org-ref-setup-label-finders |
 	    
 ** Latex Stuff
    I love Latex for writing mathematical equations. Org understands latex very well and can preview it. But I want some things changed in it. 
@@ -769,6 +773,45 @@ More languages to evaluate with org-babel (by default, only elisp is evaluated).
 
    #+RESULTS:
    | abstract | citekey | entry-type | date | pdf? | note? | file | author | editor | author-abbrev | editor-abbrev | author-or-editor-abbrev | keywords | url |
+ 
+** COMMENT Exporting org-roam files to Hugo properly  
+   My Zettelkasten is done through org roam which is great as an interface for me. But, it has a limitation in that I can't really share my org roam files with others as they dont really render well (primary problem being that I include a lot of latex code). So I have decided to take the approach of exporting to hugo and uploading the hugo website. This way, I can share my zettelkasten (which at least for now is used for all my note taking needs in university) with others who may find it handy. But by default, this has some disadvantages (like backlinks not being included and an option to sync my entire roam directory not being included). 
+
+With the power of the internet, I found [[https://sidhartharya.me/exporting-org-roam-notes-to-hugo/][someone]] who has already done this work for me so I basically took his functions and added them to my config. Many thanks to him for providing me with these useful functions.
+
+#+BEGIN_SRC elisp
+  
+  ;; Sync all org files to hugo-md
+  (defun org-hugo-org-roam-sync-all()
+    ""
+    (interactive)
+    (dolist (fil (split-string (string-trim (shell-command-to-string (concat "ls " org-roam-directory "/*.org")))))
+      (with-current-buffer (find-file-noselect fil)
+	(org-hugo-export-wim-to-md)
+	(kill-buffer))))
+  
+  ;; Auto-export to hugo on save, if the buffer is in the org-roam directory on the highest level (meaning subdirectories dont get exported)
+  (defun org-hugo--org-roam-save-buffer()
+    ""
+    (when (org-roam--org-roam-file-p)
+      (when (<= (length
+		 (split-string
+		  (replace-regexp-in-string (expand-file-name org-roam-directory) ""
+					    (expand-file-name (buffer-file-name org-roam-buffer--current))) "/")) 2)
+	(org-hugo-export-wim-to-md))))
+  (add-to-list 'after-save-hook #'org-hugo--org-roam-save-buffer)
+  
+  ;; Include org-roam backlinks inside the exported hugo document
+  (defun org-hugo--org-roam-backlinks (backend)
+    (when (org-roam--org-roam-file-p)
+      (end-of-buffer)
+      (org-roam-buffer--insert-backlinks)))
+  (add-hook 'org-export-before-processing-hook #'org-hugo--org-roam-backlinks)
+  
+#+END_SRC
+
+#+RESULTS:
+| org-hugo--org-roam-backlinks | org-blackfriday--reset-org-blackfriday--code-block-num-backticks |
    
 ** Templates
    This section is about the various templates used by the org-roam workflow. These are org-roam-capture-templates, orb-templates, org-roam-capture-ref-templates, org-roam-dailies-capture-templates
