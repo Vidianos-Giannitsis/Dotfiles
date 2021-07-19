@@ -74,17 +74,15 @@
 			  (:keywords "minibuffer" "completion")
 			  (:url . "https://elpa.gnu.org/packages/aggressive-completion.html"))])
  (aggressive-indent .
-		    [(1 8 3)
+		    [(1 10 0)
 		     ((emacs
-		       (24 1))
-		      (cl-lib
-		       (0 5)))
-		     "Minor mode to aggressively keep your code always indented" single
-		     ((:keywords "indent" "lisp" "maint" "tools")
+		       (24 3)))
+		     "Minor mode to aggressively keep your code always indented" tar
+		     ((:url . "https://github.com/Malabarba/aggressive-indent-mode")
+		      (:maintainer "Artur Malabarba" . "emacs@endlessparentheses.com")
 		      (:authors
 		       ("Artur Malabarba" . "emacs@endlessparentheses.com"))
-		      (:maintainer "Artur Malabarba" . "emacs@endlessparentheses.com")
-		      (:url . "https://github.com/Malabarba/aggressive-indent-mode"))])
+		      (:keywords "indent" "lisp" "maint" "tools"))])
  (ahungry-theme .
 		[(1 10 0)
 		 ((emacs
@@ -409,7 +407,7 @@
 		      ("Jackson Ray Hamilton" . "jackson@jacksonrayhamilton.com"))
 		     (:keywords "convenience" "faces" "tools"))])
  (corfu .
-	[(0 9)
+	[(0 10)
 	 ((emacs
 	   (27 1)))
 	 "Completion Overlay Region FUnction" tar
@@ -480,7 +478,7 @@
 	      ("João Távora" . "joaotavora@gmail.com"))
 	     (:maintainer "João Távora" . "joaotavora@gmail.com"))])
  (dash .
-       [(2 18 1)
+       [(2 19 0)
 	((emacs
 	  (24)))
 	"A modern list library for Emacs" tar
@@ -648,7 +646,7 @@
 	       ("Leo Liu" . "sdl.web@gmail.com"))
 	      (:keywords "killing" "convenience"))])
  (ebdb .
-       [(0 6 24)
+       [(0 7)
 	((emacs
 	  (25 1))
 	 (cl-lib
@@ -692,7 +690,7 @@
 	      (:maintainer "Markus Triska" . "triska@metalevel.at")
 	      (:url . "https://www.metalevel.at/ediprolog/"))])
  (eev .
-      [(20210618)
+      [(20210710)
        ((emacs
 	 (24 4)))
        "Support for e-scripts (eepitch blocks, elisp hyperlinks, etc)" tar
@@ -1494,7 +1492,7 @@
 			  ("Protesilaos Stavrou" . "info@protesilaos.com"))
 			 (:keywords "faces" "theme" "accessibility"))])
  (modus-themes .
-	       [(1 4 0)
+	       [(1 5 0)
 		((emacs
 		  (26 1)))
 		"Highly accessible themes (WCAG AAA)" tar
@@ -1847,7 +1845,7 @@
 	       ("Scott Andrew Borton" . "scott@pp.htv.fi"))
 	      (:maintainer "John Darrington" . "john@darrington.wattle.id.au"))])
  (pyim .
-       [(3 8 2)
+       [(3 9 2)
 	((emacs
 	  (24 4))
 	 (async
@@ -2151,14 +2149,14 @@
 	(:keywords "sequences")
 	(:url . "http://elpa.gnu.org/packages/seq.html"))])
  (setup .
-	[(0 2 0)
+	[(0 2 1)
 	 ((emacs
 	   (26 1)))
 	 "Helpful Configuration Macro" tar
 	 ((:url . "https://git.sr.ht/~zge/setup")
-	  (:maintainer "Philip K." . "philipk@posteo.net")
+	  (:maintainer "Philip Kaludercic" . "philipk@posteo.net")
 	  (:authors
-	   ("Philip K." . "philipk@posteo.net"))
+	   ("Philip Kaludercic" . "philipk@posteo.net"))
 	  (:keywords "lisp" "local"))])
  (shelisp .
 	  [(0 9 1)
@@ -2195,7 +2193,7 @@
 	      (:maintainer "Ralph Amissah" . "ralph.amissah@gmail.com")
 	      (:url . "http://www.sisudoc.org/"))])
  (slime-volleyball .
-		   [(1 1 7)
+		   [(1 2 0)
 		    ((cl-lib
 		      (0 5)))
 		    "An SVG Slime Volleyball Game" tar
@@ -2203,7 +2201,7 @@
 		     (:authors
 		      ("Thomas Fitzsimmons" . "fitzsim@fitzsim.org"))
 		     (:keywords "games")
-		     (:url . "http://elpa.gnu.org/packages/slime-volleyball.html"))])
+		     (:url . "https://elpa.gnu.org/packages/slime-volleyball.html"))])
  (sm-c-mode .
 	    [(1 1)
 	     nil "C major mode based on SMIE" single
@@ -2289,13 +2287,15 @@
 	    (:maintainer "Artur Malabarba" . "emacs@endlessparentheses.com")
 	    (:url . "https://github.com/Malabarba/speed-of-thought-lisp"))])
  (spinner .
-	  [(1 7 3)
-	   nil "Add spinners and progress-bars to the mode-line for ongoing operations" single
-	   ((:keywords "processes" "mode-line")
+	  [(1 7 4)
+	   ((emacs
+	     (24 3)))
+	   "Add spinners and progress-bars to the mode-line for ongoing operations" tar
+	   ((:url . "https://github.com/Malabarba/spinner.el")
+	    (:maintainer "Artur Malabarba" . "emacs@endlessparentheses.com")
 	    (:authors
 	     ("Artur Malabarba" . "emacs@endlessparentheses.com"))
-	    (:maintainer "Artur Malabarba" . "emacs@endlessparentheses.com")
-	    (:url . "https://github.com/Malabarba/spinner.el"))])
+	    (:keywords "processes" "mode-line"))])
  (sql-beeline .
 	      [(0 1)
 	       nil "Beeline support for sql.el" single
@@ -2455,7 +2455,7 @@
 		("David Gonzalez Gandara" . "dggandara@member.fsf.org"))
 	       (:maintainer "David Gonzalez Gandara" . "dggandara@member.fsf.org"))])
  (transient .
-	    [(0 3 5)
+	    [(0 3 6)
 	     ((emacs
 	       (25 1)))
 	     "Transient commands" tar

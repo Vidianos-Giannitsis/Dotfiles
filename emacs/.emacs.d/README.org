@@ -194,12 +194,12 @@ This includes:
 		    (set-font-faces))))
     (set-font-faces))
   
-  (setq-default major-mode 'org-mode)
+  ;(setq-default major-mode 'org-mode)
   
 #+END_SRC
 
 #+RESULTS:
-: org-mode
+| (lambda (frame) (setq doom-modeline-icon t) (with-selected-frame frame (set-font-faces))) | evil-init-esc | (lambda (frame) (setq doom-modeline-icon t) (let ((old-frame (selected-frame)) (old-buffer (current-buffer))) (unwind-protect (progn (select-frame frame 'norecord) (set-font-faces)) (if (frame-live-p old-frame) (progn (select-frame old-frame 'norecord))) (if (buffer-live-p old-buffer) (progn (set-buffer old-buffer)))))) | doom-modeline-refresh-font-width-cache | doom-modeline-set-selected-window | doom-modeline-set-char-widths | x-dnd-init-frame | aw--after-make-frame |
 
 * Evil Mode
 Enabling Evil Mode, my preffered editing mode for Emacs, with the evil-collection loaded. It helps me with defining vim type keybindings for more programs, which I like. Then I also load evil-org which is a package for evil keys inside org as evil-collection doesn't have that. 
@@ -449,8 +449,8 @@ Some settings (now using the word some here might be an underestimation, as with
   
   (add-hook 'org-mode-hook '(lambda ()
 			      (visual-line-mode)
-			      (org-fragtog-mode)
-			      (org-marginalia-mode)))
+			      (org-fragtog-mode)))
+;			      (org-marginalia-mode)))
   
 #+END_SRC
 
@@ -677,52 +677,56 @@ More languages to evaluate with org-babel (by default, only elisp is evaluated).
 | u | University Projects  | ((alltodo  ((org-agenda-overriding-header ) (org-super-agenda-groups '((:name Currently Working on :and (:tag University :todo ACTIVE)) (:name What you gonna start next (probably) :and (:priority A :tag University)) (:name Medium Priority Projects :and (:tag University :priority B)) (:name Trivial Projects, I'ma do them at some point :D :and (:tag University :priority C)) (:discard (:not (:tag University))))))))            |
 | e | Emacs Projects       | ((alltodo  ((org-agenda-overriding-header ) (org-super-agenda-groups '((:name Configuring Emacs, the Present :and (:tag Emacs :todo ACTIVE) :and (:tag Emacs :todo NEXT)) (:name What to add, What to add?? :and (:tag Emacs :priority A)) (:name Wow, this one's easy, lets do it :and (:tag Emacs :effort< 0:15)) (:discard (:not (:tag Emacs))) (:name But wait, this was only the beginning. The real fun starts here! :anything)))))) |
 
-* Org-Roam, References and the Zettelkasten Workflow
+* Org Roam, References and the Zettelkasten Workflow 
   This section is about my Org-roam setup and my reference management inside org. It is based on the slip-box (Zettelkasten) workflow. The packages that are most relevant to this are Org-roam (obviously) bibtex-completion (ivy-bibtex in my case), org-ref, Org-roam-bibtex. Org Roam is a tool which helps you create your own network of notes. Its based on the Zettelkasten method and the Roam Research website. Everything is linked with one another. Bibtex completion (and the existence of .bib files in general) as well as Org-ref help manage bibliographic references inside org. I use Zotero as my reference manager in which I gather my bibliographies. It exports a .bib file which these two use. Org Roam Bibtex (ORB) is a package that combines all of these to help you add citation links from org-ref inside an org-roam buffer. This section includes all the customisations and settings of these packages.
+
+  Org-roam very recently did a major redesign releasing org-roam-v2. As such, this section of my config is really a WIP as I am migrating my configurations to the new org-roam and I am relearning the fundamentals of the package. Also some things are not ported yet (such as org-roam-server) so it will be a while until this section is brought back to its former glory.
+
   As seen in the [[*Keybindings][Keybindings]] section of the config, Roam and the Reference system both use the "r" leader key. Outside of it being handy because both start with the letter r, I think this makes sense because they are two connected concepts in my opinion. Thats why they are also in the same heading here.
-
-  Below are the initialisation variables for each of these packages and after them the capture templates I change in org-roam
-
-** Org Roam, Protocols and the Org-Roam server
-   This is the general changes needed for org-roam to work as I want it to. It also sets up protocols and the org roam server.
-   
-   In detail, 
-   - I define the org_roam directory
-   - Activate org-roam after emacs's init so I can use their commands from anywhere, anytime
-   - I define the directory in which org-roam-dailies should be put
-   - I exclude the daily (where org-roam-dailies get placed) and ref (where ORB puts its notes) directories from the graph org roam can export as its pointless to view them imo.
-   - I require org-protocol and after that org-roam-protocol, which are very neat for capturing notes from random websites
-   - I set up org-roam-server, an excellent package which gives you an interactive visual representation of the org-roam directory and the connections between files in that directory.
   
-   #+BEGIN_SRC elisp
-     
-     (add-hook 'after-init-hook 'org-roam-mode)
-     
-     (setq org-roam-directory "~/org_roam"
-	   org-roam-dailies-directory "~/org_roam/daily"
-	   org-roam-graph-exclude-matcher '("daily" "ref"))
-     
-     (require 'org-protocol)
-     (require 'org-roam-protocol)
-     
-     (use-package org-roam-server
-       :ensure t
-       :config
-       (setq org-roam-server-host "127.0.0.1"
-	     org-roam-server-port 8080
-	     org-roam-server-authenticate nil
-	     org-roam-server-export-inline-images t
-	     org-roam-server-serve-files nil
-	     org-roam-server-served-file-extensions '("pdf" "mp4" "ogv")
-	     org-roam-server-network-poll t
-	     org-roam-server-network-arrows nil
-	     org-roam-server-network-label-truncate t
-	     org-roam-server-network-label-truncate-length 60
-	     org-roam-server-network-label-wrap-length 20))
-     
-     (org-roam-server-mode 1)
-     #+END_SRC
-     
+** Org-Roam general setup
+ This is the general changes needed for org-roam to work as I want it to.
+
+  In detail, 
+   - Setup org-roam after emacs's init
+   - I define the org_roam directory
+   - I disable the message about the update to org-roam-v2
+   - I define the directory in which org-roam-dailies should be put
+   - Change how org-roam-node-find looks to display the number of backlinks a file has which is cool imo
+   
+This last part is code I took from the migration guide to org-roam-v2 (can be found [[https://github.com/org-roam/org-roam/wiki/Hitchhiker's-Rough-Guide-to-Org-roam-V2][here]])
+
+  #+BEGIN_SRC elisp
+    
+    (add-hook 'after-init-hook 'org-roam-setup)
+    
+    (setq org-roam-directory "~/org_roam"
+	  org-roam-v2-ack t
+	  org-roam-dailies-directory "~/org_roam/daily")
+    
+    (cl-defmethod org-roam-node-directories ((node org-roam-node))
+      (if-let ((dirs (file-name-directory (file-relative-name (org-roam-node-file node) org-roam-directory))))
+	  (format "(%s)" (car (f-split dirs)))
+	""))
+    
+    (cl-defmethod org-roam-node-backlinkscount ((node org-roam-node))
+      (let* ((count (caar (org-roam-db-query
+			   [:select (funcall count source)
+				    :from links
+				    :where (= dest $s1)
+				    :and (= type "id")]
+			   (org-roam-node-id node)))))
+	(format "[%d]" count)))
+    
+    (setq org-roam-node-display-template "${directories:10} ${tags:10} ${title:100} ${backlinkscount:6}")
+    
+  #+END_SRC
+
+  #+RESULTS:
+  : ${directories:10} ${tags:10} ${title:100} ${backlinkscount:6}
+
+
+
 ** Bibtex completion (Ivy) and Org Ref
    Ivy Bibtex and org ref are two excellent packages for managing bibliography. The main thing I need to configure is the location of my master .bib file and pdfs (which are exported with Zotero). I also change some other variables where I see fit.
    
@@ -754,6 +758,51 @@ More languages to evaluate with org-babel (by default, only elisp is evaluated).
     #+RESULTS:
     | ivy-switch-buffer | ((f ivy--find-file-action find file) (j ivy--switch-buffer-other-window-action other window) (k ivy--kill-buffer-action kill) (r ivy--rename-buffer-action rename)) | t | ((i ivy--action-insert insert) (w ivy--action-copy copy)) | org-ref-ivy-insert-cite-link | ((b or-ivy-bibtex-open-entry Open bibtex entry) (B or-ivy-bibtex-copy-entry Copy bibtex entry) (p or-ivy-bibtex-open-pdf Open pdf) (n or-ivy-bibtex-open-notes Open notes) (u or-ivy-bibtex-open-url Open url) (d or-ivy-bibtex-open-doi Open doi) (k or-ivy-bibtex-set-keywords Add keywords) (e or-ivy-bibtex-email-entry Email entry) (f or-ivy-bibtex-insert-formatted-citation Insert formatted citation) (F or-ivy-bibtex-copy-formatted-citation Copy formatted citation) (a or-ivy-bibtex-add-entry Add bibtex entry)) | ivy-bibtex | ((u ivy-bibtex-open-url-or-doi Open URL or DOI in browser) (c ivy-bibtex-insert-citation Insert citation) (r ivy-bibtex-insert-reference Insert reference) (k ivy-bibtex-insert-key Insert BibTeX key) (b ivy-bibtex-insert-bibtex Insert BibTeX entry) (a ivy-bibtex-add-PDF-attachment Attach PDF to email) (e ivy-bibtex-edit-notes Edit notes) (s ivy-bibtex-show-entry Show entry) (l ivy-bibtex-add-pdf-to-library Add PDF to library) (f (lambda (_candidate) (ivy-bibtex-fallback ivy-text)) Fallback options) (p ivy-bibtex-open-any Open pdf, url or DOI)) |
 
+* COMMENT Org-Roam-v1 configs
+This is my old org-roam config. Until I setup v2 to do everything I originally had, I will keep this commented out for reference if so needed. 
+
+Will also keep a list with things I need to migrate
+- Org roam server (Not yet finished for org-roam-v2, will set it up when it is released)
+- Org-roam protocol (if it works for v2)
+- Org-roam-bibtex (I think someone in discourse made it available for v2)
+- My templates are no longer working. Need to tinker with them again
+
+** Org Roam, Protocols and the Org-Roam server
+   It also sets up protocols and the org roam server.
+   
+     - I exclude the daily (where org-roam-dailies get placed) and ref (where ORB puts its notes) directories from the graph org roam can export as its pointless to view them imo.
+     - I require org-protocol and after that org-roam-protocol, which are very neat for capturing notes from random websites
+     - I set up org-roam-server, an excellent package which gives you an interactive visual representation of the org-roam directory and the connections between files in that directory.
+  
+   #+BEGIN_SRC elisp
+     
+     (add-hook 'after-init-hook 'org-roam-mode)
+     
+     (setq org-roam-directory "~/org_roam"
+	   org-roam-dailies-directory "~/org_roam/daily"
+	   org-roam-graph-exclude-matcher '("daily" "ref"))
+     
+     (require 'org-protocol)
+     (require 'org-roam-protocol)
+     
+     (use-package org-roam-server
+       :ensure t
+       :config
+       (setq org-roam-server-host "127.0.0.1"
+	     org-roam-server-port 8080
+	     org-roam-server-authenticate nil
+	     org-roam-server-export-inline-images t
+	     org-roam-server-serve-files nil
+	     org-roam-server-served-file-extensions '("pdf" "mp4" "ogv")
+	     org-roam-server-network-poll t
+	     org-roam-server-network-arrows nil
+	     org-roam-server-network-label-truncate t
+	     org-roam-server-network-label-truncate-length 60
+	     org-roam-server-network-label-wrap-length 20))
+     
+     (org-roam-server-mode 1)
+     #+END_SRC
+     
 ** Org-Roam-Bibtex
    Org roam bibtex is the final part of this workflow. It uses ivy-bibtex to query my .bib file and creates a note inside the org-roam directory according to the "orb-templates" variable specific to that file. This is a very useful part of the zettelkasten method which has to do with reference management inside your zettelkasten. 
 
@@ -898,6 +947,7 @@ With the power of the internet, I found [[https://sidhartharya.me/exporting-org-
    
    #+RESULTS:
    | l | lesson | entry | #'org-roam-capture--get-point | * %? | :file-name | daily/%<%Y-%m-%d> | :head | #+title: Fleeting notes for %<%d-%m-%Y> |
+
 
 * Skeletons
   Skeletons are a very neat feature of Emacs. Think of a snippet and a template, now combine them and you have a skeleton. A skeleton is bound to a key which when pressed enters a piece of text. This is helpful when initialising a file whose format is certain. I currently use this for initialising my lab reports which have a rather standard format all the time.

@@ -166,6 +166,7 @@ alias dmenu='dmenu_run -fn "Source Code Pro Bold" -i -nb "#073642" -sb "#005858"
 alias comsol='comsol -3drend sw'
 alias bright='sudo brightnessctl s'
 alias size='sudo du -a | sort -n -r | head -n 20'
+alias dl='youtube-dl -x --audio-format "mp3"'
 
 # Git command aliases
 alias gadd='git add'

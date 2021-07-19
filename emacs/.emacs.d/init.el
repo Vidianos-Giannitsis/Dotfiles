@@ -78,7 +78,7 @@
 		  (set-font-faces))))
   (set-font-faces))
 
-(setq-default major-mode 'org-mode)
+;(setq-default major-mode 'org-mode)
 
 (setq evil-collection-setup-minibuffer t)
 (setq evil-want-keybinding nil)
@@ -220,21 +220,21 @@
 (require 'org-marginalia)
 
 (add-to-list 'org-file-apps '("\\.pdf\\'" . emacs))
-
-(setq org-odt-preferred-output-format "docx")
-
-(add-hook 'org-mode-hook (lambda () (add-hook 'after-save-hook #'(lambda ()
-								   (let ((org-confirm-babel-evaluate nil))
-								     (org-babel-tangle))))
-					      'run-at-end 'only-in-org-mode))
-
-(setq org-startup-with-inline-images t)
-(setq org-image-actual-width nil)
-
-(add-hook 'org-mode-hook '(lambda ()
-			    (visual-line-mode)
-			    (org-fragtog-mode)
-			    (org-marginalia-mode)))
+  
+  (setq org-odt-preferred-output-format "docx")
+  
+  (add-hook 'org-mode-hook (lambda () (add-hook 'after-save-hook #'(lambda ()
+								     (let ((org-confirm-babel-evaluate nil))
+								       (org-babel-tangle))))
+						'run-at-end 'only-in-org-mode))
+  
+  (setq org-startup-with-inline-images t)
+  (setq org-image-actual-width nil)
+  
+  (add-hook 'org-mode-hook '(lambda ()
+			      (visual-line-mode)
+			      (org-fragtog-mode)))
+;			      (org-marginalia-mode)))
 
 (setq org-format-latex-options '(:foreground default :background default :scale 1.8 :html-foreground "Black" :html-background "Transparent" :html-scale 1.0 :matchers))
 
@@ -336,31 +336,27 @@
 )
    )
 
-(add-hook 'after-init-hook 'org-roam-mode)
+(add-hook 'after-init-hook 'org-roam-setup)
 
 (setq org-roam-directory "~/org_roam"
-      org-roam-dailies-directory "~/org_roam/daily"
-      org-roam-graph-exclude-matcher '("daily" "ref"))
+      org-roam-v2-ack t
+      org-roam-dailies-directory "~/org_roam/daily")
 
-(require 'org-protocol)
-(require 'org-roam-protocol)
+(cl-defmethod org-roam-node-directories ((node org-roam-node))
+  (if-let ((dirs (file-name-directory (file-relative-name (org-roam-node-file node) org-roam-directory))))
+      (format "(%s)" (car (f-split dirs)))
+    ""))
 
-(use-package org-roam-server
-  :ensure t
-  :config
-  (setq org-roam-server-host "127.0.0.1"
-	org-roam-server-port 8080
-	org-roam-server-authenticate nil
-	org-roam-server-export-inline-images t
-	org-roam-server-serve-files nil
-	org-roam-server-served-file-extensions '("pdf" "mp4" "ogv")
-	org-roam-server-network-poll t
-	org-roam-server-network-arrows nil
-	org-roam-server-network-label-truncate t
-	org-roam-server-network-label-truncate-length 60
-	org-roam-server-network-label-wrap-length 20))
+(cl-defmethod org-roam-node-backlinkscount ((node org-roam-node))
+  (let* ((count (caar (org-roam-db-query
+		       [:select (funcall count source)
+				:from links
+				:where (= dest $s1)
+				:and (= type "id")]
+		       (org-roam-node-id node)))))
+    (format "[%d]" count)))
 
-(org-roam-server-mode 1)
+(setq org-roam-node-display-template "${directories:10} ${tags:10} ${title:100} ${backlinkscount:6}")
 
 (setq bibtex-completion-bibliography
       '("~/Sync/My_Library.bib")
@@ -376,90 +372,6 @@
 (ivy-add-actions
  'ivy-bibtex
  '(("p" ivy-bibtex-open-any "Open pdf, url or DOI")))
-
-(require 'org-roam-bibtex)
-(add-hook 'org-roam-mode-hook #'org-roam-bibtex-mode)
-
-(setq orb-insert-interface 'ivy-bibtex
-      orb-note-actions-interface 'ivy)
-
-(setq orb-preformat-keywords '("abstract" "citekey" "entry-type" "date" "pdf?" "note?" "file" "author" "editor" "author-abbrev" "editor-abbrev" "author-or-editor-abbrev" "keywords" "url"))
-
-(setq org-roam-capture-templates
-      '(("d" "default" plain (function org-roam-capture--get-point)
-	 "%?"
-	 :file-name "${slug}-%<%d-%m>"
-	 :unnarrowed t
-	 :head "#+title: ${title}\nglatex_roam\n
-#+roam_tags:  
-- index ::  
-- tags ::  ")
-
-	("p" "private" plain (function org-roam-capture--get-point)
-	  "%?"
-	  :file-name "private/${slug}-%<%d-%m>"
-	  :unnarrowed t
-	  :head "#+title: ${title}\nglatex_roam\n
-#+roam_tags:  
-- index ::  
-- tags ::  ")))
-
-(setq orb-templates
-      '(("r" "ref" plain (function org-roam-capture--get-point) ""
-      :file-name "ref/${citekey}"
-      :unnarrowed t
-      :head "#+TITLE: ${title}\n#+ROAM_KEY: ${ref}\n
-#+roam_tags: literature
-- keywords :: ${keywords}
-- tags ::  
-
-* Analysis of ${entry-type}
-:PROPERTIES:
-:URL: ${url}
-:NOTER_DOCUMENT: ${file}  
-:NOTER_PAGE:              
-:END:
-
-** Abstract
-      ${abstract}")))
-
-(setq org-roam-capture-ref-templates
-      '(("r" "ref" plain (function org-roam-capture--get-point)
-	 "%?"
-	 :file-name "ref/${slug}"
-	 :unnarrowed t
-	 :head "#+title: ${title}\n#+roam_key: ${ref}
-#+roam_tags: literature
-- tags ::  ")))
-
-(setq org-roam-dailies-capture-templates
-      '(("l" "lesson" entry
-	 #'org-roam-capture--get-point
-	 "* %?"
-	 :file-name "daily/%<%Y-%m-%d>"
-	 :head "#+title: Fleeting notes for %<%d-%m-%Y>\n#+roam_tags: daily\n"
-	 :olp ("Lesson notes"))
-
-	("b" "bibliography" entry
-	 #'org-roam-capture--get-point
-	 "* %?"
-	 :file-name "daily/%<%Y-%m-%d>"
-	 :head "#+title: Fleeting notes for %<%d-%m-%Y>\n#+roam_tags: daily\n"
-	 :olp ("Notes on Articles, Books, etc."))
-
-	("g" "general" entry
-	 #'org-roam-capture--get-point
-	 "* %?"
-	 :file-name "daily/%<%Y-%m-%d>"
-	 :head "#+title: Fleeting notes for %<%d-%m-%Y>\n#+roam_tags: daily\n"
-	 :olp ("Random general notes"))
-
-	("w" "workout" entry
-	 #'org-roam-capture--get-point
-	 "* %?"
-	 :file-name "daily/%<%Y-%m-%d>"
-	 :head "#+title: Fleeting notes for %<%d-%m-%Y>\n#+roam_tags: daily\n"
-	 :olp ("Workout Regimes"))))
 
 (define-skeleton lab-skeleton
   "A skeleton which I use for initialising my lab reports which have standard formatting"
