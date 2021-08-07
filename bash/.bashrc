@@ -167,6 +167,7 @@ alias comsol='comsol -3drend sw'
 alias bright='sudo brightnessctl s'
 alias size='sudo du -a | sort -n -r | head -n 20'
 alias dl='youtube-dl -x --audio-format "mp3"'
+alias yt-dl='youtube-dl'
 
 # Git command aliases
 alias gadd='git add'

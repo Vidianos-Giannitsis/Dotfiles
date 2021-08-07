@@ -7,123 +7,11 @@
   I use a setup, inspired to an extent by what Spacemacs (the first Emacs "distribution" I ever used), but in some ways they are different. The two most important modifier/leader keys in this config are Space (abbreviated as SPC in the rest of the file) and the comma key ",". Space is used for the more general keybindings which are active in every buffer if it is in normal mode. Comma is for buffer specific commands and since the only major mode I use a lot which has enough commands for me to be interested in setting this up is org, comma essentially stands for org mode commands. Its only active if the buffer's major mode is org and it is also in normal mode. I manage these with general.el, an excellent package for managing your custom keybindings. I also enable which-key mode globally so that I can see which keys I can press to follow a leader key and what action they will do (its probably one of the most useful emacs packages and I cannot comprehend why its not enabled by default in Emacs).
 
   General has integration with which-key, so for some functions whose names I find not so self descriptive, I have a which-key statement, which gives me a special message instead of the command name for those commands. I can also nest leader keys inside other leader keys creating some larger "key-chords" using general. Those are for a group of commands, which have similar functionalities but differ in something. For example SPC c is for calendar commands (using the calfw.el package) while SPC r is for Org-Roam commands and commands about reference material. If you add the nested leader key to the original leader key's list of actions and set it to :ignore t as I have done below, you can set a which-key statement which describes what that leader key is about.
-
-  Below you will find the code snippets for my config, and a table with all the keybindings I have set up (command+key for each). This isn't handwritten (although I did maintain my one tables for a long time, it just started getting annoying), but automatically generated from general using the "general-describe-keybindings" command. 
   
 ** Global keybindings, defined with the space leader key
    These are my most important keybindings. They are on the override mode map meaning they take precedence over everything and can be used in normal mode. They are very general and not mode specific. All prefixed by the SPC key
    
-*General Space Keybindings*
- | key            | command                   |
- |----------------+---------------------------|
- | =SPC !=          | ~shell-command~             |
- | =SPC p=          | ~package-install~           |
- | =SPC o=          | ~inferior-octave~           |
- | =SPC D=          | ~dired~                     |
- | =SPC t=          | ~toggle-truncate-lines~     |
- | =SPC T=          | ~org-babel-tangle~          |
- | =SPC RET=        | ~vterm-toggle~              |
- | =SPC <C-return>= | ~vterm~                     |
- | =SPC b=          | ~counsel-switch-buffer~     |
- | =SPC a=          | ~org-agenda~                |
- | =SPC g=          | ~pdf-view-goto-page~        |
- | =SPC H=          | ~split-window-horizontally~ |
- | =SPC V=          | ~split-window-vertically~   |
- | =SPC C=          | ~calc-dispatch~             |
- | =SPC R=          | ~recover-this-file~         |
- | =SPC m=          | ~magit~                     |
- | =SPC B=          | ~ivy-bibtex~                |
- | =SPC h=          | ~counsel-imenu~             |
- | =SPC l=          | ~linum-mode~                |
- | =SPC i=          | ~ielm~                      |
- | =SPC f=          | ~ace-window~                |
- | =SPC W=          | ~wolfram-alpha~             |
- |----------------+---------------------------|
-
- *Calfw commands*
- | key     | command                  |
- |---------+--------------------------|
- | =SPC c o= | ~cfw:open-org-calendar~    |
- | =SPC c g= | ~cfw:git-open-calendar~    |
- | =SPC c b= | ~cfw:open-calendar-buffer~ |
- |---------+--------------------------|
-
- *Eval-lisp commands*
- | key     | command         |
- |---------+-----------------+
- | =SPC e e= | ~eval-expression~ |
- | =SPC e f= | ~eval-defun~      |
- | =SPC e b= | ~eval-buffer~     |
- |---------+-----------------+
-
- *Dired commands*
- | key     | command            |
- |---------+--------------------+
- | =SPC d j= | ~dired-jump~         |
- | =SPC d d= | ~deft~               |
- | =SPC d o= | ~mediator-open-file~ |
- | =SPC d f= | ~counsel-find-file~  |
- |---------+--------------------+
-   
- *Quickmarks to important files*
- | key     | command                                           |
- |---------+---------------------------------------------------+
- | =SPC q c= | ~(lambda nil (interactive) (find-file ~/.emacs.d/RE~ |
- | =SPC q k= | ~(lambda nil (interactive) (find-file ~/.emacs.d/li~ |
- | =SPC q u= | ~(lambda nil (interactive) (dired ~/Documents/4o_εξ~ |
- | =SPC q q= | ~(lambda nil (interactive) (find-file ~/.config/qti~ |
- | =SPC q h= | ~(lambda nil (interactive) (dired ~))~               |
- | =SPC q o= | ~(lambda nil (interactive) (dired ~/Documents/Octav~ |
- | =SPC q s= | ~(lambda nil (interactive) (dired ~/.emacs.d/snippe~ |
- |---------+---------------------------------------------------+
-
- *Org-Roam and references commands*
- | key     | command                             |
- |---------+-------------------------------------|
- | =spc r f= | ~org-roam-node-find~                  |
- | =spc r b= | ~isbn-to-bibtex~                      |
- | =spc r a= | ~doi-utils-add-bibtex-entry-from-doi~ |
- | =spc r g= | ~org-roam-graph~                      |
- | =spc r g= | ~counsel-rg~                          |
- | =spc r c= | ~org-roam-capture~                    |
- |---------+-------------------------------------|
-
- *Org-roam-dailies commands*
- | key       | command                        |
- |-----------+--------------------------------+
- | =SPC j c t= | ~org-roam-dailies-capture-today~ |
- | =SPC j f t= | ~org-roam-dailies-find-today~    |
- | =SPC j c d= | ~org-roam-dailies-capture-date~  |
- | =SPC j f d= | ~org-roam-dailies-find-date~     |
- |-----------+--------------------------------+
-
- *Counsel Spotify commands*
- | key       | command                           |
- |-----------+-----------------------------------+
- |           |                                   |
- | =SPC s n=   | ~counsel-spotify-next~              |
- | =SPC s p=   | ~counsel-spotify-previous~          |
- | =SPC s t=   | ~counsel-spotify-toggle-play-pause~ |
- | =SPC s s t= | ~counsel-spotify-search-track~      |
- | =SPC s s p= | ~counsel-spotify-search-playlist~   |
- | =SPC s s a= | ~counsel-spotify-search-artist~     |
- |-----------+-----------------------------------+
-
- *Window management commands*
- | key     | command                     |
- |---------+-----------------------------+
- | =SPC w h= | ~evil-window-left~            |
- | =SPC w j= | ~evil-window-down~            |
- | =SPC w k= | ~evil-window-up~              |
- | =SPC w l= | ~evil-window-right~           |
- | =SPC w i= | ~evil-window-increase-width~  |
- | =SPC w I= | ~evil-window-increase-height~ |
- | =SPC w d= | ~evil-window-decrease-width~  |
- | =SPC w D= | ~evil-window-decrease-height~ |
- | =SPC w == | ~balance-windows~             |
- |---------+-----------------------------+
-
- #+BEGIN_SRC elisp
+#+BEGIN_SRC elisp
    
     (general-create-definer my-leader-def
 			    :prefix "SPC")
@@ -132,7 +20,7 @@
      :states 'normal
      :keymaps 'override
       "!" 'shell-command
-      "p" 'package-install
+      "P" 'package-install
       "o" '(inferior-octave :which-key "octave")
       "D" 'dired
       "d" '(:ignore t :which-key "Dired functions")
@@ -141,7 +29,7 @@
       "T" 'org-babel-tangle
       "RET" 'vterm-toggle
       "<C-return>" 'vterm 
-      "b" 'counsel-switch-buffer
+      "b" 'persp-counsel-switch-buffer
       "a" 'org-agenda
       "g" 'pdf-view-goto-page
       "H" 'split-window-horizontally
@@ -259,40 +147,6 @@
 ** Global keybindings without a leader key
    Some keybindings that I regularly use aren't under any leader key, but just there as general convenience things. This is that section of my keybindings
 
-   *General Commands*
- | key   | command          |
- |-------+------------------|
- | =C-h f= | ~helpful-callable~ |
- | =C-h v= | ~helpful-variable~ |
- | =C-h k= | ~helpful-key~      |
- | =M-b=   | ~ebuku~            |
- | =C-M-r= | ~restart-emacs~    |
- | =M-m=   | ~man~              |
- | ===     | ~math-at-point~    |
- | =C-r=   | ~undo-tree-redo~   |
- | =u=     | ~undo-tree-undo~   |
- |-------+------------------|
-
-*Insert State*
- | key     | command      |
- |---------+--------------|
- | =<M-tab>= | ~tab-jump-out~ |
- |---------+--------------|
-
-*Visual State*
- | key | command             |
- |-----+---------------------+
- | =e r= | ~eval-region~         |
- | =m=   | ~org-marginalia-mark~ |
- |-----+---------------------+
- 
-*Motion State*
- | key | command                   |
- |-----+---------------------------|
- | =j=   | ~evil-next-visual-line~     |
- | =k=   | ~evil-previous-visual-line~ |
- |-----+---------------------------|
-
  #+BEGIN_SRC elisp
    
    (general-define-key
@@ -339,56 +193,6 @@
 ** Org mode keybindings
    I initially planned for , to become the leader key for all major mode specific commands. In the end, the only one I use enough to need this many commands is org. So , is the leader key that signifies that this is an org mode command. And I have a lot of them.
    
- *Main Org Keybindings*
- | key | command                           |
- |-----+-----------------------------------|
- | =, l= | ~org-latex-preview~                 |
- | =, n= | ~org-noter~                         |
- | =, e= | ~org-export-dispatch~               |
- | =, y= | ~org-download-clipboard~            |
- | =, h= | ~org-cycle-hide-drawers~            |
- | =, s= | ~org-store-link~                    |
- | =, I= | ~org-insert-link~                   |
- | =, i= | ~org-toggle-inline-images~          |
- | =, p= | ~org-plot/gnuplot~                  |
- | =, f= | ~org-footnote-action~               |
- | =, S= | ~lab-skeleton~                      |
- | =, T= | ~toc-org-mode~                      |
- | =, b= | ~org-beamer-select-environment~     |
- | =`=   | ~org-roam-buffer-toggle~       |
- | =C-j= | ~org-tree-slide-move-next-tree~     |
- | =C-k= | ~org-tree-slide-move-previous-tree~ |
- |-----+-----------------------------------|
-
- *Org Marginalia*
-| key   | command                 |
-|-------+-------------------------|
-| =, m o= | ~org-marginalia-open~     |
-| =, m n= | ~org-marginalia-next~     |
-| =, m p= | ~org-marginalia-previous~ |
-| =, m r= | ~org-marginalia-remove~   |
-| =, m t= | ~org-marginalia-toggle~   |
-|-------+-------------------------|
-
-*Org Todos*
-| key   | command              |
-|-------+----------------------|
-| =, t s= | ~org-schedule~         |
-| =, t c= | ~org-todo~             |
-| =, t p= | ~org-priority~         |
-| =, t v= | ~org-tags-view~        |
-| =, t t= | ~org-set-tags-command~ |
-|-------+----------------------|
-
-*Org roam/Org Ref*
-| key   | command                       |
-|-------+-------------------------------|
-| =, r i= | ~org-roam-node-insert~          |
-| =, r c= | ~org-ref-ivy-insert-cite-link~  |
-| =, r r= | ~org-ref-ivy-insert-ref-link~   |
-| =, r l= | ~org-ref-ivy-insert-label-link~ |
-|-------+-------------------------------|
-
 #+BEGIN_SRC elisp
   (general-create-definer org-leader-def
 	:prefix ",")
@@ -462,24 +266,6 @@
 ** Other mode specific keybindings
    This is all about some mode specific keybindings that I use regularly but arent under any leader key. 
 
- *Dired Keybindings* 
- | key               | command                  |
- |-------------------+--------------------------|
- | =C-+=               | ~dired-create-directory~   |
- | =+=                 | ~dired-create-empty-file~  |
- | =h=                 | ~dired-up-directory~       |
- | =l=                 | ~dired-find-file~          |
- | =H=                 | ~dired-hide-dotfiles-mode~ |
- | =y=                 | ~dired-ranger-copy~        |
- | =p=                 | ~dired-ranger-paste~       |
- | =g s=               | ~dired-toggle-sudo~        |
- | =s i=               | ~dired-subtree-insert~     |
- | =s r=               | ~dired-subtree-remove~     |
- | =s n=               | ~dired-subtree-narrow~     |
- |-------------------+--------------------------|
-
- (For some weird reason general doesnt want to add a table for the pdf tools commands -_- There are only 4 of those so you can make it out without them).
- 
 #+BEGIN_SRC elisp
   (general-define-key
    :states 'normal

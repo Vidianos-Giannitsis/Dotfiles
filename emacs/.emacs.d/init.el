@@ -40,13 +40,6 @@
 (all-the-icons-ivy-setup)
 (global-set-key (kbd "M-x") #'counsel-M-x)
 (marginalia-mode 1)
-; Marginalia and ivy-rich have similar functions. Marginalia is mostly
-; for completion frameworks that dont have this functionality like
-; Ivy-rich. But marginalia feels so much smoother. Ivy-rich seems to
-; lag in some commands more than I would like
-;(require 'all-the-icons-ivy-rich)
-;(all-the-icons-ivy-rich-mode 1)
-;(ivy-rich-mode 1)
 
 (setq backup-directory-alist `(("." . ,(expand-file-name "tmp/backups/" user-emacs-directory))))
 (make-directory (expand-file-name "tmp/auto-saves/" user-emacs-directory) t)
@@ -200,6 +193,12 @@
 (setq flyspell-default-dictionary "greek")
 (add-hook 'flyspell-mode 'flyspell-buffer)
 
+(use-package perspective
+  :ensure t
+  :config (setq persp-mode-prefix-key "SPC p")
+  :init
+  (persp-mode))
+
 (add-hook 'org-mode-hook #'(lambda ()
 			       (org-superstar-mode)
 			       (org-superstar-configure-like-org-bullets)))
@@ -337,26 +336,36 @@
    )
 
 (add-hook 'after-init-hook 'org-roam-setup)
+(setq org-roam-v2-ack t)
 
-(setq org-roam-directory "~/org_roam"
-      org-roam-v2-ack t
-      org-roam-dailies-directory "~/org_roam/daily")
+(use-package org-roam
+  :config
+  (setq org-roam-directory "~/org_roam"
+	org-roam-dailies-directory "~/org_roam/daily")
 
-(cl-defmethod org-roam-node-directories ((node org-roam-node))
-  (if-let ((dirs (file-name-directory (file-relative-name (org-roam-node-file node) org-roam-directory))))
-      (format "(%s)" (car (f-split dirs)))
-    ""))
+  (cl-defmethod org-roam-node-directories ((node org-roam-node))
+    (if-let ((dirs (file-name-directory (file-relative-name (org-roam-node-file node) org-roam-directory))))
+	(format "(%s)" (car (f-split dirs)))
+      ""))
 
-(cl-defmethod org-roam-node-backlinkscount ((node org-roam-node))
-  (let* ((count (caar (org-roam-db-query
-		       [:select (funcall count source)
-				:from links
-				:where (= dest $s1)
-				:and (= type "id")]
-		       (org-roam-node-id node)))))
-    (format "[%d]" count)))
+  (cl-defmethod org-roam-node-backlinkscount ((node org-roam-node))
+    (let* ((count (caar (org-roam-db-query
+			 [:select (funcall count source)
+				  :from links
+				  :where (= dest $s1)
+				  :and (= type "id")]
+			 (org-roam-node-id node)))))
+      (format "[%d]" count)))
 
-(setq org-roam-node-display-template "${directories:10} ${tags:10} ${title:100} ${backlinkscount:6}")
+  (setq org-roam-node-display-template "${directories:8} ${tags:20} ${title:100} ${backlinkscount:6}")
+
+  (add-to-list 'display-buffer-alist
+	       '("\\*org-roam\\*"
+		 (display-buffer-in-direction)
+		 (direction . right)
+		 (window-width . 0.33)
+		 (window-height . fit-window-to-buffer)))
+  )
 
 (setq bibtex-completion-bibliography
       '("~/Sync/My_Library.bib")
@@ -372,6 +381,47 @@
 (ivy-add-actions
  'ivy-bibtex
  '(("p" ivy-bibtex-open-any "Open pdf, url or DOI")))
+
+(require 'org-roam-bibtex)
+
+(setq orb-insert-interface 'ivy-bibtex
+      orb-note-actions-interface 'ivy)
+
+(setq orb-preformat-keywords '("citekey" "author" "date"))
+
+(setq org-roam-capture-templates
+	   '(("d" "default" plain "%?" :if-new
+	      (file+head "${slug}-%<%d-%m>.org" "#+title: ${title}\nglatex_roam\n
+     #+filetags: 
+     - index :: 
+     - tags ::  ")
+	      :unarrowed t
+	      :jump-to-captured t)
+
+	     ("p" "private" plain "%?" :if-new
+	      (file+head "private/${slug}-%<%d-%m>.org" "#+title: ${title}\nglatex_roam\n
+     #+filetags: 
+     - index :: 
+     - tags ::  ")
+	      :unarrowed t
+	      :jump-to-captured t)
+
+	     ("r" "bibliography reference" plain
+	      "%?"
+	      :if-new
+	      (file+head "ref/${citekey}.org" "#+title: ${title}\n
+#+filetags: literature
+- keywords :: ${keywords}
+- tags :: 
+
+* Analysis of ${entry-type}
+:PROPERTIES:
+:URL: ${url}
+:NOTER_DOCUMENT: ${file}  
+:NOTER_PAGE:              
+:END:")
+	      :unnarrowed t
+	      :jump-to-captured t)))
 
 (define-skeleton lab-skeleton
   "A skeleton which I use for initialising my lab reports which have standard formatting"
@@ -443,6 +493,9 @@
 				(setq company-math-allow-latex-symbols-in-faces t)
 				(add-to-list 'company-backends 'company-bibtex)
 				(setq company-bibtex-bibliography '("~/org_roam/Zotero_library.bib"))))
+
+(setq calc-angle-mode 'rad
+      calc-symbolic-mode t)
 
 (require 'ebuku)
 (require 'evil-collection-ebuku)

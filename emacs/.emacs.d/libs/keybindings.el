@@ -5,7 +5,7 @@
   :states 'normal
   :keymaps 'override
    "!" 'shell-command
-   "p" 'package-install
+   "P" 'package-install
    "o" '(inferior-octave :which-key "octave")
    "D" 'dired
    "d" '(:ignore t :which-key "Dired functions")
@@ -14,7 +14,7 @@
    "T" 'org-babel-tangle
    "RET" 'vterm-toggle
    "<C-return>" 'vterm 
-   "b" 'counsel-switch-buffer
+   "b" 'persp-counsel-switch-buffer
    "a" 'org-agenda
    "g" 'pdf-view-goto-page
    "H" 'split-window-horizontally

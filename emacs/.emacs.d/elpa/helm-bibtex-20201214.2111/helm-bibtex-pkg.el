@@ -1,2 +1,0 @@
-;;; Generated package description from /home/vidianos/.emacs.d/elpa/helm-bibtex-20201214.2111/helm-bibtex.el  -*- no-byte-compile: t -*-
-(define-package "helm-bibtex" "20201214.2111" "A bibliography manager based on Helm" '((bibtex-completion "1.0.0") (helm "1.5.5") (cl-lib "0.5") (emacs "24.1")) :commit "94807a3d3419f90b505eddc3272e244475eeb4f2" :authors '(("Titus von der Malsburg" . "malsburg@posteo.de")) :maintainer '("Titus von der Malsburg" . "malsburg@posteo.de") :url "https://github.com/tmalsburg/helm-bibtex")

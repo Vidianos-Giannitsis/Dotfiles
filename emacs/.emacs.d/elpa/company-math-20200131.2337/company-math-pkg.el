@@ -1,2 +1,0 @@
-;;; Generated package description from /home/vidianos/.emacs.d/elpa/company-math-20200131.2337/company-math.el  -*- no-byte-compile: t -*-
-(define-package "company-math" "20200131.2337" "Completion backends for unicode math symbols and latex tags" '((company "0.8.0") (math-symbol-lists "1.3")) :commit "a796053590012e6a15c8b527b521ffc15d137bd0" :authors '(("Vitalie Spinu" . "spinuvit@gmail.com")) :maintainer '("Vitalie Spinu" . "spinuvit@gmail.com") :keywords '("unicode" "symbols" "completion") :url "https://github.com/vspinu/company-math")
