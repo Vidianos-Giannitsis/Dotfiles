@@ -695,9 +695,11 @@ More languages to evaluate with org-babel (by default, only elisp is evaluated).
    - I define the org_roam directory
    - I define the directory in which org-roam-dailies should be put
    - Change how org-roam-node-find looks to display the number of backlinks a file has which is cool imo
-   - Make the org-roam buffer a little smaller cause it doesnt need to be larger
+   - Make the org-roam buffer a little smaller cause it doesnt need to take half the screen
    
 These last two things in the code I took from the migration guide to org-roam-v2 (can be found [[https://github.com/org-roam/org-roam/wiki/Hitchhiker's-Rough-Guide-to-Org-roam-V2][here]])
+
+I also define a "replacement" function for org-roam-buffer-toggle which temporarily disables latex previews in org files. I had the issue that opening the backlinks buffer in a big index file caused a lot of lag as org roam was trying to preview the latex in every file that links to the index file. As this was a large number of files, this was annoying. 
 
   #+BEGIN_SRC elisp
     
@@ -731,12 +733,20 @@ These last two things in the code I took from the migration guide to org-roam-v2
 		     (direction . right)
 		     (window-width . 0.33)
 		     (window-height . fit-window-to-buffer)))
+    
       )
     
+    (defun org-roam-buffer-without-latex ()
+      "Essentially org-roam-buffer-toggle but it ensures latex previews are turned off before toggling the buffer.
+    
+    This is useful because especially with index files, having latex previews on, makes opening the buffer very slow as it needs to load previews of many files. But since I like starting my org files with latex preview on, I only turn it off when toggling visibility of the org-roam-buffer, which is when it causes issues."
+      (interactive)
+      (let ((org-startup-with-latex-preview nil))
+	(org-roam-buffer-toggle)))
   #+END_SRC
 
   #+RESULTS:
-  : t
+  : org-roam-buffer-without-latex
 
 
 
@@ -786,6 +796,21 @@ These last two things in the code I took from the migration guide to org-roam-v2
 #+RESULTS:
 | abstract | citekey | entry-type | date | pdf? | note? | file | author | editor | author-abbrev | editor-abbrev | author-or-editor-abbrev | keywords | url |
 
+** Org-Roam-ui and Org-roam Protocols
+
+#+BEGIN_SRC elisp
+  
+  (require 'websocket)
+  (require 'org-roam-ui)
+  
+  (require 'org-protocol)
+  (require 'org-roam-protocol)
+  
+#+END_SRC
+
+#+RESULTS:
+: org-roam-protocol
+
 ** Capture Templates
 
    #+BEGIN_SRC elisp
@@ -823,10 +848,14 @@ These last two things in the code I took from the migration guide to org-roam-v2
      :END:")
 		   :unnarrowed t
 		   :jump-to-captured t)))
+     
+     (setq org-roam-dailies-capture-templates
+	   '(("d" "default" entry "* %?" :if-new
+	      (file+head "%<%Y-%m-%d>.org" "#+title: %<%Y-%m-%d>\n#+filetags: daily"))))
    #+END_SRC
 
    #+RESULTS:
-   | d | default | plain | %? | :if-new | (file+head ${slug}-%<%d-%m>.org #+title: ${title} |
+   | d | default | entry | * %? | :if-new | (file+head %<%Y-%m-%d>.org #+title: %<%Y-%m-%d> |
 
 * COMMENT Org-Roam-v1 configs
 This is my old org-roam config. Until I setup v2 to do everything I originally had, I will keep this commented out for reference if so needed. 
@@ -852,7 +881,6 @@ Will also keep a list with things I need to migrate
 	   org-roam-dailies-directory "~/org_roam/daily"
 	   org-roam-graph-exclude-matcher '("daily" "ref"))
      
-     (require 'org-protocol)
      (require 'org-roam-protocol)
      
      (use-package org-roam-server
@@ -992,27 +1020,12 @@ With the power of the internet, I found [[https://sidhartharya.me/exporting-org-
 	      :head "#+title: Fleeting notes for %<%d-%m-%Y>\n#+roam_tags: daily\n"
 	      :olp ("Lesson notes"))
      
-	     ("b" "bibliography" entry
-	      #'org-roam-capture--get-point
-	      "* %?"
-	      :file-name "daily/%<%Y-%m-%d>"
-	      :head "#+title: Fleeting notes for %<%d-%m-%Y>\n#+roam_tags: daily\n"
-	      :olp ("Notes on Articles, Books, etc."))
-     
 	     ("g" "general" entry
 	      #'org-roam-capture--get-point
 	      "* %?"
 	      :file-name "daily/%<%Y-%m-%d>"
 	      :head "#+title: Fleeting notes for %<%d-%m-%Y>\n#+roam_tags: daily\n"
-	      :olp ("Random general notes"))
-     
-	     ("w" "workout" entry
-	      #'org-roam-capture--get-point
-	      "* %?"
-	      :file-name "daily/%<%Y-%m-%d>"
-	      :head "#+title: Fleeting notes for %<%d-%m-%Y>\n#+roam_tags: daily\n"
-	      :olp ("Workout Regimes"))))
-     
+	      :olp ("Random general notes"))))
    #+END_SRC
    
    #+RESULTS:

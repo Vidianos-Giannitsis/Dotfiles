@@ -1,0 +1,2 @@
+;;; Generated package description from /home/vidianos/.emacs.d/elpa/marginalia-20210818.1206/marginalia.el  -*- no-byte-compile: t -*-
+(define-package "marginalia" "20210818.1206" "Enrich existing commands with completion annotations" '((emacs "26.1")) :commit "72dafdac39097d13babe44c81402cf4cd4a68ce7" :authors '(("Omar Antolín Camarena <omar@matem.unam.mx>, Daniel Mendler" . "mail@daniel-mendler.de")) :maintainer '("Omar Antolín Camarena <omar@matem.unam.mx>, Daniel Mendler" . "mail@daniel-mendler.de") :url "https://github.com/minad/marginalia")

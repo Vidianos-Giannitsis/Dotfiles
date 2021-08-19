@@ -365,7 +365,16 @@
 		 (direction . right)
 		 (window-width . 0.33)
 		 (window-height . fit-window-to-buffer)))
+
   )
+
+(defun org-roam-buffer-without-latex ()
+  "Essentially org-roam-buffer-toggle but it ensures latex previews are turned off before toggling the buffer.
+
+This is useful because especially with index files, having latex previews on, makes opening the buffer very slow as it needs to load previews of many files. But since I like starting my org files with latex preview on, I only turn it off when toggling visibility of the org-roam-buffer, which is when it causes issues."
+  (interactive)
+  (let ((org-startup-with-latex-preview nil))
+    (org-roam-buffer-toggle)))
 
 (setq bibtex-completion-bibliography
       '("~/Sync/My_Library.bib")
@@ -388,6 +397,12 @@
       orb-note-actions-interface 'ivy)
 
 (setq orb-preformat-keywords '("citekey" "author" "date"))
+
+(require 'websocket)
+(require 'org-roam-ui)
+
+(require 'org-protocol)
+(require 'org-roam-protocol)
 
 (setq org-roam-capture-templates
 	   '(("d" "default" plain "%?" :if-new
@@ -422,6 +437,10 @@
 :END:")
 	      :unnarrowed t
 	      :jump-to-captured t)))
+
+(setq org-roam-dailies-capture-templates
+      '(("d" "default" entry "* %?" :if-new
+	 (file+head "%<%Y-%m-%d>.org" "#+title: %<%Y-%m-%d>\n#+filetags: daily"))))
 
 (define-skeleton lab-skeleton
   "A skeleton which I use for initialising my lab reports which have standard formatting"

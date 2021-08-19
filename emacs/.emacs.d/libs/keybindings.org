@@ -108,9 +108,9 @@
      "f" '(:ignore t :which-key "Find daily note")
      "c" '(:ignore t :which-key "Capture daily note")
      "c t" 'org-roam-dailies-capture-today
-     "f t" 'org-roam-dailies-find-today
+     "f t" 'org-roam-dailies-goto-today
      "c d" 'org-roam-dailies-capture-date
-     "f d" 'org-roam-dailies-find-date)
+     "f d" 'org-roam-dailies-goto-date)
    
     (general-define-key
      :states 'normal
@@ -251,7 +251,7 @@
   (general-define-key
    :states 'normal
    :keymaps 'org-mode-map
-   "`" 'org-roam-buffer-toggle)
+   "`" 'org-roam-buffer-without-latex)
   
   (general-define-key
    :states 'normal
