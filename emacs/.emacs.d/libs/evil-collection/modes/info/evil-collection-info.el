@@ -53,9 +53,9 @@
     (kbd "M-h") 'Info-help              ; "h"
     (kbd "C-t") 'Info-history-back      ; "l"
     (kbd "C-o") 'Info-history-back
-    " " 'Info-scroll-up
-    (kbd "C-]") 'Info-follow-nearest-node
-    (kbd "DEL") 'Info-scroll-down
+    "J" 'Info-scroll-up
+    (kbd "RET") 'Info-follow-nearest-node
+    (kbd "K") 'Info-scroll-down
     (kbd "C-i") 'Info-history-forward
 
     "d" 'Info-directory

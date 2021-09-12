@@ -1,0 +1,2 @@
+;;; Generated package description from /home/vidianos/.emacs.d/elpa/vterm-toggle-20210902.828/vterm-toggle.el  -*- no-byte-compile: t -*-
+(define-package "vterm-toggle" "20210902.828" "Toggles between the vterm buffer and other buffers." '((emacs "25.1") (vterm "0.0.1")) :commit "ea0bfeaa200d9ed02b51bbbd83222657b02637e7" :authors '((nil . "jixiuf  jixiuf@qq.com")) :maintainer '(nil . "jixiuf  jixiuf@qq.com") :keywords '("vterm" "terminals") :url "https://github.com/jixiuf/vterm-toggle")

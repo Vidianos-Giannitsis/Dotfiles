@@ -82,7 +82,8 @@ var favorites = [
       ["Emacs Subreddit", "https://www.reddit.com/r/emacs/", "er"],
       ["r/unixporn", "https://www.reddit.com/r/unixporn/", "up"],
       ["CompetitiveTFT", "https://www.reddit.com/r/CompetitiveTFT/", "ct"],
-      ["TFT Subreddit", "https://www.reddit.com/r/TeamfightTactics/", "tft"]
+	["TFT Subreddit", "https://www.reddit.com/r/TeamfightTactics/", "tft"],
+	["Bodyweightfitness' RR", "https://www.reddit.com/r/bodyweightfitness/wiki/kb/recommended_routine", "rr"]
     ]
   ],
   [ "Games",
@@ -102,7 +103,8 @@ var favorites = [
   [ "Other",
     [
 	["Darebee", "https://darebee.com/", "d"],
-	["Org-Roam-Server", "http://127.0.0.1:8080/", "ors"]
+	["Org-Roam Discourse", "https://org-roam.discourse.group/", "ord"],
+	["Raindrop", "https://app.raindrop.io/my/0", "rd"]
           ]
   ]
 ];

@@ -190,8 +190,6 @@ This includes:
 		    (set-font-faces))))
     (set-font-faces))
   
-  ;(setq-default major-mode 'org-mode)
-  
 #+END_SRC
 
 #+RESULTS:
@@ -201,25 +199,24 @@ This includes:
 Enabling Evil Mode, my preffered editing mode for Emacs, with the evil-collection loaded. It helps me with defining vim type keybindings for more programs, which I like. Then I also load evil-org which is a package for evil keys inside org as evil-collection doesn't have that. 
 
 #+BEGIN_SRC elisp
-
+  
   (setq evil-collection-setup-minibuffer t)
   (setq evil-want-keybinding nil)
-  (when (require 'evil-collection nil t)
-    (evil-collection-init))
-
-  (unless (package-installed-p 'evil)
-    (package-install 'evil))
-
+  (require 'evil-collection)
+  (evil-collection-init)
+  
   (require 'evil)
   (evil-mode 1)
-
+  
   (require 'evil-org)
   (add-hook 'org-mode-hook 'evil-org-mode)
   (evil-org-set-key-theme '(navigation insert textobjects additional calendar))
   (require 'evil-org-agenda)
   (evil-org-agenda-set-keys)
-
+  
   #+END_SRC
+
+  #+RESULTS:
 
 * Utilities
 General utilities that I want enabled when editing, or changes to the way emacs opens some programs.
@@ -301,7 +298,8 @@ This enables:
   I have configured it to include:
   + Icons alongside each file which represent what type of file it is.
   + Hiding dotfiles by default (The keychord SPC d h, will show all the dotfiles in the directory but I find hiding them better for initial behaviour).
-  + Added the functionality of when a folder has a single item, directly go to that item (open if its file, display the directory if its a directory). This is how you vieew folders in github, which behaviour I really like it so since I found a package with this behaviour (dired-collapse) I added it to my config and hooked it to dired mode. 
+  + Added the functionality of when a folder has a single item, directly go to that item (open if its file, display the directory if its a directory). This is how you vieew folders in github, which behaviour I really like it so since I found a package with this behaviour (dired-collapse) I added it to my config and hooked it to dired mode.
+  + Require helm-dired-open, a small package to prompt for opening files outside of Emacs. 
 
   #+BEGIN_SRC elisp
      (require 'dired-x)
@@ -319,7 +317,12 @@ This enables:
       :hook (dired-mode . dired-collapse-mode))
     
     (setq dired-filter-prefix "f")
+    
+    (require 'helm-dired-open)
   #+END_SRC
+
+  #+RESULTS:
+  : helm-dired-open
 
   This is how Dired ends up looking after these changes
   [[https://github.com/AuroraDragoon/Dotfiles/blob/master/screenshots/dired.png]]
@@ -334,6 +337,7 @@ This enables:
 + Audio files, obscure image files and MS/Libre Office documents don't open properly inside Emacs. I set up openwith to open them with external files.
 + Loading projectile, to remind me to play around with it some day.
 + Make the default flyspell dictionary greek and run flyspell on the whole buffer when flyspell mode is activated. I find spellchecking software to be very annoying and intrusive in my typical writing workflow so I dont want this to activate when I enter text buffers. Rather, I want to be able to run this once, when I am done with the writing and fix any errors at that point. This does just that
++ Winner mode is a mode for navigating through buffer history
   
   #+BEGIN_SRC elisp
     
@@ -380,12 +384,7 @@ This enables:
     (setq flyspell-default-dictionary "greek")
     (add-hook 'flyspell-mode 'flyspell-buffer)
     
-    (use-package perspective
-      :ensure t
-      :config (setq persp-mode-prefix-key "SPC p")
-      :init
-      (persp-mode))
-    
+    (winner-mode 1)
   #+END_SRC
 
   #+RESULTS:
@@ -748,8 +747,6 @@ I also define a "replacement" function for org-roam-buffer-toggle which temporar
   #+RESULTS:
   : org-roam-buffer-without-latex
 
-
-
 ** Bibtex completion (Ivy) and Org Ref
    Ivy Bibtex and org ref are two excellent packages for managing bibliography. The main thing I need to configure is the location of my master .bib file and pdfs (which are exported with Zotero). I also change some other variables where I see fit.
    
@@ -781,7 +778,50 @@ I also define a "replacement" function for org-roam-buffer-toggle which temporar
     #+RESULTS:
     | ivy-switch-buffer | ((f ivy--find-file-action find file) (j ivy--switch-buffer-other-window-action other window) (k ivy--kill-buffer-action kill) (r ivy--rename-buffer-action rename)) | t | ((i ivy--action-insert insert) (w ivy--action-copy copy)) | org-ref-ivy-insert-cite-link | ((b or-ivy-bibtex-open-entry Open bibtex entry) (B or-ivy-bibtex-copy-entry Copy bibtex entry) (p or-ivy-bibtex-open-pdf Open pdf) (n or-ivy-bibtex-open-notes Open notes) (u or-ivy-bibtex-open-url Open url) (d or-ivy-bibtex-open-doi Open doi) (k or-ivy-bibtex-set-keywords Add keywords) (e or-ivy-bibtex-email-entry Email entry) (f or-ivy-bibtex-insert-formatted-citation Insert formatted citation) (F or-ivy-bibtex-copy-formatted-citation Copy formatted citation) (a or-ivy-bibtex-add-entry Add bibtex entry)) | ivy-bibtex | ((u ivy-bibtex-open-url-or-doi Open URL or DOI in browser) (c ivy-bibtex-insert-citation Insert citation) (r ivy-bibtex-insert-reference Insert reference) (k ivy-bibtex-insert-key Insert BibTeX key) (b ivy-bibtex-insert-bibtex Insert BibTeX entry) (a ivy-bibtex-add-PDF-attachment Attach PDF to email) (e ivy-bibtex-edit-notes Edit notes) (s ivy-bibtex-show-entry Show entry) (l ivy-bibtex-add-pdf-to-library Add PDF to library) (f (lambda (_candidate) (ivy-bibtex-fallback ivy-text)) Fallback options) (p ivy-bibtex-open-any Open pdf, url or DOI)) |
 
-** Org Roam Bibtex
+** Fleeting notes
+   My fleeting notes workflow makes heavy usage of custom todo keywords to manage the state of each fleeting note. I don't use todos for project management, and I needed something similar for managing my fleeting notes so I have repurposed the system for this. This is essentially the TODO and agenda workflow section but its repurposed to work as I need it for this. 
+
+#+BEGIN_SRC elisp
+  
+  (setq org-todo-keywords
+	'((sequence "INBOX(i)"
+		    "PROCESSING(p)"
+		    "REFILE(r)"
+		    "WAIT(w)"
+		    "|"
+		    "DONE(d)"
+		    )))
+  
+  (setq org-agenda-files
+	'("~/org_roam/daily"))
+  (setq org-journal-dir "~/org_roam/daily"
+	org-journal-file-format "%Y-%m-%d.org")
+  
+  (org-super-agenda-mode 1)
+  (add-hook 'org-agenda-mode-hook 'visual-line-mode)
+  
+  (defun org-roam-init-fleeting-note ()
+    "Prescribe an ID to the heading making it a node in org-roam, then add it the inboxset its priority, and some useful tags for it. This helps automate the process of creating new fleeting notes in combination with the org-roam-dailies commands"
+    (interactive)
+    (org-id-get-create)
+    (org-todo)
+    (org-priority)
+    (org-set-tags-command))
+  
+  (defun org-id-delete-entry ()
+  "Remove/delete an ID entry. Saves the current point and only does this if inside an org-heading."
+  (interactive)
+    (save-excursion
+      (org-back-to-heading t)
+      (when (org-entry-delete (point) "ID"))))
+  
+#+END_SRC
+
+#+RESULTS:
+: %Y-%m-%d.org
+
+** Org Roam Bibtex, Protocols (Reference notes) and UI (graphing capabilities)
+   I require a bunch of packages so ORB, org roam ui and the roam protocols work as intended. I also make orb use ivy for completions 
 
 #+BEGIN_SRC elisp
   
@@ -791,21 +831,12 @@ I also define a "replacement" function for org-roam-buffer-toggle which temporar
 	orb-note-actions-interface 'ivy)
   
   (setq orb-preformat-keywords '("citekey" "author" "date"))
-#+END_SRC
-
-#+RESULTS:
-| abstract | citekey | entry-type | date | pdf? | note? | file | author | editor | author-abbrev | editor-abbrev | author-or-editor-abbrev | keywords | url |
-
-** Org-Roam-ui and Org-roam Protocols
-
-#+BEGIN_SRC elisp
   
   (require 'websocket)
   (require 'org-roam-ui)
-  
+    
   (require 'org-protocol)
   (require 'org-roam-protocol)
-  
 #+END_SRC
 
 #+RESULTS:
@@ -815,28 +846,28 @@ I also define a "replacement" function for org-roam-buffer-toggle which temporar
 
    #+BEGIN_SRC elisp
      
-	  (setq org-roam-capture-templates
-		'(("d" "default" plain "%?" :if-new
-		   (file+head "${slug}-%<%d-%m>.org" "#+title: ${title}\nglatex_roam\n
-	  ,#+filetags: 
-	  - index :: 
-	  - tags ::  ")
-		   :unarrowed t
-		   :jump-to-captured t)
+     (setq org-roam-capture-templates
+	   '(("d" "default" plain "%?" :if-new
+	      (file+head "${slug}-%<%d-%m-%y>.org" "#+title: ${title}\nglatex_roam\n
+     +filetags: 
+     - index :: 
+     - tags ::  ")
+	      :unarrowed t
+	      :jump-to-captured t)
      
-		  ("p" "private" plain "%?" :if-new
-		   (file+head "private/${slug}-%<%d-%m>.org" "#+title: ${title}\nglatex_roam\n
-	  ,#+filetags: 
-	  - index :: 
-	  - tags ::  ")
-		   :unarrowed t
-		   :jump-to-captured t)
+	     ("p" "private" plain "%?" :if-new
+	      (file+head "private/${slug}-%<%d-%m-%y>.org" "#+title: ${title}\nglatex_roam\n
+     ,#+filetags: 
+     - index :: 
+     - tags ::  ")
+	      :unarrowed t
+	      :jump-to-captured t)
      
-		  ("r" "bibliography reference" plain
-		   "%?"
-		   :if-new
-		   (file+head "ref/${citekey}.org" "#+title: ${title}\n
-     ,#+filetags: literature
+	     ("r" "bibliography reference" plain
+	      "%?"
+	      :if-new
+	      (file+head "ref/${citekey}.org" "#+title: ${title}\n
+     ,#+filetags: ${entry-type}
      - keywords :: ${keywords}
      - tags :: 
      
@@ -851,7 +882,8 @@ I also define a "replacement" function for org-roam-buffer-toggle which temporar
      
      (setq org-roam-dailies-capture-templates
 	   '(("d" "default" entry "* %?" :if-new
-	      (file+head "%<%Y-%m-%d>.org" "#+title: %<%Y-%m-%d>\n#+filetags: daily"))))
+	      (file+head "%<%Y-%m-%d>.org" "#+title: %<%Y-%m-%d>\n#+filetags: daily")
+	      :empty-lines 1)))
    #+END_SRC
 
    #+RESULTS:
@@ -859,12 +891,6 @@ I also define a "replacement" function for org-roam-buffer-toggle which temporar
 
 * COMMENT Org-Roam-v1 configs
 This is my old org-roam config. Until I setup v2 to do everything I originally had, I will keep this commented out for reference if so needed. 
-
-Will also keep a list with things I need to migrate
-- Org roam server (Not yet finished for org-roam-v2, will set it up when it is released)
-- Org-roam protocol (if it works for v2)
-- Org-roam-bibtex (I think someone in discourse made it available for v2)
-- My templates are no longer working. Need to tinker with them again
 
 ** Org Roam, Protocols and the Org-Roam server
    It also sets up protocols and the org roam server.

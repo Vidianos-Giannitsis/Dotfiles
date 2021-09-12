@@ -71,15 +71,10 @@
 		  (set-font-faces))))
   (set-font-faces))
 
-;(setq-default major-mode 'org-mode)
-
 (setq evil-collection-setup-minibuffer t)
 (setq evil-want-keybinding nil)
-(when (require 'evil-collection nil t)
-  (evil-collection-init))
-
-(unless (package-installed-p 'evil)
-  (package-install 'evil))
+(require 'evil-collection)
+(evil-collection-init)
 
 (require 'evil)
 (evil-mode 1)
@@ -150,6 +145,8 @@
 
 (setq dired-filter-prefix "f")
 
+(require 'helm-dired-open)
+
 (show-paren-mode 1)
 (electric-pair-mode 1)
 (setq wolfram-alpha-app-id "U9PERG-KTPL49AWA2")
@@ -193,11 +190,7 @@
 (setq flyspell-default-dictionary "greek")
 (add-hook 'flyspell-mode 'flyspell-buffer)
 
-(use-package perspective
-  :ensure t
-  :config (setq persp-mode-prefix-key "SPC p")
-  :init
-  (persp-mode))
+(winner-mode 1)
 
 (add-hook 'org-mode-hook #'(lambda ()
 			       (org-superstar-mode)
@@ -391,6 +384,38 @@ This is useful because especially with index files, having latex previews on, ma
  'ivy-bibtex
  '(("p" ivy-bibtex-open-any "Open pdf, url or DOI")))
 
+(setq org-todo-keywords
+      '((sequence "INBOX(i)"
+		  "PROCESSING(p)"
+		  "REFILE(r)"
+		  "WAIT(w)"
+		  "|"
+		  "DONE(d)"
+		  )))
+
+(setq org-agenda-files
+      '("~/org_roam/daily"))
+(setq org-journal-dir "~/org_roam/daily"
+      org-journal-file-format "%Y-%m-%d.org")
+
+(org-super-agenda-mode 1)
+(add-hook 'org-agenda-mode-hook 'visual-line-mode)
+
+(defun org-roam-init-fleeting-note ()
+  "Prescribe an ID to the heading making it a node in org-roam, then add it the inboxset its priority, and some useful tags for it. This helps automate the process of creating new fleeting notes in combination with the org-roam-dailies commands"
+  (interactive)
+  (org-id-get-create)
+  (org-todo)
+  (org-priority)
+  (org-set-tags-command))
+
+(defun org-id-delete-entry ()
+"Remove/delete an ID entry. Saves the current point and only does this if inside an org-heading."
+(interactive)
+  (save-excursion
+    (org-back-to-heading t)
+    (when (org-entry-delete (point) "ID"))))
+
 (require 'org-roam-bibtex)
 
 (setq orb-insert-interface 'ivy-bibtex
@@ -405,27 +430,27 @@ This is useful because especially with index files, having latex previews on, ma
 (require 'org-roam-protocol)
 
 (setq org-roam-capture-templates
-	   '(("d" "default" plain "%?" :if-new
-	      (file+head "${slug}-%<%d-%m>.org" "#+title: ${title}\nglatex_roam\n
-     #+filetags: 
-     - index :: 
-     - tags ::  ")
-	      :unarrowed t
-	      :jump-to-captured t)
+      '(("d" "default" plain "%?" :if-new
+	 (file+head "${slug}-%<%d-%m-%y>.org" "#+title: ${title}\nglatex_roam\n
++filetags: 
+- index :: 
+- tags ::  ")
+	 :unarrowed t
+	 :jump-to-captured t)
 
-	     ("p" "private" plain "%?" :if-new
-	      (file+head "private/${slug}-%<%d-%m>.org" "#+title: ${title}\nglatex_roam\n
-     #+filetags: 
-     - index :: 
-     - tags ::  ")
-	      :unarrowed t
-	      :jump-to-captured t)
+	("p" "private" plain "%?" :if-new
+	 (file+head "private/${slug}-%<%d-%m-%y>.org" "#+title: ${title}\nglatex_roam\n
+#+filetags: 
+- index :: 
+- tags ::  ")
+	 :unarrowed t
+	 :jump-to-captured t)
 
-	     ("r" "bibliography reference" plain
-	      "%?"
-	      :if-new
-	      (file+head "ref/${citekey}.org" "#+title: ${title}\n
-#+filetags: literature
+	("r" "bibliography reference" plain
+	 "%?"
+	 :if-new
+	 (file+head "ref/${citekey}.org" "#+title: ${title}\n
+#+filetags: ${entry-type}
 - keywords :: ${keywords}
 - tags :: 
 
@@ -440,7 +465,8 @@ This is useful because especially with index files, having latex previews on, ma
 
 (setq org-roam-dailies-capture-templates
       '(("d" "default" entry "* %?" :if-new
-	 (file+head "%<%Y-%m-%d>.org" "#+title: %<%Y-%m-%d>\n#+filetags: daily"))))
+	 (file+head "%<%Y-%m-%d>.org" "#+title: %<%Y-%m-%d>\n#+filetags: daily")
+	 :empty-lines 1)))
 
 (define-skeleton lab-skeleton
   "A skeleton which I use for initialising my lab reports which have standard formatting"
