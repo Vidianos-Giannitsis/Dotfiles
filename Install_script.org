@@ -1,0 +1,50 @@
+#+TITLE: Install script for fresh Arch install
+
+* AUR Helper
+  I plan to install yay at the start as I am familiar with yay but I will try paru and others as well.
+  #+BEGIN_SRC sh
+sudo pacman -S yay
+  #+END_SRC
+
+* System Dependencies
+  This list are programs that without them my system wont work properly. I will list them as install with pacman, but once I try, I will change which ones need AUR. Git might be preinstalled, but I dont know. Also, I dont know, if Arco ships with a qtile version (I think it does though), so I will add it to the list if I dont install it.
+
+  #+BEGIN_SRC sh
+    sudo pacman -S lxappearance dmenu git qtile xrandr nitrogen pavucontrol nm-applet picom lxpolkit dunst volumeicon stow timeshift syncthing
+    
+    yay -S tuxedo-control-center-bin
+  #+END_SRC
+ 
+
+* Core Programs
+  This list is my most important programs, which I use on a daily basis. I cant really use my computer without them. Some might come preinstalled with the iso, or I will install them in the install process, but I will list all of them
+
+  #+BEGIN_SRC sh
+    sudo pacman -S alacritty emacs firefox brave libreoffice octave pcmanfm spotify qalculate-gtk flameshot lutris steam thunderbird geogebra inkscape blueman redshift starship qpdfview zathura zotero
+  #+END_SRC
+
+* Other things
+  Other things to install for my system
+
+  #+BEGIN_SRC sh
+    sudo pacman -S python-pip minecraft
+    
+    pip3 install LibreGaming
+  #+END_SRC
+  More packages which need other methods and not pacman. Lol, comsol, edopro
+
+** Zotero plugins
+   Better bibtex, sci-hub plugin, zotfile
+** Browser plugin
+   uBlockOrigin, darkreader, surfingkeys, zotero extension, raindrop
+
+* Things to backup
+  Documents and org_roam, which contain a massive chunk of all my personal documents.
+
+  Pokemon Clover, Rad Red, Reborn, Redux, Unbound (maybe ren plat, deso and rejuv but if I play them I might start over) + any rom file I have. I think, save files are also stored elsewhere for some games. Will add them to sync.
+
+  The sync directory has my zotero master bib file and pdfs, some useful documents
+
+  Music directory, hiit workouts, auth.org
+
+  

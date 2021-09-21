@@ -440,7 +440,7 @@
 	      (:keywords "files")
 	      (:url . "http://elpa.gnu.org/packages/cpio-mode.html"))])
  (crdt .
-       [(0 2 1)
+       [(0 2 4)
 	nil "Collaborative editing using Conflict-free Replicated Data Types" tar
 	((:url . "https://code.librehq.com/qhong/crdt.el")
 	 (:keywords "collaboration" "crdt")
@@ -651,6 +651,14 @@
 	      ("Ben Gamari" . "ben@smart-cactus.org"))
 	     (:keywords "languages")
 	     (:url . "https://elpa.gnu.org/packages/dts-mode.html"))])
+ (easy-escape .
+	      [(0 2 1)
+	       nil "Improve readability of escape characters in regular expressions" tar
+	       ((:url . "https://github.com/cpitclaudel/easy-escape")
+		(:keywords "convenience" "lisp" "tools")
+		(:maintainer "Clément Pit-Claudel" . "clement.pitclaudel@live.com")
+		(:authors
+		 ("Clément Pit-Claudel" . "clement.pitclaudel@live.com")))])
  (easy-kill .
 	    [(0 9 4)
 	     ((emacs
@@ -706,15 +714,15 @@
 	      (:maintainer "Markus Triska" . "triska@metalevel.at")
 	      (:url . "https://www.metalevel.at/ediprolog/"))])
  (eev .
-      [(20210822)
+      [(20210913)
        ((emacs
 	 (24 4)))
        "Support for e-scripts (eepitch blocks, elisp hyperlinks, etc)" tar
        ((:url . "http://angg.twu.net/#eev")
+	(:keywords "lisp" "e-scripts")
 	(:maintainer "Eduardo Ochs" . "eduardoochs@gmail.com")
 	(:authors
-	 ("Eduardo Ochs" . "eduardoochs@gmail.com"))
-	(:keywords "lisp" "e-scripts"))])
+	 ("Eduardo Ochs" . "eduardoochs@gmail.com")))])
  (eglot .
 	[(1 7)
 	 ((emacs
@@ -905,16 +913,18 @@
 	     ("Barry O'Reilly" . "gundaetiapo@gmail.com"))
 	    (:maintainer "Barry O'Reilly" . "gundaetiapo@gmail.com"))])
  (flymake .
-	  [(1 1 1)
+	  [(1 2 1)
 	   ((emacs
 	     (26 1))
 	    (eldoc
-	     (1 1 0)))
+	     (1 1 0))
+	    (project
+	     (0 7 1)))
 	   "A universal on-the-fly syntax checker" tar
-	   ((:maintainer "João Távora" . "joaotavora@gmail.com")
+	   ((:keywords "c" "languages" "tools")
+	    (:maintainer "João Távora" . "joaotavora@gmail.com")
 	    (:authors
 	     ("Pavel Kobyakov" . "pk_at_work@yahoo.com"))
-	    (:keywords "c" "languages" "tools")
 	    (:url . "https://elpa.gnu.org/packages/flymake.html"))])
  (flymake-proselint .
 		    [(0 2 1)
@@ -1832,15 +1842,15 @@
 	     ("Phillip Lord" . "phillip.lord@russet.org.uk"))
 	    (:url . "http://elpa.gnu.org/packages/persist.html"))])
  (phps-mode .
-	    [(0 4 6)
+	    [(0 4 7)
 	     ((emacs
 	       (26)))
 	     "Major mode for PHP with Semantic integration" tar
 	     ((:url . "https://github.com/cjohansson/emacs-phps-mode")
+	      (:keywords "tools" "convenience")
 	      (:maintainer "Christian Johansson" . "christian@cvj.se")
 	      (:authors
-	       ("Christian Johansson" . "christian@cvj.se"))
-	      (:keywords "tools" "convenience"))])
+	       ("Christian Johansson" . "christian@cvj.se")))])
  (pinentry .
 	   [(0 1)
 	    nil "GnuPG Pinentry server implementation" single
@@ -1868,7 +1878,7 @@
 	      ("Feng Shu" . "tumashu@163.com"))
 	     (:keywords "convenience" "tooltip"))])
  (project .
-	  [(0 6 1)
+	  [(0 7 1)
 	   ((emacs
 	     (26 1))
 	    (xref
@@ -2293,15 +2303,15 @@
 	      ("	(Stefan Monnier)" . "monnier@iro.umontreal.ca"))
 	     (:maintainer "Stefan Monnier" . "monnier@iro.umontreal.ca"))])
  (so-long .
-	  [(1 1 1)
+	  [(1 1 2)
 	   ((emacs
 	     (24 4)))
 	   "Say farewell to performance problems with minified code." tar
 	   ((:url . "https://savannah.nongnu.org/projects/so-long")
+	    (:keywords "convenience")
 	    (:maintainer "Phil Sainty" . "psainty@orcon.net.nz")
 	    (:authors
-	     ("Phil Sainty" . "psainty@orcon.net.nz"))
-	    (:keywords "convenience"))])
+	     ("Phil Sainty" . "psainty@orcon.net.nz")))])
  (soap-client .
 	      [(3 2 0)
 	       ((cl-lib
@@ -2437,15 +2447,15 @@
 	 (:maintainer "Toby Cubitt" . "toby-predictive@dr-qubit.org")
 	 (:url . "http://www.dr-qubit.org/emacs.php"))])
  (taxy .
-       [(0 5)
+       [(0 7)
 	((emacs
 	  (26 3)))
 	"Programmable taxonomical grouping for arbitrary objects" tar
 	((:url . "https://github.com/alphapapa/taxy.el")
+	 (:keywords "lisp")
 	 (:maintainer "Adam Porter" . "adam@alphapapa.net")
 	 (:authors
-	  ("Adam Porter" . "adam@alphapapa.net"))
-	 (:keywords "lisp"))])
+	  ("Adam Porter" . "adam@alphapapa.net")))])
  (temp-buffer-browse .
 		     [(1 5)
 		      ((emacs
@@ -2652,14 +2662,14 @@
 	   ("Justin Burkett" . "justin@burkett.cc"))
 	  (:keywords "diff"))])
  (verilog-mode .
-	       [(2021 4 12 188864585)
+	       [(2021 9 16 45775504)
 		nil "major mode for editing verilog source in Emacs" tar
 		((:url . "https://www.veripool.org")
+		 (:keywords "languages")
 		 (:maintainer "Michael McNamara" . "mac@verilog.com")
 		 (:authors
 		  ("Michael McNamara" . "mac@verilog.com")
-		  ("Wilson Snyder" . "wsnyder@wsnyder.org"))
-		 (:keywords "languages"))])
+		  ("Wilson Snyder" . "wsnyder@wsnyder.org")))])
  (vertico .
 	  [(0 14)
 	   ((emacs

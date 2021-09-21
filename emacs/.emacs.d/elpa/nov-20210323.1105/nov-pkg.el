@@ -1,0 +1,2 @@
+;;; Generated package description from /home/vidianos/.emacs.d/elpa/nov-20210323.1105/nov.el  -*- no-byte-compile: t -*-
+(define-package "nov" "20210323.1105" "Featureful EPUB reader mode" '((dash "2.12.0") (esxml "0.3.6") (emacs "24.4")) :commit "b3c7cc28e95fe25ce7b443e5f49e2e45360944a3" :authors '(("Vasilij Schneidermann" . "mail@vasilij.de")) :maintainer '("Vasilij Schneidermann" . "mail@vasilij.de") :keywords '("hypermedia" "multimedia" "epub") :url "https://depp.brause.cc/nov.el")

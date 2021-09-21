@@ -66,7 +66,8 @@
    :prefix "SPC e"
    "b" 'eval-buffer
    "e" 'eval-expression
-   "f" 'eval-defun)
+   "f" 'eval-defun
+   "s" 'eval-last-sexp)
   
   (general-define-key
    :states 'normal
@@ -193,7 +194,7 @@
    #+RESULTS:
    
 ** Org mode keybindings
-   I initially planned for , to become the leader key for all major mode specific commands. In the end, the only one I use enough to need this many commands is org. So , is the leader key that signifies that this is an org mode command. And I have a lot of them.
+   I initially planned for , to become the leader key for all major mode specific commands. In the end, the only one I use enough to need this many commands is org. So , is the leader key that signifies that this is an org mode command. And I have a lot of them. 
    
 #+BEGIN_SRC elisp
   (general-create-definer org-leader-def
@@ -223,7 +224,7 @@
   
   (general-define-key
    :states 'normal
-   :keymaps 'org-mode-map
+   :keymaps 'org-marginalia-mode-map
    :prefix ", m"
    "o" 'org-marginalia-open
    "n" 'org-marginalia-next
@@ -240,7 +241,8 @@
    "p" 'org-priority
    "v" 'org-tags-view
    "T" 'org-set-tags-command
-   "e" 'org-set-effort)
+   "e" 'org-set-effort
+   "d" 'org-deadline)
   
   (general-define-key
    :states 'normal

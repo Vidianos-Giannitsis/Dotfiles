@@ -104,6 +104,7 @@ var favorites = [
     [
 	["Darebee", "https://darebee.com/", "d"],
 	["Org-Roam Discourse", "https://org-roam.discourse.group/", "ord"],
+	["MC Biome Finder", "https://www.chunkbase.com/apps/biome-finder#-3038289977291799158", "bf"],
 	["Raindrop", "https://app.raindrop.io/my/0", "rd"]
           ]
   ]

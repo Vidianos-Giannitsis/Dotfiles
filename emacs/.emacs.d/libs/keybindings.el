@@ -51,7 +51,8 @@
  :prefix "SPC e"
  "b" 'eval-buffer
  "e" 'eval-expression
- "f" 'eval-defun)
+ "f" 'eval-defun
+ "s" 'eval-last-sexp)
 
 (general-define-key
  :states 'normal
@@ -189,7 +190,7 @@
 
 (general-define-key
  :states 'normal
- :keymaps 'org-mode-map
+ :keymaps 'org-marginalia-mode-map
  :prefix ", m"
  "o" 'org-marginalia-open
  "n" 'org-marginalia-next
@@ -206,7 +207,8 @@
  "p" 'org-priority
  "v" 'org-tags-view
  "T" 'org-set-tags-command
- "e" 'org-set-effort)
+ "e" 'org-set-effort
+ "d" 'org-deadline)
 
 (general-define-key
  :states 'normal

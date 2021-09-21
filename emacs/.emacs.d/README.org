@@ -230,7 +230,8 @@ This enables:
 + Loading small utility packages such as math at point (which makes doing calculations in Emacs faster) and molar-mass (a Molar mass calculator for Emacs)
 + Adding the dot to tab jump out delimiters. Sometimes you want to jump over a dot in a text and I like this besides jumping out of brackets
 + Loading mediator, a helpful package for dired which allows opening files with other programs. Its useful in some cases
-+ Ace-window is a helpful package for switching focus between buffers really quickly. I set the keys used in it to be the home row keys instead of number keys as that is more convenient. I also activate a mode which shows which letter corresponds to each window in the mode line. 
++ Ace-window is a helpful package for switching focus between buffers really quickly. I set the keys used in it to be the home row keys instead of number keys as that is more convenient. I also activate a mode which shows which letter corresponds to each window in the mode line.
++ Load info+, a package that enhances info menus.
 
 #+BEGIN_SRC elisp
   
@@ -275,10 +276,12 @@ This enables:
   
   (ace-window-display-mode 1)
   (setq aw-keys '(?a ?s ?d ?f ?g ?h ?j ?k ?l))
+  
+  (require 'info+)
 #+END_SRC
 
 #+RESULTS:
-| 97 | 115 | 100 | 102 | 103 | 104 | 106 | 107 | 108 |
+: info+
 
 
 * Keybindings
@@ -369,6 +372,10 @@ This enables:
 		   "comsol"
 		   '(file))
 	     (list (openwith-make-extension-regexp
+		    '("aup"))
+		   "audacity"
+		   '(file))
+	     (list (openwith-make-extension-regexp
 		    '("docx" "doc" "xlsx" "xls" "ppt" "odt" "ods"))
 		   "libreoffice"
 		   '(file))))
@@ -421,7 +428,9 @@ Some settings (now using the word some here might be an underestimation, as with
   (require 'ox-beamer)
   (require 'ox-hugo)
   
+  (require 'org-marginalia-global-tracking)
   (require 'org-marginalia)
+  
 #+END_SRC
 
 #+RESULTS:
@@ -724,7 +733,11 @@ I also define a "replacement" function for org-roam-buffer-toggle which temporar
 			     (org-roam-node-id node)))))
 	  (format "[%d]" count)))
     
-      (setq org-roam-node-display-template "${directories:8} ${tags:20} ${title:100} ${backlinkscount:6}")
+      (cl-defmethod org-roam-node-todostate ((node org-roam-node))
+	(if-let ((state (org-roam-node-todo node)))
+	  (format "Status: %s" state)))
+    
+      (setq org-roam-node-display-template "${directories:8} ${tags:15} ${title:100} ${backlinkscount:6} ${todostate:20}")
     
       (add-to-list 'display-buffer-alist
 		   '("\\*org-roam\\*"
@@ -801,12 +814,10 @@ I also define a "replacement" function for org-roam-buffer-toggle which temporar
   (add-hook 'org-agenda-mode-hook 'visual-line-mode)
   
   (defun org-roam-init-fleeting-note ()
-    "Prescribe an ID to the heading making it a node in org-roam, then add it the inboxset its priority, and some useful tags for it. This helps automate the process of creating new fleeting notes in combination with the org-roam-dailies commands"
+    "Prescribe an ID to the heading making it a node in org-roam, then add it the inbox by giving it a todo keyword. This helps automate the process of creating new fleeting notes in combination with the org-journal commands"
     (interactive)
     (org-id-get-create)
-    (org-todo)
-    (org-priority)
-    (org-set-tags-command))
+    (org-todo))
   
   (defun org-id-delete-entry ()
   "Remove/delete an ID entry. Saves the current point and only does this if inside an org-heading."
@@ -815,10 +826,15 @@ I also define a "replacement" function for org-roam-buffer-toggle which temporar
       (org-back-to-heading t)
       (when (org-entry-delete (point) "ID"))))
   
+  (add-to-list 'org-after-todo-state-change-hook
+	       (lambda ()
+		 (when (equal org-state "DONE")
+		   (org-id-delete-entry))))
 #+END_SRC
 
 #+RESULTS:
-: %Y-%m-%d.org
+| lambda | nil | (when (equal org-state DONE) (org-id-delete-entry))       |
+| lambda | nil | (if (equal org-state DONE) (progn (org-id-delete-entry))) |
 
 ** Org Roam Bibtex, Protocols (Reference notes) and UI (graphing capabilities)
    I require a bunch of packages so ORB, org roam ui and the roam protocols work as intended. I also make orb use ivy for completions 
@@ -834,7 +850,7 @@ I also define a "replacement" function for org-roam-buffer-toggle which temporar
   
   (require 'websocket)
   (require 'org-roam-ui)
-    
+  
   (require 'org-protocol)
   (require 'org-roam-protocol)
 #+END_SRC
@@ -877,17 +893,37 @@ I also define a "replacement" function for org-roam-buffer-toggle which temporar
      :NOTER_DOCUMENT: ${file}  
      :NOTER_PAGE:              
      :END:")
-		   :unnarrowed t
-		   :jump-to-captured t)))
+	      :unnarrowed t
+	      :jump-to-captured t)
+     
+	     ("i" "info reference" plain
+	      "%?"
+	      :if-new
+	      (file+head "ref/${slug}.org" "#+title: ${title}\n
+     ,#+filetags: %:type
+     - tags :: 
+     
+     Evaluate sexp for link to referenced info page: (Info-goto-node \"(%:file)%:node\")
+     \n
+     ")
+	      :unnarowed t)))
      
      (setq org-roam-dailies-capture-templates
 	   '(("d" "default" entry "* %?" :if-new
 	      (file+head "%<%Y-%m-%d>.org" "#+title: %<%Y-%m-%d>\n#+filetags: daily")
 	      :empty-lines 1)))
+     
+     (setq org-roam-capture-ref-templates 
+	   '(("r" "ref" plain "%?" :target
+	      (file+head "${slug}.org" "#+title: ${title}\nglatex_roam\n
+     ,#+filetags: 
+      - tags :: ")
+	      :unnarrowed t
+	      :jump-to-captured t)))
    #+END_SRC
 
    #+RESULTS:
-   | d | default | entry | * %? | :if-new | (file+head %<%Y-%m-%d>.org #+title: %<%Y-%m-%d> |
+   | r | ref | plain | %? | :target | (file+head ${slug}.org #+title: ${title} |
 
 * COMMENT Org-Roam-v1 configs
 This is my old org-roam config. Until I setup v2 to do everything I originally had, I will keep this commented out for reference if so needed. 
@@ -1086,7 +1122,22 @@ With the power of the internet, I found [[https://sidhartharya.me/exporting-org-
 
   #+RESULTS:
   : lab-skeleton
+ 
+* Bookmarks
+  I want to explore the bookmark system in emacs more. I enable version control for bookmarks and auto deletion of old ones as well as activate bookmark+, a set of libraries which make useful additions to the vanilla bookmarks
+
+#+BEGIN_SRC elisp
   
+  (setq bookmark-version-control t
+	delete-old-versions t)
+  
+  (require 'bookmark+)
+  
+#+END_SRC
+
+#+RESULTS:
+: bookmark+
+
 * Emacs Scratchpad
   Ever wanted to write some text somewhere besides Emacs and got annoyed because you want your snippets and in general your emacs customisations in that text interface without needing to jump to Emacs. The emacs scratchpad solves this issue. This is the part of the setup needed in my init.el, while the rest of the project lies in my qtile's config.py . If you are interested on the topic, you can check [[https://github.com/Vidianos-Giannitsis/Dotfiles/blob/master/Emacs_Scratchpad.org][this]] file for more details.
 
@@ -1163,18 +1214,19 @@ With the power of the internet, I found [[https://sidhartharya.me/exporting-org-
   Company is a minor mode, which I enable globally, which allows for autocompletions. This is useful when programming, or writing latex for completing what you want, but also can speed up the writing of long words. The lambda I add to the company-mode-hook adds latex autocompletions and allows them to be used anywhere. It also sets up company to read and give autocompletions for citations from my master .bib file in Zotero. I usually enter them with the ivy-bibtex package (my current default action is add citation there) but this is worth a try. 
   
   #+BEGIN_SRC elisp
-
+    
     (add-hook 'after-init-hook 'global-company-mode)
     (add-hook 'company-mode-hook '(lambda ()
 				    (add-to-list 'company-backends 'company-math-symbols-latex)
 				    (setq company-math-allow-latex-symbols-in-faces t)
 				    (add-to-list 'company-backends 'company-bibtex)
+				    (add-to-list 'company-backends 'company-capf)
 				    (setq company-bibtex-bibliography '("~/org_roam/Zotero_library.bib"))))
-
+    
   #+END_SRC
   
   #+RESULTS:
-  | (lambda nil (add-to-list 'company-backends 'company-math-symbols-latex) (setq company-math-allow-latex-symbols-in-faces t) (add-to-list 'company-backends 'company-bibtex) (setq company-bibtex-bibliography '(~/org_roam/Zotero_library.bib))) | company-mode-set-explicitly | (lambda nil (add-to-list 'company-backends 'company-math-symbols-latex) (setq company-math-allow-latex-symbols-in-faces t) (add-to-list 'company-backends 'company-bibtex) (setq company-bibtex-bibliography '(~/org_roam/Zotero_library.bib)) (setq company-minimum-prefix-length 2)) |
+  | (lambda nil (add-to-list 'company-backends 'company-math-symbols-latex) (setq company-math-allow-latex-symbols-in-faces t) (add-to-list 'company-backends 'company-bibtex) (add-to-list 'company-backends 'company-capf) (setq company-bibtex-bibliography '(~/org_roam/Zotero_library.bib))) | company-mode-set-explicitly | (lambda nil (add-to-list 'company-backends 'company-math-symbols-latex) (setq company-math-allow-latex-symbols-in-faces t) (add-to-list 'company-backends 'company-bibtex) (setq company-bibtex-bibliography '(~/org_roam/Zotero_library.bib))) |
  
 * Other Major Modes
 Some other extensions inside my Emacs config that require some changes for their major modes to function as I want them. This currently includes:
@@ -1184,6 +1236,7 @@ Some other extensions inside my Emacs config that require some changes for their
 - Octave
 - Emacs Application Framework
 - Elisp
+- Deft
   
 ** Calc
    The M-x calc is a powerful calculator software built for Emacs. I set up some small utilities for it like making angles counted in radians and keeping symbols like sqrt(2) as sqrt(2) and not substituting it for a number. 
@@ -1260,6 +1313,7 @@ Configuration for PDF-tools, my favourite Emacs pdf viewer. I set it as the defa
    #+END_SRC
 
 ** Deft
+   Deft is a package which provides a nice interface for browsing your network of notes in org-roam.
 
    #+BEGIN_SRC elisp
      

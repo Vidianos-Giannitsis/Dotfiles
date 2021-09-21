@@ -127,6 +127,8 @@
 (ace-window-display-mode 1)
 (setq aw-keys '(?a ?s ?d ?f ?g ?h ?j ?k ?l))
 
+(require 'info+)
+
 (require 'keybindings)
 
 (require 'dired-x)
@@ -175,6 +177,10 @@
 	       "comsol"
 	       '(file))
 	 (list (openwith-make-extension-regexp
+		'("aup"))
+	       "audacity"
+	       '(file))
+	 (list (openwith-make-extension-regexp
 		'("docx" "doc" "xlsx" "xls" "ppt" "odt" "ods"))
 	       "libreoffice"
 	       '(file))))
@@ -209,6 +215,7 @@
 (require 'ox-beamer)
 (require 'ox-hugo)
 
+(require 'org-marginalia-global-tracking)
 (require 'org-marginalia)
 
 (add-to-list 'org-file-apps '("\\.pdf\\'" . emacs))
@@ -350,7 +357,11 @@
 			 (org-roam-node-id node)))))
       (format "[%d]" count)))
 
-  (setq org-roam-node-display-template "${directories:8} ${tags:20} ${title:100} ${backlinkscount:6}")
+  (cl-defmethod org-roam-node-todostate ((node org-roam-node))
+    (if-let ((state (org-roam-node-todo node)))
+      (format "Status: %s" state)))
+
+  (setq org-roam-node-display-template "${directories:8} ${tags:15} ${title:100} ${backlinkscount:6} ${todostate:20}")
 
   (add-to-list 'display-buffer-alist
 	       '("\\*org-roam\\*"
@@ -402,12 +413,10 @@ This is useful because especially with index files, having latex previews on, ma
 (add-hook 'org-agenda-mode-hook 'visual-line-mode)
 
 (defun org-roam-init-fleeting-note ()
-  "Prescribe an ID to the heading making it a node in org-roam, then add it the inboxset its priority, and some useful tags for it. This helps automate the process of creating new fleeting notes in combination with the org-roam-dailies commands"
+  "Prescribe an ID to the heading making it a node in org-roam, then add it the inbox by giving it a todo keyword. This helps automate the process of creating new fleeting notes in combination with the org-journal commands"
   (interactive)
   (org-id-get-create)
-  (org-todo)
-  (org-priority)
-  (org-set-tags-command))
+  (org-todo))
 
 (defun org-id-delete-entry ()
 "Remove/delete an ID entry. Saves the current point and only does this if inside an org-heading."
@@ -415,6 +424,11 @@ This is useful because especially with index files, having latex previews on, ma
   (save-excursion
     (org-back-to-heading t)
     (when (org-entry-delete (point) "ID"))))
+
+(add-to-list 'org-after-todo-state-change-hook
+	     (lambda ()
+	       (when (equal org-state "DONE")
+		 (org-id-delete-entry))))
 
 (require 'org-roam-bibtex)
 
@@ -460,13 +474,33 @@ This is useful because especially with index files, having latex previews on, ma
 :NOTER_DOCUMENT: ${file}  
 :NOTER_PAGE:              
 :END:")
-	      :unnarrowed t
-	      :jump-to-captured t)))
+	 :unnarrowed t
+	 :jump-to-captured t)
+
+	("i" "info reference" plain
+	 "%?"
+	 :if-new
+	 (file+head "ref/${slug}.org" "#+title: ${title}\n
+#+filetags: %:type
+- tags :: 
+
+Evaluate sexp for link to referenced info page: (Info-goto-node \"(%:file)%:node\")
+\n
+")
+	 :unnarowed t)))
 
 (setq org-roam-dailies-capture-templates
       '(("d" "default" entry "* %?" :if-new
 	 (file+head "%<%Y-%m-%d>.org" "#+title: %<%Y-%m-%d>\n#+filetags: daily")
 	 :empty-lines 1)))
+
+(setq org-roam-capture-ref-templates 
+      '(("r" "ref" plain "%?" :target
+	 (file+head "${slug}.org" "#+title: ${title}\nglatex_roam\n
+#+filetags: 
+ - tags :: ")
+	 :unnarrowed t
+	 :jump-to-captured t)))
 
 (define-skeleton lab-skeleton
   "A skeleton which I use for initialising my lab reports which have standard formatting"
@@ -486,6 +520,11 @@ This is useful because especially with index files, having latex previews on, ma
   "* Βιβλιογραφία\n"
   "bibliography:~/Sync/My_Library.bib\n"
   "bibliographystyle:unsrt")
+
+(setq bookmark-version-control t
+      delete-old-versions t)
+
+(require 'bookmark+)
 
 (defun org-scratchpad ()
   "Yank the entire document, delete it and save the buffer. This is very useful for my scratchpad setup"
@@ -537,6 +576,7 @@ This is useful because especially with index files, having latex previews on, ma
 				(add-to-list 'company-backends 'company-math-symbols-latex)
 				(setq company-math-allow-latex-symbols-in-faces t)
 				(add-to-list 'company-backends 'company-bibtex)
+				(add-to-list 'company-backends 'company-capf)
 				(setq company-bibtex-bibliography '("~/org_roam/Zotero_library.bib"))))
 
 (setq calc-angle-mode 'rad
