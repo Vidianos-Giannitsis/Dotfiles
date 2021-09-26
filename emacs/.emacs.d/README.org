@@ -26,7 +26,6 @@
  - [ ] SPEAKING OF EXWM, I MUST TRY IT. But although its Emacs and I will be comfortable in it from the get go, its definitely going to be time consuming so I am stalling it for now cause I dont want to spend all my time there.
  - [ ] GNU Hyperbole is an interesting package to play around with
  - [ ] I should eventually give mu4e a try. I am very comfortable with thunderbird and dont need to switch, but there are apparent advantages to using emacs for email so I should try it evetually.
- - [ ] Look more into the org-download-screenshot function. Copying something to the clipboard and pasting it to emacs is rather fast, but this function automatically pastes the screenshot as well, which I like. The problem is it needs to be invoked from Emacs and you cant change workspace after. There must be some way to call this with emacsclient from a different workspace.
 
 ** Project Management in Emacs
     I want to start learning more things about managing my projects in Emacs. There are some built-in project features in Emacs and the projectile package helps a lot with project management. This isn't currently urgent but its usability is sure to arise soon. Being able to export a latex file which draws info from multiple other files inside the projects directory is awesome. Looking into the future, this is probably going to be the most efficient way to get to writing my diploma thesis and any other big project I want to manage.
@@ -49,7 +48,7 @@ I have drawn inspiration from a lot of other init.el's but the most apparent one
 
 Note that I am no elisp ninja and know just enough to write this config in a simple way, so some things are probably not done in the most efficient way possible, but everything I have set has its desired behaviour, which is enough for me.
 
-I hope you will find something useful here that you can put to your emacs config as well. 
+I hope you will find something useful here that you can put to your emacs config as well.
 
 * Table of Contents                                                     :TOC:
 - [[#about-this-config][About this config]]
@@ -69,9 +68,11 @@ I hope you will find something useful here that you can put to your emacs config
 - [[#org-roam-references-and-the-zettelkasten-workflow][Org Roam, References and the Zettelkasten Workflow]]
   - [[#org-roam-general-setup][Org-Roam general setup]]
   - [[#bibtex-completion-ivy-and-org-ref][Bibtex completion (Ivy) and Org Ref]]
-  - [[#org-roam-bibtex][Org Roam Bibtex]]
+  - [[#fleeting-notes][Fleeting notes]]
+  - [[#org-roam-bibtex-protocols-reference-notes-and-ui-graphing-capabilities][Org Roam Bibtex, Protocols (Reference notes) and UI (graphing capabilities)]]
   - [[#capture-templates][Capture Templates]]
 - [[#skeletons][Skeletons]]
+- [[#bookmarks][Bookmarks]]
 - [[#emacs-scratchpad][Emacs Scratchpad]]
 - [[#inkscape-x-emacs][Inkscape x Emacs]]
 - [[#company][Company]]
@@ -80,6 +81,7 @@ I hope you will find something useful here that you can put to your emacs config
   - [[#ebuku][Ebuku]]
   - [[#pdf-tools][PDF Tools]]
   - [[#octave][Octave]]
+  - [[#vterm][Vterm]]
   - [[#emacs-application-framework][Emacs Application Framework]]
   - [[#elisp][Elisp]]
   - [[#deft][Deft]]
@@ -141,7 +143,7 @@ This includes:
   
   (gcmh-mode 1)
   
-  (load-theme 'doom-dracula t)
+  (load-theme 'doom-palenight t)
   
   (menu-bar-mode -1)
   (scroll-bar-mode -1)
@@ -232,6 +234,7 @@ This enables:
 + Loading mediator, a helpful package for dired which allows opening files with other programs. Its useful in some cases
 + Ace-window is a helpful package for switching focus between buffers really quickly. I set the keys used in it to be the home row keys instead of number keys as that is more convenient. I also activate a mode which shows which letter corresponds to each window in the mode line.
 + Load info+, a package that enhances info menus.
++ Load a simple wrapper around pdftotext so it can be easily integrated with emacs
 
 #+BEGIN_SRC elisp
   
@@ -278,10 +281,12 @@ This enables:
   (setq aw-keys '(?a ?s ?d ?f ?g ?h ?j ?k ?l))
   
   (require 'info+)
+  
+  (require 'pdftotext)
 #+END_SRC
 
 #+RESULTS:
-: info+
+: ox-chameleon
 
 
 * Keybindings
@@ -404,10 +409,9 @@ Some settings (now using the word some here might be an underestimation, as with
    This first section is about some packages I load for org, which are very helpful for my workflow, such as:
    + Better headings for org, as I am not a fan of the default asterisks.
    + I load org-download after org, this is a helpful addon which allows me to paste photos on my clipboard to org, which makes adding photos to org documents much faster.
-   + I activate calctex and activate it when I go into calc's embedded mode. Its a neat package that allows me to type a formula inside calc and renders it automatically into latex. Latex snippets are what I use mostly but this is a very neat package and I had to include it here.
-   + I activate org-cdlatex-mode which makes typing latex equations easier inside org and massively improves speed of typing equations together with snippets for org
    + I add org-tree-slide for presentations inside Org
-   + Require the org export beamer package so beamer export options are there by default
+   + Require the org export beamer, hugo and pandoc packages so their export options are there by default
+   + Require org-marginalia
      
 #+BEGIN_SRC elisp
   
@@ -418,18 +422,16 @@ Some settings (now using the word some here might be an underestimation, as with
   (use-package org-download
     :after org)
   
-  (require 'calctex)
-  (add-hook 'calc-embedded-new-formula-hook 'calctex-mode)
-  
-  (add-hook 'org-mode-hook 'turn-on-org-cdlatex)
-  
   (require 'org-tree-slide)
   
   (require 'ox-beamer)
   (require 'ox-hugo)
+  (require 'ox-pandoc)
   
   (require 'org-marginalia-global-tracking)
   (require 'org-marginalia)
+  
+  (require 'org-pandoc-import)
   
 #+END_SRC
 
@@ -442,38 +444,38 @@ Some settings (now using the word some here might be an underestimation, as with
    + I tell org that its odt export should be converted to docx as if I am exporting to a rich text editors format, its for a collaboration and most people I know use that format. If its a personal project I always export to a latex pdf because it looks better.
    + Defining a function which supresses the confirmation message for tangling an org document's source code and hooking it to the after save hook in org-mode. If I understand it correctly, it should automatically tangle after saving, if thats possible, which is handy for things such as this configuration.
    + I activate image preview by default inside org, as images are cool, I like images. I also change the "org-image-actual-width" variable, which makes images previewd in org to be able to change size if given the right headers. This is helpful for some images which are too large to be properly viewed in org so they can be scaled down and be properly visible.
-   + I have a custom lambda function which I hook to the org-mode-hook (so it activates every time a new org mode buffer is opened) which automatically activates the visual-line and org-fragtog minor modes. Visual line is for wrapping text to the next line once the current line is full, which is insanely useful for any org document in my opinion. Org-fragtog is a neat minor mode for latex previews. When on a latex equation it automatically shows the source code of it, allowing you to edit it, and then previews it once you leave the equation, which is very useful. Org marginalia mode is for writing margin notes in org-buffers. I especially like this feature on org-roam notes. 
-     
+   + Activate visual line mode, as its really useful to have imo.
+ 
 #+BEGIN_SRC elisp
-  (add-to-list 'org-file-apps '("\\.pdf\\'" . emacs))
+    (add-to-list 'org-file-apps '("\\.pdf\\'" . emacs))
   
-  (setq org-odt-preferred-output-format "docx")
+    (setq org-odt-preferred-output-format "docx")
   
-  (add-hook 'org-mode-hook (lambda () (add-hook 'after-save-hook #'(lambda ()
-								     (let ((org-confirm-babel-evaluate nil))
-								       (org-babel-tangle))))
-						'run-at-end 'only-in-org-mode))
+    (add-hook 'org-mode-hook (lambda () (add-hook 'after-save-hook #'(lambda ()
+								       (let ((org-confirm-babel-evaluate nil))
+									 (org-babel-tangle))))
+						  'run-at-end 'only-in-org-mode))
   
-  (setq org-startup-with-inline-images t)
-  (setq org-image-actual-width nil)
+    (setq org-startup-with-inline-images t)
+    (setq org-image-actual-width nil)
   
-  (add-hook 'org-mode-hook '(lambda ()
-			      (visual-line-mode)
-			      (org-fragtog-mode)))
-;			      (org-marginalia-mode)))
+    (add-hook 'org-mode-hook 'visual-line-mode)
   
 #+END_SRC
 
 #+RESULTS:
-| (lambda nil (visual-line-mode) (org-fragtog-mode) (org-marginalia-mode)) | org-ref-org-menu | (lambda nil (visual-line-mode) (org-fragtog-mode) (org-marginalia-mode) (org-hugo-auto-export-mode)) | (lambda nil (add-hook 'after-save-hook #'(lambda nil (let ((org-confirm-babel-evaluate nil)) (org-babel-tangle)))) 'run-at-end 'only-in-org-mode) | turn-on-org-cdlatex | (lambda nil (org-superstar-mode) (org-superstar-configure-like-org-bullets)) | evil-org-mode | #[0 \300\301\302\303\304$\207 [add-hook change-major-mode-hook org-show-all append local] 5] | #[0 \300\301\302\303\304$\207 [add-hook change-major-mode-hook org-babel-show-result-all append local] 5] | org-babel-result-hide-spec | org-babel-hide-all-hashes | #[0 \301\211\207 [imenu-create-index-function org-imenu-get-tree] 2] | org-ref-setup-label-finders |
-	    
+| (lambda nil (visual-line-mode) (org-fragtog-mode) (laas-mode)) | org-ref-org-menu | (lambda nil (visual-line-mode) (org-fragtog-mode)) | (lambda nil (add-hook 'after-save-hook #'(lambda nil (let ((org-confirm-babel-evaluate nil)) (org-babel-tangle)))) 'run-at-end 'only-in-org-mode) | turn-on-org-cdlatex | (lambda nil (org-superstar-mode) (org-superstar-configure-like-org-bullets)) | evil-org-mode | #[0 \300\301\302\303\304$\207 [add-hook change-major-mode-hook org-show-all append local] 5] | #[0 \300\301\302\303\304$\207 [add-hook change-major-mode-hook org-babel-show-result-all append local] 5] | org-babel-result-hide-spec | org-babel-hide-all-hashes | #[0 \301\211\207 [imenu-create-index-function org-imenu-get-tree] 2] | org-ref-setup-label-finders |
+
 ** Latex Stuff
    I love Latex for writing mathematical equations. Org understands latex very well and can preview it. But I want some things changed in it. 
     + I write a lot of equations in my documents usually with latex and the normal size of those inside org (available with org-latex-preview) is a bit small for my liking so after playing around with it a bit I scaled it up to 1.8 of the original which I consider a very sensible size
     + Making latex view my bibtex bibliography and export it properly. I took this from the org-ref docs as originally I wasnt getting proper bibliographic entries. It works with this.
     + I make the default process for creating latex previews dvisvgm. For the most part, both this and dvipng work flawlessly. But one specific latex package (chemfig) which I use from time to time cant preview things correctly in org with dvipng and previewing them as svgs with dvisvgm fixes that issue. Besides that, I havent really noticed any other major problems with either one.
     + I tell org to preview latex fragments by default when opening a document, as I use them extensively so this makes my life easier.
-    + The rest was taken by John Kitchin's [[https://kitchingroup.cheme.cmu.edu/blog/2016/11/07/Better-equation-numbering-in-LaTeX-fragments-in-org-mode/][website]]. Its about equations in org not being properly numbered as the org latex preview takes them as independent fragments and not as a whole. This code snippet, makes org number equations properly using an advice on org-create-formula-image. Its very neat and I am glad to have found it. 
+    + I activate calctex and activate it when I go into calc's embedded mode. Its a neat package that allows me to type a formula inside calc and renders it automatically into latex. Latex snippets are what I use mostly but this is a very neat package and I had to include it here.
+    + I activate org-cdlatex-mode which makes typing latex equations easier inside org and massively improves speed of typing equations together with snippets for org, org-fragtog mode which automatically creates previews for latex fragments when the cursor is not on them and laas mode which is a bunch of helpful latex snippets which autocomplete.
+    + The next few were taken by John Kitchin's [[https://kitchingroup.cheme.cmu.edu/blog/2016/11/07/Better-equation-numbering-in-LaTeX-fragments-in-org-mode/][website]]. Its about equations in org not being properly numbered as the org latex preview takes them as independent fragments and not as a whole. This code snippet, makes org number equations properly using an advice on org-create-formula-image. Its very neat and I am glad to have found it.
+    + Lastly, I redefine the laas basic snippets as there are some useful symbols not included (such as laplace transformation) or some others which I dont like the letter they are bound to. A lot of the snippets included are for adding greek letters to text. I have a greek keyboard, so to me these are useless and I replaced some of them with these symbols. I left the rest of them the same, as I dont really care about them.
 
    #+BEGIN_SRC elisp
      (setq org-format-latex-options '(:foreground default :background default :scale 1.8 :html-foreground "Black" :html-background "Transparent" :html-scale 1.0 :matchers))
@@ -483,6 +485,14 @@ Some settings (now using the word some here might be an underestimation, as with
      (setq org-preview-latex-default-process 'dvisvgm)
      
      (setq org-startup-with-latex-preview t)
+     
+     (require 'calctex)
+     (add-hook 'calc-embedded-new-formula-hook 'calctex-mode)
+     
+     (add-hook 'org-mode-hook '(lambda ()
+				 (turn-on-org-cdlatex)
+				 (org-fragtog-mode)
+				 (laas-mode)))
      
      (defun org-renumber-environment (orig-func &rest args)
        (let ((results '()) 
@@ -526,9 +536,140 @@ Some settings (now using the word some here might be an underestimation, as with
      
      (advice-add 'org-create-formula-image :around #'org-renumber-environment)
      
+     (setq laas-basic-snippets
+       '(:cond laas-mathp
+	 "!="    "\\neq"
+	 "!>"    "\\mapsto"
+	 "**"    "\\cdot"
+	 "+-"    "\\pm"
+	 "-+"    "\\mp"
+	 "->"    "\\to"
+	 "..."   "\\dots"
+	 "<<"    "\\ll"
+	 "<="    "\\leq"
+	 "<>"    "\\diamond"
+	 "=<"    "\\impliedby"
+	 "=="    "&="
+	 "=>"    "\\implies"
+	 ">="    "\\geq"
+	 ">>"    "\\gg"
+	 "AA"    "\\forall"
+	 "EE"    "\\exists"
+	 "cb"    "^3"
+	 "iff"   "\\iff"
+	 "inn"   "\\in"
+	 "notin" "\\not\\in"
+	 "sr"    "^2"
+	 "xx"    "\\times"
+	 "|->"   "\\mapsto"
+	 "|="    "\\models"
+	 "||"    "\\mid"
+	 "~="    "\\approx"
+	 "~~"    "\\sim"
+     
+	 "arccos" "\\arccos"
+	 "arccot" "\\arccot"
+	 "arccot" "\\arccot"
+	 "arccsc" "\\arccsc"
+	 "arcsec" "\\arcsec"
+	 "arcsin" "\\arcsin"
+	 "arctan" "\\arctan"
+	 "cos"    "\\cos"
+	 "cot"    "\\cot"
+	 "csc"    "\\csc"
+	 "exp"    "\\exp"
+	 "ln"     "\\ln"
+	 "log"    "\\log"
+	 "perp"   "\\perp"
+	 "sin"    "\\sin"
+	 "star"   "\\star"
+	 "gcd"    "\\gcd"
+	 "min"    "\\min"
+	 "max"    "\\max"
+     
+	 "CC" "\\CC"
+	 "FF" "\\FF"
+	 "HH" "\\HH"
+	 "NN" "\\NN"
+	 "PP" "\\PP"
+	 "QQ" "\\QQ"
+	 "RR" "\\RR"
+	 "ZZ" "\\ZZ"
+     
+	 ";a"  "\\alpha"
+	 ";A"  "\\forall"        ";;A" "\\aleph"
+	 ";b"  "\\beta"
+	 ";;;c" "\\cos"
+	 ";C"  "\\mathbb{C}"                            ";;;C" "\\arccos"
+	 ";d"  "\\delta"         ";;d" "\\partial"
+	 ";D"  "\\Delta"         ";;D" "\\nabla"
+	 ";e"  "\\mathcal{E}"       ";;e" "\\varepsilon"   ";;;e" "\\exp"
+	 ";E"  "\\exists"                               ";;;E" "\\ln"
+	 ";f"  "\\phi"           ";;f" "\\varphi"
+	 ";F"  "\\Phi"
+	 ";g"  "\\gamma"                                ";;;g" "\\lg"
+	 ";G"  "\\Gamma"                                ";;;G" "10^{?}"
+	 ";h"  "\\eta"           ";;h" "\\hbar"
+	 ";i"  "\\in"            ";;i" "\\imath"
+	 ";I"  "\\iota"          ";;I" "\\Im"
+	 ";;j" "\\jmath"
+	 ";k"  "\\kappa"
+	 ";l"  "\\mathcal{L}"        ";;l" "\\ell"          ";;;l" "\\log"
+	 ";L"  "\\Lambda"
+	 ";m"  "\\mu"
+	 ";n"  "\\nabla"         ";;n" "\\vec{\\nabla}"     ";;;n" "\\ln"
+	 ";N"  "\\mathbb{N}"                                ";;;N" "\\exp"
+	 ";o"  "\\omega"
+	 ";O"  "\\Omega"         ";;O" "\\mho"
+	 ";p"  "\\partial"            ";;p" "\\varpi"
+	 ";P"  "\\Pi"
+	 ";q"  "\\theta"         ";;q" "\\vartheta"
+	 ";Q"  "\\mathbb{Q}"
+	 ";r"  "\\rho"           ";;r" "\\varrho"
+	 ";R"  "\\mathbb{R}"      ";;R" "\\Re"
+	 ";s"  "\\sigma"         ";;s" "\\varsigma"    ";;;s" "\\sin"
+	 ";S"  "\\Sigma"                               ";;;S" "\\arcsin"
+	 ";t"  "\\tau"                                 ";;;t" "\\tan"
+	 ";;;T" "\\arctan"
+	 ";u"  "\\upsilon"
+	 ";U"  "\\Upsilon"
+	 ";v"  "\\vee"
+	 ";V"  "\\Phi"
+	 ";w"  "\\xi"
+	 ";W"  "\\Xi"
+	 ";x"  "\\chi"
+	 ";y"  "\\psi"
+	 ";Y"  "\\Psi"
+	 ";z"  "\\zeta"
+	 ";Z"  "\\mathbb{Z}"
+	 ";0"  "\\emptyset"
+	 ";8"  "\\infty"
+	 ";!"  "\\neg"
+	 ";^"  "\\uparrow"
+	 ";&"  "\\wedge"
+	 ";~"  "\\approx"        ";;~" "\\simeq"
+	 ";_"  "\\downarrow"
+	 ";+"  "\\cup"
+	 ";-"  "\\leftrightarrow"";;-" "\\longleftrightarrow"
+	 ";*"  "\\times"
+	 ";/"  "\\not"
+	 ";|"  "\\mapsto"        ";;|" "\\longmapsto"
+	 ";\\" "\\setminus"
+	 ";="  "\\Leftrightarrow"";;=" "\\Longleftrightarrow"
+	 ";(" "\\langle"
+	 ";)" "\\rangle"
+	 ";[" "\\Leftarrow"     ";;[" "\\Longleftarrow"
+	 ";]" "\\Rightarrow"    ";;]" "\\Longrightarrow"
+	 ";{"  "\\subset"
+	 ";}"  "\\supset"
+	 ";<"  "\\leftarrow"    ";;<" "\\longleftarrow"  ";;;<" "\\min"
+	 ";>"  "\\rightarrow"   ";;>" "\\longrightarrow" ";;;>" "\\max"
+	 ";'"  "\\prime"
+	 ";."  "\\cdot"))
    #+END_SRC
 
    #+RESULTS:
+   | :cond | laas-mathp | != | \neq | !> | \mapsto | ** | \cdot | +- | \pm | -+ | \mp | -> | \to | ... | \dots | << | \ll | <= | \leq | <> | \diamond | =< | \impliedby | == | &= | => | \implies | >= | \geq | >> | \gg | AA | \forall | EE | \exists | cb | ^3 | iff | \iff | inn | \in | notin | \not\in | sr | ^2 | xx | \times |   | -> | \mapsto |   | = | \models |   |   |   | \mid | ~= | \approx | ~~ | \sim | arccos | \arccos | arccot | \arccot | arccot | \arccot | arccsc | \arccsc | arcsec | \arcsec | arcsin | \arcsin | arctan | \arctan | cos | \cos | cot | \cot | csc | \csc | exp | \exp | ln | \ln | log | \log | perp | \perp | sin | \sin | star | \star | gcd | \gcd | min | \min | max | \max | CC | \CC | FF | \FF | HH | \HH | NN | \NN | PP | \PP | QQ | \QQ | RR | \RR | ZZ | \ZZ | ;a | \alpha | ;A | \forall | ;;A | \aleph | ;b | \beta | ;;;c | \cos | ;C | \mathbb{C} | ;;;C | \arccos | ;d | \delta | ;;d | \partial | ;D | \Delta | ;;D | \nabla | ;e | \mathcal{E} | ;;e | \varepsilon | ;;;e | \exp | ;E | \exists | ;;;E | \ln | ;f | \phi | ;;f | \varphi | ;F | \Phi | ;g | \gamma | ;;;g | \lg | ;G | \Gamma | ;;;G | 10^{?} | ;h | \eta | ;;h | \hbar | ;i | \in | ;;i | \imath | ;I | \iota | ;;I | \Im | ;;j | \jmath | ;k | \kappa | ;l | \mathcal{L} | ;;l | \ell | ;;;l | \log | ;L | \Lambda | ;m | \mu | ;n | \nabla | ;;n | \vec{\nabla} | ;;;n | \ln | ;N | \mathbb{N} | ;;;N | \exp | ;o | \omega | ;O | \Omega | ;;O | \mho | ;p | \partial | ;;p | \varpi | ;P | \Pi | ;q | \theta | ;;q | \vartheta | ;Q | \mathbb{Q} | ;r | \rho | ;;r | \varrho | ;R | \mathbb{R} | ;;R | \Re | ;s | \sigma | ;;s | \varsigma | ;;;s | \sin | ;S | \Sigma | ;;;S | \arcsin | ;t | \tau | ;;;t | \tan | ;;;T | \arctan | ;u | \upsilon | ;U | \Upsilon | ;v | \vee | ;V | \Phi | ;w | \xi | ;W | \Xi | ;x | \chi | ;y | \psi | ;Y | \Psi | ;z | \zeta | ;Z | \mathbb{Z} | ;0 | \emptyset | ;8 | \infty | ;! | \neg | ;^ | \uparrow | ;& | \wedge | ;~ | \approx | ;;~ | \simeq | ;_ | \downarrow | ;+ | \cup | ;- | \leftrightarrow | ;;- | \longleftrightarrow | ;* | \times | ;/ | \not | ; |   | \mapsto | ;; |   | \longmapsto | ;\ | \setminus | ;= | \Leftrightarrow | ;;= | \Longleftrightarrow | ;( | \langle | ;) | \rangle | ;[ | \Leftarrow | ;;[ | \Longleftarrow | ;] | \Rightarrow | ;;] | \Longrightarrow | ;{ | \subset | ;} | \supset | ;< | \leftarrow | ;;< | \longleftarrow | ;;;< | \min | ;> | \rightarrow | ;;> | \longrightarrow | ;;;> | \max | ;' | \prime | ;. | \cdot |
    
 ** Org Noter
    
@@ -1229,15 +1370,8 @@ With the power of the internet, I found [[https://sidhartharya.me/exporting-org-
   | (lambda nil (add-to-list 'company-backends 'company-math-symbols-latex) (setq company-math-allow-latex-symbols-in-faces t) (add-to-list 'company-backends 'company-bibtex) (add-to-list 'company-backends 'company-capf) (setq company-bibtex-bibliography '(~/org_roam/Zotero_library.bib))) | company-mode-set-explicitly | (lambda nil (add-to-list 'company-backends 'company-math-symbols-latex) (setq company-math-allow-latex-symbols-in-faces t) (add-to-list 'company-backends 'company-bibtex) (setq company-bibtex-bibliography '(~/org_roam/Zotero_library.bib))) |
  
 * Other Major Modes
-Some other extensions inside my Emacs config that require some changes for their major modes to function as I want them. This currently includes:
-- Calc
-- Ebuku
-- PDF Tools
-- Octave
-- Emacs Application Framework
-- Elisp
-- Deft
-  
+Some other extensions inside my Emacs config that require some changes for their major modes to function as I want them. 
+ 
 ** Calc
    The M-x calc is a powerful calculator software built for Emacs. I set up some small utilities for it like making angles counted in radians and keeping symbols like sqrt(2) as sqrt(2) and not substituting it for a number. 
 
@@ -1289,6 +1423,21 @@ Configuration for PDF-tools, my favourite Emacs pdf viewer. I set it as the defa
       (add-to-list 'auto-mode-alist '("\\.m\\'" . octave-mode))
    #+END_SRC
    
+** Vterm
+   I want a function that can interactively create new named vterm sessions without needing to provide arguments, besides the wanted string. This is what this part is about
+
+#+BEGIN_SRC elisp
+  
+  (defun named-vterm (NAME)
+    "Create a new vterm session with name NAME and open it in a new window"
+    (interactive "sEnter Name: ")
+    (vterm-other-window NAME))
+
+#+END_SRC
+
+#+RESULTS:
+: named-vterm
+
 ** Emacs Application Framework
   
      EAF is a very promising package for Emacs giving it some useful gui apps that are not so easy to find in other packages (such as a browser) and in general a full suite of applications. Unfortunately its got a weird behaviour in tiling window managers such as i3 and qtile, which I use not allowing me to use Emacs commands inside its buffers. It seems that when the cursor is outside the Emacs buffer (in my bar) this fixes but its still annoying so its use is limited unfortunately.

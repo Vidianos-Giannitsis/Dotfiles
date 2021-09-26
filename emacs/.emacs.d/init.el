@@ -22,7 +22,7 @@
 
 (gcmh-mode 1)
 
-(load-theme 'doom-dracula t)
+(load-theme 'doom-palenight t)
 
 (menu-bar-mode -1)
 (scroll-bar-mode -1)
@@ -129,6 +129,8 @@
 
 (require 'info+)
 
+(require 'pdftotext)
+
 (require 'keybindings)
 
 (require 'dired-x)
@@ -205,35 +207,30 @@
 (use-package org-download
   :after org)
 
-(require 'calctex)
-(add-hook 'calc-embedded-new-formula-hook 'calctex-mode)
-
-(add-hook 'org-mode-hook 'turn-on-org-cdlatex)
-
 (require 'org-tree-slide)
 
 (require 'ox-beamer)
 (require 'ox-hugo)
+(require 'ox-pandoc)
 
 (require 'org-marginalia-global-tracking)
 (require 'org-marginalia)
 
+(require 'org-pandoc-import)
+
 (add-to-list 'org-file-apps '("\\.pdf\\'" . emacs))
-  
-  (setq org-odt-preferred-output-format "docx")
-  
-  (add-hook 'org-mode-hook (lambda () (add-hook 'after-save-hook #'(lambda ()
-								     (let ((org-confirm-babel-evaluate nil))
-								       (org-babel-tangle))))
-						'run-at-end 'only-in-org-mode))
-  
-  (setq org-startup-with-inline-images t)
-  (setq org-image-actual-width nil)
-  
-  (add-hook 'org-mode-hook '(lambda ()
-			      (visual-line-mode)
-			      (org-fragtog-mode)))
-;			      (org-marginalia-mode)))
+
+(setq org-odt-preferred-output-format "docx")
+
+(add-hook 'org-mode-hook (lambda () (add-hook 'after-save-hook #'(lambda ()
+								   (let ((org-confirm-babel-evaluate nil))
+								     (org-babel-tangle))))
+					      'run-at-end 'only-in-org-mode))
+
+(setq org-startup-with-inline-images t)
+(setq org-image-actual-width nil)
+
+(add-hook 'org-mode-hook 'visual-line-mode)
 
 (setq org-format-latex-options '(:foreground default :background default :scale 1.8 :html-foreground "Black" :html-background "Transparent" :html-scale 1.0 :matchers))
 
@@ -242,6 +239,14 @@
 (setq org-preview-latex-default-process 'dvisvgm)
 
 (setq org-startup-with-latex-preview t)
+
+(require 'calctex)
+(add-hook 'calc-embedded-new-formula-hook 'calctex-mode)
+
+(add-hook 'org-mode-hook '(lambda ()
+			    (turn-on-org-cdlatex)
+			    (org-fragtog-mode)
+			    (laas-mode)))
 
 (defun org-renumber-environment (orig-func &rest args)
   (let ((results '()) 
@@ -284,6 +289,137 @@
   (apply orig-func args))
 
 (advice-add 'org-create-formula-image :around #'org-renumber-environment)
+
+(setq laas-basic-snippets
+  '(:cond laas-mathp
+    "!="    "\\neq"
+    "!>"    "\\mapsto"
+    "**"    "\\cdot"
+    "+-"    "\\pm"
+    "-+"    "\\mp"
+    "->"    "\\to"
+    "..."   "\\dots"
+    "<<"    "\\ll"
+    "<="    "\\leq"
+    "<>"    "\\diamond"
+    "=<"    "\\impliedby"
+    "=="    "&="
+    "=>"    "\\implies"
+    ">="    "\\geq"
+    ">>"    "\\gg"
+    "AA"    "\\forall"
+    "EE"    "\\exists"
+    "cb"    "^3"
+    "iff"   "\\iff"
+    "inn"   "\\in"
+    "notin" "\\not\\in"
+    "sr"    "^2"
+    "xx"    "\\times"
+    "|->"   "\\mapsto"
+    "|="    "\\models"
+    "||"    "\\mid"
+    "~="    "\\approx"
+    "~~"    "\\sim"
+
+    "arccos" "\\arccos"
+    "arccot" "\\arccot"
+    "arccot" "\\arccot"
+    "arccsc" "\\arccsc"
+    "arcsec" "\\arcsec"
+    "arcsin" "\\arcsin"
+    "arctan" "\\arctan"
+    "cos"    "\\cos"
+    "cot"    "\\cot"
+    "csc"    "\\csc"
+    "exp"    "\\exp"
+    "ln"     "\\ln"
+    "log"    "\\log"
+    "perp"   "\\perp"
+    "sin"    "\\sin"
+    "star"   "\\star"
+    "gcd"    "\\gcd"
+    "min"    "\\min"
+    "max"    "\\max"
+
+    "CC" "\\CC"
+    "FF" "\\FF"
+    "HH" "\\HH"
+    "NN" "\\NN"
+    "PP" "\\PP"
+    "QQ" "\\QQ"
+    "RR" "\\RR"
+    "ZZ" "\\ZZ"
+
+    ";a"  "\\alpha"
+    ";A"  "\\forall"        ";;A" "\\aleph"
+    ";b"  "\\beta"
+    ";;;c" "\\cos"
+    ";C"  "\\mathbb{C}"                            ";;;C" "\\arccos"
+    ";d"  "\\delta"         ";;d" "\\partial"
+    ";D"  "\\Delta"         ";;D" "\\nabla"
+    ";e"  "\\mathcal{E}"       ";;e" "\\varepsilon"   ";;;e" "\\exp"
+    ";E"  "\\exists"                               ";;;E" "\\ln"
+    ";f"  "\\phi"           ";;f" "\\varphi"
+    ";F"  "\\Phi"
+    ";g"  "\\gamma"                                ";;;g" "\\lg"
+    ";G"  "\\Gamma"                                ";;;G" "10^{?}"
+    ";h"  "\\eta"           ";;h" "\\hbar"
+    ";i"  "\\in"            ";;i" "\\imath"
+    ";I"  "\\iota"          ";;I" "\\Im"
+    ";;j" "\\jmath"
+    ";k"  "\\kappa"
+    ";l"  "\\mathcal{L}"        ";;l" "\\ell"          ";;;l" "\\log"
+    ";L"  "\\Lambda"
+    ";m"  "\\mu"
+    ";n"  "\\nabla"         ";;n" "\\vec{\\nabla}"     ";;;n" "\\ln"
+    ";N"  "\\mathbb{N}"                                ";;;N" "\\exp"
+    ";o"  "\\omega"
+    ";O"  "\\Omega"         ";;O" "\\mho"
+    ";p"  "\\partial"            ";;p" "\\varpi"
+    ";P"  "\\Pi"
+    ";q"  "\\theta"         ";;q" "\\vartheta"
+    ";Q"  "\\mathbb{Q}"
+    ";r"  "\\rho"           ";;r" "\\varrho"
+    ";R"  "\\mathbb{R}"      ";;R" "\\Re"
+    ";s"  "\\sigma"         ";;s" "\\varsigma"    ";;;s" "\\sin"
+    ";S"  "\\Sigma"                               ";;;S" "\\arcsin"
+    ";t"  "\\tau"                                 ";;;t" "\\tan"
+    ";;;T" "\\arctan"
+    ";u"  "\\upsilon"
+    ";U"  "\\Upsilon"
+    ";v"  "\\vee"
+    ";V"  "\\Phi"
+    ";w"  "\\xi"
+    ";W"  "\\Xi"
+    ";x"  "\\chi"
+    ";y"  "\\psi"
+    ";Y"  "\\Psi"
+    ";z"  "\\zeta"
+    ";Z"  "\\mathbb{Z}"
+    ";0"  "\\emptyset"
+    ";8"  "\\infty"
+    ";!"  "\\neg"
+    ";^"  "\\uparrow"
+    ";&"  "\\wedge"
+    ";~"  "\\approx"        ";;~" "\\simeq"
+    ";_"  "\\downarrow"
+    ";+"  "\\cup"
+    ";-"  "\\leftrightarrow"";;-" "\\longleftrightarrow"
+    ";*"  "\\times"
+    ";/"  "\\not"
+    ";|"  "\\mapsto"        ";;|" "\\longmapsto"
+    ";\\" "\\setminus"
+    ";="  "\\Leftrightarrow"";;=" "\\Longleftrightarrow"
+    ";(" "\\langle"
+    ";)" "\\rangle"
+    ";[" "\\Leftarrow"     ";;[" "\\Longleftarrow"
+    ";]" "\\Rightarrow"    ";;]" "\\Longrightarrow"
+    ";{"  "\\subset"
+    ";}"  "\\supset"
+    ";<"  "\\leftarrow"    ";;<" "\\longleftarrow"  ";;;<" "\\min"
+    ";>"  "\\rightarrow"   ";;>" "\\longrightarrow" ";;;>" "\\max"
+    ";'"  "\\prime"
+    ";."  "\\cdot"))
 
 (setq org-noter-always-create-frame nil)
 
@@ -598,6 +734,11 @@ Evaluate sexp for link to referenced info page: (Info-goto-node \"(%:file)%:node
 (add-hook 'pdf-view-mode-hook 'pdf-view-midnight-minor-mode)
 
 (add-to-list 'auto-mode-alist '("\\.m\\'" . octave-mode))
+
+(defun named-vterm (NAME)
+  "Create a new vterm session with name NAME and open it in a new window"
+  (interactive "sEnter Name: ")
+  (vterm-other-window NAME))
 
 (require 'eaf)
 

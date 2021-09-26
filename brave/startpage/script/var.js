@@ -53,7 +53,8 @@ var favorites = [
       ["Submissions" , "https://www.chemeng.ntua.gr/submission/", "cs"],
       ["Wolfram Alpha" , "https://www.wolframalpha.com", "wa"],
       ["Chemeng Forum" , "https://forum.chemeng.ntua.gr/", "cf"],
-      ["Science Direct" , "https://www.sciencedirect.com/", "sc"]
+	["Science Direct" , "https://www.sciencedirect.com/", "sc"],
+	["Research Rabbit" , "https://www.researchrabbitapp.com/home", "rr"]
     ]
   ],
   [ "Socials",
@@ -83,7 +84,7 @@ var favorites = [
       ["r/unixporn", "https://www.reddit.com/r/unixporn/", "up"],
       ["CompetitiveTFT", "https://www.reddit.com/r/CompetitiveTFT/", "ct"],
 	["TFT Subreddit", "https://www.reddit.com/r/TeamfightTactics/", "tft"],
-	["Bodyweightfitness' RR", "https://www.reddit.com/r/bodyweightfitness/wiki/kb/recommended_routine", "rr"]
+	["Bodyweightfitness' RR", "https://www.reddit.com/r/bodyweightfitness/wiki/kb/recommended_routine", "brr"]
     ]
   ],
   [ "Games",

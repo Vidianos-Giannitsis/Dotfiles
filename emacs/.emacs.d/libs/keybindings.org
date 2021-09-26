@@ -25,37 +25,38 @@
     "D" 'dired
     "d" '(:ignore t :which-key "Dired functions")
     "q" '(:ignore t :which-key "Quickmarks")
-    "t" 'toggle-truncate-lines
+    "t" '(:ignore t :which-key "Move between vterms")
     "T" 'org-babel-tangle
     "RET" 'vterm-toggle
-    "<C-return>" 'vterm 
+    "<C-return>" 'named-vterm 
     "b" 'counsel-switch-buffer
     "a" 'org-agenda
     "g" 'pdf-view-goto-page
     "H" 'split-window-horizontally
     "V" 'split-window-vertically
-    "C" '(calc-dispatch :which-key "Open the M-x calc menu")
+    "c" '(calc-dispatch :which-key "Open the calc dispatcher")
     "R" 'recover-this-file
     "m" 'magit
     "B" 'ivy-bibtex
-    "r" '(:ignore t :which-key "Org Roam/Ref commands")
+    "r" '(:ignore t :which-key "Org Roam/Ref")
     "j" '(:ignore t :which-key "Daily notes")
     "h" 'counsel-imenu
-    "c" '(:ignore t :which-key "Calendar Commands")
+    "C" '(:ignore t :which-key "Calendar Commands")
     "l" '(linum-mode :which-key "Line numbers")
-    "i" 'ielm
-    "s" '(:ignore t :which-key "Counsel-spotify commands")
+    "I" 'ielm
+    "s" '(:ignore t :which-key "Counsel-spotify")
     "e" '(:ignore t :which-key "Evaluate Emacs-Lisp")
     "f" '(ace-window :which-key "Switch focus")
     "w" '(:ignore t :which-key "Motion commands")
     "W" 'wolfram-alpha
     "n" 'winner-redo
-    "p" 'winner-undo)
+    "p" 'winner-undo
+    "i" '(:ignore t :which-key "Org-Pandoc-Import"))
   
   (general-define-key
    :states 'normal
    :keymaps 'override
-   :prefix "SPC c"
+   :prefix "SPC C"
    "b" 'cfw:open-calendar-buffer
    "o" '(cfw:open-org-calendar :which-key "Open calendar with scheduled to-dos")
    "g" '(cfw:git-open-calendar :which-key "Open calendar with git commit history"))
@@ -139,6 +140,29 @@
    "d" 'evil-window-decrease-width
    "D" 'evil-window-decrease-height
    "=" 'balance-windows)
+  
+  (general-define-key
+   :states 'normal
+   :keymaps 'override
+   :prefix "SPC i"
+   "i" 'org-pandoc-import-to-org
+   "I" 'org-pandoc-import-as-org
+   "c" 'org-pandoc-import-csv-to-org
+   "C" 'org-pandoc-import-csv-as-org
+   "d" 'org-pandoc-import-docx-to-org
+   "D" 'org-pandoc-import-docx-as-org
+   "o" 'org-pandoc-import-odt-to-org
+   "O" 'org-pandoc-import-odt-as-org
+   "l" 'org-pandoc-import-latex-to-org
+   "L" 'org-pandoc-import-latex-as-org)
+  
+  (general-define-key
+   :states 'normal
+   :keymaps 'override
+   :prefix "SPC t"
+   "n" 'vterm-toggle-forward
+   "N" 'vterm-toggle-backward)
+  
  #+END_SRC
 
  #+RESULTS:
@@ -160,10 +184,9 @@
    
    (general-define-key
     :states 'normal
-    :keymaps 'override
+    :keymaps 'global
     "u" 'undo-tree-undo
     "C-r" 'undo-tree-redo
-    "=" 'math-at-point
     "/" 'swiper)
    
    (general-define-key
@@ -173,7 +196,7 @@
    
    (general-define-key
     :states 'visual
-    :keymaps 'override
+    :keymaps 'global
     "e r" 'eval-region
     "m" 'org-marginalia-mark)
    
@@ -263,7 +286,8 @@
    :states 'normal
    :keymaps 'org-mode-map
    "C-j" '(org-tree-slide-move-next-tree :which-key "Next Slide")
-   "C-k" '(org-tree-slide-move-previous-tree :which-key "Previous Slide"))
+   "C-k" '(org-tree-slide-move-previous-tree :which-key "Previous Slide")
+   "=" 'math-at-point)
   
 #+END_SRC
 
@@ -299,6 +323,12 @@
    "s r" 'dired-subtree-remove
    "s n" 'dired-subtree-narrow
    "<C-return>" 'helm-dired-open)
+  
+  (define-key calc-mode-map (kbd "/") nil)
+  (general-define-key
+   :states 'normal
+   :keymaps 'calc-mode-map
+   "/" 'calc-divide)
   
 #+END_SRC
 

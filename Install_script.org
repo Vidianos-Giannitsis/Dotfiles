@@ -10,7 +10,7 @@ sudo pacman -S yay
   This list are programs that without them my system wont work properly. I will list them as install with pacman, but once I try, I will change which ones need AUR. Git might be preinstalled, but I dont know. Also, I dont know, if Arco ships with a qtile version (I think it does though), so I will add it to the list if I dont install it.
 
   #+BEGIN_SRC sh
-    sudo pacman -S lxappearance dmenu git qtile xrandr nitrogen pavucontrol nm-applet picom lxpolkit dunst volumeicon stow timeshift syncthing
+    sudo pacman -S lxappearance dmenu git qtile xrandr nitrogen pavucontrol nm-applet picom lxpolkit dunst volumeicon stow timeshift syncthing exa brightnessctl
     
     yay -S tuxedo-control-center-bin
   #+END_SRC
@@ -27,11 +27,11 @@ sudo pacman -S yay
   Other things to install for my system
 
   #+BEGIN_SRC sh
-    sudo pacman -S python-pip minecraft
+    sudo pacman -S python-pip minecraft neofetch htop youtube-dl starship
     
     pip3 install LibreGaming
   #+END_SRC
-  More packages which need other methods and not pacman. Lol, comsol, edopro
+  More packages which need other methods and not pacman. Lol, comsol, edopro, dracula theme, SourceCodePro font if its not installed. 
 
 ** Zotero plugins
    Better bibtex, sci-hub plugin, zotfile

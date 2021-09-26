@@ -19,7 +19,7 @@ file_manager = "thunar" # I mostly use dired inside emacs for file management, b
 music_player = "spotify"
 calculator = "qalculate-gtk"
 screenshots = "flameshot gui"
-run_launcher = 'dmenu_run -fn "Source Code Pro Bold" -i -nb "#44475a" -sb "#bd93f9" -nf "#839496" -sf "#f8f8f2" -p "Launch program"'
+run_launcher = 'dmenu_run -fn "Source Code Pro Bold" -i -nb "#292d3e" -sb "#5b76b2" -nf "#839496" -sf "#eeffff" -p "Launch program"'
 
 @hook.subscribe.startup_once
 def autostart():
@@ -30,7 +30,7 @@ def autostart():
 def floating_calc(c):
     if c.name == "Qalculate!":
         c.toggle_floating()
-
+        
 keys = [
     Key2("M-k", lazy.layout.down(),
 	desc="Move focus down in stack pane"),
@@ -85,7 +85,7 @@ Key2("M-C-a", lazy.spawn("pavucontrol"), desc="Launch audio control"),
 Key2("M-C-g", lazy.spawn("geogebra"), desc="Launch geogebra"),
 Key2("M-C-i", lazy.spawn("inkscape"), desc="Launch inkscape"),
 Key2("M-S-c", lazy.spawn("tuxedo-control-center"), desc="Launch computer settings manager"),
-    Key2("M-C-p", lazy.spawn("system-config-printer"), desc="Launch printer software"),
+Key2("M-C-p", lazy.spawn("system-config-printer"), desc="Launch printer software"),
 
 Key2("<XF86AudioRaiseVolume>", lazy.spawn("amixer -c 1 sset Master 5%+ unmute"), desc="Raise Volume and unmute if muted"),
 Key2("<XF86AudioLowerVolume>", lazy.spawn("amixer -c 1 sset Master 5%- unmute"), desc="Lower Volume and unmute if muted"),
@@ -133,13 +133,13 @@ keys.extend([Key2("M-C-s", lazy.group['scratchpad'].dropdown_toggle('music')),
 
 # Layouts
 layouts = [
-    layout.MonadTall(border_focus = "#5e497c", border_normal = "#002525"),
+    layout.MonadTall(border_focus = "#41557f", border_normal = "#002525"),
     # layout.Columns(),
     # layout.Bsp(),
     layout.Max(),
-    layout.Stack(num_stacks=2, border_focus = "#5e497c", border_normal = "#002525"),
+    layout.Stack(num_stacks=2, border_focus = "#41557f", border_normal = "#002525"),
     # layout.Matrix(),
-    layout.MonadWide(border_focus = "#5e497c", border_normal = "#002525"),
+    layout.MonadWide(border_focus = "#41557f", border_normal = "#002525"),
     # layout.RatioTile(),
     # layout.Tile(border_focus = "#005858", border_normal = "#002525", border_width ="2"),
     # layout.TreeTab(),
@@ -151,8 +151,8 @@ widget_defaults = dict(
     font='Source Code Pro',
     fontsize=16,
     padding=2,
-    background="#282a36",
-    foreground="#f8f8f2",
+    background="#292d3e",
+    foreground="#eeffff",
 )
 extension_defaults = widget_defaults.copy()
 
@@ -160,31 +160,31 @@ screens = [
     Screen(
 	bottom=bar.Bar(
 	    [
-		widget.CurrentLayout(background="#5e497c"),
+		widget.CurrentLayout(background="#41557f"),
 		widget.Sep(foreground="#363428", size_percent=100),
 		widget.GroupBox(),
 		widget.Prompt(),
 		widget.WindowName(),
 		widget.Sep(foreground="#363428", size_percent=100),
-		widget.TextBox("Free Space: ", background="#5e497c"),
-		widget.DF(background="#5e497c", visible_on_warn=False, format='({uf}{m}|{r:.0f}%)', warn_space=20),
+		widget.TextBox("Free Space: ", background="#41557f"),
+		widget.DF(background="#41557f", visible_on_warn=False, format='({uf}{m}|{r:.0f}%)', warn_space=20),
 		widget.Sep(foreground="#363428", size_percent=100),
-		widget.TextBox("RAM: ", background="#282a36"),
-		widget.Memory(background="#282a36"),
-		widget.TextBox(",", background="#282a36"),
-		widget.CPU(background="#282a36"),
-		widget.TextBox("Battery: ", background="#5e497c"),
+		widget.TextBox("RAM: ", background="#242837"),
+		widget.Memory(background="#242837"),
+		widget.TextBox(",", background="#242837"),
+		widget.CPU(background="#242837"),
+		widget.TextBox("Battery: ", background="#41557f"),
 		widget.Battery(low_percentage = 0.2,
 			       notify_below = 0.15,
 			       update_interval = 30,
 			       discharge_char = '↓',
 			       charge_char = '↑',
-			       background="#5e497c",
+			       background="#41557f",
 			       ),
-		widget.TextBox("", background="#282a36"),
-		widget.Clock(format='%a %d-%m-%Y %I:%M %p', background="#282a36"),
+		widget.TextBox("", background="#242837"),
+		widget.Clock(format='%a %d-%m-%Y %I:%M %p', background="#242837"),
 		widget.Sep(foreground="#363428", size_percent=100),
-		widget.Systray(background="#5e497c"),
+		widget.Systray(background="41557f"),
 	],
 	    24,
 	),

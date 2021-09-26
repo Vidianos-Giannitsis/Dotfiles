@@ -57,7 +57,7 @@ Defining them here helps if I want to use them in multiple locations of my confi
   music_player = "spotify"
   calculator = "qalculate-gtk"
   screenshots = "flameshot gui"
-  run_launcher = 'dmenu_run -fn "Source Code Pro Bold" -i -nb "#44475a" -sb "#bd93f9" -nf "#839496" -sf "#f8f8f2" -p "Launch program"'
+  run_launcher = 'dmenu_run -fn "Source Code Pro Bold" -i -nb "#292d3e" -sb "#5b76b2" -nf "#839496" -sf "#eeffff" -p "Launch program"'
 #+END_SRC
 
 #+RESULTS:
@@ -168,7 +168,7 @@ Some notes about them are:
   Key2("M-C-g", lazy.spawn("geogebra"), desc="Launch geogebra"),
   Key2("M-C-i", lazy.spawn("inkscape"), desc="Launch inkscape"),
   Key2("M-S-c", lazy.spawn("tuxedo-control-center"), desc="Launch computer settings manager"),
-  Key2("M-C-p", lazy.spawn("system-config-printer"), desc="Launch printer software")
+  Key2("M-C-p", lazy.spawn("system-config-printer"), desc="Launch printer software"),
 #+END_SRC
 
 ** Multimedia Keys
@@ -249,13 +249,13 @@ MonadWide is the same as monadtall with the only difference being that 2 windows
 #+BEGIN_SRC python
 # Layouts
 layouts = [
-    layout.MonadTall(border_focus = "#bd93f9", border_normal = "#002525"),
+    layout.MonadTall(border_focus = "#41557f", border_normal = "#002525"),
     # layout.Columns(),
     # layout.Bsp(),
     layout.Max(),
-    layout.Stack(num_stacks=2, border_focus = "#bd93f9", border_normal = "#002525"),
+    layout.Stack(num_stacks=2, border_focus = "#41557f", border_normal = "#002525"),
     # layout.Matrix(),
-    layout.MonadWide(border_focus = "#bd93f9", border_normal = "#002525"),
+    layout.MonadWide(border_focus = "#41557f", border_normal = "#002525"),
     # layout.RatioTile(),
     # layout.Tile(border_focus = "#005858", border_normal = "#002525", border_width ="2"),
     # layout.TreeTab(),
@@ -276,8 +276,8 @@ On the right side of the bar, I have RAM and CPU usage, which combining textboxe
       font='Source Code Pro',
       fontsize=16,
       padding=2,
-      background="#282a36",
-      foreground="#f8f8f2",
+      background="#292d3e",
+      foreground="#eeffff",
   )
   extension_defaults = widget_defaults.copy()
   
@@ -285,31 +285,31 @@ On the right side of the bar, I have RAM and CPU usage, which combining textboxe
       Screen(
 	  bottom=bar.Bar(
 	      [
-		  widget.CurrentLayout(background="#2a3628"),
+		  widget.CurrentLayout(background="#41557f"),
 		  widget.Sep(foreground="#363428", size_percent=100),
 		  widget.GroupBox(),
 		  widget.Prompt(),
 		  widget.WindowName(),
 		  widget.Sep(foreground="#363428", size_percent=100),
-		  widget.TextBox("Free Space: ", background="#2a3628"),
-		  widget.DF(background="#2a3628", visible_on_warn=False, format='({uf}{m}|{r:.0f}%)', warn_space=20),
+		  widget.TextBox("Free Space: ", background="#41557f"),
+		  widget.DF(background="#41557f", visible_on_warn=False, format='({uf}{m}|{r:.0f}%)', warn_space=20),
 		  widget.Sep(foreground="#363428", size_percent=100),
-		  widget.TextBox("RAM: ", background="#36282a"),
-		  widget.Memory(background="#36282a"),
-		  widget.TextBox(",", background="#36282a"),
-		  widget.CPU(background="#36282a"),
-		  widget.TextBox("Battery: ", background="#2a3628"),
+		  widget.TextBox("RAM: ", background="#242837"),
+		  widget.Memory(background="#242837"),
+		  widget.TextBox(",", background="#242837"),
+		  widget.CPU(background="#242837"),
+		  widget.TextBox("Battery: ", background="#41557f"),
 		  widget.Battery(low_percentage = 0.2,
 				 notify_below = 0.15,
 				 update_interval = 30,
 				 discharge_char = '↓',
 				 charge_char = '↑',
-				 background="#2a3628",
+				 background="#41557f",
 				 ),
-		  widget.TextBox("", background="#36282a"),
-		  widget.Clock(format='%a %d-%m-%Y %I:%M %p', background="#36282a"),
+		  widget.TextBox("", background="#242837"),
+		  widget.Clock(format='%a %d-%m-%Y %I:%M %p', background="#242837"),
 		  widget.Sep(foreground="#363428", size_percent=100),
-		  widget.Systray(),
+		  widget.Systray(background="41557f"),
 	  ],
 	      24,
 	  ),

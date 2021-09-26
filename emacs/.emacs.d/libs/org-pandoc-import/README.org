@@ -1,0 +1,115 @@
+#+title: Org Pandoc Import
+#+author: tecosaur
+
+#+html: <p><img src="https://img.shields.io/badge/Emacs-26.3+-blueviolet.svg?style=flat-square&logo=GNU%20Emacs&logoColor=white">
+#+html: <img src="https://img.shields.io/badge/-Linux-fcc624?logo=linux&style=flat-square&logoColor=black">
+#+html: <img src="https://img.shields.io/badge/-MacOS-lightgrey?logo=apple&style=flat-square&logoColor=black">
+#+html: <a href="https://www.buymeacoffee.com/tecosaur"><img src="https://img.shields.io/badge/Buy_me_a_coffee-FFDD00?style=flat-square&logo=buy-me-a-coffee&logoColor=black"></a></p>
+
+The worst part about =org-mode=? Having to leave it.
+
+This package aims to reduce this pain by leveraging [[https://pandoc.org/][Pandoc]] to convert selected
+file types /to/ org.
+
+*There are two tiers of non-org file avoidance:*
+
+ 1. The basic "get me out of here" ---
+    ~org-pandoc-import-{to,as}-org~ allows you to easily convert supported non-org
+    files to an org file/buffer with Pandoc
+ 2. "I don't even want to /see/ non-org files" --- ~org-pandoc-import-transient-mode~
+    is for you
+    - (via file handlers) intercepts requests for non-org files it knows it can convert
+    - uses ~org-pandoc-import-to-org~ to convert the file to a temporary org file
+    - opens this org file instead
+    - exports back to the original non-org file on save
+
+[[file:org-pandoc-import.svg]]
+
+* Installation
+** Straight
+#+begin_src elisp
+(use-package org-pandoc-import
+  :straight (:host github
+             :repo "tecosaur/org-pandoc-import"
+             :files ("*.el" "filters" "preprocessors")))
+#+end_src
+** Doom
+#+begin_src elisp
+;; $DOOMDIR/packages.el
+(package! org-pandoc-import
+  :recipe (:host github
+           :repo "tecosaur/org-pandoc-import"
+           :files ("*.el" "filters" "preprocessors")))
+
+;; $DOOMDIR/config.el
+(use-package! org-pandoc-import :after org)
+#+end_src
+
+** Dependences
++ Pandoc
+
+That's the only hard dependency. However ~ox-pandoc~ and ~ox-gfm~ can be useful for
+exporting with ~org-pandoc-import-transient-mode~.
+
+That said, as they are currently implemented, the pre-processors for /Rmarkdown/
+and /TSV/ files use ~sed~ (only really affects Windows users).
+ 
+* Screenshots
+
+[[file:screenshots/odt.png]]
+
+[[file:screenshots/markdown.png]]
+
+[[file:screenshots/csv.png]]
+
+* Default backends
++ markdown :: associated with: =.md=, =.markdown=
++ LaTeX :: associated with: =.tex=, =.latex=
++ reStructuredText :: (~rst~) associated with: =.rst=
++ ODT :: associated with: =.odt=
++ DOCX :: associated with: =.docx=
++ Jupyter Notebooks :: (~ipynb~) associated with: =.ipynb=
++ Rmarkdown :: (~markdown~) associated with: =.Rmd=, =.rmd=
++ CSV :: associated with: =.csv=
++ TSV :: (~csv~) associated with: =.tsv=
+
+Currently /Rmarkdown/ and /TSV/ files require ~sed~ in order to pre-process the file
+for Pandoc.
+
+** Default transient-mode backends
+Please note that this mode is off by default.
+It is however a global mode, so enable it once in your config and it will be
+active everywhere.
+
+The active transient backends are determined by
+~org-pandoc-import-transient-associations~.
+
++ markdown :: using Org's ~gfm~ export if available, otherwise ~md~
++ ODT :: using Org's ~odt~ export
++ csv, tsv :: using ~org-table-export~
+When ~ox-pandoc~ is available, the following formats are also enabled by default,
+and use ~ox-pandoc~ to export.
++ =rst=
++ =docx=
+
+* Adding new backends
+For something supported out of the box by Pandoc, it couldn't be easier ---
+just
+#+begin_src elisp
+(org-pandoc-import-backend foo)
+#+end_src
+
+This will add ~foo~ to ~org-pandoc-import-backends~, and create the following
+functions
++ ~org-pandoc-import-foo-as-org~
++ ~org-pandoc-import-foo-to-org~
+Which will reference these variables,
++ ~org-pandoc-import-foo-args~
++ ~org-pandoc-import-foo-filters~
++ ~org-pandoc-import-foo-preprocessors~
++ ~org-pandoc-import-foo-extensions~
+That last variable will be set to ~("foo")~, and will cause
+~org-pandoc-import-{to,as}-org~ to automatically select this backend when called
+on =.foo= files.
+
+These all have docstrings --- check them out!
