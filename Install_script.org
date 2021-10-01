@@ -6,38 +6,29 @@
 sudo pacman -S yay
   #+END_SRC
 
-* System Dependencies
-  This list are programs that without them my system wont work properly. I will list them as install with pacman, but once I try, I will change which ones need AUR. Git might be preinstalled, but I dont know. Also, I dont know, if Arco ships with a qtile version (I think it does though), so I will add it to the list if I dont install it.
+* Packages to install
 
   #+BEGIN_SRC sh
-    sudo pacman -S lxappearance dmenu git qtile xrandr nitrogen pavucontrol nm-applet picom lxpolkit dunst volumeicon stow timeshift syncthing exa brightnessctl
+    sudo pacman -S picom lxsession dunst stow syncthing octave qalculate-gtk geogebra zathura cmake libvterm exa python-pip starship pandoc libretro vulkan-radeon
     
-    yay -S tuxedo-control-center-bin
+    yay -S tuxedo-control-center-bin zotero palenight-gtk-theme sc-im LibreGaming
   #+END_SRC
  
-
-* Core Programs
-  This list is my most important programs, which I use on a daily basis. I cant really use my computer without them. Some might come preinstalled with the iso, or I will install them in the install process, but I will list all of them
-
-  #+BEGIN_SRC sh
-    sudo pacman -S alacritty emacs firefox brave libreoffice octave pcmanfm spotify qalculate-gtk flameshot lutris steam thunderbird geogebra inkscape blueman redshift starship qpdfview zathura zotero
-  #+END_SRC
-
 * Other things
-  Other things to install for my system
+  Other things to install for my system which need other methods and not pacman. Lol, comsol
 
-  #+BEGIN_SRC sh
-    sudo pacman -S python-pip minecraft neofetch htop youtube-dl starship
-    
-    pip3 install LibreGaming
-  #+END_SRC
-  More packages which need other methods and not pacman. Lol, comsol, edopro, dracula theme, SourceCodePro font if its not installed. 
+** Edopro
+  https://mega.nz/file/9a4C3arS#3W3X4usmctzpv5XfLiJD4PKsiOPRhTde0GZ2TgGrylM
 
 ** Zotero plugins
-   Better bibtex, sci-hub plugin, zotfile
-** Browser plugin
-   uBlockOrigin, darkreader, surfingkeys, zotero extension, raindrop
+   Better bibtex https://github.com/retorquere/zotero-better-bibtex/releases/tag/v5.4.29
 
+   zotfile (change some config options to get pdf name to match citekey and save to Sync directory) http://zotfile.com/
+
+   sci-hub plugin https://github.com/ethanwillis/zotero-scihub/releases
+   
+** Browser plugin
+   uBlockOrigin (if firefox), darkreader, surfingkeys (or vimium), zotero extension, raindrop, custom new tab url (if brave), google scholar
 * Things to backup
   Documents and org_roam, which contain a massive chunk of all my personal documents.
 
@@ -47,4 +38,22 @@ sudo pacman -S yay
 
   Music directory, hiit workouts, auth.org
 
-  
+** Pokemon Reborn
+   Most recent save files are inside the game folder in Sync (Game.rxdata), they however need to be placed in ~/.local/share/Pokemon Reborn
+   For Redux, since it is running the windows version (the modpack hasnt been ported to other versions), the Game.rxdata file needs to go to ~/.wine/drive_c/users/vidianos/Saved Games/Pokemon Reborn Redux/Game.rxdata
+
+   The file nesting for both should be automatically created when the games run for the first time. 
+   
+* From git repo
+** Emacs
+   Should work after installing some vterm dependencies (on the package install list)
+** Bash
+   The bashrc in arco seems better than mine so I just copied my aliases over
+** Qtile
+   Need to install some dependencies from pip
+   #+BEGIN_SRC shell
+     pip3 install dbus-next autogui
+   #+END_SRC
+   On the test install, I still see to get some error despite the package being installed. The problem might be the need to restart. But the fix is to comment out the autogui import and the part of the config with the emacs scratchpad.
+
+   The rest of the folders have either not been tested because they dont need to or work perfectly
