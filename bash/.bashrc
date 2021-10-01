@@ -180,5 +180,3 @@ alias gpush='git push'
 set -o vi
 eval "$(starship init bash)"
 
-
-

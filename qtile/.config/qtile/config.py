@@ -19,7 +19,7 @@ file_manager = "thunar" # I mostly use dired inside emacs for file management, b
 music_player = "spotify"
 calculator = "qalculate-gtk"
 screenshots = "flameshot gui"
-run_launcher = 'dmenu_run -fn "Source Code Pro Bold" -i -nb "#292d3e" -sb "#5b76b2" -nf "#839496" -sf "#eeffff" -p "Launch program"'
+run_launcher = 'dmenu_run -fn "Source Code Pro Bold" -i -nb "#292d3e" -sb "#4C7975" -nf "#839496" -sf "#eeffff" -p "Launch program"'
 
 @hook.subscribe.startup_once
 def autostart():
@@ -30,7 +30,7 @@ def autostart():
 def floating_calc(c):
     if c.name == "Qalculate!":
         c.toggle_floating()
-        
+
 keys = [
     Key2("M-k", lazy.layout.down(),
 	desc="Move focus down in stack pane"),
@@ -95,16 +95,17 @@ Key2("<XF86MonBrightnessDown>", lazy.spawn("sudo brightnessctl -q s 10%-"), desc
 Key2("<Print>", lazy.spawn(screenshots), desc="Screenshot util"),
 ]
 
-def cursor_pos():
-    x1, y1=pyautogui.position()
-    return [x1/1920 - 0.2, y1/1080 - 0.25]
+# def cursor_pos():
+  #    x1, y1=pyautogui.position()
+   #   return [x1/1920 - 0.2, y1/1080 - 0.25]
 
 groups = [
     ScratchPad("scratchpad", [
-	DropDown("music", "spotify", opacity=0.8, height=0.8, weight=0.8),
-	DropDown("term", "alacritty", opacity=0.8),
-	DropDown("calc", "qalculate-gtk", opacity=0.8),
-	DropDown("emacs", "emacs scratchpad.org", width=0.4, height=0.5, y=cursor_pos()[1], x=cursor_pos()[0], opacity=0.8) ]),
+    DropDown("music", "spotify", opacity=0.8, height=0.8, weight=0.8),
+    DropDown("term", "alacritty", opacity=0.8),
+    DropDown("calc", "qalculate-gtk", opacity=0.8),
+   # DropDown("emacs", "emacs scratchpad.org", width=0.4, height=0.5, y=cursor_pos()[1], x=cursor_pos()[0], opacity=0.8)
+    ]),
     Group("1"),
     Group("2"),
     Group("3"),
@@ -123,7 +124,7 @@ for i in "123456789":
 
 	Key([mod, "shift"], i, lazy.window.togroup(i, switch_group=False),
 	    desc="Switch to & move focused window to group {}".format(i)),
-	   ])
+])
 
 keys.extend([Key2("M-C-s", lazy.group['scratchpad'].dropdown_toggle('music')),
 	     Key2("M-S-<Return>", lazy.group['scratchpad'].dropdown_toggle('term')),
@@ -133,13 +134,13 @@ keys.extend([Key2("M-C-s", lazy.group['scratchpad'].dropdown_toggle('music')),
 
 # Layouts
 layouts = [
-    layout.MonadTall(border_focus = "#41557f", border_normal = "#002525"),
+    layout.MonadTall(border_focus = "#3c605d", border_normal = "#002525"),
     # layout.Columns(),
     # layout.Bsp(),
     layout.Max(),
-    layout.Stack(num_stacks=2, border_focus = "#41557f", border_normal = "#002525"),
+    layout.Stack(num_stacks=2, border_focus = "#4C7975", border_normal = "#002525"),
     # layout.Matrix(),
-    layout.MonadWide(border_focus = "#41557f", border_normal = "#002525"),
+    layout.MonadWide(border_focus = "#4C7975", border_normal = "#002525"),
     # layout.RatioTile(),
     # layout.Tile(border_focus = "#005858", border_normal = "#002525", border_width ="2"),
     # layout.TreeTab(),
@@ -160,31 +161,31 @@ screens = [
     Screen(
 	bottom=bar.Bar(
 	    [
-		widget.CurrentLayout(background="#41557f"),
+		widget.CurrentLayout(background="#4C7975"),
 		widget.Sep(foreground="#363428", size_percent=100),
 		widget.GroupBox(),
 		widget.Prompt(),
 		widget.WindowName(),
 		widget.Sep(foreground="#363428", size_percent=100),
-		widget.TextBox("Free Space: ", background="#41557f"),
-		widget.DF(background="#41557f", visible_on_warn=False, format='({uf}{m}|{r:.0f}%)', warn_space=20),
+		widget.TextBox("Free Space: ", background="#4C7975"),
+		widget.DF(background="#4C7975", visible_on_warn=False, format='({uf}{m}|{r:.0f}%)', warn_space=20),
 		widget.Sep(foreground="#363428", size_percent=100),
 		widget.TextBox("RAM: ", background="#242837"),
 		widget.Memory(background="#242837"),
 		widget.TextBox(",", background="#242837"),
 		widget.CPU(background="#242837"),
-		widget.TextBox("Battery: ", background="#41557f"),
+		widget.TextBox("Battery: ", background="#4C7975"),
 		widget.Battery(low_percentage = 0.2,
 			       notify_below = 0.15,
 			       update_interval = 30,
 			       discharge_char = '↓',
 			       charge_char = '↑',
-			       background="#41557f",
+			       background="#4C7975",
 			       ),
 		widget.TextBox("", background="#242837"),
 		widget.Clock(format='%a %d-%m-%Y %I:%M %p', background="#242837"),
 		widget.Sep(foreground="#363428", size_percent=100),
-		widget.Systray(background="41557f"),
+		widget.Systray(background="4C7975"),
 	],
 	    24,
 	),

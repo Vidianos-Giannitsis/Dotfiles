@@ -197,17 +197,18 @@ Lastly, there is the Emacs scratchpad contained here. This is a unique scratchpa
 This part defines the very scratchpad and its dimensions and location on the screen as well as the keybinding which opens it. The interesting part is that I read the cursors position with the pyautogui library and do some necessary calculations to define the x and y dimensions of the scratchpad (which are on the edges of the window) in a way that the scratchpad is centered on the position of my cursor. I wanted to make this position update every time I open the scratchpad but I havent figured it out yet so for now it gets the cursor position once on startup and in every subsequent restart of qtile. The problem appears to be that qtile loads the dimensions of every scratchpad when it reads config.py and then when launching them recalls them from memory and not interactively. I tend to believe its not possible to interactively change this position (as I have tried a multitude of things which didnt appear to work) but I would be glad to be proved wrong as its a very cool concept to always center it on the cursor. 
 
 #+BEGIN_SRC python
-
-  def cursor_pos():
-      x1, y1=pyautogui.position()
-      return [x1/1920 - 0.2, y1/1080 - 0.25]
-
+  
+   # def cursor_pos():
+    #    x1, y1=pyautogui.position()
+     #   return [x1/1920 - 0.2, y1/1080 - 0.25]
+  
   groups = [
       ScratchPad("scratchpad", [
-	  DropDown("music", "spotify", opacity=0.8, height=0.8, weight=0.8),
-	  DropDown("term", "alacritty", opacity=0.8),
-	  DropDown("calc", "qalculate-gtk", opacity=0.8),
-	  DropDown("emacs", "emacs scratchpad.org", width=0.4, height=0.5, y=cursor_pos()[1], x=cursor_pos()[0], opacity=0.8) ]),
+      DropDown("music", "spotify", opacity=0.8, height=0.8, weight=0.8),
+      DropDown("term", "alacritty", opacity=0.8),
+      DropDown("calc", "qalculate-gtk", opacity=0.8),
+     # DropDown("emacs", "emacs scratchpad.org", width=0.4, height=0.5, y=cursor_pos()[1], x=cursor_pos()[0], opacity=0.8)
+      ]),
       Group("1"),
       Group("2"),
       Group("3"),
@@ -218,22 +219,24 @@ This part defines the very scratchpad and its dimensions and location on the scr
       Group("8"),
       Group("9"),
   ]
-
+  
   for i in "123456789":
       keys.extend([
 	  Key([mod], i, lazy.group[i].toscreen(),
 	      desc="Switch to group {}".format(i)),
-
+  
 	  Key([mod, "shift"], i, lazy.window.togroup(i, switch_group=False),
 	      desc="Switch to & move focused window to group {}".format(i)),
-	     ])
-
+  ])
+  
   keys.extend([Key2("M-C-s", lazy.group['scratchpad'].dropdown_toggle('music')),
 	       Key2("M-S-<Return>", lazy.group['scratchpad'].dropdown_toggle('term')),
 	       Key2("M-C-c", lazy.group['scratchpad'].dropdown_toggle('calc')),
 	       Key2("M-e", lazy.group['scratchpad'].dropdown_toggle('emacs')),
 	       ])
 #+END_SRC
+
+#+RESULTS:
 
 * Layouts
 These are all the layouts I could find in the qtile documentation. I only have 4 uncommented as adding too many makes it annoying to switch between them. Also I use this config in a small laptop screen so some layouts could be useful but the windows are too small for my screen.
@@ -285,31 +288,31 @@ On the right side of the bar, I have RAM and CPU usage, which combining textboxe
       Screen(
 	  bottom=bar.Bar(
 	      [
-		  widget.CurrentLayout(background="#41557f"),
+		  widget.CurrentLayout(background="#4C7975"),
 		  widget.Sep(foreground="#363428", size_percent=100),
 		  widget.GroupBox(),
 		  widget.Prompt(),
 		  widget.WindowName(),
 		  widget.Sep(foreground="#363428", size_percent=100),
-		  widget.TextBox("Free Space: ", background="#41557f"),
-		  widget.DF(background="#41557f", visible_on_warn=False, format='({uf}{m}|{r:.0f}%)', warn_space=20),
+		  widget.TextBox("Free Space: ", background="#4C7975"),
+		  widget.DF(background="#4C7975", visible_on_warn=False, format='({uf}{m}|{r:.0f}%)', warn_space=20),
 		  widget.Sep(foreground="#363428", size_percent=100),
 		  widget.TextBox("RAM: ", background="#242837"),
 		  widget.Memory(background="#242837"),
 		  widget.TextBox(",", background="#242837"),
 		  widget.CPU(background="#242837"),
-		  widget.TextBox("Battery: ", background="#41557f"),
+		  widget.TextBox("Battery: ", background="#4C7975"),
 		  widget.Battery(low_percentage = 0.2,
 				 notify_below = 0.15,
 				 update_interval = 30,
 				 discharge_char = '↓',
 				 charge_char = '↑',
-				 background="#41557f",
+				 background="#4C7975",
 				 ),
 		  widget.TextBox("", background="#242837"),
 		  widget.Clock(format='%a %d-%m-%Y %I:%M %p', background="#242837"),
 		  widget.Sep(foreground="#363428", size_percent=100),
-		  widget.Systray(background="41557f"),
+		  widget.Systray(background="4C7975"),
 	  ],
 	      24,
 	  ),

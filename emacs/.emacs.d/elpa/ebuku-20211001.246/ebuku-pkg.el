@@ -1,0 +1,2 @@
+;;; Generated package description from /home/vidianos/.emacs.d/elpa/ebuku-20211001.246/ebuku.el  -*- no-byte-compile: t -*-
+(define-package "ebuku" "20211001.246" "Interface to the buku Web bookmark manager" '((emacs "25.1")) :commit "0f853e9fd7647a33b38925727d283f5731fafef8" :authors '(("Alexis <flexibeast@gmail.com>, Erik Sjöstrand" . "sjostrand.erik@gmail.com")) :maintainer '("Alexis" . "flexibeast@gmail.com") :keywords '("bookmarks" "buku" "data" "web" "www") :url "https://github.com/flexibeast/ebuku")

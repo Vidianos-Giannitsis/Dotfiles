@@ -61,7 +61,7 @@
 
 (defun set-font-faces ()
   "Needed to set up my fonts to work with the emacs daemon"
-  (set-face-attribute 'default nil :height 140 :family "Source Code Pro"))
+  (set-face-attribute 'default nil :font "Source Code Pro 14"))
 
 (if (daemonp)
     (add-hook 'after-make-frame-functions
@@ -130,6 +130,11 @@
 (require 'info+)
 
 (require 'pdftotext)
+
+(defun set-font-size (SIZE)
+  "Change font size of Emacs window according to SIZE. Font remains Source Code Pro."
+  (interactive "MFont Size: ")
+  (set-face-attribute 'default nil :font (concat "Source Code Pro " SIZE)))
 
 (require 'keybindings)
 
