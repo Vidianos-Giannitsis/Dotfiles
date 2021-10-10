@@ -39,7 +39,7 @@ Not much to say here, importing some necessary packages for qtile to have all th
   from libqtile.utils import guess_terminal
   import os
   import subprocess
-  import pyautogui
+  #import pyautogui
 #+END_SRC
 
 * Variables
@@ -50,8 +50,8 @@ Defining them here helps if I want to use them in multiple locations of my confi
   mod = "mod4"
   terminal = "alacritty"
   editor = "emacsclient -c -a emacs ~"
-  browser_1 = "firefox"
-  browser_2 = "brave"
+  browser_2 = "firefox"
+  browser_1 = "brave"
   office = "libreoffice"
   file_manager = "thunar" # I mostly use dired inside emacs for file management, but this exists as a gui file manager in case I need it
   music_player = "spotify"
@@ -138,7 +138,7 @@ Fairly simple section for making a window floating (a window also becomes floati
   Key2("M-S-f", lazy.window.toggle_floating, desc="Toggle Floating"),
   Key2("M-q", lazy.window.kill(), desc="Kill focused window"),
   Key2("M-S-r", lazy.restart(), desc="Restart qtile"),
-  Key2("M-S-e", lazy.shutdown(), desc="Shutdown qtile"),
+  Key2("M-S-e", lazy.spawn("arcolinux-logout"), desc="Log out of qtile"),
 #+END_SRC
 
 ** My favourite programs
@@ -169,6 +169,7 @@ Some notes about them are:
   Key2("M-C-i", lazy.spawn("inkscape"), desc="Launch inkscape"),
   Key2("M-S-c", lazy.spawn("tuxedo-control-center"), desc="Launch computer settings manager"),
   Key2("M-C-p", lazy.spawn("system-config-printer"), desc="Launch printer software"),
+  Key2("M-t", lazy.spawn("rofi-theme-selector"), desc="Launch a theme selector using rofi"),
 #+END_SRC
 
 ** Multimedia Keys
@@ -250,21 +251,31 @@ The stack layout is a niche layout which needs a num_stacks variable defined. Th
 MonadWide is the same as monadtall with the only difference being that 2 windows are split vertically and every ither window splits horizontally with the bottom window.
   
 #+BEGIN_SRC python
-# Layouts
-layouts = [
-    layout.MonadTall(border_focus = "#41557f", border_normal = "#002525"),
-    # layout.Columns(),
-    # layout.Bsp(),
-    layout.Max(),
-    layout.Stack(num_stacks=2, border_focus = "#41557f", border_normal = "#002525"),
-    # layout.Matrix(),
-    layout.MonadWide(border_focus = "#41557f", border_normal = "#002525"),
-    # layout.RatioTile(),
-    # layout.Tile(border_focus = "#005858", border_normal = "#002525", border_width ="2"),
-    # layout.TreeTab(),
-    # layout.VerticalTile(),
-    # layout.Zoomy(),
-]
+  # Layouts
+  
+  def init_layout_theme():
+      return {"margin":2,
+	      "border_width":2,
+	      "border_focus": "#4C7975",
+	      "border_normal": "#002525"
+	      }
+  
+  layout_theme = init_layout_theme()
+  
+  layouts = [
+      layout.MonadTall(**layout_theme),
+      # layout.Columns(),
+      # layout.Bsp(),
+      layout.Max(),
+      layout.Stack(num_stacks=2, border_focus = "#41557f", border_normal = "#002525"),
+      # layout.Matrix(),
+      layout.MonadWide(**layout_theme),
+      layout.RatioTile(**layout_theme),
+      # layout.Tile(border_focus = "#005858", border_normal = "#002525", border_width ="2"),
+      # layout.TreeTab(),
+      # layout.VerticalTile(),
+      # layout.Zoomy(),
+  ]
 #+END_SRC
 
 * Qtile Bar

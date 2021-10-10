@@ -226,8 +226,6 @@ This enables:
 + Enabling yasnippet snippets.
 + Enabling general, a package that helps me define keybindings easier.
 + Remove the warnings Emacs gives when opening large files or following vc controlled symlinks. I dont need them and they can be annoying.
-+ Changing the heading and title font to match my global font and resizing them so 1st tier headings and titles actually stand out like they should.
-+ A function to toggle the behaviour of markup elements such as visible asterisks when writing a message in bold. I dont like seeing them usually, but its good to have a function which toggle this behaviour
 + Setting the spotify id which counsel needs to be able to control spotify through Emacs.
 + Loading small utility packages such as math at point (which makes doing calculations in Emacs faster) and molar-mass (a Molar mass calculator for Emacs)
 + Adding the dot to tab jump out delimiters. Sometimes you want to jump over a dot in a text and I like this besides jumping out of brackets
@@ -235,6 +233,9 @@ This enables:
 + Ace-window is a helpful package for switching focus between buffers really quickly. I set the keys used in it to be the home row keys instead of number keys as that is more convenient. I also activate a mode which shows which letter corresponds to each window in the mode line.
 + Load info+, a package that enhances info menus.
 + Load a simple wrapper around pdftotext so it can be easily integrated with emacs
++ Create a function to make changing my font size easier without the need to prompt for which font to use
++ Create a function to interactively name new vterm sessions from the minibuffer and open them in another window.
++ Making .m files open in octave-mode and .epub in nov-mode (as they should do). For Octave configurations also check init_octave.m inside this directory
 
 #+BEGIN_SRC elisp
   
@@ -248,24 +249,6 @@ This enables:
   
   (setq large-file-warning-threshold nil)
   (setq vc-follow-symlinks t)
-  
-  (set-face-attribute 'org-document-title nil :font "Source Code Pro" :weight 'bold :height 1.3)
-      (dolist (face '((org-level-1 . 1.2)
-		      (org-level-2 . 1.1)
-		      (org-level-3 . 1.05)
-		      (org-level-4 . 1.0)
-		      (org-level-5 . 1.1)
-		      (org-level-6 . 1.1)
-		      (org-level-7 . 1.1)
-		      (org-level-8 . 1.1)))
-	(set-face-attribute (car face) nil :font "Source Code Pro" :weight 'regular :height (cdr face)))
-  
-  (defun org-toggle-emphasis ()
-    "Toggle hiding/showing of org emphasize markers."
-    (interactive)
-    (if org-hide-emphasis-markers
-	(set-variable 'org-hide-emphasis-markers nil)
-      (set-variable 'org-hide-emphasis-markers t)))
   
   (setq counsel-spotify-client-id "0df2796a793b41dc91711eb9f85c0e77")
   (setq counsel-spotify-client-secret "bcdbb823795640248ff2c29eedadb800")
@@ -288,10 +271,18 @@ This enables:
     "Change font size of Emacs window according to SIZE. Font remains Source Code Pro."
     (interactive "MFont Size: ")
     (set-face-attribute 'default nil :font (concat "Source Code Pro " SIZE)))
+  
+  (defun named-vterm (NAME)
+    "Create a new vterm session with name NAME and open it in a new window"
+    (interactive "sEnter Name: ")
+    (vterm-other-window NAME))
+  
+  (add-to-list 'auto-mode-alist '("\\.m\\'" . octave-mode))
+  (add-to-list 'auto-mode-alist '("\\.epub\\'" . nov-mode))
 #+END_SRC
 
 #+RESULTS:
-: set-font-size
+: ((\.epub\' . nov-mode) (\.[pP][dD][fF]\' . pdf-view-mode) (\.m\' . octave-mode) (\.pdf\' . pdf-view-mode) (\.odc\' . archive-mode) (\.odf\' . archive-mode) (\.odi\' . archive-mode) (\.otp\' . archive-mode) (\.odp\' . archive-mode) (\.otg\' . archive-mode) (\.odg\' . archive-mode) (\.ots\' . archive-mode) (\.ods\' . archive-mode) (\.odm\' . archive-mode) (\.ott\' . archive-mode) (\.odt\' . archive-mode) (\.gpg\(~\|\.~[0-9]+~\)?\' nil epa-file) (\.tsv\' . tsv-mode) (\.[Cc][Ss][Vv]\' . csv-mode) (\.hsc\' . haskell-mode) (\.l[gh]s\' . haskell-literate-mode) (\.hsig\' . haskell-mode) (\.[gh]s\' . haskell-mode) (\.cabal\'\|/cabal\.project\|/\.cabal/config\' . haskell-cabal-mode) (\.chs\' . haskell-c2hs-mode) (\.ghci\' . ghci-script-mode) (\.dump-simpl\' . ghc-core-mode) (\.hcr\' . ghc-core-mode) (\.hva\' . latex-mode) (\.\(?:md\|markdown\|mkd\|mdown\|mkdn\|mdwn\)\' . markdown-mode) (\.sps\' . pspp-mode) (/git-rebase-todo\' . git-rebase-mode) (\.elc\' . elisp-byte-code-mode) (\.zst\' nil jka-compr) (\.dz\' nil jka-compr) (\.xz\' nil jka-compr) (\.lzma\' nil jka-compr) (\.lz\' nil jka-compr) (\.g?z\' nil jka-compr) (\.bz2\' nil jka-compr) (\.Z\' nil jka-compr) (\.vr[hi]?\' . vera-mode) (\(?:\.\(?:rbw?\|ru\|rake\|thor\|jbuilder\|rabl\|gemspec\|podspec\)\|/\(?:Gem\|Rake\|Cap\|Thor\|Puppet\|Berks\|Vagrant\|Guard\|Pod\)file\)\' . ruby-mode) (\.re?st\' . rst-mode) (\.py[iw]?\' . python-mode) (\.m\' . octave-maybe-mode) (\.less\' . less-css-mode) (\.scss\' . scss-mode) (\.awk\' . awk-mode) (\.\(u?lpc\|pike\|pmod\(\.in\)?\)\' . pike-mode) (\.idl\' . idl-mode) (\.java\' . java-mode) (\.m\' . objc-mode) (\.ii\' . c++-mode) (\.i\' . c-mode) (\.lex\' . c-mode) (\.y\(acc\)?\' . c-mode) (\.h\' . c-or-c++-mode) (\.c\' . c-mode) (\.\(CC?\|HH?\)\' . c++-mode) (\.[ch]\(pp\|xx\|\+\+\)\' . c++-mode) (\.\(cc\|hh\)\' . c++-mode) (\.\(bat\|cmd\)\' . bat-mode) (\.[sx]?html?\(\.[a-zA-Z_]+\)?\' . mhtml-mode) (\.svgz?\' . image-mode) (\.svgz?\' . xml-mode) (\.x[bp]m\' . image-mode) (\.x[bp]m\' . c-mode) (\.p[bpgn]m\' . image-mode) (\.tiff?\' . image-mode) (\.gif\' . image-mode) (\.png\' . image-mode) (\.jpe?g\' . image-mode) (\.te?xt\' . text-mode) (\.[tT]e[xX]\' . tex-mode) (\.ins\' . tex-mode) (\.ltx\' . latex-mode) (\.dtx\' . doctex-mode) (\.org\' . org-mode) (\.el\' . emacs-lisp-mode) (Project\.ede\' . emacs-lisp-mode) (\.\(scm\|stk\|ss\|sch\)\' . scheme-mode) (\.l\' . lisp-mode) (\.li?sp\' . lisp-mode) (\.[fF]\' . fortran-mode) (\.for\' . fortran-mode) (\.p\' . pascal-mode) (\.pas\' . pascal-mode) (\.\(dpr\|DPR\)\' . delphi-mode) (\.ad[abs]\' . ada-mode) (\.ad[bs]\.dg\' . ada-mode) (\.\([pP]\([Llm]\|erl\|od\)\|al\)\' . perl-mode) (Imakefile\' . makefile-imake-mode) (Makeppfile\(?:\.mk\)?\' . makefile-makepp-mode) (\.makepp\' . makefile-makepp-mode) (\.mk\' . makefile-gmake-mode) (\.make\' . makefile-gmake-mode) ([Mm]akefile\' . makefile-gmake-mode) (\.am\' . makefile-automake-mode) (\.texinfo\' . texinfo-mode) (\.te?xi\' . texinfo-mode) (\.[sS]\' . asm-mode) (\.asm\' . asm-mode) (\.css\' . css-mode) (\.mixal\' . mixal-mode) (\.gcov\' . compilation-mode) (/\.[a-z0-9-]*gdbinit . gdb-script-mode) (-gdb\.gdb . gdb-script-mode) ([cC]hange\.?[lL]og?\' . change-log-mode) ([cC]hange[lL]og[-.][0-9]+\' . change-log-mode) (\$CHANGE_LOG\$\.TXT . change-log-mode) (\.scm\.[0-9]*\' . scheme-mode) (\.[ckz]?sh\'\|\.shar\'\|/\.z?profile\' . sh-mode) (\.bash\' . sh-mode) (\(/\|\`\)\.\(bash_\(profile\|history\|log\(in\|out\)\)\|z?log\(in\|out\)\)\' . sh-mode) (\(/\|\`\)\.\(shrc\|zshrc\|m?kshrc\|bashrc\|t?cshrc\|esrc\)\' . sh-mode) (\(/\|\`\)\.\([kz]shenv\|xinitrc\|startxrc\|xsession\)\' . sh-mode) (\.m?spec\' . sh-mode) (\.m[mes]\' . nroff-mode) (\.man\' . nroff-mode) (\.sty\' . latex-mode) (\.cl[so]\' . latex-mode) (\.bbl\' . latex-mode) (\.bib\' . bibtex-mode) (\.bst\' . bibtex-style-mode) (\.sql\' . sql-mode) (\(acinclude\|aclocal\|acsite\)\.m4\' . autoconf-mode) (\.m[4c]\' . m4-mode) (\.mf\' . metafont-mode) (\.mp\' . metapost-mode) (\.vhdl?\' . vhdl-mode) (\.article\' . text-mode) (\.letter\' . text-mode) (\.i?tcl\' . tcl-mode) (\.exp\' . tcl-mode) (\.itk\' . tcl-mode) (\.icn\' . icon-mode) (\.sim\' . simula-mode) (\.mss\' . scribe-mode) (\.f9[05]\' . f90-mode) (\.f0[38]\' . f90-mode) (\.indent\.pro\' . fundamental-mode) (\.\(pro\|PRO\)\' . idlwave-mode) (\.srt\' . srecode-template-mode) (\.prolog\' . prolog-mode) (\.tar\' . tar-mode) (\.\(arc\|zip\|lzh\|lha\|zoo\|[jew]ar\|xpi\|rar\|cbr\|7z\|ARC\|ZIP\|LZH\|LHA\|ZOO\|[JEW]AR\|XPI\|RAR\|CBR\|7Z\)\' . archive-mode) (\.oxt\' . archive-mode) (\.\(deb\|[oi]pk\)\' . archive-mode) (\`/tmp/Re . text-mode) (/Message[0-9]*\' . text-mode) (\`/tmp/fol/ . text-mode) (\.oak\' . scheme-mode) (\.sgml?\' . sgml-mode) (\.x[ms]l\' . xml-mode) (\.dbk\' . xml-mode) (\.dtd\' . sgml-mode) (\.ds\(ss\)?l\' . dsssl-mode) (\.js[mx]?\' . javascript-mode) (\.har\' . javascript-mode) (\.json\' . javascript-mode) (\.[ds]?va?h?\' . verilog-mode) (\.by\' . bovine-grammar-mode) (\.wy\' . wisent-grammar-mode) ([:/\]\..*\(emacs\|gnus\|viper\)\' . emacs-lisp-mode) (\`\..*emacs\' . emacs-lisp-mode) ([:/]_emacs\' . emacs-lisp-mode) (/crontab\.X*[0-9]+\' . shell-script-mode) (\.ml\' . lisp-mode) (\.ld[si]?\' . ld-script-mode) (ld\.?script\' . ld-script-mode) (\.xs\' . c-mode) (\.x[abdsru]?[cnw]?\' . ld-script-mode) (\.zone\' . dns-mode) (\.soa\' . dns-mode) (\.asd\' . lisp-mode) (\.\(asn\|mib\|smi\)\' . snmp-mode) (\.\(as\|mi\|sm\)2\' . snmpv2-mode) (\.\(diffs?\|patch\|rej\)\' . diff-mode) (\.\(dif\|pat\)\' . diff-mode) (\.[eE]?[pP][sS]\' . ps-mode) (\.\(?:PDF\|DVI\|OD[FGPST]\|DOCX\|XLSX?\|PPTX?\|pdf\|djvu\|dvi\|od[fgpst]\|docx\|xlsx?\|pptx?\)\' . doc-view-mode-maybe) (configure\.\(ac\|in\)\' . autoconf-mode) (\.s\(v\|iv\|ieve\)\' . sieve-mode) (BROWSE\' . ebrowse-tree-mode) (\.ebrowse\' . ebrowse-tree-mode) (#\*mail\* . mail-mode) (\.g\' . antlr-mode) (\.mod\' . m2-mode) (\.ses\' . ses-mode) (\.docbook\' . sgml-mode) (\.com\' . dcl-mode) (/config\.\(?:bat\|log\)\' . fundamental-mode) (/\.\(authinfo\|netrc\)\' . authinfo-mode) (\.\(?:[iI][nN][iI]\|[lL][sS][tT]\|[rR][eE][gG]\|[sS][yY][sS]\)\' . conf-mode) (\.la\' . conf-unix-mode) (\.ppd\' . conf-ppd-mode) (java.+\.conf\' . conf-javaprop-mode) (\.properties\(?:\.[a-zA-Z0-9._-]+\)?\' . conf-javaprop-mode) (\.toml\' . conf-toml-mode) (\.desktop\' . conf-desktop-mode) (/\.redshift\.conf\' . conf-windows-mode) (\`/etc/\(?:DIR_COLORS\|ethers\|.?fstab\|.*hosts\|lesskey\|login\.?de\(?:fs\|vperm\)\|magic\|mtab\|pam\.d/.*\|permissions\(?:\.d/.+\)?\|protocols\|rpc\|services\)\' . conf-space-mode) (\`/etc/\(?:acpid?/.+\|aliases\(?:\.d/.+\)?\|default/.+\|group-?\|hosts\..+\|inittab\|ksysguarddrc\|opera6rc\|passwd-?\|shadow-?\|sysconfig/.+\)\' . conf-mode) ([cC]hange[lL]og[-.][-0-9a-z]+\' . change-log-mode) (/\.?\(?:gitconfig\|gnokiirc\|hgrc\|kde.*rc\|mime\.types\|wgetrc\)\' . conf-mode) (/\.\(?:asound\|enigma\|fetchmail\|gltron\|gtk\|hxplayer\|mairix\|mbsync\|msmtp\|net\|neverball\|nvidia-settings-\|offlineimap\|qt/.+\|realplayer\|reportbug\|rtorrent\.\|screen\|scummvm\|sversion\|sylpheed/.+\|xmp\)rc\' . conf-mode) (/\.\(?:gdbtkinit\|grip\|mpdconf\|notmuch-config\|orbital/.+txt\|rhosts\|tuxracer/options\)\' . conf-mode) (/\.?X\(?:default\|resource\|re\)s\> . conf-xdefaults-mode) (/X11.+app-defaults/\|\.ad\' . conf-xdefaults-mode) (/X11.+locale/.+/Compose\' . conf-colon-mode) (/X11.+locale/compose\.dir\' . conf-javaprop-mode) (\.~?[0-9]+\.[0-9][-.0-9]*~?\' nil t) (\.\(?:orig\|in\|[bB][aA][kK]\)\' nil t) ([/.]c\(?:on\)?f\(?:i?g\)?\(?:\.[a-zA-Z0-9._-]+\)?\' . conf-mode-maybe) (\.[1-9]\' . nroff-mode) (\.art\' . image-mode) (\.avs\' . image-mode) (\.bmp\' . image-mode) (\.cmyk\' . image-mode) (\.cmyka\' . image-mode) (\.crw\' . image-mode) (\.dcr\' . image-mode) (\.dcx\' . image-mode) (\.dng\' . image-mode) (\.dpx\' . image-mode) (\.fax\' . image-mode) (\.hrz\' . image-mode) (\.icb\' . image-mode) (\.icc\' . image-mode) (\.icm\' . image-mode) (\.ico\' . image-mode) (\.icon\' . image-mode) (\.jbg\' . image-mode) (\.jbig\' . image-mode) (\.jng\' . image-mode) (\.jnx\' . image-mode) (\.miff\' . image-mode) (\.mng\' . image-mode) (\.mvg\' . image-mode) (\.otb\' . image-mode) (\.p7\' . image-mode) (\.pcx\' . image-mode) (\.pdb\' . image-mode) (\.pfa\' . image-mode) (\.pfb\' . image-mode) (\.picon\' . image-mode) (\.pict\' . image-mode) (\.rgb\' . image-mode) (\.rgba\' . image-mode) (\.tga\' . image-mode) (\.wbmp\' . image-mode) (\.webp\' . image-mode) (\.wmf\' . image-mode) (\.wpg\' . image-mode) (\.xcf\' . image-mode) (\.xmp\' . image-mode) (\.xwd\' . image-mode) (\.yuv\' . image-mode) (\.tgz\' . tar-mode) (\.tbz2?\' . tar-mode) (\.txz\' . tar-mode) (\.tzst\' . tar-mode) (\.drv\' . latex-mode))
 
 
 * Keybindings
@@ -328,8 +319,6 @@ This enables:
     
     (use-package dired-collapse
       :hook (dired-mode . dired-collapse-mode))
-    
-    (setq dired-filter-prefix "f")
     
     (require 'helm-dired-open)
   #+END_SRC
@@ -450,21 +439,42 @@ Some settings (now using the word some here might be an underestimation, as with
    + Defining a function which supresses the confirmation message for tangling an org document's source code and hooking it to the after save hook in org-mode. If I understand it correctly, it should automatically tangle after saving, if thats possible, which is handy for things such as this configuration.
    + I activate image preview by default inside org, as images are cool, I like images. I also change the "org-image-actual-width" variable, which makes images previewd in org to be able to change size if given the right headers. This is helpful for some images which are too large to be properly viewed in org so they can be scaled down and be properly visible.
    + Activate visual line mode, as its really useful to have imo.
+   + Changing the heading and title font to match my global font and resizing them so 1st tier headings and titles actually stand out like they should.
+   + A function to toggle the behaviour of markup elements such as visible asterisks when writing a message in bold. I dont like seeing them usually, but its good to have a function which toggle this behaviour
+
  
 #+BEGIN_SRC elisp
-    (add-to-list 'org-file-apps '("\\.pdf\\'" . emacs))
+  (add-to-list 'org-file-apps '("\\.pdf\\'" . emacs))
   
-    (setq org-odt-preferred-output-format "docx")
+  (setq org-odt-preferred-output-format "docx")
   
-    (add-hook 'org-mode-hook (lambda () (add-hook 'after-save-hook #'(lambda ()
-								       (let ((org-confirm-babel-evaluate nil))
-									 (org-babel-tangle))))
-						  'run-at-end 'only-in-org-mode))
+  (add-hook 'org-mode-hook (lambda () (add-hook 'after-save-hook #'(lambda ()
+								     (let ((org-confirm-babel-evaluate nil))
+								       (org-babel-tangle))))
+						'run-at-end 'only-in-org-mode))
   
-    (setq org-startup-with-inline-images t)
-    (setq org-image-actual-width nil)
+  (setq org-startup-with-inline-images t)
+  (setq org-image-actual-width nil)
   
-    (add-hook 'org-mode-hook 'visual-line-mode)
+  (add-hook 'org-mode-hook 'visual-line-mode)
+  
+  (set-face-attribute 'org-document-title nil :font "Source Code Pro" :weight 'bold :height 1.3)
+  (dolist (face '((org-level-1 . 1.2)
+		  (org-level-2 . 1.1)
+		  (org-level-3 . 1.05)
+		  (org-level-4 . 1.0)
+		  (org-level-5 . 1.1)
+		  (org-level-6 . 1.1)
+		  (org-level-7 . 1.1)
+		  (org-level-8 . 1.1)))
+    (set-face-attribute (car face) nil :font "Source Code Pro" :weight 'regular :height (cdr face)))
+  
+  (defun org-toggle-emphasis ()
+    "Toggle hiding/showing of org emphasize markers."
+    (interactive)
+    (if org-hide-emphasis-markers
+	(set-variable 'org-hide-emphasis-markers nil)
+      (set-variable 'org-hide-emphasis-markers t)))
   
 #+END_SRC
 
@@ -615,8 +625,8 @@ Some settings (now using the word some here might be an underestimation, as with
 	 ";g"  "\\gamma"                                ";;;g" "\\lg"
 	 ";G"  "\\Gamma"                                ";;;G" "10^{?}"
 	 ";h"  "\\eta"           ";;h" "\\hbar"
-	 ";i"  "\\in"            ";;i" "\\imath"
-	 ";I"  "\\iota"          ";;I" "\\Im"
+	 ";i"  "\\infty"            ";;i" "\\imath"
+	 ";I"  "\\in"          ";;I" "\\Im"
 	 ";;j" "\\jmath"
 	 ";k"  "\\kappa"
 	 ";l"  "\\mathcal{L}"        ";;l" "\\ell"          ";;;l" "\\log"
@@ -674,7 +684,7 @@ Some settings (now using the word some here might be an underestimation, as with
    #+END_SRC
 
    #+RESULTS:
-   | :cond | laas-mathp | != | \neq | !> | \mapsto | ** | \cdot | +- | \pm | -+ | \mp | -> | \to | ... | \dots | << | \ll | <= | \leq | <> | \diamond | =< | \impliedby | == | &= | => | \implies | >= | \geq | >> | \gg | AA | \forall | EE | \exists | cb | ^3 | iff | \iff | inn | \in | notin | \not\in | sr | ^2 | xx | \times |   | -> | \mapsto |   | = | \models |   |   |   | \mid | ~= | \approx | ~~ | \sim | arccos | \arccos | arccot | \arccot | arccot | \arccot | arccsc | \arccsc | arcsec | \arcsec | arcsin | \arcsin | arctan | \arctan | cos | \cos | cot | \cot | csc | \csc | exp | \exp | ln | \ln | log | \log | perp | \perp | sin | \sin | star | \star | gcd | \gcd | min | \min | max | \max | CC | \CC | FF | \FF | HH | \HH | NN | \NN | PP | \PP | QQ | \QQ | RR | \RR | ZZ | \ZZ | ;a | \alpha | ;A | \forall | ;;A | \aleph | ;b | \beta | ;;;c | \cos | ;C | \mathbb{C} | ;;;C | \arccos | ;d | \delta | ;;d | \partial | ;D | \Delta | ;;D | \nabla | ;e | \mathcal{E} | ;;e | \varepsilon | ;;;e | \exp | ;E | \exists | ;;;E | \ln | ;f | \phi | ;;f | \varphi | ;F | \Phi | ;g | \gamma | ;;;g | \lg | ;G | \Gamma | ;;;G | 10^{?} | ;h | \eta | ;;h | \hbar | ;i | \in | ;;i | \imath | ;I | \iota | ;;I | \Im | ;;j | \jmath | ;k | \kappa | ;l | \mathcal{L} | ;;l | \ell | ;;;l | \log | ;L | \Lambda | ;m | \mu | ;n | \nabla | ;;n | \vec{\nabla} | ;;;n | \ln | ;N | \mathbb{N} | ;;;N | \exp | ;o | \omega | ;O | \Omega | ;;O | \mho | ;p | \partial | ;;p | \varpi | ;P | \Pi | ;q | \theta | ;;q | \vartheta | ;Q | \mathbb{Q} | ;r | \rho | ;;r | \varrho | ;R | \mathbb{R} | ;;R | \Re | ;s | \sigma | ;;s | \varsigma | ;;;s | \sin | ;S | \Sigma | ;;;S | \arcsin | ;t | \tau | ;;;t | \tan | ;;;T | \arctan | ;u | \upsilon | ;U | \Upsilon | ;v | \vee | ;V | \Phi | ;w | \xi | ;W | \Xi | ;x | \chi | ;y | \psi | ;Y | \Psi | ;z | \zeta | ;Z | \mathbb{Z} | ;0 | \emptyset | ;8 | \infty | ;! | \neg | ;^ | \uparrow | ;& | \wedge | ;~ | \approx | ;;~ | \simeq | ;_ | \downarrow | ;+ | \cup | ;- | \leftrightarrow | ;;- | \longleftrightarrow | ;* | \times | ;/ | \not | ; |   | \mapsto | ;; |   | \longmapsto | ;\ | \setminus | ;= | \Leftrightarrow | ;;= | \Longleftrightarrow | ;( | \langle | ;) | \rangle | ;[ | \Leftarrow | ;;[ | \Longleftarrow | ;] | \Rightarrow | ;;] | \Longrightarrow | ;{ | \subset | ;} | \supset | ;< | \leftarrow | ;;< | \longleftarrow | ;;;< | \min | ;> | \rightarrow | ;;> | \longrightarrow | ;;;> | \max | ;' | \prime | ;. | \cdot |
+   | :cond | laas-mathp | != | \neq | !> | \mapsto | ** | \cdot | +- | \pm | -+ | \mp | -> | \to | ... | \dots | << | \ll | <= | \leq | <> | \diamond | =< | \impliedby | == | &= | => | \implies | >= | \geq | >> | \gg | AA | \forall | EE | \exists | cb | ^3 | iff | \iff | inn | \in | notin | \not\in | sr | ^2 | xx | \times |   | -> | \mapsto |   | = | \models |   |   |   | \mid | ~= | \approx | ~~ | \sim | arccos | \arccos | arccot | \arccot | arccot | \arccot | arccsc | \arccsc | arcsec | \arcsec | arcsin | \arcsin | arctan | \arctan | cos | \cos | cot | \cot | csc | \csc | exp | \exp | ln | \ln | log | \log | perp | \perp | sin | \sin | star | \star | gcd | \gcd | min | \min | max | \max | CC | \CC | FF | \FF | HH | \HH | NN | \NN | PP | \PP | QQ | \QQ | RR | \RR | ZZ | \ZZ | ;a | \alpha | ;A | \forall | ;;A | \aleph | ;b | \beta | ;;;c | \cos | ;C | \mathbb{C} | ;;;C | \arccos | ;d | \delta | ;;d | \partial | ;D | \Delta | ;;D | \nabla | ;e | \mathcal{E} | ;;e | \varepsilon | ;;;e | \exp | ;E | \exists | ;;;E | \ln | ;f | \phi | ;;f | \varphi | ;F | \Phi | ;g | \gamma | ;;;g | \lg | ;G | \Gamma | ;;;G | 10^{?} | ;h | \eta | ;;h | \hbar | ;i | \infty | ;;i | \imath | ;I | \in | ;;I | \Im | ;;j | \jmath | ;k | \kappa | ;l | \mathcal{L} | ;;l | \ell | ;;;l | \log | ;L | \Lambda | ;m | \mu | ;n | \nabla | ;;n | \vec{\nabla} | ;;;n | \ln | ;N | \mathbb{N} | ;;;N | \exp | ;o | \omega | ;O | \Omega | ;;O | \mho | ;p | \partial | ;;p | \varpi | ;P | \Pi | ;q | \theta | ;;q | \vartheta | ;Q | \mathbb{Q} | ;r | \rho | ;;r | \varrho | ;R | \mathbb{R} | ;;R | \Re | ;s | \sigma | ;;s | \varsigma | ;;;s | \sin | ;S | \Sigma | ;;;S | \arcsin | ;t | \tau | ;;;t | \tan | ;;;T | \arctan | ;u | \upsilon | ;U | \Upsilon | ;v | \vee | ;V | \Phi | ;w | \xi | ;W | \Xi | ;x | \chi | ;y | \psi | ;Y | \Psi | ;z | \zeta | ;Z | \mathbb{Z} | ;0 | \emptyset | ;8 | \infty | ;! | \neg | ;^ | \uparrow | ;& | \wedge | ;~ | \approx | ;;~ | \simeq | ;_ | \downarrow | ;+ | \cup | ;- | \leftrightarrow | ;;- | \longleftrightarrow | ;* | \times | ;/ | \not | ; |   | \mapsto | ;; |   | \longmapsto | ;\ | \setminus | ;= | \Leftrightarrow | ;;= | \Longleftrightarrow | ;( | \langle | ;) | \rangle | ;[ | \Leftarrow | ;;[ | \Longleftarrow | ;] | \Rightarrow | ;;] | \Longrightarrow | ;{ | \subset | ;} | \supset | ;< | \leftarrow | ;;< | \longleftarrow | ;;;< | \min | ;> | \rightarrow | ;;> | \longrightarrow | ;;;> | \max | ;' | \prime | ;. | \cdot |
    
 ** Org Noter
    
@@ -833,6 +843,35 @@ More languages to evaluate with org-babel (by default, only elisp is evaluated).
 | u | University Projects  | ((alltodo  ((org-agenda-overriding-header ) (org-super-agenda-groups '((:name Currently Working on :and (:tag University :todo ACTIVE)) (:name What you gonna start next (probably) :and (:priority A :tag University)) (:name Medium Priority Projects :and (:tag University :priority B)) (:name Trivial Projects, I'ma do them at some point :D :and (:tag University :priority C)) (:discard (:not (:tag University))))))))            |
 | e | Emacs Projects       | ((alltodo  ((org-agenda-overriding-header ) (org-super-agenda-groups '((:name Configuring Emacs, the Present :and (:tag Emacs :todo ACTIVE) :and (:tag Emacs :todo NEXT)) (:name What to add, What to add?? :and (:tag Emacs :priority A)) (:name Wow, this one's easy, lets do it :and (:tag Emacs :effort< 0:15)) (:discard (:not (:tag Emacs))) (:name But wait, this was only the beginning. The real fun starts here! :anything)))))) |
 
+* Skeletons
+  Skeletons are a very neat feature of Emacs. Think of a snippet and a template, now combine them and you have a skeleton. A skeleton is bound to a key which when pressed enters a piece of text. This is helpful when initialising a file whose format is certain. I currently use this for initialising my lab reports which have a rather standard format all the time.
+
+  #+BEGIN_SRC elisp
+    
+    (define-skeleton lab-skeleton
+      "A skeleton which I use for initialising my lab reports which have standard formatting"
+      ""
+      "#+TITLE:"str"\n"
+      "glatex"-"\n"
+      "ab\n\\pagebreak\n\n"
+    
+      "* Εισαγωγή\n\n"
+    
+      "* Πειραματικό Μέρος\n\n"
+    
+      "* Αποτελέσματα - Συζήτηση\n\n"
+    
+      "* Συμπεράσματα\n\n"
+    
+      "* Βιβλιογραφία\n"
+      "bibliography:~/Sync/My_Library.bib\n"
+      "bibliographystyle:unsrt")
+    
+  #+END_SRC
+
+  #+RESULTS:
+  : lab-skeleton
+ 
 * Org Roam, References and the Zettelkasten Workflow 
   This section is about my Org-roam setup and my reference management inside org. It is based on the slip-box (Zettelkasten) workflow. The packages that are most relevant to this are Org-roam (obviously) bibtex-completion (ivy-bibtex in my case), org-ref, Org-roam-bibtex. Org Roam is a tool which helps you create your own network of notes. Its based on the Zettelkasten method and the Roam Research website. Everything is linked with one another. Bibtex completion (and the existence of .bib files in general) as well as Org-ref help manage bibliographic references inside org. I use Zotero as my reference manager in which I gather my bibliographies. It exports a .bib file which these two use. Org Roam Bibtex (ORB) is a package that combines all of these to help you add citation links from org-ref inside an org-roam buffer. This section includes all the customisations and settings of these packages.
 
@@ -883,7 +922,7 @@ I also define a "replacement" function for org-roam-buffer-toggle which temporar
 	(if-let ((state (org-roam-node-todo node)))
 	  (format "Status: %s" state)))
     
-      (setq org-roam-node-display-template "${directories:8} ${tags:15} ${title:100} ${backlinkscount:6} ${todostate:20}")
+      (setq org-roam-node-display-template "${title:100} ${backlinkscount:6} ${todostate:20} ${directories:8} ${tags:12}")
     
       (add-to-list 'display-buffer-alist
 		   '("\\*org-roam\\*"
@@ -954,16 +993,27 @@ I also define a "replacement" function for org-roam-buffer-toggle which temporar
   (setq org-agenda-files
 	'("~/org_roam/daily"))
   (setq org-journal-dir "~/org_roam/daily"
-	org-journal-file-format "%Y-%m-%d.org")
+	org-journal-file-format "%d-%m-%Y.org"
+	org-journal-time-format "%a, %m/%d-%R")
   
-  (org-super-agenda-mode 1)
   (add-hook 'org-agenda-mode-hook 'visual-line-mode)
   
+  (define-skeleton project-skeleton
+    "This skeleton inserts a link to the Current Projects file in the org-roam directory. 
+  
+  Its used in my fleeting note initialization function as a means to always make new fleeting notes point to the current projects file, as that is that files purpose"
+    ""
+    "- tags :: [[id:b5e71fe5-9d76-4f7f-b58d-df6a561e6a6b][Current Projects]]")
+  
   (defun org-roam-init-fleeting-note ()
-    "Prescribe an ID to the heading making it a node in org-roam, then add it the inbox by giving it a todo keyword. This helps automate the process of creating new fleeting notes in combination with the org-journal commands"
+    "Prescribe an ID to the heading making it a node in org-roam, then add it the inbox by giving it a todo keyword. Finally, insert a new line and the project skeleton, linking the new file to the Current Projects file.
+  
+   This helps automate the process of creating new fleeting notes in combination with the org-journal commands"
     (interactive)
     (org-id-get-create)
-    (org-todo))
+    (org-todo)
+    (evil-open-below 1)
+    (project-skeleton))
   
   (defun org-id-delete-entry ()
   "Remove/delete an ID entry. Saves the current point and only does this if inside an org-heading."
@@ -988,17 +1038,17 @@ I also define a "replacement" function for org-roam-buffer-toggle which temporar
 #+BEGIN_SRC elisp
   
   (require 'org-roam-bibtex)
+  (org-roam-bibtex-mode 1)
   
   (setq orb-insert-interface 'ivy-bibtex
 	orb-note-actions-interface 'ivy)
-  
-  (setq orb-preformat-keywords '("citekey" "author" "date"))
-  
-  (require 'websocket)
-  (require 'org-roam-ui)
+  (setq orb-preformat-keywords '("citekey" "author" "date" "entry-type" "keywords" "url" "file"))
   
   (require 'org-protocol)
   (require 'org-roam-protocol)
+  
+  (require 'websocket)
+  (require 'org-roam-ui)
 #+END_SRC
 
 #+RESULTS:
@@ -1011,7 +1061,6 @@ I also define a "replacement" function for org-roam-buffer-toggle which temporar
      (setq org-roam-capture-templates
 	   '(("d" "default" plain "%?" :if-new
 	      (file+head "${slug}-%<%d-%m-%y>.org" "#+title: ${title}\nglatex_roam\n
-     +filetags: 
      - index :: 
      - tags ::  ")
 	      :unarrowed t
@@ -1019,7 +1068,6 @@ I also define a "replacement" function for org-roam-buffer-toggle which temporar
      
 	     ("p" "private" plain "%?" :if-new
 	      (file+head "private/${slug}-%<%d-%m-%y>.org" "#+title: ${title}\nglatex_roam\n
-     ,#+filetags: 
      - index :: 
      - tags ::  ")
 	      :unarrowed t
@@ -1033,7 +1081,7 @@ I also define a "replacement" function for org-roam-buffer-toggle which temporar
      - keywords :: ${keywords}
      - tags :: 
      
-     ,* Analysis of ${entry-type}
+     ,* Analysis of ${entry-type} by ${author}
      :PROPERTIES:
      :URL: ${url}
      :NOTER_DOCUMENT: ${file}  
@@ -1071,204 +1119,6 @@ I also define a "replacement" function for org-roam-buffer-toggle which temporar
    #+RESULTS:
    | r | ref | plain | %? | :target | (file+head ${slug}.org #+title: ${title} |
 
-* COMMENT Org-Roam-v1 configs
-This is my old org-roam config. Until I setup v2 to do everything I originally had, I will keep this commented out for reference if so needed. 
-
-** Org Roam, Protocols and the Org-Roam server
-   It also sets up protocols and the org roam server.
-   
-     - I exclude the daily (where org-roam-dailies get placed) and ref (where ORB puts its notes) directories from the graph org roam can export as its pointless to view them imo.
-     - I require org-protocol and after that org-roam-protocol, which are very neat for capturing notes from random websites
-     - I set up org-roam-server, an excellent package which gives you an interactive visual representation of the org-roam directory and the connections between files in that directory.
-  
-   #+BEGIN_SRC elisp
-     
-     (add-hook 'after-init-hook 'org-roam-mode)
-     
-     (setq org-roam-directory "~/org_roam"
-	   org-roam-dailies-directory "~/org_roam/daily"
-	   org-roam-graph-exclude-matcher '("daily" "ref"))
-     
-     (require 'org-roam-protocol)
-     
-     (use-package org-roam-server
-       :ensure t
-       :config
-       (setq org-roam-server-host "127.0.0.1"
-	     org-roam-server-port 8080
-	     org-roam-server-authenticate nil
-	     org-roam-server-export-inline-images t
-	     org-roam-server-serve-files nil
-	     org-roam-server-served-file-extensions '("pdf" "mp4" "ogv")
-	     org-roam-server-network-poll t
-	     org-roam-server-network-arrows nil
-	     org-roam-server-network-label-truncate t
-	     org-roam-server-network-label-truncate-length 60
-	     org-roam-server-network-label-wrap-length 20))
-     
-     (org-roam-server-mode 1)
-     #+END_SRC
-     
-** Org-Roam-Bibtex
-   Org roam bibtex is the final part of this workflow. It uses ivy-bibtex to query my .bib file and creates a note inside the org-roam directory according to the "orb-templates" variable specific to that file. This is a very useful part of the zettelkasten method which has to do with reference management inside your zettelkasten. 
-
-   - I require ORB and hook it to the org-roam-hook (roam is started in the after-init-hook).
-   - I make orb use the ivy completion framework for its tasks
-   - I add some new keywords to the orb-preformat-keywords variable which will be used in my template below.
-   
-   #+BEGIN_SRC elisp
-     (require 'org-roam-bibtex)
-     (add-hook 'org-roam-mode-hook #'org-roam-bibtex-mode)
-     
-     (setq orb-insert-interface 'ivy-bibtex
-	   orb-note-actions-interface 'ivy)
-     
-     (setq orb-preformat-keywords '("abstract" "citekey" "entry-type" "date" "pdf?" "note?" "file" "author" "editor" "author-abbrev" "editor-abbrev" "author-or-editor-abbrev" "keywords" "url"))
-     #+END_SRC
-
-   #+RESULTS:
-   | abstract | citekey | entry-type | date | pdf? | note? | file | author | editor | author-abbrev | editor-abbrev | author-or-editor-abbrev | keywords | url |
- 
-** COMMENT Exporting org-roam files to Hugo properly  
-   My Zettelkasten is done through org roam which is great as an interface for me. But, it has a limitation in that I can't really share my org roam files with others as they dont really render well (primary problem being that I include a lot of latex code). So I have decided to take the approach of exporting to hugo and uploading the hugo website. This way, I can share my zettelkasten (which at least for now is used for all my note taking needs in university) with others who may find it handy. But by default, this has some disadvantages (like backlinks not being included and an option to sync my entire roam directory not being included). 
-
-With the power of the internet, I found [[https://sidhartharya.me/exporting-org-roam-notes-to-hugo/][someone]] who has already done this work for me so I basically took his functions and added them to my config. Many thanks to him for providing me with these useful functions.
-
-#+BEGIN_SRC elisp
-  
-  ;; Sync all org files to hugo-md
-  (defun org-hugo-org-roam-sync-all()
-    ""
-    (interactive)
-    (dolist (fil (split-string (string-trim (shell-command-to-string (concat "ls " org-roam-directory "/*.org")))))
-      (with-current-buffer (find-file-noselect fil)
-	(org-hugo-export-wim-to-md)
-	(kill-buffer))))
-  
-  ;; Auto-export to hugo on save, if the buffer is in the org-roam directory on the highest level (meaning subdirectories dont get exported)
-  (defun org-hugo--org-roam-save-buffer()
-    ""
-    (when (org-roam--org-roam-file-p)
-      (when (<= (length
-		 (split-string
-		  (replace-regexp-in-string (expand-file-name org-roam-directory) ""
-					    (expand-file-name (buffer-file-name org-roam-buffer--current))) "/")) 2)
-	(org-hugo-export-wim-to-md))))
-  (add-to-list 'after-save-hook #'org-hugo--org-roam-save-buffer)
-  
-  ;; Include org-roam backlinks inside the exported hugo document
-  (defun org-hugo--org-roam-backlinks (backend)
-    (when (org-roam--org-roam-file-p)
-      (end-of-buffer)
-      (org-roam-buffer--insert-backlinks)))
-  (add-hook 'org-export-before-processing-hook #'org-hugo--org-roam-backlinks)
-  
-#+END_SRC
-
-#+RESULTS:
-| org-hugo--org-roam-backlinks | org-blackfriday--reset-org-blackfriday--code-block-num-backticks |
-   
-** Templates
-   This section is about the various templates used by the org-roam workflow. These are org-roam-capture-templates, orb-templates, org-roam-capture-ref-templates, org-roam-dailies-capture-templates
-
-   #+BEGIN_SRC elisp
-     
-     (setq org-roam-capture-templates
-	   '(("d" "default" plain (function org-roam-capture--get-point)
-	      "%?"
-	      :file-name "${slug}-%<%d-%m>"
-	      :unnarrowed t
-	      :head "#+title: ${title}\nglatex_roam\n
-     ,#+roam_tags:  
-     - index ::  
-     - tags ::  ")
-     
-	     ("p" "private" plain (function org-roam-capture--get-point)
-	       "%?"
-	       :file-name "private/${slug}-%<%d-%m>"
-	       :unnarrowed t
-	       :head "#+title: ${title}\nglatex_roam\n
-     ,#+roam_tags:  
-     - index ::  
-     - tags ::  ")))
-     
-     (setq orb-templates
-	   '(("r" "ref" plain (function org-roam-capture--get-point) ""
-	   :file-name "ref/${citekey}"
-	   :unnarrowed t
-	   :head "#+TITLE: ${title}\n#+ROAM_KEY: ${ref}\n
-     ,#+roam_tags: literature
-     - keywords :: ${keywords}
-     - tags ::  
-     
-     ,* Analysis of ${entry-type}
-     :PROPERTIES:
-     :URL: ${url}
-     :NOTER_DOCUMENT: ${file}  
-     :NOTER_PAGE:              
-     :END:
-     
-     ,** Abstract
-	   ${abstract}")))
-     
-     (setq org-roam-capture-ref-templates
-	   '(("r" "ref" plain (function org-roam-capture--get-point)
-	      "%?"
-	      :file-name "ref/${slug}"
-	      :unnarrowed t
-	      :head "#+title: ${title}\n#+roam_key: ${ref}
-     ,#+roam_tags: literature
-     - tags ::  ")))
-     
-     (setq org-roam-dailies-capture-templates
-	   '(("l" "lesson" entry
-	      #'org-roam-capture--get-point
-	      "* %?"
-	      :file-name "daily/%<%Y-%m-%d>"
-	      :head "#+title: Fleeting notes for %<%d-%m-%Y>\n#+roam_tags: daily\n"
-	      :olp ("Lesson notes"))
-     
-	     ("g" "general" entry
-	      #'org-roam-capture--get-point
-	      "* %?"
-	      :file-name "daily/%<%Y-%m-%d>"
-	      :head "#+title: Fleeting notes for %<%d-%m-%Y>\n#+roam_tags: daily\n"
-	      :olp ("Random general notes"))))
-   #+END_SRC
-   
-   #+RESULTS:
-   | l | lesson | entry | #'org-roam-capture--get-point | * %? | :file-name | daily/%<%Y-%m-%d> | :head | #+title: Fleeting notes for %<%d-%m-%Y> |
-
-
-* Skeletons
-  Skeletons are a very neat feature of Emacs. Think of a snippet and a template, now combine them and you have a skeleton. A skeleton is bound to a key which when pressed enters a piece of text. This is helpful when initialising a file whose format is certain. I currently use this for initialising my lab reports which have a rather standard format all the time.
-
-  #+BEGIN_SRC elisp
-
-    (define-skeleton lab-skeleton
-      "A skeleton which I use for initialising my lab reports which have standard formatting"
-      ""
-      "#+TITLE:"str"\n"
-      "glatex\n"
-      "ab\n\pagebreak\n\n"
-
-      "* Εισαγωγή\n\n"
-
-      "* Πειραματικό Μέρος\n\n"
-
-      "* Αποτελέσματα - Συζήτηση\n\n"
-
-      "* Συμπεράσματα\n\n"
-
-      "* Βιβλιογραφία\n"
-      "bibliography:~/Sync/My_Library.bib\n"
-      "bibliographystyle:unsrt")
-
-  #+END_SRC
-
-  #+RESULTS:
-  : lab-skeleton
- 
 * Bookmarks
   I want to explore the bookmark system in emacs more. I enable version control for bookmarks and auto deletion of old ones as well as activate bookmark+, a set of libraries which make useful additions to the vanilla bookmarks
 
@@ -1306,7 +1156,9 @@ With the power of the internet, I found [[https://sidhartharya.me/exporting-org-
   | yasnippet | backquote-change |
   | :warning  |                  |
   
-* Inkscape x Emacs
+* Drawing with Emacs
+  
+** Inkscape
   This section is about integration of Emacs' org-mode with Inkscape. Essentially the first function, opens Inkscape, lets you draw whatever you desire and then creates a latex code area with the figure, ready to be imported. But, since saved the file as a .svg we need the second function, which exports the .svg to pdf so it can be imported properly to the Latex document Org exports.
 
   In a nutshell, you can use Inkscape to seamlessly create good looking graphs/shapes inside your org documents, which can prove very useful in some cases. I take no credit for this. I "stole" the idea from [[https://www.reddit.com/r/emacs/comments/lo9ov0/latex_export_with_inkscape_images_and_drawio/][this]] excellent reddit post. I recommend you check that post out and not this section. The only problem I had with it is that the author initially planned for the second function to not be interactive but simply hooked to the org-export-before-processing-hook. This should work, but for some reason (at least in my config) this hook simply doesn't exist on startup creating an error while loading my init.el. After testing I noticed that if you export a file once in an emacs session, the hook is created and this works perfectly. But since I can't get it on startup and its tedious to do otherwise, I just made the function interactive so I can call it from the M-x menu and from a custom keybinding. If you however don't have this issue, the fix (as can be seen in the reddit post, which I recommend at least checking out) is removing the (interactive) (which isn't mandatory, but you wont need to call the function if its hooked to the correct hook) and adding a variable arg as the function's argument (this is needed for the hook to call the function correctly, but isn't needed if the function is called interactively).
@@ -1355,6 +1207,20 @@ With the power of the internet, I found [[https://sidhartharya.me/exporting-org-
 
   #+RESULTS:
   : svglatex
+
+** Drawing inside emacs
+Besides the inkscape integration, I also load the package "el-easydraw", a package that allows for drawing basic svgs inside of emacs. For smaller scale drawings on the fly, its more convenient to use this rather than have to open inkscape. 
+
+#+BEGIN_SRC elisp
+  
+  (with-eval-after-load 'org
+    (require 'edraw-org)
+    (edraw-org-setup-default))
+  
+#+END_SRC
+
+#+RESULTS:
+| edraw-org-link-image-mode | org-ref-org-menu | (lambda nil (turn-on-org-cdlatex) (org-fragtog-mode) (laas-mode)) | visual-line-mode | (lambda nil (add-hook 'after-save-hook #'(lambda nil (let ((org-confirm-babel-evaluate nil)) (org-babel-tangle)))) 'run-at-end 'only-in-org-mode) | (lambda nil (org-superstar-mode) (org-superstar-configure-like-org-bullets)) | evil-org-mode | #[0 \300\301\302\303\304$\207 [add-hook change-major-mode-hook org-show-all append local] 5] | #[0 \300\301\302\303\304$\207 [add-hook change-major-mode-hook org-babel-show-result-all append local] 5] | org-babel-result-hide-spec | org-babel-hide-all-hashes | #[0 \301\211\207 [imenu-create-index-function org-imenu-get-tree] 2] | org-ref-setup-label-finders |
  
 * Company
   Company is a minor mode, which I enable globally, which allows for autocompletions. This is useful when programming, or writing latex for completing what you want, but also can speed up the writing of long words. The lambda I add to the company-mode-hook adds latex autocompletions and allows them to be used anywhere. It also sets up company to read and give autocompletions for citations from my master .bib file in Zotero. I usually enter them with the ivy-bibtex package (my current default action is add citation there) but this is worth a try. 
@@ -1428,21 +1294,6 @@ Configuration for PDF-tools, my favourite Emacs pdf viewer. I set it as the defa
       (add-to-list 'auto-mode-alist '("\\.m\\'" . octave-mode))
    #+END_SRC
    
-** Vterm
-   I want a function that can interactively create new named vterm sessions without needing to provide arguments, besides the wanted string. This is what this part is about
-
-#+BEGIN_SRC elisp
-  
-  (defun named-vterm (NAME)
-    "Create a new vterm session with name NAME and open it in a new window"
-    (interactive "sEnter Name: ")
-    (vterm-other-window NAME))
-
-#+END_SRC
-
-#+RESULTS:
-: named-vterm
-
 ** Emacs Application Framework
   
      EAF is a very promising package for Emacs giving it some useful gui apps that are not so easy to find in other packages (such as a browser) and in general a full suite of applications. Unfortunately its got a weird behaviour in tiling window managers such as i3 and qtile, which I use not allowing me to use Emacs commands inside its buffers. It seems that when the cursor is outside the Emacs buffer (in my bar) this fixes but its still annoying so its use is limited unfortunately.

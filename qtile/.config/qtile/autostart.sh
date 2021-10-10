@@ -1,11 +1,12 @@
 #!/bin/bash
 setxkbmap -model pc104 -layout us,gr -variant ,, -option grp:alt_shift_toggle &
-nitrogen --set-scaled /usr/share/backgrounds/Xplo_by_Hugo_Cliff.png &
 volumeicon &
 nm-applet &
+feh --bg-fill /usr/share/backgrounds/arcolinux/arco-wallpaper.jpg &
 picom --config ~/.config/picom.conf &
 lxpolkit &
 emacs --daemon &
-blueman-applet &
-redshift-gtk &
+blueberry-tray &
 dunst &
+xfce4-power-manager &
+redshift -l 37.91:23.70 &

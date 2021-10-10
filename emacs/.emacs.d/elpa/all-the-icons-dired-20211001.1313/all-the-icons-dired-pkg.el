@@ -1,0 +1,2 @@
+;;; Generated package description from all-the-icons-dired.el  -*- no-byte-compile: t -*-
+(define-package "all-the-icons-dired" "20211001.1313" "Shows icons for each file in dired mode" '((emacs "24.4") (all-the-icons "2.2.0")) :commit "9eb119edcea12e9b7a06d888336abb0b8ea6502e" :authors '(("jtbm37")) :maintainer '("Jimmy Yuen Ho Wong" . "wyuenho@gmail.com") :keywords '("files" "icons" "dired") :url "https://github.com/wyuenho/all-the-icons-dired")

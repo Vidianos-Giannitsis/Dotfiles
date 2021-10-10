@@ -7,19 +7,19 @@ from libqtile.lazy import lazy
 from libqtile.utils import guess_terminal
 import os
 import subprocess
-import pyautogui
+#import pyautogui
 
 mod = "mod4"
 terminal = "alacritty"
 editor = "emacsclient -c -a emacs ~"
-browser_1 = "firefox"
-browser_2 = "brave"
+browser_2 = "firefox"
+browser_1 = "brave"
 office = "libreoffice"
 file_manager = "thunar" # I mostly use dired inside emacs for file management, but this exists as a gui file manager in case I need it
 music_player = "spotify"
 calculator = "qalculate-gtk"
 screenshots = "flameshot gui"
-run_launcher = 'dmenu_run -fn "Source Code Pro Bold" -i -nb "#292d3e" -sb "#4C7975" -nf "#839496" -sf "#eeffff" -p "Launch program"'
+run_launcher = 'dmenu_run -fn "Source Code Pro Bold" -i -nb "#292d3e" -sb "#5b76b2" -nf "#839496" -sf "#eeffff" -p "Launch program"'
 
 @hook.subscribe.startup_once
 def autostart():
@@ -66,7 +66,7 @@ keys = [
 Key2("M-S-f", lazy.window.toggle_floating, desc="Toggle Floating"),
 Key2("M-q", lazy.window.kill(), desc="Kill focused window"),
 Key2("M-S-r", lazy.restart(), desc="Restart qtile"),
-Key2("M-S-e", lazy.shutdown(), desc="Shutdown qtile"),
+Key2("M-S-e", lazy.spawn("arcolinux-logout"), desc="Log out of qtile"),
 
 Key2("M-<Return>", lazy.spawn(terminal), desc="Launch terminal"),
 Key2("M-r", lazy.spawn(run_launcher),
@@ -86,6 +86,7 @@ Key2("M-C-g", lazy.spawn("geogebra"), desc="Launch geogebra"),
 Key2("M-C-i", lazy.spawn("inkscape"), desc="Launch inkscape"),
 Key2("M-S-c", lazy.spawn("tuxedo-control-center"), desc="Launch computer settings manager"),
 Key2("M-C-p", lazy.spawn("system-config-printer"), desc="Launch printer software"),
+Key2("M-t", lazy.spawn("rofi-theme-selector"), desc="Launch a theme selector using rofi"),
 
 Key2("<XF86AudioRaiseVolume>", lazy.spawn("amixer -c 1 sset Master 5%+ unmute"), desc="Raise Volume and unmute if muted"),
 Key2("<XF86AudioLowerVolume>", lazy.spawn("amixer -c 1 sset Master 5%- unmute"), desc="Lower Volume and unmute if muted"),
@@ -133,15 +134,25 @@ keys.extend([Key2("M-C-s", lazy.group['scratchpad'].dropdown_toggle('music')),
 	     ])
 
 # Layouts
+
+def init_layout_theme():
+    return {"margin":2,
+	    "border_width":2,
+	    "border_focus": "#4C7975",
+	    "border_normal": "#002525"
+	    }
+
+layout_theme = init_layout_theme()
+
 layouts = [
-    layout.MonadTall(border_focus = "#3c605d", border_normal = "#002525"),
+    layout.MonadTall(**layout_theme),
     # layout.Columns(),
     # layout.Bsp(),
     layout.Max(),
-    layout.Stack(num_stacks=2, border_focus = "#4C7975", border_normal = "#002525"),
+    layout.Stack(num_stacks=2, border_focus = "#41557f", border_normal = "#002525"),
     # layout.Matrix(),
-    layout.MonadWide(border_focus = "#4C7975", border_normal = "#002525"),
-    # layout.RatioTile(),
+    layout.MonadWide(**layout_theme),
+    layout.RatioTile(**layout_theme),
     # layout.Tile(border_focus = "#005858", border_normal = "#002525", border_width ="2"),
     # layout.TreeTab(),
     # layout.VerticalTile(),

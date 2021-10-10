@@ -96,24 +96,6 @@
 (setq large-file-warning-threshold nil)
 (setq vc-follow-symlinks t)
 
-(set-face-attribute 'org-document-title nil :font "Source Code Pro" :weight 'bold :height 1.3)
-    (dolist (face '((org-level-1 . 1.2)
-		    (org-level-2 . 1.1)
-		    (org-level-3 . 1.05)
-		    (org-level-4 . 1.0)
-		    (org-level-5 . 1.1)
-		    (org-level-6 . 1.1)
-		    (org-level-7 . 1.1)
-		    (org-level-8 . 1.1)))
-      (set-face-attribute (car face) nil :font "Source Code Pro" :weight 'regular :height (cdr face)))
-
-(defun org-toggle-emphasis ()
-  "Toggle hiding/showing of org emphasize markers."
-  (interactive)
-  (if org-hide-emphasis-markers
-      (set-variable 'org-hide-emphasis-markers nil)
-    (set-variable 'org-hide-emphasis-markers t)))
-
 (setq counsel-spotify-client-id "0df2796a793b41dc91711eb9f85c0e77")
 (setq counsel-spotify-client-secret "bcdbb823795640248ff2c29eedadb800")
 
@@ -136,6 +118,14 @@
   (interactive "MFont Size: ")
   (set-face-attribute 'default nil :font (concat "Source Code Pro " SIZE)))
 
+(defun named-vterm (NAME)
+  "Create a new vterm session with name NAME and open it in a new window"
+  (interactive "sEnter Name: ")
+  (vterm-other-window NAME))
+
+(add-to-list 'auto-mode-alist '("\\.m\\'" . octave-mode))
+(add-to-list 'auto-mode-alist '("\\.epub\\'" . nov-mode))
+
 (require 'keybindings)
 
 (require 'dired-x)
@@ -151,8 +141,6 @@
 
 (use-package dired-collapse
   :hook (dired-mode . dired-collapse-mode))
-
-(setq dired-filter-prefix "f")
 
 (require 'helm-dired-open)
 
@@ -236,6 +224,24 @@
 (setq org-image-actual-width nil)
 
 (add-hook 'org-mode-hook 'visual-line-mode)
+
+(set-face-attribute 'org-document-title nil :font "Source Code Pro" :weight 'bold :height 1.3)
+(dolist (face '((org-level-1 . 1.2)
+		(org-level-2 . 1.1)
+		(org-level-3 . 1.05)
+		(org-level-4 . 1.0)
+		(org-level-5 . 1.1)
+		(org-level-6 . 1.1)
+		(org-level-7 . 1.1)
+		(org-level-8 . 1.1)))
+  (set-face-attribute (car face) nil :font "Source Code Pro" :weight 'regular :height (cdr face)))
+
+(defun org-toggle-emphasis ()
+  "Toggle hiding/showing of org emphasize markers."
+  (interactive)
+  (if org-hide-emphasis-markers
+      (set-variable 'org-hide-emphasis-markers nil)
+    (set-variable 'org-hide-emphasis-markers t)))
 
 (setq org-format-latex-options '(:foreground default :background default :scale 1.8 :html-foreground "Black" :html-background "Transparent" :html-scale 1.0 :matchers))
 
@@ -369,8 +375,8 @@
     ";g"  "\\gamma"                                ";;;g" "\\lg"
     ";G"  "\\Gamma"                                ";;;G" "10^{?}"
     ";h"  "\\eta"           ";;h" "\\hbar"
-    ";i"  "\\in"            ";;i" "\\imath"
-    ";I"  "\\iota"          ";;I" "\\Im"
+    ";i"  "\\infty"            ";;i" "\\imath"
+    ";I"  "\\in"          ";;I" "\\Im"
     ";;j" "\\jmath"
     ";k"  "\\kappa"
     ";l"  "\\mathcal{L}"        ";;l" "\\ell"          ";;;l" "\\log"
@@ -476,6 +482,25 @@
 )
    )
 
+(define-skeleton lab-skeleton
+  "A skeleton which I use for initialising my lab reports which have standard formatting"
+  ""
+  "#+TITLE:"str"\n"
+  "glatex"-"\n"
+  "ab\n\\pagebreak\n\n"
+
+  "* Εισαγωγή\n\n"
+
+  "* Πειραματικό Μέρος\n\n"
+
+  "* Αποτελέσματα - Συζήτηση\n\n"
+
+  "* Συμπεράσματα\n\n"
+
+  "* Βιβλιογραφία\n"
+  "bibliography:~/Sync/My_Library.bib\n"
+  "bibliographystyle:unsrt")
+
 (add-hook 'after-init-hook 'org-roam-setup)
 (setq org-roam-v2-ack t)
 
@@ -502,7 +527,7 @@
     (if-let ((state (org-roam-node-todo node)))
       (format "Status: %s" state)))
 
-  (setq org-roam-node-display-template "${directories:8} ${tags:15} ${title:100} ${backlinkscount:6} ${todostate:20}")
+  (setq org-roam-node-display-template "${title:100} ${backlinkscount:6} ${todostate:20} ${directories:8} ${tags:12}")
 
   (add-to-list 'display-buffer-alist
 	       '("\\*org-roam\\*"
@@ -548,16 +573,27 @@ This is useful because especially with index files, having latex previews on, ma
 (setq org-agenda-files
       '("~/org_roam/daily"))
 (setq org-journal-dir "~/org_roam/daily"
-      org-journal-file-format "%Y-%m-%d.org")
+      org-journal-file-format "%d-%m-%Y.org"
+      org-journal-time-format "%a, %m/%d-%R")
 
-(org-super-agenda-mode 1)
 (add-hook 'org-agenda-mode-hook 'visual-line-mode)
 
+(define-skeleton project-skeleton
+  "This skeleton inserts a link to the Current Projects file in the org-roam directory. 
+
+Its used in my fleeting note initialization function as a means to always make new fleeting notes point to the current projects file, as that is that files purpose"
+  ""
+  "- tags :: [[id:b5e71fe5-9d76-4f7f-b58d-df6a561e6a6b][Current Projects]]")
+
 (defun org-roam-init-fleeting-note ()
-  "Prescribe an ID to the heading making it a node in org-roam, then add it the inbox by giving it a todo keyword. This helps automate the process of creating new fleeting notes in combination with the org-journal commands"
+  "Prescribe an ID to the heading making it a node in org-roam, then add it the inbox by giving it a todo keyword. Finally, insert a new line and the project skeleton, linking the new file to the Current Projects file.
+
+ This helps automate the process of creating new fleeting notes in combination with the org-journal commands"
   (interactive)
   (org-id-get-create)
-  (org-todo))
+  (org-todo)
+  (evil-open-below 1)
+  (project-skeleton))
 
 (defun org-id-delete-entry ()
 "Remove/delete an ID entry. Saves the current point and only does this if inside an org-heading."
@@ -572,22 +608,21 @@ This is useful because especially with index files, having latex previews on, ma
 		 (org-id-delete-entry))))
 
 (require 'org-roam-bibtex)
+(org-roam-bibtex-mode 1)
 
 (setq orb-insert-interface 'ivy-bibtex
       orb-note-actions-interface 'ivy)
-
-(setq orb-preformat-keywords '("citekey" "author" "date"))
-
-(require 'websocket)
-(require 'org-roam-ui)
+(setq orb-preformat-keywords '("citekey" "author" "date" "entry-type" "keywords" "url" "file"))
 
 (require 'org-protocol)
 (require 'org-roam-protocol)
 
+(require 'websocket)
+(require 'org-roam-ui)
+
 (setq org-roam-capture-templates
       '(("d" "default" plain "%?" :if-new
 	 (file+head "${slug}-%<%d-%m-%y>.org" "#+title: ${title}\nglatex_roam\n
-+filetags: 
 - index :: 
 - tags ::  ")
 	 :unarrowed t
@@ -595,7 +630,6 @@ This is useful because especially with index files, having latex previews on, ma
 
 	("p" "private" plain "%?" :if-new
 	 (file+head "private/${slug}-%<%d-%m-%y>.org" "#+title: ${title}\nglatex_roam\n
-#+filetags: 
 - index :: 
 - tags ::  ")
 	 :unarrowed t
@@ -609,7 +643,7 @@ This is useful because especially with index files, having latex previews on, ma
 - keywords :: ${keywords}
 - tags :: 
 
-* Analysis of ${entry-type}
+* Analysis of ${entry-type} by ${author}
 :PROPERTIES:
 :URL: ${url}
 :NOTER_DOCUMENT: ${file}  
@@ -642,25 +676,6 @@ Evaluate sexp for link to referenced info page: (Info-goto-node \"(%:file)%:node
  - tags :: ")
 	 :unnarrowed t
 	 :jump-to-captured t)))
-
-(define-skeleton lab-skeleton
-  "A skeleton which I use for initialising my lab reports which have standard formatting"
-  ""
-  "#+TITLE:"str"\n"
-  "glatex\n"
-  "ab\n\pagebreak\n\n"
-
-  "* Εισαγωγή\n\n"
-
-  "* Πειραματικό Μέρος\n\n"
-
-  "* Αποτελέσματα - Συζήτηση\n\n"
-
-  "* Συμπεράσματα\n\n"
-
-  "* Βιβλιογραφία\n"
-  "bibliography:~/Sync/My_Library.bib\n"
-  "bibliographystyle:unsrt")
 
 (setq bookmark-version-control t
       delete-old-versions t)
@@ -712,6 +727,10 @@ Evaluate sexp for link to referenced info page: (Info-goto-node \"(%:file)%:node
   (setq export (concat "inkscape --export-latex --export-pdf=" file_name ".pdf" file_name ".svg" ))
   (shell-command export))
 
+(with-eval-after-load 'org
+  (require 'edraw-org)
+  (edraw-org-setup-default))
+
 (add-hook 'after-init-hook 'global-company-mode)
 (add-hook 'company-mode-hook '(lambda ()
 				(add-to-list 'company-backends 'company-math-symbols-latex)
@@ -739,11 +758,6 @@ Evaluate sexp for link to referenced info page: (Info-goto-node \"(%:file)%:node
 (add-hook 'pdf-view-mode-hook 'pdf-view-midnight-minor-mode)
 
 (add-to-list 'auto-mode-alist '("\\.m\\'" . octave-mode))
-
-(defun named-vterm (NAME)
-  "Create a new vterm session with name NAME and open it in a new window"
-  (interactive "sEnter Name: ")
-  (vterm-other-window NAME))
 
 (require 'eaf)
 

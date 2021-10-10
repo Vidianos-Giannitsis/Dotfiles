@@ -2,115 +2,247 @@
 # ~/.bashrc
 #
 
+#Ibus settings if you need them
+#type ibus-setup in terminal to change settings and start the daemon
+#delete the hashtags of the next lines and restart
+#export GTK_IM_MODULE=ibus
+#export XMODIFIERS=@im=dbus
+#export QT_IM_MODULE=ibus
+
+# If not running interactively, don't do anything
 [[ $- != *i* ]] && return
 
+export HISTCONTROL=ignoreboth:erasedups
+
+# Make nano the default editor
+
+export EDITOR='emacsclient -c -a emacs'
+export VISUAL='emacsclient -c -a emacs'
+export BROWSER='brave'
 export MANPAGER="/bin/sh -c \"col -b | vim --not-a-term -c 'set ft=man ts=8 nomod nolist noma' -\""
 
-colors() {
-	local fgc bgc vals seq0
+PS1='[\u@\h \W]\$ '
 
-	printf "Color escapes are %s\n" '\e[${value};...;${value}m'
-	printf "Values 30..37 are \e[33mforeground colors\e[m\n"
-	printf "Values 40..47 are \e[43mbackground colors\e[m\n"
-	printf "Value  1 gives a  \e[1mbold-faced look\e[m\n\n"
-
-	# foreground colors
-	for fgc in {30..37}; do
-		# background colors
-		for bgc in {40..47}; do
-			fgc=${fgc#37} # white
-			bgc=${bgc#40} # black
-
-			vals="${fgc:+$fgc;}${bgc}"
-			vals=${vals%%;}
-
-			seq0="${vals:+\e[${vals}m}"
-			printf "  %-9s" "${seq0:-(default)}"
-			printf " ${seq0}TEXT\e[m"
-			printf " \e[${vals:+${vals+$vals;}}1mBOLD\e[m"
-		done
-		echo; echo
-	done
-}
-
-[ -r /usr/share/bash-completion/bash_completion ] && . /usr/share/bash-completion/bash_completion
-
-# Change the window title of X terminals
-case ${TERM} in
-	xterm*|rxvt*|Eterm*|aterm|kterm|gnome*|interix|konsole*)
-		PROMPT_COMMAND='echo -ne "\033]0;${USER}@${HOSTNAME%%.*}:${PWD/#$HOME/\~}\007"'
-		;;
-	screen*)
-		PROMPT_COMMAND='echo -ne "\033_${USER}@${HOSTNAME%%.*}:${PWD/#$HOME/\~}\033\\"'
-		;;
-esac
-
-use_color=true
-
-# Set colorful PS1 only on colorful terminals.
-# dircolors --print-database uses its own built-in database
-# instead of using /etc/DIR_COLORS.  Try to use the external file
-# first to take advantage of user additions.  Use internal bash
-# globbing instead of external grep binary.
-safe_term=${TERM//[^[:alnum:]]/?}   # sanitize TERM
-match_lhs=""
-[[ -f ~/.dir_colors   ]] && match_lhs="${match_lhs}$(<~/.dir_colors)"
-[[ -f /etc/DIR_COLORS ]] && match_lhs="${match_lhs}$(</etc/DIR_COLORS)"
-[[ -z ${match_lhs}    ]] \
-	&& type -P dircolors >/dev/null \
-	&& match_lhs=$(dircolors --print-database)
-[[ $'\n'${match_lhs} == *$'\n'"TERM "${safe_term}* ]] && use_color=true
-
-if ${use_color} ; then
-	# Enable colors for ls, etc.  Prefer ~/.dir_colors #64489
-	if type -P dircolors >/dev/null ; then
-		if [[ -f ~/.dir_colors ]] ; then
-			eval $(dircolors -b ~/.dir_colors)
-		elif [[ -f /etc/DIR_COLORS ]] ; then
-			eval $(dircolors -b /etc/DIR_COLORS)
-		fi
-	fi
-
-	if [[ ${EUID} == 0 ]] ; then
-		PS1='\[\033[01;31m\][\h\[\033[01;36m\] \W\[\033[01;31m\]]\$\[\033[00m\] '
-	else
-		PS1='\[\033[01;32m\][\u@\h\[\033[01;37m\] \W\[\033[01;32m\]]\$\[\033[00m\] '
-	fi
-
-	alias ls='ls --color=auto'
-	alias grep='grep --colour=auto'
-	alias egrep='egrep --colour=auto'
-	alias fgrep='fgrep --colour=auto'
-else
-	if [[ ${EUID} == 0 ]] ; then
-		# show root@ when we don't have colors
-		PS1='\u@\h \W \$ '
-	else
-		PS1='\u@\h \w \$ '
-	fi
+if [ -d "$HOME/.bin" ] ;
+  then PATH="$HOME/.bin:$PATH"
 fi
 
-unset use_color safe_term match_lhs sh
+if [ -d "$HOME/.local/bin" ] ;
+  then PATH="$HOME/.local/bin:$PATH"
+fi
 
-xhost +local:root > /dev/null 2>&1
+#ignore upper and lowercase when TAB completion
+bind "set completion-ignore-case on"
 
-complete -cf sudo
+#list
+alias ls='exa -al --color=always --group-directories-first' 
+alias la='exa -a --color=always --group-directories-first'  # all files and dirs
+alias ll='exa -l --color=always --group-directories-first'  # long format
+alias lt='exa -aT --color=always --group-directories-first' # tree listing
+alias l.='exa -a | egrep "^\."'
+alias ..='cd ..'
 
-# Bash won't get SIGWINCH if another process is in the foreground.
-# Enable checkwinsize so that bash will check the terminal size when
-# it regains control.  #65623
-# http://cnswww.cns.cwru.edu/~chet/bash/FAQ (E11)
-shopt -s checkwinsize
 
-shopt -s expand_aliases
+#fix obvious typo's
+alias cd..='cd ..'
+alias pdw="pwd"
+alias udpate='sudo pacman -Syyu'
+alias upate='sudo pacman -Syyu'
+alias updte='sudo pacman -Syyu'
+alias updqte='sudo pacman -Syyu'
+alias upqll="paru -Syu --noconfirm"
+alias upal="paru -Syu --noconfirm"
 
-# export QT_SELECT=4
+## Colorize the grep command output for ease of use (good for log files)##
+alias grep='grep --color=auto'
+alias egrep='egrep --color=auto'
+alias fgrep='fgrep --color=auto'
 
-# Enable history appending instead of overwriting.  #139609
-shopt -s histappend
+#readable output
+alias df='df -h'
 
-#
-# # ex - archive extractor
+#pacman unlock
+alias unlock="sudo rm /var/lib/pacman/db.lck"
+alias rmpacmanlock="sudo rm /var/lib/pacman/db.lck"
+
+#arcolinux logout unlock
+alias rmlogoutlock="sudo rm /tmp/arcologout.lock"
+
+#which graphical card is working
+alias whichvga="/usr/local/bin/arcolinux-which-vga"
+
+#free
+alias free="free -mt"
+
+#continue download
+alias wget="wget -c"
+
+#userlist
+alias userlist="cut -d: -f1 /etc/passwd"
+
+#merge new settings
+alias merge="xrdb -merge ~/.Xresources"
+
+# Aliases for software managment
+# pacman or pm
+alias pacman='sudo pacman --color auto'
+alias update='sudo pacman -Syyu'
+
+# paru as aur helper - updates everything
+alias pksyua="paru -Syu --noconfirm"
+alias upall="paru -Syu --noconfirm"
+
+#ps
+alias psa="ps auxf"
+alias psgrep="ps aux | grep -v grep | grep -i -e VSZ -e"
+
+#grub update
+alias update-grub="sudo grub-mkconfig -o /boot/grub/grub.cfg"
+
+#add new fonts
+alias update-fc='sudo fc-cache -fv'
+
+#copy/paste all content of /etc/skel over to home folder - backup of config created - beware
+alias skel='[ -d ~/.config ] || mkdir ~/.config && cp -Rf ~/.config ~/.config-backup-$(date +%Y.%m.%d-%H.%M.%S) && cp -rf /etc/skel/* ~'
+#backup contents of /etc/skel to hidden backup folder in home/user
+alias bupskel='cp -Rf /etc/skel ~/.skel-backup-$(date +%Y.%m.%d-%H.%M.%S)'
+
+#copy bashrc-latest over on bashrc - cb= copy bashrc
+alias cb='sudo cp /etc/skel/.bashrc ~/.bashrc && source ~/.bashrc'
+#copy /etc/skel/.zshrc over on ~/.zshrc - cb= copy zshrc
+#alias cz='sudo cp /etc/skel/.zshrc ~/.zshrc && exec zsh'
+
+#switch between bash and zsh
+alias tobash="sudo chsh $USER -s /bin/bash && echo 'Now log out.'"
+alias tozsh="sudo chsh $USER -s /bin/zsh && echo 'Now log out.'"
+
+#switch between lightdm and sddm
+alias tolightdm="sudo pacman -S lightdm lightdm-gtk-greeter lightdm-gtk-greeter-settings --noconfirm --needed ; sudo systemctl enable lightdm.service -f ; echo 'Lightm is active - reboot now'"
+alias tosddm="sudo pacman -S sddm --noconfirm --needed ; sudo systemctl enable sddm.service -f ; echo 'Sddm is active - reboot now'"
+
+#quickly kill conkies
+alias kc='killall conky'
+
+#hardware info --short
+alias hw="hwinfo --short"
+
+#skip integrity check
+alias paruskip='paru -S --mflags --skipinteg'
+alias yayskip='yay -S --mflags --skipinteg'
+alias trizenskip='trizen -S --skipinteg'
+
+#check vulnerabilities microcode
+alias microcode='grep . /sys/devices/system/cpu/vulnerabilities/*'
+
+#get fastest mirrors in your neighborhood
+alias mirror="sudo reflector -f 30 -l 30 --number 10 --verbose --save /etc/pacman.d/mirrorlist"
+alias mirrord="sudo reflector --latest 30 --number 10 --sort delay --save /etc/pacman.d/mirrorlist"
+alias mirrors="sudo reflector --latest 30 --number 10 --sort score --save /etc/pacman.d/mirrorlist"
+alias mirrora="sudo reflector --latest 30 --number 10 --sort age --save /etc/pacman.d/mirrorlist"
+#our experimental - best option for the moment
+alias mirrorx="sudo reflector --age 6 --latest 20  --fastest 20 --threads 5 --sort rate --protocol https --save /etc/pacman.d/mirrorlist"
+alias mirrorxx="sudo reflector --age 6 --latest 20  --fastest 20 --threads 20 --sort rate --protocol https --save /etc/pacman.d/mirrorlist"
+alias ram='rate-arch-mirrors'
+
+#mounting the folder Public for exchange between host and guest on virtualbox
+alias vbm="sudo /usr/local/bin/arcolinux-vbox-share"
+
+#shopt
+shopt -s autocd # change to named directory
+shopt -s cdspell # autocorrects cd misspellings
+shopt -s cmdhist # save multi-line commands in history as single line
+shopt -s dotglob
+shopt -s histappend # do not overwrite history
+shopt -s expand_aliases # expand aliases
+
+#youtube-dl
+alias yta-aac="youtube-dl --extract-audio --audio-format aac "
+alias yta-best="youtube-dl --extract-audio --audio-format best "
+alias yta-flac="youtube-dl --extract-audio --audio-format flac "
+alias yta-m4a="youtube-dl --extract-audio --audio-format m4a "
+alias yta-mp3="youtube-dl --extract-audio --audio-format mp3 "
+alias yta-opus="youtube-dl --extract-audio --audio-format opus "
+alias yta-vorbis="youtube-dl --extract-audio --audio-format vorbis "
+alias yta-wav="youtube-dl --extract-audio --audio-format wav "
+
+alias ytv-best="youtube-dl -f bestvideo+bestaudio "
+
+#Recent Installed Packages
+alias rip="expac --timefmt='%Y-%m-%d %T' '%l\t%n %v' | sort | tail -200 | nl"
+alias riplong="expac --timefmt='%Y-%m-%d %T' '%l\t%n %v' | sort | tail -3000 | nl"
+
+#iso and version used to install ArcoLinux
+alias iso="cat /etc/dev-rel | awk -F '=' '/ISO/ {print $2}'"
+
+#Cleanup orphaned packages
+alias cleanup='sudo pacman -Rns $(pacman -Qtdq)'
+
+#search content with ripgrep
+alias rg="rg --sort path"
+
+#get the error messages from journalctl
+alias jctl="journalctl -p 3 -xb"
+
+#nano for important configuration files
+#know what you do in these files
+alias nlightdm="sudo $EDITOR /etc/lightdm/lightdm.conf"
+alias npacman="sudo $EDITOR /etc/pacman.conf"
+alias ngrub="sudo $EDITOR /etc/default/grub"
+alias nconfgrub="sudo $EDITOR /boot/grub/grub.cfg"
+alias nmkinitcpio="sudo $EDITOR /etc/mkinitcpio.conf"
+alias nmirrorlist="sudo $EDITOR /etc/pacman.d/mirrorlist"
+alias narcomirrorlist='sudo nano /etc/pacman.d/arcolinux-mirrorlist'
+alias nsddm="sudo $EDITOR /etc/sddm.conf"
+alias nsddmk="sudo $EDITOR /etc/sddm.conf.d/kde_settings.conf"
+alias nfstab="sudo $EDITOR /etc/fstab"
+alias nnsswitch="sudo $EDITOR /etc/nsswitch.conf"
+alias nsamba="sudo $EDITOR /etc/samba/smb.conf"
+alias ngnupgconf="sudo nano /etc/pacman.d/gnupg/gpg.conf"
+alias nb="$EDITOR ~/.bashrc"
+alias nz="$EDITOR ~/.zshrc"
+
+#gpg
+#verify signature for isos
+alias gpg-check="gpg2 --keyserver-options auto-key-retrieve --verify"
+alias fix-gpg-check="gpg2 --keyserver-options auto-key-retrieve --verify"
+#receive the key of a developer
+alias gpg-retrieve="gpg2 --keyserver-options auto-key-retrieve --receive-keys"
+alias fix-gpg-retrieve="gpg2 --keyserver-options auto-key-retrieve --receive-keys"
+alias fix-keyserver="[ -d ~/.gnupg ] || mkdir ~/.gnupg ; cp /etc/pacman.d/gnupg/gpg.conf ~/.gnupg/ ; echo 'done'"
+
+#fixes
+alias fix-permissions="sudo chown -R $USER:$USER ~/.config ~/.local"
+alias keyfix="/usr/local/bin/arcolinux-fix-pacman-databases-and-keys"
+alias key-fix="/usr/local/bin/arcolinux-fix-pacman-databases-and-keys"
+alias fixkey="/usr/local/bin/arcolinux-fix-pacman-databases-and-keys"
+alias fix-key="/usr/local/bin/arcolinux-fix-pacman-databases-and-keys"
+alias fix-sddm-config="/usr/local/bin/arcolinux-fix-sddm-config"
+alias fix-pacman-conf="/usr/local/bin/arcolinux-fix-pacman-conf"
+alias fix-pacman-keyserver="/usr/local/bin/arcolinux-fix-pacman-gpg-conf"
+
+#maintenance
+alias big="expac -H M '%m\t%n' | sort -h | nl"
+alias downgrada="sudo downgrade --ala-url https://ant.seedhost.eu/arcolinux/"
+
+#hblock (stop tracking with hblock)
+#use unhblock to stop using hblock
+alias unhblock="hblock -S none -D none"
+
+#systeminfo
+alias probe="sudo -E hw-probe -all -upload"
+alias sysfailed="systemctl list-units --failed"
+
+#shutdown or reboot
+alias ssn="sudo shutdown now"
+alias sr="sudo reboot"
+
+#update betterlockscreen images
+alias bls="betterlockscreen -u /usr/share/backgrounds/arcolinux/"
+
+#give the list of all installed desktops - xsessions desktops
+alias xd="ls /usr/share/xsessions"
+
+# # ex = EXtractor for all kinds of archives
 # # usage: ex <file>
 ex ()
 {
@@ -119,7 +251,7 @@ ex ()
       *.tar.bz2)   tar xjf $1   ;;
       *.tar.gz)    tar xzf $1   ;;
       *.bz2)       bunzip2 $1   ;;
-      *.rar)       unrar x $1     ;;
+      *.rar)       unrar x $1   ;;
       *.gz)        gunzip $1    ;;
       *.tar)       tar xf $1    ;;
       *.tbz2)      tar xjf $1   ;;
@@ -127,6 +259,9 @@ ex ()
       *.zip)       unzip $1     ;;
       *.Z)         uncompress $1;;
       *.7z)        7z x $1      ;;
+      *.deb)       ar x $1      ;;
+      *.tar.xz)    tar xf $1    ;;
+      *.tar.zst)   tar xf $1    ;;
       *)           echo "'$1' cannot be extracted via ex()" ;;
     esac
   else
@@ -134,15 +269,23 @@ ex ()
   fi
 }
 
-# better yaourt colors
-export YAOURT_COLORS="nb=1:pkg=1:ver=1;32:lver=1;45:installed=1;42:grp=1;34:od=1;41;5:votes=1;44:dsc=0:other=1;35"
+#arcolinux applications
+alias att="arcolinux-tweak-tool"
+alias adt="arcolinux-desktop-trasher"
+alias abl="arcolinux-betterlockscreen"
+alias agm="arcolinux-get-mirrors"
+alias amr="arcolinux-mirrorlist-rank-info"
+alias aom="arcolinux-osbeck-as-mirror"
+alias ars="arcolinux-reflector-simple"
+alias atm="arcolinux-tellme"
+alias avs="arcolinux-vbox-share"
+alias awa="arcolinux-welcome-app"
 
-export ALTERNATE_EDITOR=""
-export EDITOR="emacsclient -c -a emacs"
-export VISUAL="emacsclient -c -a emacs"
-export BROWSER='brave'
-export PATH="$HOME/.cargo/bin:$HOME/qtile/bin:$PATH"
-#export PATH='/home/vidianos/.cargo/bin'
+#remove
+alias rmgitcache="rm -r ~/.cache/git"
+
+#moving your personal files and folders from /personal to ~
+alias personal='cp -Rf /personal/* ~'
 
 # General aliases
 alias chemacs='emacs-user-changer.sh'
@@ -153,13 +296,6 @@ alias df='df -h'                          # human-readable sizes
 alias free='free -m'                      # show sizes in MB
 alias np='nano -w PKGBUILD'
 alias more=less
-alias nnn='nnn -e'
-alias ls='exa -al --color=always --group-directories-first' 
-alias la='exa -a --color=always --group-directories-first'  # all files and dirs
-alias ll='exa -l --color=always --group-directories-first'  # long format
-alias lt='exa -aT --color=always --group-directories-first' # tree listing
-alias l.='exa -a | egrep "^\."'
-alias ..='cd ..'
 alias tlmgr='/usr/share/texmf-dist/scripts/texlive/tlmgr.pl --usermode'
 alias zotero='cd Zotero_linux-x86_64/ && ./zotero && cd'
 alias dmenu='dmenu_run -fn "Source Code Pro Bold" -i -nb "#073642" -sb "#005858" -nf "#839496" -sf "#58002c"'
@@ -168,15 +304,28 @@ alias bright='sudo brightnessctl s'
 alias size='sudo du -a | sort -n -r | head -n 20'
 alias dl='youtube-dl -x --audio-format "mp3"'
 alias yt-dl='youtube-dl'
-
-# Git command aliases
-alias gadd='git add'
-alias gst='git status'
-alias gcm='git commit -a'
-alias gpull='git pull'
-alias gpush='git push'
+alias sc='sc-im'
 
 # Vim editing mode for my shell
 set -o vi
 eval "$(starship init bash)"
 
+#create a file called .bashrc-personal and put all your personal aliases
+#in there. They will not be overwritten by skel.
+
+[[ -f ~/.bashrc-personal ]] && . ~/.bashrc-personal
+
+# reporting tools - install when not installed
+#screenfetch
+#alsi
+#paleofetch
+#fetch
+#hfetch
+#sfetch
+#ufetch
+#ufetch-arco
+pfetch
+#sysinfo
+#sysinfo-retro
+#cpufetch
+#colorscript random
