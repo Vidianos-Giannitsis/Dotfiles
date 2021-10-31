@@ -53,7 +53,8 @@
   :ensure t
   :init (doom-modeline-mode 1)
   :config (setq doom-modeline-minor-modes nil
-		doom-modeline-enable-word-count t))
+		doom-modeline-enable-word-count t
+		doom-modeline-modal-icon t))
 
 (defalias 'yes-or-no-p 'y-or-n-p)
 
@@ -70,6 +71,8 @@
 		(with-selected-frame frame
 		  (set-font-faces))))
   (set-font-faces))
+
+(setq default-input-method "greek")
 
 (setq evil-collection-setup-minibuffer t)
 (setq evil-want-keybinding nil)
@@ -98,6 +101,8 @@
 
 (setq counsel-spotify-client-id "0df2796a793b41dc91711eb9f85c0e77")
 (setq counsel-spotify-client-secret "bcdbb823795640248ff2c29eedadb800")
+(setq espotify-client-id "0df2796a793b41dc91711eb9f85c0e77")
+(setq espotify-client-secret "bcdbb823795640248ff2c29eedadb800")
 
 (require 'math-at-point)
 (require 'molar-mass)
@@ -125,6 +130,10 @@
 
 (add-to-list 'auto-mode-alist '("\\.m\\'" . octave-mode))
 (add-to-list 'auto-mode-alist '("\\.epub\\'" . nov-mode))
+
+(setq org-confirm-elisp-link-function nil)
+
+(setq ivy-youtube-key "224520591375-p6v36u3r9k8qt2k7qthb12gnjarc8c7t")
 
 (require 'keybindings)
 
@@ -364,7 +373,6 @@
     ";a"  "\\alpha"
     ";A"  "\\forall"        ";;A" "\\aleph"
     ";b"  "\\beta"
-    ";;;c" "\\cos"
     ";C"  "\\mathbb{C}"                            ";;;C" "\\arccos"
     ";d"  "\\delta"         ";;d" "\\partial"
     ";D"  "\\Delta"         ";;D" "\\nabla"
@@ -392,13 +400,13 @@
     ";Q"  "\\mathbb{Q}"
     ";r"  "\\rho"           ";;r" "\\varrho"
     ";R"  "\\mathbb{R}"      ";;R" "\\Re"
-    ";s"  "\\sigma"         ";;s" "\\varsigma"    ";;;s" "\\sin"
+    ";s"  "\\sqrt"         ";;s" "\\varsigma"    ";;;s" "\\sin"
     ";S"  "\\Sigma"                               ";;;S" "\\arcsin"
     ";t"  "\\tau"                                 ";;;t" "\\tan"
     ";;;T" "\\arctan"
     ";u"  "\\upsilon"
     ";U"  "\\Upsilon"
-    ";v"  "\\vee"
+    ";v"  "\\vec"
     ";V"  "\\Phi"
     ";w"  "\\xi"
     ";W"  "\\Xi"
@@ -501,6 +509,17 @@
   "bibliography:~/Sync/My_Library.bib\n"
   "bibliographystyle:unsrt")
 
+(define-skeleton hw-skeleton
+  "A skeleton for quickly adding a list of this semester's lessons to a new note which I use for tracking what I need to do for each lesson"
+  ""
+  "*** ΜΦΔ\n\n"
+  "*** Φαινόμενα Μεταφοράς\n\n"
+  "*** ΗΕΔ (Υδραυλικό)\n\n"
+  "*** ΗΕΔ (Ηλεκτρικό)\n\n"
+  "*** Υλικά\n\n"
+  "*** Προηγμένα Κεραμικά\n\n"
+  "*** Βιολογία\n\n")
+
 (add-hook 'after-init-hook 'org-roam-setup)
 (setq org-roam-v2-ack t)
 
@@ -527,7 +546,7 @@
     (if-let ((state (org-roam-node-todo node)))
       (format "Status: %s" state)))
 
-  (setq org-roam-node-display-template "${title:100} ${backlinkscount:6} ${todostate:20} ${directories:8} ${tags:12}")
+  (setq org-roam-node-display-template "${title:100} ${backlinkscount:6} ${todostate:20} ${directories:8} ${tags:25}")
 
   (add-to-list 'display-buffer-alist
 	       '("\\*org-roam\\*"
@@ -546,26 +565,39 @@ This is useful because especially with index files, having latex previews on, ma
   (let ((org-startup-with-latex-preview nil))
     (org-roam-buffer-toggle)))
 
+(defun org-roam-buffer-dedicated-without-latex ()
+  "Same logic as the above function, but this time wrapping the let expression around the org-roam-buffer-display-dedicated function"
+  (interactive)
+  (let ((org-startup-with-latex-preview nil))
+    (org-roam-buffer-display-dedicated)))
+
 (setq bibtex-completion-bibliography
       '("~/Sync/My_Library.bib")
-      reftex-default-bibliography '("~/Sync/My_Library.bib")
+      bibtex-completion-pdf-field "File"
       bibtex-completion-library-path '("~/Sync/Zotero_pdfs"))
 
 (setq bibtex-completion-additional-search-fields '(keywords abstract))
-
-(use-package org-ref
-  :config (org-ref-ivy-cite-completion))
 
 (setq ivy-bibtex-default-action 'ivy-bibtex-insert-citation)
 (ivy-add-actions
  'ivy-bibtex
  '(("p" ivy-bibtex-open-any "Open pdf, url or DOI")))
 
+(setq bibtex-completion-format-citation-functions
+      '((org-mode . bibtex-completion-format-citation-org-title-link-to-PDF)
+	(latex-mode . bibtex-completion-format-citation-cite)
+	(markdown-mode . bibtex-completion-format-citation-pandoc-citeproc)
+	(python-mode . bibtex-completion-format-citation-sphinxcontrib-bibtex)
+	(rst-mode . bibtex-completion-format-citation-sphinxcontrib-bibtex)
+	(default . bibtex-completion-format-citation-default)))
+
 (setq org-todo-keywords
       '((sequence "INBOX(i)"
 		  "PROCESSING(p)"
-		  "REFILE(r)"
+		  "URGENT(u)"
+		  "LOW-PRIORITY(l)"
 		  "WAIT(w)"
+		  "TO-READ(r)"
 		  "|"
 		  "DONE(d)"
 		  )))
@@ -591,9 +623,10 @@ Its used in my fleeting note initialization function as a means to always make n
  This helps automate the process of creating new fleeting notes in combination with the org-journal commands"
   (interactive)
   (org-id-get-create)
-  (org-todo)
+  (evil-next-visual-line)
   (evil-open-below 1)
-  (project-skeleton))
+  (project-skeleton)
+  (org-todo))
 
 (defun org-id-delete-entry ()
 "Remove/delete an ID entry. Saves the current point and only does this if inside an org-heading."
@@ -623,14 +656,14 @@ Its used in my fleeting note initialization function as a means to always make n
 (setq org-roam-capture-templates
       '(("d" "default" plain "%?" :if-new
 	 (file+head "${slug}-%<%d-%m-%y>.org" "#+title: ${title}\nglatex_roam\n
-- index :: 
+- index ::  
 - tags ::  ")
 	 :unarrowed t
 	 :jump-to-captured t)
 
 	("p" "private" plain "%?" :if-new
 	 (file+head "private/${slug}-%<%d-%m-%y>.org" "#+title: ${title}\nglatex_roam\n
-- index :: 
+- index ::  
 - tags ::  ")
 	 :unarrowed t
 	 :jump-to-captured t)
@@ -659,7 +692,7 @@ Its used in my fleeting note initialization function as a means to always make n
 #+filetags: %:type
 - tags :: 
 
-Evaluate sexp for link to referenced info page: (Info-goto-node \"(%:file)%:node\")
+[[elisp:(Info-goto-node \"(%:file)%:node\")][Link to Info page]]
 \n
 ")
 	 :unnarowed t)))
@@ -670,8 +703,8 @@ Evaluate sexp for link to referenced info page: (Info-goto-node \"(%:file)%:node
 	 :empty-lines 1)))
 
 (setq org-roam-capture-ref-templates 
-      '(("r" "ref" plain "%?" :target
-	 (file+head "${slug}.org" "#+title: ${title}\nglatex_roam\n
+      '(("r" "ref" entry "* %?" :target
+	 (file+head "ref/${slug}.org" "#+title: ${title}\nglatex_roam\n
 #+filetags: 
  - tags :: ")
 	 :unnarrowed t
@@ -680,7 +713,7 @@ Evaluate sexp for link to referenced info page: (Info-goto-node \"(%:file)%:node
 (setq bookmark-version-control t
       delete-old-versions t)
 
-(require 'bookmark+)
+;(require 'bookmark+)
 
 (defun org-scratchpad ()
   "Yank the entire document, delete it and save the buffer. This is very useful for my scratchpad setup"
@@ -701,7 +734,7 @@ Evaluate sexp for link to referenced info page: (Info-goto-node \"(%:file)%:node
      ;; if file doesn't exist create it
      (if (not (file-exists-p (concat "./" dirname "/" string ".svg")))
      (progn
-	 (setq command (concat "echo " "'<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?><svg xmlns:dc=\"http://purl.org/dc/elements/1.1/\" xmlns:cc=\"http://creativecommons.org/ns#\" xmlns:rdf=\"http://www.w3.org/1999/02/22-rdf-syntax-ns#\" xmlns:svg=\"http://www.w3.org/2000/svg\" xmlns=\"http://www.w3.org/2000/svg\" xmlns:sodipodi=\"http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd\" xmlns:inkscape=\"http://www.inkscape.org/namespaces/inkscape\" width=\"164.13576mm\" height=\"65.105995mm\" viewBox=\"0 0 164.13576 65.105995\" version=\"1.1\" id=\"svg8\" inkscape:version=\"1.0.2 (e86c8708, 2021-01-15)\" sodipodi:docname=\"disegno.svg\"> <defs id=\"defs2\" /> <sodipodi:namedview id=\"base\" pagecolor=\"#ffffff\" bordercolor=\"#666666\" borderopacity=\"1.0\" inkscape:zoom=\"1.2541194\" inkscape:cx=\"310.17781\" inkscape:cy=\"123.03495\"z inkscape:window-width=\"1440\" inkscape:window-height=\"847\" inkscape:window-x=\"1665\" inkscape:window-y=\"131\" inkscape:window-maximized=\"1\"  inkscape:current-layer=\"svg8\" /><g/></svg>' >> " dirname "/" string ".svg; inkscape " dirname "/" string ".svg"))
+	 (setq command (concat "echo " "'<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?><svg xmlns:dc=\"http://purl.org/dc/elements/1.1/\" xmlns:cc=\"http://creativecommons.org/ns#\" xmlns:rdf=\"http://www.w3.org/1999/02/22-rdf-syntax-ns#\" xmlns:svg=\"http://www.w3.org/2000/svg\" xmlns=\"http://www.w3.org/2000/svg\" xmlns:sodipodi=\"http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd\" xmlns:inkscape=\"http://www.inkscape.org/namespaces/inkscape\" width=\"164.13576mm\" height=\"65.105995mm\" viewBox=\"0 0 164.13576 65.105995\" version=\"1.1\" id=\"svg8\" inkscape:version=\"1.0.2 (e86c8708, 2021-01-15)\" sodipodi:docname=\"disegno.svg\"> <defs id=\"defs2\" /> <sodipodi:namedview id=\"base\" pagecolor=\"#292d3e\" bordercolor=\"#666666\" borderopacity=\"1.0\" inkscape:zoom=\"1.2541194\" inkscape:cx=\"310.17781\" inkscape:cy=\"123.03495\"z inkscape:window-width=\"1440\" inkscape:window-height=\"847\" inkscape:window-x=\"1665\" inkscape:window-y=\"131\" inkscape:window-maximized=\"1\"  inkscape:current-layer=\"svg8\" /><g/></svg>' >> " dirname "/" string ".svg; inkscape " dirname "/" string ".svg"))
 	    (shell-command command)
 	    (concat "#+begin_export latex\n\\begin{figure}\n\\centering\n\\def\\svgwidth{0.9\\columnwidth}\n\\import{" "./" dirname "/}{" string ".pdf_tex" "}\n\\end{figure}\n#+end_export"))
 	;; if file exists opens it
@@ -724,7 +757,7 @@ Evaluate sexp for link to referenced info page: (Info-goto-node \"(%:file)%:node
 (defun svglatex (file_name)
   "Prompts for a file name (without any file prefix), takes an svg with that file name and exports the file as a latex compatible pdf file"
   (interactive "MEnter svg file name: ")
-  (setq export (concat "inkscape --export-latex --export-pdf=" file_name ".pdf" file_name ".svg" ))
+  (setq export (concat "inkscape -D --export-latex --export-pdf=" file_name ".pdf" file_name ".svg" ))
   (shell-command export))
 
 (with-eval-after-load 'org
@@ -738,6 +771,182 @@ Evaluate sexp for link to referenced info page: (Info-goto-node \"(%:file)%:node
 				(add-to-list 'company-backends 'company-bibtex)
 				(add-to-list 'company-backends 'company-capf)
 				(setq company-bibtex-bibliography '("~/org_roam/Zotero_library.bib"))))
+
+(setq elfeed-feeds
+      '(("https://feeds.feedburner.com/chemengntua" university)
+	("https://www.reddit.com/r/emacs.rss" emacs linux reddit)
+	("https://www.reddit.com/r/LaTeX.rss" emacs org reddit)
+	("https://www.reddit.com/r/commandline.rss" linux reddit)
+	("https://www.reddit.com/r/vim.rss" linux reddit)
+	("https://www.reddit.com/r/linux.rss" linux reddit)
+	("https://www.reddit.com/r/orgmode.rss" emacs org reddit)
+	("https://www.reddit.com/r/git.rss" linux reddit)
+	("https://www.reddit.com/r/OrgRoam.rss" emacs org zettelkasten reddit)
+	("https://www.reddit.com/r/planetemacs.rss" emacs reddit)
+	("https://www.youtube.com/feeds/videos.xml?channel_id=UCQp2VLAOlvq142YN3JO3y8w" emacs org python youtube) ; John Kitchin's YT
+	("https://www.youtube.com/feeds/videos.xml?channel_id=UCVls1GmFKf6WlTraIb_IaJg" linux youtube) ; DistroTube's YT
+	("https://www.youtube.com/feeds/videos.xml?channel_id=UCld68syR8Wi-GY_n4CaoJGA" linux youtube) ; Brodie Robertson's YT
+	("https://www.youtube.com/feeds/videos.xml?channel_id=UCAiiOTio8Yu69c3XnR7nQBQ" emacs org youtube) ; SystemCrafters YT
+	("https://www.youtube.com/feeds/videos.xml?channel_id=UC0uTPqBCFIpZxlz_Lv1tk_g" emacs youtube) ; Protesilaos Stavrou's YT
+	("https://org-roam.discourse.group/c/how-to/6.rss" emacs org zettelkasten)
+	("https://org-roam.discourse.group/c/dev/5.rss" emacs org zettelkasten)
+	("https://org-roam.discourse.group/c/meta/11.rss" emacs org zettelkasten)
+	("https://planet.emacslife.com/atom.xml" emacs)
+	("https://irreal.org/blog/?feed=rss2" emacs linux org)
+	("https://sachachua.com/blog/category/emacs-news/feed/" emacs)
+	))
+
+(require 'ox-word)
+
+(require 'scimax-autoformat-abbrev)
+(add-hook 'org-mode-hook '(lambda ()
+			    scimax-abbrev-mode
+			    scimax-autoformat-mode))
+
+(defun doi-utils-add-entry-from-elfeed-entry ()
+  "Add elfeed entry to bibtex."
+  (interactive)
+  (require 'org-ref)
+  (let* ((title (elfeed-entry-title elfeed-show-entry))
+	 (url (elfeed-entry-link elfeed-show-entry))
+	 (content (elfeed-deref (elfeed-entry-content elfeed-show-entry)))
+	 (entry-id (elfeed-entry-id elfeed-show-entry))
+	 (entry-link (elfeed-entry-link elfeed-show-entry))
+	 (entry-id-str (concat (car entry-id)
+			       "|"
+			       (cdr entry-id)
+			       "|"
+			       url)))
+    (if (string-match "DOI: \\(.*\\)$" content)
+	(doi-add-bibtex-entry (match-string 1 content)
+			      (ido-completing-read
+			       "Bibfile: "
+			       (append (f-entries "." (lambda (f)
+							(and (not (string-match "#" f))
+							     (f-ext? f "bib"))))
+				       org-ref-default-bibliography)))
+      (let ((dois (org-ref-url-scrape-dois url)))
+	(cond
+	 ;; One doi found. Assume it is what we want.
+	 ((= 1 (length dois))
+	  (doi-utils-add-bibtex-entry-from-doi
+	   (car dois)
+	   (ido-completing-read
+	    "Bibfile: "
+	    (append (f-entries "." (lambda (f)
+				     (and (not (string-match "#" f))
+					  (f-ext? f "bib"))))
+		    org-ref-default-bibliography)))
+	  action)
+	 ;; Multiple DOIs found
+	 ((> (length dois) 1)
+	  (ivy-read "Select a DOI" (let ((dois '()))
+				     (with-current-buffer (url-retrieve-synchronously url)
+				       (loop for doi-pattern in org-ref-doi-regexps
+					     do
+					     (goto-char (point-min))
+					     (while (re-search-forward doi-pattern nil t)
+					       (pushnew
+						;; Cut off the doi, sometimes
+						;; false matches are long.
+						(cons (format "%40s | %s"
+							      (substring
+							       (match-string 1)
+							       0 (min
+								  (length (match-string 1))
+								  40))
+							      doi-pattern)
+						      (match-string 1))
+						dois
+						:test #'equal)))
+				       (reverse dois)))
+		    :action
+		    (lambda (x)
+		      (let ((bibfile (completing-read
+				      "Bibfile: "
+				      (append (f-entries "." (lambda (f)
+							       (and (not (string-match "#" f))
+								    (f-ext? f "bib"))))
+					      org-ref-default-bibliography))))
+			(doi-utils-add-bibtex-entry-from-doi
+			 doi
+			 bibfile)
+			;; this removes two blank lines before each entry.
+			(bibtex-beginning-of-entry)
+			(delete-char -2))))
+	  ;; (helm :sources
+	  ;; 	`((name . "Select a DOI")
+	  ;; 	  (candidates . ,(let ((dois '()))
+	  ;; 			   (with-current-buffer (url-retrieve-synchronously url)
+	  ;; 			     (loop for doi-pattern in org-ref-doi-regexps
+	  ;; 				   do
+	  ;; 				   (goto-char (point-min))
+	  ;; 				   (while (re-search-forward doi-pattern nil t)
+	  ;; 				     (pushnew
+	  ;; 				      ;; Cut off the doi, sometimes
+	  ;; 				      ;; false matches are long.
+	  ;; 				      (cons (format "%40s | %s"
+	  ;; 						    (substring
+	  ;; 						     (match-string 1)
+	  ;; 						     0 (min
+	  ;; 							(length (match-string 1))
+	  ;; 							40))
+	  ;; 						    doi-pattern)
+	  ;; 					    (match-string 1))
+	  ;; 				      dois
+	  ;; 				      :test #'equal)))
+	  ;; 			     (reverse dois))))
+	  ;; 	  (action . (lambda (candidates)
+	  ;; 		      (let ((bibfile (ido-completing-read
+	  ;; 				      "Bibfile: "
+	  ;; 				      (append (f-entries "." (lambda (f)
+	  ;; 							       (and (not (string-match "#" f))
+	  ;; 								    (f-ext? f "bib"))))
+	  ;; 					      org-ref-default-bibliography))))
+	  ;; 			(loop for doi in (helm-marked-candidates)
+	  ;; 			      do
+	  ;; 			      (doi-utils-add-bibtex-entry-from-doi
+	  ;; 			       doi
+	  ;; 			       bibfile)
+	  ;; 			      ;; this removes two blank lines before each entry.
+	  ;; 			      (bibtex-beginning-of-entry)
+	  ;; 			      (delete-char -2)))))))
+	  ))))))
+
+(defun org-elfeed-store-link ()
+  "Store a link to an elfeed entry."
+  (interactive)
+  (cond
+   ((eq major-mode 'elfeed-show-mode)
+    (let* ((title (elfeed-entry-title elfeed-show-entry))
+	   (url (elfeed-entry-link elfeed-show-entry))
+	   (entry-id (elfeed-entry-id elfeed-show-entry))
+	   (entry-id-str (concat (car entry-id)
+				 "|"
+				 (cdr entry-id)
+				 "|"
+				 url))
+	   (org-link (concat "elfeed:entry-id:" entry-id-str)))
+      (org-link-store-props
+       :description title
+       :type "elfeed"
+       :link org-link
+       :url url
+       :entry-id entry-id)
+      org-link))
+   (t nil)))
+
+(setq ebib-preload-bib-files '("~/Sync/My_Library.bib"))
+
+(add-hook 'ebib-entry-mode-hook 'visual-line-mode)
+
+(setq ebib-index-columns '(("Title" 60 t)
+			   ("Author/Editor" 40 t)
+			   ("Year" 6 t)
+			   ("Entry Key" 40 t)
+			   ("Note" 10 t)))
+
+(setq ebib-notes-directory "~/org_roam/ref")
 
 (setq calc-angle-mode 'rad
       calc-symbolic-mode t)
@@ -756,8 +965,6 @@ Evaluate sexp for link to referenced info page: (Info-goto-node \"(%:file)%:node
     )
 
 (add-hook 'pdf-view-mode-hook 'pdf-view-midnight-minor-mode)
-
-(add-to-list 'auto-mode-alist '("\\.m\\'" . octave-mode))
 
 (require 'eaf)
 

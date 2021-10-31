@@ -17,15 +17,15 @@
   "b" 'counsel-switch-buffer
   "a" 'org-agenda
   "g" 'pdf-view-goto-page
-  "H" 'split-window-horizontally
-  "V" 'split-window-vertically
+  "h" 'split-window-horizontally
+  "v" 'split-window-vertically
   "c" '(calc-dispatch :which-key "Open the calc dispatcher")
   "R" 'recover-this-file
   "m" 'magit
   "B" 'ivy-bibtex
   "r" '(:ignore t :which-key "Org Roam/Ref")
   "j" '(:ignore t :which-key "Daily notes")
-  "h" 'counsel-imenu
+  "H" 'counsel-imenu
   "C" '(:ignore t :which-key "Calendar Commands")
   "l" '(linum-mode :which-key "Line numbers")
   "I" 'ielm
@@ -36,7 +36,8 @@
   "W" 'wolfram-alpha
   "n" 'winner-redo
   "p" 'winner-undo
-  "i" '(:ignore t :which-key "Org-Pandoc-Import"))
+  "i" '(:ignore t :which-key "Org-Pandoc-Import")
+  "y" 'ivy-yasnippet)
 
 (general-define-key
  :states 'normal
@@ -70,23 +71,33 @@
  :prefix "SPC q"
  "c" '((lambda() (interactive)(find-file "~/.emacs.d/README.org")) :which-key "Literate Emacs config")
  "k" '((lambda() (interactive)(find-file "~/.emacs.d/libs/keybindings.org")) :which-key "Emacs keybindings config file")
- "u" '((lambda() (interactive)(dired "~/Documents/4o_εξάμηνο")) :which-key "University folder")
+ "u" '((lambda() (interactive)(dired "~/Documents/5o_εξάμηνο")) :which-key "University folder")
  "q" '((lambda() (interactive)(find-file "~/.config/qtile/README.org")) :which-key "Literate Qtile config")
  "h" '((lambda() (interactive)(dired "~")) :which-key "Home directory")
  "o" '((lambda() (interactive)(dired "~/Documents/Octave")) :which-key "Octave directory")
- "s" '((lambda() (interactive)(dired "~/.emacs.d/snippets/org-mode")) :which-key "Org snippets"))
+ "s" '((lambda() (interactive)(dired "~/.emacs.d/snippets/org-mode")) :which-key "Org snippets")
+ "w" '((lambda() (interactive)(find-file "~/startpage/script/var.js")) :which-key "Web Start page")
+ "b" '((lambda() (interactive)(find-file "~/Sync/My_Library.bib")) :which-key "Master Bibliography file")
+ "e" '((lambda() (interactive)(find-file "~/org_roam/erasmus-08-10-21.org")) :which-key "Erasmus index file"))
 
 (general-define-key
  :states 'normal
  :keymaps 'override
  :prefix "SPC r"
  "f" 'org-roam-node-find
- "B" 'isbn-to-bibtex
- "a" 'doi-utils-add-bibtex-entry-from-doi
  "G" 'org-roam-ui-mode
+ "C" 'org-roam-capture
  "g" 'counsel-rg
- "c" 'org-roam-capture
- "i" '((lambda () (interactive)(find-file "~/org_roam/index.org")) :which-key "Master index file for org_roam"))
+ "i" '((lambda () (interactive)(find-file "~/org_roam/index.org")) :which-key "Master index file for org_roam")
+ "s" 'org-roam-db-sync
+ "D" '(org-roam-buffer-display-dedicated :which-key "Org-roam dedicated buffer")
+ "r" 'org-roam-ref-find
+ "B" 'isbn-to-bibtex
+ "n" '(ivy-bibtex-with-notes :which-key "Find bibliographic node")
+ "d" 'doi-utils-add-bibtex-entry-from-doi
+ "c" 'org-ref-insert-cite-link
+ "h" 'org-ref-insert-link-hydra/body
+ "b" 'org-ref-bibtex-hydra/body)
 
 (general-define-key
  :states 'normal
@@ -160,12 +171,16 @@
  :keymaps 'global
  "u" 'undo-tree-undo
  "C-r" 'undo-tree-redo
- "/" 'swiper)
+ "/" 'swiper
+ "M-g" 'toggle-input-method
+ "M-SPC" 'org-mark-ring-goto
+ "<menu>" 'elfeed)
 
 (general-define-key
  :states 'insert
  :keymaps 'override
- "<M-tab>" 'tab-jump-out)
+ "<M-tab>" 'tab-jump-out
+ "M-g" 'toggle-input-method)
 
 (general-define-key
  :states 'visual
@@ -239,8 +254,9 @@
  "i" 'org-roam-node-insert
  "a" 'org-roam-alias-add
  "f" 'org-roam-init-fleeting-note
- "c" 'org-id-get-create
- "d" 'org-id-delete-entry)
+ "I" 'org-id-get-create
+ "d" 'org-id-delete-entry
+ "r" 'org-roam-ref-add)
 
 (general-define-key
  :states 'normal
@@ -286,5 +302,15 @@
  :states 'normal
  :keymaps 'calc-mode-map
  "/" 'calc-divide)
+
+(general-define-key
+ :states 'normal
+ :keymaps 'Info-mode-map
+ ", c" '((lambda() (interactive) (org-roam-capture nil "i")) :which-key "org-roam-capture info-template"))
+
+(general-define-key
+ :states 'normal
+ :keymaps 'ebib-index-mode-map
+ "/" 'ebib-jump-to-entry)
 
 (provide 'keybindings)

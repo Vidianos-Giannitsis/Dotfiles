@@ -305,6 +305,7 @@ alias size='sudo du -a | sort -n -r | head -n 20'
 alias dl='youtube-dl -x --audio-format "mp3"'
 alias yt-dl='youtube-dl'
 alias sc='sc-im'
+alias tlmgr='/usr/share/texmf-dist/scripts/texlive/tlmgr.pl --usermode'
 
 # Vim editing mode for my shell
 set -o vi

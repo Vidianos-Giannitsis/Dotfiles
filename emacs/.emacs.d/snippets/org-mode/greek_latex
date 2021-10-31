@@ -8,6 +8,8 @@
 #+LATEX_HEADER: \usepackage{esint}
 #+LATEX_HEADER: \usepackage{mathtools}
 #+LATEX_HEADER: \usepackage{esdiff}
+#+LATEX_HEADER: \usepackage{makeidx}
+#+LATEX_HEADER: \usepackage{glossaries}
 \renewcommand{\abstractname}{Περίληψη}
 \renewcommand{\tablename}{Πίνακας}
 \renewcommand{\figurename}{Σχήμα}

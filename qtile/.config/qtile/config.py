@@ -136,9 +136,9 @@ keys.extend([Key2("M-C-s", lazy.group['scratchpad'].dropdown_toggle('music')),
 # Layouts
 
 def init_layout_theme():
-    return {"margin":2,
+    return {"margin":0,
 	    "border_width":2,
-	    "border_focus": "#4C7975",
+	    "border_focus": "#5b76b2",
 	    "border_normal": "#002525"
 	    }
 
@@ -172,31 +172,33 @@ screens = [
     Screen(
 	bottom=bar.Bar(
 	    [
-		widget.CurrentLayout(background="#4C7975"),
+		widget.CurrentLayout(background="#5b76b2"),
 		widget.Sep(foreground="#363428", size_percent=100),
 		widget.GroupBox(),
 		widget.Prompt(),
 		widget.WindowName(),
 		widget.Sep(foreground="#363428", size_percent=100),
-		widget.TextBox("Free Space: ", background="#4C7975"),
-		widget.DF(background="#4C7975", visible_on_warn=False, format='({uf}{m}|{r:.0f}%)', warn_space=20),
+		widget.TextBox("Free Space: ", background="#5b76b2"),
+		widget.DF(background="#5b76b2", visible_on_warn=False, format='({uf}{m}|{r:.0f}%)', warn_space=20),
 		widget.Sep(foreground="#363428", size_percent=100),
 		widget.TextBox("RAM: ", background="#242837"),
 		widget.Memory(background="#242837"),
 		widget.TextBox(",", background="#242837"),
 		widget.CPU(background="#242837"),
-		widget.TextBox("Battery: ", background="#4C7975"),
+		widget.TextBox("Battery: ", background="#5b76b2"),
 		widget.Battery(low_percentage = 0.2,
 			       notify_below = 0.15,
 			       update_interval = 30,
 			       discharge_char = '↓',
 			       charge_char = '↑',
-			       background="#4C7975",
+			       background="#5b76b2",
 			       ),
 		widget.TextBox("", background="#242837"),
 		widget.Clock(format='%a %d-%m-%Y %I:%M %p', background="#242837"),
 		widget.Sep(foreground="#363428", size_percent=100),
-		widget.Systray(background="4C7975"),
+		widget.Systray(background="5b76b2"),
+		widget.Sep(foreground="#363428", size_percent=100),
+		widget.Pomodoro(length_long_break=20, color_inactive="#808080", color_active="6b83b9", color_break="516aa0"),
 	],
 	    24,
 	),
