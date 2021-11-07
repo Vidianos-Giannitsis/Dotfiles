@@ -6,8 +6,9 @@
                          (or (file-name-directory #$) (car load-path))))
 
 
-;;;### (autoloads nil "org-ql" "org-ql.el" (0 0 0 0))
-;;; Generated autoloads from org-ql.el
+;;;### (autoloads nil "org-ql" "../../../../../.emacs.d/elpa/org-ql-20210922.615/org-ql.el"
+;;;;;;  "3b014e81bd68193de6211c0b7b2363a6")
+;;; Generated autoloads from ../../../../../.emacs.d/elpa/org-ql-20210922.615/org-ql.el
 
 (autoload 'org-ql-select "org-ql" "\
 Return items matching QUERY in BUFFERS-OR-FILES.
@@ -87,13 +88,20 @@ NARROW corresponds to the `org-ql-select' argument NARROW.
 \(fn &key (SELECT \\='element-with-markers) FROM WHERE NARROW ORDER-BY)" nil nil)
 
 (function-put 'org-ql-query 'lisp-indent-function '0)
+
+;;;### (autoloads "actual autoloads are elsewhere" "org-ql" "../../../../../.emacs.d/elpa/org-ql-20210922.615/org-ql.el"
+;;;;;;  (0 0 0 0))
+;;; Generated autoloads from ../../../../../.emacs.d/elpa/org-ql-20210922.615/org-ql.el
 
 (if (fboundp 'register-definition-prefixes) (register-definition-prefixes "org-ql" '("org-ql-")))
 
 ;;;***
+
+;;;***
 
-;;;### (autoloads nil "org-ql-search" "org-ql-search.el" (0 0 0 0))
-;;; Generated autoloads from org-ql-search.el
+;;;### (autoloads nil "org-ql-search" "../../../../../.emacs.d/elpa/org-ql-20210922.615/org-ql-search.el"
+;;;;;;  "5db08527ffbf05b67fa3f46c9831c5d2")
+;;; Generated autoloads from ../../../../../.emacs.d/elpa/org-ql-20210922.615/org-ql-search.el
 
 (autoload 'org-ql-sparse-tree "org-ql-search" "\
 Show a sparse tree for QUERY in BUFFER and return number of results.
@@ -164,13 +172,21 @@ automatically from the query.
 \(fn QUERY)" nil nil)
 
 (defalias 'org-ql-block 'org-ql-search-block)
+
+;;;### (autoloads "actual autoloads are elsewhere" "org-ql-search"
+;;;;;;  "../../../../../.emacs.d/elpa/org-ql-20210922.615/org-ql-search.el"
+;;;;;;  (0 0 0 0))
+;;; Generated autoloads from ../../../../../.emacs.d/elpa/org-ql-20210922.615/org-ql-search.el
 
 (if (fboundp 'register-definition-prefixes) (register-definition-prefixes "org-ql-search" '("org-ql-")))
 
 ;;;***
+
+;;;***
 
-;;;### (autoloads nil "org-ql-view" "org-ql-view.el" (0 0 0 0))
-;;; Generated autoloads from org-ql-view.el
+;;;### (autoloads nil "org-ql-view" "../../../../../.emacs.d/elpa/org-ql-20210922.615/org-ql-view.el"
+;;;;;;  "cfe78d930c91b668aa2837e0ed1a2526")
+;;; Generated autoloads from ../../../../../.emacs.d/elpa/org-ql-20210922.615/org-ql-view.el
 
 (autoload 'org-ql-view "org-ql-view" "\
 Choose and display the `org-ql-views' view NAME.
@@ -194,12 +210,24 @@ Show `org-ql-view' view list sidebar.
 Show Org QL View BOOKMARK in current buffer.
 
 \(fn BOOKMARK)" nil nil)
+
+;;;### (autoloads "actual autoloads are elsewhere" "org-ql-view"
+;;;;;;  "../../../../../.emacs.d/elpa/org-ql-20210922.615/org-ql-view.el"
+;;;;;;  (0 0 0 0))
+;;; Generated autoloads from ../../../../../.emacs.d/elpa/org-ql-20210922.615/org-ql-view.el
 
 (if (fboundp 'register-definition-prefixes) (register-definition-prefixes "org-ql-view" '("org-ql-view")))
 
 ;;;***
+
+;;;***
 
-;;;### (autoloads nil nil ("org-ql-pkg.el") (0 0 0 0))
+;;;### (autoloads nil nil ("../../../../../.emacs.d/elpa/org-ql-20210922.615/org-ql-autoloads.el"
+;;;;;;  "../../../../../.emacs.d/elpa/org-ql-20210922.615/org-ql-pkg.el"
+;;;;;;  "../../../../../.emacs.d/elpa/org-ql-20210922.615/org-ql-search.el"
+;;;;;;  "../../../../../.emacs.d/elpa/org-ql-20210922.615/org-ql-view.el"
+;;;;;;  "../../../../../.emacs.d/elpa/org-ql-20210922.615/org-ql.el")
+;;;;;;  (0 0 0 0))
 
 ;;;***
 

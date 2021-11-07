@@ -1,2 +1,0 @@
-;;; Generated package description from /home/vidianos/.emacs.d/elpa/literate-calc-mode-20210528.815/literate-calc-mode.el  -*- no-byte-compile: t -*-
-(define-package "literate-calc-mode" "20210528.815" "Inline results from calc" '((emacs "25.1") (s "1.12.0")) :commit "29bb40a7150b6cfe1a96948ae1f36e9c107eb759" :authors '(("Robin Schroer")) :maintainer '("Robin Schroer") :keywords '("calc" "languages" "tools") :url "https://github.com/sulami/literate-calc-mode.el")
