@@ -842,9 +842,7 @@ More languages to evaluate with org-babel (by default, only elisp is evaluated).
 
  
 * Org Roam, References and the Zettelkasten Workflow 
-  This section is about my Org-roam setup and my reference management inside org. It is based on the slip-box (Zettelkasten) workflow. The packages that are most relevant to this are Org-roam (obviously) bibtex-completion (ivy-bibtex in my case), org-ref, Org-roam-bibtex. Org Roam is a tool which helps you create your own network of notes. Its based on the Zettelkasten method and the Roam Research website. Everything is linked with one another. Bibtex completion (and the existence of .bib files in general) as well as Org-ref help manage bibliographic references inside org. I use Zotero as my reference manager in which I gather my bibliographies. It exports a .bib file which these two use. Org Roam Bibtex (ORB) is a package that combines all of these to help you add citation links from org-ref inside an org-roam buffer. This section includes all the customisations and settings of these packages.
-
-  Org-roam very recently did a major redesign releasing org-roam-v2. As such, this section of my config is really a WIP as I am migrating my configurations to the new org-roam and I am relearning the fundamentals of the package. Also some things are not ported yet (such as org-roam-server) so it will be a while until this section is brought back to its former glory.
+  This section is about my Org-roam setup and my reference management inside org. It is based on the slip-box (Zettelkasten) workflow. Its based on the Zettelkasten method and the Roam Research website. Everything is linked with one another. Bibtex completion (and the existence of .bib files in general) as well as Org-ref help manage bibliographic references inside org. I use Zotero as my reference manager in which I gather my bibliographies. It exports a .bib file which these two use. Org Roam Bibtex (ORB) is a package that combines all of these to help you add citation links from org-ref inside an org-roam buffer. This section includes all the customisations and settings of these packages.
 
   As seen in the [[*Keybindings][Keybindings]] section of the config, Roam and the Reference system both use the "r" leader key. Outside of it being handy because both start with the letter r, I think this makes sense because they are two connected concepts in my opinion. Thats why they are also in the same heading here.
   
@@ -854,13 +852,10 @@ More languages to evaluate with org-babel (by default, only elisp is evaluated).
   In detail, 
    - Setup org-roam after emacs's init
    - I disable the message about the update to org-roam-v2
-   - I define the org_roam directory
-   - I define the directory in which org-roam-dailies should be put
-   - Change how org-roam-node-find looks to display the number of backlinks a file has which is cool imo
+   - I define the org_roam directory and org-roam-dailies directory
+   - Change the org-roam-node-find UI to display the number of backlinks a file has, the directory it is under and its todostate if it has one. 
    - Make the org-roam buffer a little smaller cause it doesnt need to take half the screen
    
-These last two things in the code I took from the migration guide to org-roam-v2 (can be found [[https://github.com/org-roam/org-roam/wiki/Hitchhiker's-Rough-Guide-to-Org-roam-V2][here]])
-
 I also define a "replacement" function for org-roam-buffer-toggle which temporarily disables latex previews in org files. I had the issue that opening the backlinks buffer in a big index file caused a lot of lag as org roam was trying to preview the latex in every file that links to the index file. As this was a large number of files, this was annoying. 
 
   #+BEGIN_SRC elisp
@@ -921,14 +916,14 @@ I also define a "replacement" function for org-roam-buffer-toggle which temporar
 
 
 ** Bibtex completion (Ivy) and Org-Ref
-   Ivy Bibtex and org ref are two excellent packages for managing bibliography. The main thing I need to configure is the location of my master .bib file and pdfs (which are exported with Zotero). I also change some other variables where I see fit.
+   Ivy Bibtex and Org ref are two excellent packages for managing bibliography. The main thing I need to configure is the location of my master .bib file and pdfs (which are exported with Zotero). I also change some other variables where I see fit.
    
    In detail
    - Zotero exports a .bib file with all my references (the main way it "talks" to Emacs). I "tell" ivy-bibtex and org-ref the location of this file for usage in their various commands.
    - I allow ivy-bibtex to query by keywords or abstract. Can be useful
-   - I configure org-ref to use ivy-completions for its commands
-   - I make the default action of ivy-bibtex, inserting the citation of the chosen reference. Personally, its the action I use most as opening the link/pdf to the reference (which is the original default) is more easily done from Zotero imo. In Emacs I find more utility in inserting the citation in my own documents.
+   - I make the default action of ivy-bibtex, the edit notes action. Personally, its the action I use most as opening the link/pdf to the reference (which is the original default) is more easily done from Zotero imo. In Emacs I find more utility in this function creating bibliographical notes.
    - Since opening the pdf, url or DOI of a bibtex entry is no longer the default action in my config, I bind it to the letter p in the options menu of Ivy-bibtex
+   - Change the citation format bibtex uses on org mode. I enter cite links with org-ref-insert-cite-links so I make the ivy-bibtex link be a link to the pdf. 
 
       #+BEGIN_SRC elisp
 	(setq bibtex-completion-bibliography
@@ -953,9 +948,36 @@ I also define a "replacement" function for org-roam-buffer-toggle which temporar
      #+END_SRC
 
     
-** Fleeting notes
-   My fleeting notes workflow makes heavy usage of custom todo keywords to manage the state of each fleeting note. I don't use todos for project management, and I needed something similar for managing my fleeting notes so I have repurposed the system for this. This is essentially the TODO and agenda workflow section but its repurposed to work as I need it for this. 
+** Org Roam Bibtex, Protocols (Reference notes) and UI (graphing capabilities)
+   I require a bunch of packages so ORB, org roam ui and the roam protocols work as intended. I also make orb use ivy for completions.
 
+   For a brief description of each ones use case, org-roam-bibtex (aka ORB) is an excellent package for bibliography management inside org-roam. Since other packages help out with this, the big thing this one does is that it hooks bibtex-completion to use the org-roam ecosystem for its notes. Org-protocol is for capturing info from a web page and adding it to an org file. The org-roam-protocol is basically integrating that to the org-roam ecosystem. Org-roam-ui is the new graphing package designed for org-roam-v2. We used to use org-roam-server for this, but with the migration to v2, this package was created (which is honestly better than org-roam-server) for an excellent visual graph of your org roam directory. There are many advantages to viewing your knowledge repository with a graph so this is a must have package. 
+
+#+BEGIN_SRC elisp
+  
+  (require 'org-roam-bibtex)
+  (org-roam-bibtex-mode 1)
+  
+  (setq orb-insert-interface 'ivy-bibtex
+	orb-note-actions-interface 'ivy)
+  (setq orb-preformat-keywords '("citekey" "author" "date" "entry-type" "keywords" "url" "file"))
+  
+  (require 'org-protocol)
+  (require 'org-roam-protocol)
+  
+  (require 'websocket)
+  (require 'org-roam-ui)
+  
+#+END_SRC
+
+
+** Fleeting notes
+   This is one of the more interesting sections of my workflow as its really custom and from what I have seen really unique. The zettelkasten method has a concept of fleeting notes. They are small notes which should be easy and non intrusive to write quickly to capture ideas and need to be archived when done. I "abuse" the todo-keywords org provides for this to completely repurpose them into what I need. As mentioned above, my org-roam-node-find UI shows the todo state of files which have one. 
+
+Now which files have a todo state? Since org-roam-v2, headings can have IDs and can become nodes. Headings can also have a todo state. The todo states I use are helpful for me for a lot purposes. Inbox, Processing, To-Read and Wait show in which level of editing something is while Urgent is there for things I need to get to ASAP and Low-Priority is for things I want to remember but I can do them whenever. This gives me a lot of flexibility in my daily (fleeting) notes as I can define all of these and then search my zettelkasten for things with this keyword. But, headings have neither an ID nor a todo state in their creation. So I created a function which gives these to a new heading. Together with these, it links the fleeting note to a file named Current Projects, which acts as an index for my fleeting notes so they are not fully disconnected from the system and I have another way of viewing all of them together. To add the link without a prompt (such as that of org-roam-node-insert) I use a skeleton which adds an ID link to that file. 
+
+Lastly, for this system to work properly for fleeting notes I need a seamless way of archiving my daily notes once I am done with the idea they store. For that, we need to define a function which deleted the ID of a node. But running that manually is by no means seamless and in my opinion unacceptable. An idea I found which works perfectly for this is the last code snippet in this section. Essentially, it adds to the org-after-todo-state-change-hook a check of what the new keyword is. If it is DONE, it runs org-id-delete-entry, deleting the ID. Therefore, whenever I set the item's state to done, it removes its ID archiving it from the system. But the file is never deleted, so if I want the context again, I can look for it in the daily directory. But, if I were to do this with the org-roam-dailies package I would reach a big problem. As the file itself gets an ID but not a todo state, it would have an ID which isn't removable automatically, something which would as mentioned above break the system in my opinion. So, these files are created with org-journal so that I can give IDs only to the headings. There isn't much configuration on that end, just some different formatting to a format I think makes more sense. 
+   
 #+BEGIN_SRC elisp
   
   (setq org-todo-keywords
@@ -1009,28 +1031,18 @@ I also define a "replacement" function for org-roam-buffer-toggle which temporar
 #+END_SRC
 
 
-** Org Roam Bibtex, Protocols (Reference notes) and UI (graphing capabilities)
-   I require a bunch of packages so ORB, org roam ui and the roam protocols work as intended. I also make orb use ivy for completions 
-
-#+BEGIN_SRC elisp
-  
-  (require 'org-roam-bibtex)
-  (org-roam-bibtex-mode 1)
-  
-  (setq orb-insert-interface 'ivy-bibtex
-	orb-note-actions-interface 'ivy)
-  (setq orb-preformat-keywords '("citekey" "author" "date" "entry-type" "keywords" "url" "file"))
-  
-  (require 'org-protocol)
-  (require 'org-roam-protocol)
-  
-  (require 'websocket)
-  (require 'org-roam-ui)
-  
-#+END_SRC
-
-
 ** Capture Templates
+   Capture templates are really the "heart" of my zettelkasten workflow. By having a prefefined form for all files I create with the system I do not lose time trying to get a standard format on them. Its very important therefore to have at least a well customised default template. The rest of my templates here are for the capturing of specific things. Mine isn't that special but it has some important things. After the title, I add glatex_roam which is the key to a snippet of mine which basically adds some useful latex packages for writing the most major one being greek characters in latex equations which I use all the time (I am greek). 
+
+The project template is a rather new one to my workflow. The zettelkasten workflow defines a type of notes called project notes which you are meant to use to plan out your project inside the zettelkasten. Because of all the ideas there, you never have to start from a blank box but you can take ideas from anywhere and add them to a project file. This part of my workflow isn't polished yet, but I am thinking of using a project file for each project and then headings which I can make nodes for each part of the project I want to document. Each heading can be archived easily with the same method as the daily files. For the central project file, I could archive them by removing their ID manually or something better if I figure it out. 
+
+Anoter idea for this which is more zettelkasten-y (yes that is a word now, deal with it) is to have a file for each section of the project and link all of them (either to an index or through the use of filetags) together. The problem is that then archiving becomes harder unless I figure out a good, easy and frictionless way of archiving files by removing their ID. This part is heavily WIP though as I said already
+
+Then the other 2 templates I define are used for bibliographic information. Basic part of these is that they are stored in a subdirectory of the org_roam folder named ref and have tags depending on what type of file they are. For example, all articles I have have a tag article, and books have a tag book. The bibliography reference template is for things stored in my .bib file. This is mostly things like scientific articles. This is a very neat template as it uses a lot of the information the bibliography file has to make the template really functional. My favourite part of it is that if the entry has a pdf file attached to it, it will automatically set up org-noter to work with that file. The other template I use (info reference) is for creating reference notes from emacs info buffers. org-roam-capture-templates holds some special values if it is invoked in some special buffers one of which is the info-buffer. Specifically, it stores that the capture process was started in an info buffer, which file the buffer was visiting and which node it was in. With this info (no pun intended) and some elisp magic, you can automatically create a link that points to the info buffer the capture was invoked from so you have a reference point when you look at the note again. I found this a very cool feature of org-roam-capture-templates so I integrated it in a template. 
+
+Also part of my templates I use for bibliographic information, is the org-roam-capture-ref-templates variable. This one is invoked when one captures a web page using org-roam-protocol. Besides books, articles, info pages and whatever else the above 2 cover, capturing info from a web page, is very important to my workflow. So I need to have a good template for it. Its not much, but its important. Org-roam-protocol doesn't store much special info besides the title of the web page so this template is about as simple as my default one. 
+
+Lastly, I define the org-roam-dailies-capture-templates. As discussed above I do not use these too much, but since I have tried them I have kept the template I made for them. Its got the same formatting as the org-journal ones so if a file is created with one method the other can add things to it.
 
    #+BEGIN_SRC elisp
      
@@ -1042,10 +1054,11 @@ I also define a "replacement" function for org-roam-buffer-toggle which temporar
 	      :unarrowed t
 	      :jump-to-captured t)
      
-	     ("p" "private" plain "%?" :if-new
-	      (file+head "private/${slug}-%<%d-%m-%y>.org" "#+title: ${title}\nglatex_roam\n
+	     ("p" "project" plain "%?" :if-new
+	      (file+head "project/${slug}-%<%d-%m-%y>.org" "#+title: ${title}\nglatex_roam\n
      - index ::  
-     - tags ::  ")
+     - tags ::  
+     ,#+filetags: ")
 	      :unarrowed t
 	      :jump-to-captured t)
      
@@ -1078,11 +1091,6 @@ I also define a "replacement" function for org-roam-buffer-toggle which temporar
      ")
 	      :unnarowed t)))
      
-     (setq org-roam-dailies-capture-templates
-	   '(("d" "default" entry "* %?" :if-new
-	      (file+head "%<%Y-%m-%d>.org" "#+title: %<%Y-%m-%d>\n#+filetags: daily")
-	      :empty-lines 1)))
-     
      (setq org-roam-capture-ref-templates 
 	   '(("r" "ref" entry "* %?" :target
 	      (file+head "ref/${slug}.org" "#+title: ${title}\nglatex_roam\n
@@ -1090,6 +1098,12 @@ I also define a "replacement" function for org-roam-buffer-toggle which temporar
       - tags :: ")
 	      :unnarrowed t
 	      :jump-to-captured t)))
+     
+     (setq org-roam-dailies-capture-templates
+	   '(("d" "default" entry "* %?" :if-new
+	      (file+head "%<%Y-%m-%d>.org" "#+title: %<%Y-%m-%d>\n#+filetags: daily")
+	      :empty-lines 1)))
+     
    #+END_SRC
 
 * Bookmarks
@@ -1134,7 +1148,7 @@ I also define a "replacement" function for org-roam-buffer-toggle which temporar
   Big thanks to u/ozzopp on reddit for providing the source code for this as its truly amazing but something I couldn't have made on my own. 
   
   #+BEGIN_SRC elisp
-
+    
     (defun org-inkscape-img ()
 	(interactive "P")
 	(setq string (read-from-minibuffer "Insert image name: "))
@@ -1145,7 +1159,7 @@ I also define a "replacement" function for org-roam-buffer-toggle which temporar
 	 ;; if file doesn't exist create it
 	 (if (not (file-exists-p (concat "./" dirname "/" string ".svg")))
 	 (progn
-	     (setq command (concat "echo " "'<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?><svg xmlns:dc=\"http://purl.org/dc/elements/1.1/\" xmlns:cc=\"http://creativecommons.org/ns#\" xmlns:rdf=\"http://www.w3.org/1999/02/22-rdf-syntax-ns#\" xmlns:svg=\"http://www.w3.org/2000/svg\" xmlns=\"http://www.w3.org/2000/svg\" xmlns:sodipodi=\"http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd\" xmlns:inkscape=\"http://www.inkscape.org/namespaces/inkscape\" width=\"164.13576mm\" height=\"65.105995mm\" viewBox=\"0 0 164.13576 65.105995\" version=\"1.1\" id=\"svg8\" inkscape:version=\"1.0.2 (e86c8708, 2021-01-15)\" sodipodi:docname=\"disegno.svg\"> <defs id=\"defs2\" /> <sodipodi:namedview id=\"base\" pagecolor=\"#292d3e\" bordercolor=\"#666666\" borderopacity=\"1.0\" inkscape:zoom=\"1.2541194\" inkscape:cx=\"310.17781\" inkscape:cy=\"123.03495\"z inkscape:window-width=\"1440\" inkscape:window-height=\"847\" inkscape:window-x=\"1665\" inkscape:window-y=\"131\" inkscape:window-maximized=\"1\"  inkscape:current-layer=\"svg8\" /><g/></svg>' >> " dirname "/" string ".svg; inkscape " dirname "/" string ".svg"))
+	     (setq command (concat "echo " "'<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?><svg xmlns:dc=\"http://purl.org/dc/elements/1.1/\" xmlns:cc=\"http://creativecommons.org/ns#\" xmlns:rdf=\"http://www.w3.org/1999/02/22-rdf-syntax-ns#\" xmlns:svg=\"http://www.w3.org/2000/svg\" xmlns=\"http://www.w3.org/2000/svg\" xmlns:sodipodi=\"http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd\" xmlns:inkscape=\"http://www.inkscape.org/namespaces/inkscape\" width=\"240mm\" height=\"120mm\" viewBox=\"0 0 164.13576 65.105995\" version=\"1.1\" id=\"svg8\" inkscape:version=\"1.0.2 (e86c8708, 2021-01-15)\" sodipodi:docname=\"disegno.svg\"> <defs id=\"defs2\" /> <sodipodi:namedview id=\"base\" pagecolor=\"#292d3e\" bordercolor=\"#666666\" borderopacity=\"1.0\" inkscape:zoom=\"1.2541194\" inkscape:cx=\"310.17781\" inkscape:cy=\"123.03495\"z inkscape:window-width=\"1440\" inkscape:window-height=\"847\" inkscape:window-x=\"1665\" inkscape:window-y=\"131\" inkscape:window-maximized=\"1\"  inkscape:current-layer=\"svg8\" /><g/></svg>' >> " dirname "/" string ".svg; inkscape " dirname "/" string ".svg"))
 		(shell-command command)
 		(concat "#+begin_export latex\n\\begin{figure}\n\\centering\n\\def\\svgwidth{0.9\\columnwidth}\n\\import{" "./" dirname "/}{" string ".pdf_tex" "}\n\\end{figure}\n#+end_export"))
 	    ;; if file exists opens it
@@ -1153,10 +1167,10 @@ I also define a "replacement" function for org-roam-buffer-toggle which temporar
 		(setq command (concat "inkscape " dirname "/" string ".svg"))
 		(shell-command command)
 		(concat "" ""))))
-
+    
     (add-to-list 'org-latex-packages-alist '("" "booktabs"))
     (add-to-list 'org-latex-packages-alist '("" "import"))
-
+    
     (defun org-svg-pdf-export ()
       (interactive)
       (setq dirname (concat (f-base (buffer-file-name)) "-org-img"))
@@ -1164,13 +1178,22 @@ I also define a "replacement" function for org-roam-buffer-toggle which temporar
 	  (progn
 	    (setq command (concat "/usr/bin/inkscape -D --export-latex --export-type=\"pdf\" " dirname "/" "*.svg"))
 	    (shell-command command))))
-
+    
     (defun svglatex (file_name)
       "Prompts for a file name (without any file prefix), takes an svg with that file name and exports the file as a latex compatible pdf file"
       (interactive "MEnter svg file name: ")
       (setq export (concat "inkscape -D --export-latex --export-pdf=" file_name ".pdf" file_name ".svg" ))
       (shell-command export))
-
+    
+    (defun insert-svg (NAME)
+      "Prompts for an svg's name (without the prefix) and inserts an working orglink to the svg if it is located under a directory with the name of the buffer suffixed by -org-img.
+    
+    This is really useful for me as by default the function org-inkscape-img I use extensively saves inkscape's svgs in that directory. The problem is that that command was made with the latex export in mind (which is perfectly fine as I use it a lot) but in my org_roam setup I dont export files to latex so I just want to see the svg. 
+    
+    For this reason, this command inserts an org link to an svg in that directory with the prompted file name and toggles image-preview to see it."
+      (interactive "Msvg name: ")
+      (insert (concat "[[" (file-name-sans-extension buffer-file-name) "-org-img/" NAME ".svg" "]]"))
+      (org-toggle-inline-images))
   #+END_SRC
 
 
