@@ -7,7 +7,6 @@ from libqtile.lazy import lazy
 from libqtile.utils import guess_terminal
 import os
 import subprocess
-#import pyautogui
 
 mod = "mod4"
 terminal = "alacritty"
@@ -96,16 +95,12 @@ Key2("<XF86MonBrightnessDown>", lazy.spawn("sudo brightnessctl -q s 10%-"), desc
 Key2("<Print>", lazy.spawn(screenshots), desc="Screenshot util"),
 ]
 
-# def cursor_pos():
-  #    x1, y1=pyautogui.position()
-   #   return [x1/1920 - 0.2, y1/1080 - 0.25]
-
 groups = [
     ScratchPad("scratchpad", [
     DropDown("music", "spotify", opacity=0.8, height=0.8, weight=0.8),
     DropDown("term", "alacritty", opacity=0.8),
     DropDown("calc", "qalculate-gtk", opacity=0.8),
-   # DropDown("emacs", "emacs scratchpad.org", width=0.4, height=0.5, y=cursor_pos()[1], x=cursor_pos()[0], opacity=0.8)
+    DropDown("emacs", "emacs scratchpad.org", width=0.4, height=0.5, opacity=0.8)
     ]),
     Group("1"),
     Group("2"),

@@ -24,14 +24,14 @@
     "o" '(inferior-octave :which-key "octave")
     "D" 'dired
     "d" '(:ignore t :which-key "Dired functions")
-    "q" '(:ignore t :which-key "Quickmarks")
+    "q" 'quickmarks-hydra/body
     "t" '(:ignore t :which-key "Move between vterms")
     "T" 'org-babel-tangle
     "RET" 'vterm-toggle
     "<C-return>" 'named-vterm 
     "b" 'counsel-switch-buffer
     "a" 'org-agenda
-    "g" 'pdf-view-goto-page
+    "g" 'run-gnuplot
     "h" 'split-window-horizontally
     "v" 'split-window-vertically
     "c" '(calc-dispatch :which-key "Open the calc dispatcher")
@@ -51,7 +51,7 @@
     "W" 'wolfram-alpha
     "n" 'winner-redo
     "p" 'winner-undo
-    "i" '(:ignore t :which-key "Org-Pandoc-Import")
+    "i" 'org-pandoc-hydra/body
     "y" 'ivy-yasnippet)
   
   (general-define-key
@@ -80,20 +80,23 @@
    "d" 'deft
    "o" 'mediator-open-file)
   
-  (general-define-key
-   :states 'normal
-   :keymaps 'override
-   :prefix "SPC q"
-   "c" '((lambda() (interactive)(find-file "~/.emacs.d/README.org")) :which-key "Literate Emacs config")
-   "k" '((lambda() (interactive)(find-file "~/.emacs.d/libs/keybindings.org")) :which-key "Emacs keybindings config file")
-   "u" '((lambda() (interactive)(dired "~/Documents/5o_εξάμηνο")) :which-key "University folder")
-   "q" '((lambda() (interactive)(find-file "~/.config/qtile/README.org")) :which-key "Literate Qtile config")
-   "h" '((lambda() (interactive)(dired "~")) :which-key "Home directory")
-   "o" '((lambda() (interactive)(dired "~/Documents/Octave")) :which-key "Octave directory")
-   "s" '((lambda() (interactive)(dired "~/.emacs.d/snippets/org-mode")) :which-key "Org snippets")
-   "w" '((lambda() (interactive)(find-file "~/startpage/script/var.js")) :which-key "Web Start page")
-   "b" '((lambda() (interactive)(find-file "~/Sync/My_Library.bib")) :which-key "Master Bibliography file")
-   "e" '((lambda() (interactive)(find-file "~/org_roam/erasmus-08-10-21.org")) :which-key "Erasmus index file"))
+  (pretty-hydra-define quickmarks-hydra (:color blue :title "Quickmarks")
+    ("Emacs Stuff"
+     (("c" (lambda() (interactive)(find-file "~/.emacs.d/README.org")) "Literate Emacs Config")
+      ("k" (lambda() (interactive)(find-file "~/.emacs.d/libs/keybindings.org")) "Emacs keybindings")
+      ("s" (lambda() (interactive)(dired "~/.emacs.d/snippets/org-mode")) "Org-mode snippets"))
+  
+     "University"
+     (("u" (lambda() (interactive)(dired "~/Documents/5o_εξάμηνο")) "University Documents folder")
+      ("b" (lambda() (interactive)(find-file "~/Sync/My_Library.bib")) "Master Bibliography file")
+      ("e" (lambda() (interactive)(find-file "~/org_roam/erasmus-08-10-21.org")) "Erasmus index file")
+      ("o" (lambda() (interactive)(dired "~/Documents/Octave")) "Octave scripts directory"))
+  
+     "General Computer Things"
+     (("h" (lambda() (interactive)(dired "~")) "Home directory")
+      ("q" (lambda() (interactive)(find-file "~/.config/qtile/README.org")) "Literate Qtile config")
+      ("w" (lambda() (interactive)(find-file "~/startpage/script/var.js")) "Web Start page source"))
+     ))
   
   (general-define-key
    :states 'normal
@@ -155,28 +158,29 @@
   (general-define-key
    :states 'normal
    :keymaps 'override
-   :prefix "SPC i"
-   "i" 'org-pandoc-import-to-org
-   "I" 'org-pandoc-import-as-org
-   "c" 'org-pandoc-import-csv-to-org
-   "C" 'org-pandoc-import-csv-as-org
-   "d" 'org-pandoc-import-docx-to-org
-   "D" 'org-pandoc-import-docx-as-org
-   "o" 'org-pandoc-import-odt-to-org
-   "O" 'org-pandoc-import-odt-as-org
-   "l" 'org-pandoc-import-latex-to-org
-   "L" 'org-pandoc-import-latex-as-org)
-  
-  (general-define-key
-   :states 'normal
-   :keymaps 'override
    :prefix "SPC t"
    "n" 'vterm-toggle-forward
    "N" 'vterm-toggle-backward)
   
+  (pretty-hydra-define org-pandoc-hydra (:color blue :title "Import files to Org")
+    ("Import to org file"
+     (("i" org-pandoc-import-to-org "General Import")
+      ("c" org-pandoc-import-csv-to-org "Import CSV")
+      ("d" org-pandoc-import-docx-to-org "Import DOCX")
+      ("o" org-pandoc-import-odt-to-org "Import ODT")
+      ("l" org-pandoc-import-latex-to-org "Import Latex"))
+  
+     "Import to temporary org buffer"
+     (("I" org-pandoc-import-as-org "General Import")
+      ("C" org-pandoc-import-csv-as-org "Import CSV")
+      ("D" org-pandoc-import-docx-as-org "Import DOCX")
+      ("O" org-pandoc-import-odt-as-org "Import ODT")
+      ("L" org-pandoc-import-latex-as-org "Import Latex"))))
+  
  #+END_SRC
 
  #+RESULTS:
+ : org-pandoc-hydra/body
 
 
 #+RESULTS:
@@ -248,9 +252,9 @@
        "y" 'org-download-clipboard
        "r" '(:ignore t :which-key "Org Roam/Ref commands")
        "h" '(org-cycle-hide-drawers :which-key "Hide properties drawers")
-       "s" 'org-store-link
+       "S" 'org-store-link
        "I" 'org-insert-link
-       "S" '(org-svg-pdf-export :which-key "Export svg files to pdf")
+       "s" '(:ignore t :which-key "SVG commands/Inkscape")
        "i" 'org-toggle-inline-images
        "P" 'org-tree-slide-mode
        "p" '(org-plot/gnuplot :which-key "Plot table data")
@@ -259,6 +263,14 @@
        "T" '(toc-org-mode :which-key "Insert ToC")
        "b" 'org-beamer-select-environment
        "m" '(:ignore t :which-key "Org-Marginalia commands"))
+  
+  (general-define-key
+   :states 'normal
+   :keymaps 'org-mode-map
+   :prefix ", s"
+   "i" 'insert-svg
+   "l" 'svglatex
+   "p" 'org-svg-pdf-export)
   
   (general-define-key
    :states 'normal
@@ -291,7 +303,8 @@
    "f" 'org-roam-init-fleeting-note
    "I" 'org-id-get-create
    "d" 'org-id-delete-entry
-   "r" 'org-roam-ref-add)
+   "r" 'org-roam-ref-add
+   "b" 'org-roam-backlink-files)
   
   (general-define-key
    :states 'normal
@@ -320,7 +333,8 @@
    "c" 'kill-current-buffer
    "a" '(:ignore t :which-key "Add annotation")
    "a t" 'pdf-annot-add-text-annotation
-   "a m" 'pdf-annot-add-markup-annotation)
+   "a m" 'pdf-annot-add-markup-annotation
+   ", g" 'pdf-view-goto-page)
   
   (define-key dired-mode-map (kbd "+") nil)
   (general-define-key

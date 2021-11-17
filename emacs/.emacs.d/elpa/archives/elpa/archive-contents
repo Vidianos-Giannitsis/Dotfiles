@@ -421,7 +421,7 @@
 			("Ingo Lohmar" . "i.lohmar@gmail.com"))
 		       (:keywords "abbrev" "convenience" "matching"))])
  (consult .
-	  [(0 12)
+	  [(0 13)
 	   ((emacs
 	     (26 1)))
 	   "Consulting completing-read" tar
@@ -440,7 +440,7 @@
 		      ("Jackson Ray Hamilton" . "jackson@jacksonrayhamilton.com"))
 		     (:keywords "convenience" "faces" "tools"))])
  (corfu .
-	[(0 13)
+	[(0 14)
 	 ((emacs
 	   (27 1)))
 	 "Completion Overlay Region FUnction" tar
@@ -757,7 +757,7 @@
 	      (:maintainer "Markus Triska" . "triska@metalevel.at")
 	      (:url . "https://www.metalevel.at/ediprolog/"))])
  (eev .
-      [(20211101)
+      [(20211110)
        ((emacs
 	 (24 4)))
        "Support for e-scripts (eepitch blocks, elisp hyperlinks, etc)" tar
@@ -953,7 +953,7 @@
 		   ("Magnar Sveen" . "magnars@gmail.com"))
 		  (:keywords "marking" "region"))])
  (exwm .
-       [(0 25)
+       [(0 26)
 	((xelb
 	  (0 18)))
 	"Emacs X Window Manager" tar
@@ -1525,7 +1525,7 @@
 	 ("Nicolas Petton" . "nicolas@petton.fr"))
 	(:url . "https://elpa.gnu.org/packages/map.html"))])
  (marginalia .
-	     [(0 9)
+	     [(0 10)
 	      ((emacs
 		(26 1)))
 	      "Enrich existing commands with completion annotations" tar
@@ -1548,6 +1548,15 @@
 		       ("Vitalie Spinu" . "spinuvit@gmail.com"))
 		      (:maintainer "Vitalie Spinu" . "spinuvit@gmail.com")
 		      (:url . "https://github.com/vspinu/math-symbol-lists"))])
+ (mct .
+      [(0 2 0)
+       ((emacs
+	 (28 1)))
+       "Minibuffer and Completions in Tandem" tar
+       ((:url . "https://gitlab.com/protesilaos/mct")
+	(:maintainer "Protesilaos Stavrou" . "info@protesilaos.com")
+	(:authors
+	 ("Protesilaos Stavrou" . "info@protesilaos.com")))])
  (memory-usage .
 	       [(0 2)
 		nil "Analyze the memory usage of Emacs in various ways" single
@@ -1963,7 +1972,7 @@
 	     ("Phillip Lord" . "phillip.lord@russet.org.uk"))
 	    (:url . "http://elpa.gnu.org/packages/persist.html"))])
  (phps-mode .
-	    [(0 4 12)
+	    [(0 4 13)
 	     ((emacs
 	       (26)))
 	     "Major mode for PHP with Semantic integration" tar
@@ -1989,7 +1998,7 @@
 	   ("Mario Lang" . "mlang@delysid.org"))
 	  (:maintainer "Mario Lang" . "mlang@delysid.org"))])
  (posframe .
-	   [(1 1 0)
+	   [(1 1 1)
 	    ((emacs
 	      (26 1)))
 	    "Pop a posframe (just a frame) at point" tar
@@ -2328,7 +2337,7 @@
 	 ("Nicolas Petton" . "nicolas@petton.fr"))
 	(:url . "https://elpa.gnu.org/packages/seq.html"))])
  (setup .
-	[(1 1 0)
+	[(1 2 0)
 	 ((emacs
 	   (26 1)))
 	 "Helpful Configuration Macro" tar
@@ -2808,7 +2817,7 @@
 		  ("Michael McNamara" . "mac@verilog.com")
 		  ("Wilson Snyder" . "wsnyder@wsnyder.org")))])
  (vertico .
-	  [(0 14)
+	  [(0 15)
 	   ((emacs
 	     (27 1)))
 	   "VERTical Interactive COmpletion" tar

@@ -456,6 +456,7 @@ Some settings (now using the word some here might be an underestimation, as with
     + I tell org to preview latex fragments by default when opening a document, as I use them extensively so this makes my life easier.
     + I activate calctex and activate it when I go into calc's embedded mode. Its a neat package that allows me to type a formula inside calc and renders it automatically into latex. Latex snippets are what I use mostly but this is a very neat package and I had to include it here.
     + I activate org-cdlatex-mode which makes typing latex equations easier inside org and massively improves speed of typing equations together with snippets for org, org-fragtog mode which automatically creates previews for latex fragments when the cursor is not on them and laas mode which is a bunch of helpful latex snippets which autocomplete.
+    + I add some packages I use in all my documents in org-latex-packages-alist. 
     + The next few were taken by John Kitchin's [[https://kitchingroup.cheme.cmu.edu/blog/2016/11/07/Better-equation-numbering-in-LaTeX-fragments-in-org-mode/][website]]. Its about equations in org not being properly numbered as the org latex preview takes them as independent fragments and not as a whole. This code snippet, makes org number equations properly using an advice on org-create-formula-image. Its very neat and I am glad to have found it.
     + Lastly, I redefine the laas basic snippets as there are some useful symbols not included (such as laplace transformation) or some others which I dont like the letter they are bound to. A lot of the snippets included are for adding greek letters to text. I have a greek keyboard, so to me these are useless and I replaced some of them with these symbols. I left the rest of them the same, as I dont really care about them.
 
@@ -475,6 +476,17 @@ Some settings (now using the word some here might be an underestimation, as with
 				 (turn-on-org-cdlatex)
 				 (org-fragtog-mode)
 				 (laas-mode)))
+     
+     (setq org-latex-packages-alist '(("" "booktabs")
+				      ("" "import")
+				      ("LGR, T1" "fontenc")
+				      ("greek, english" "babel")
+				      ("" "alphabeta")
+				      ("" "esint")
+				      ("" "mathtools")
+				      ("" "esdiff")
+				      ("" "makeidx")
+				      ("" "glossaries")))
      
      (defun org-renumber-environment (orig-func &rest args)
        (let ((results '()) 
@@ -799,10 +811,6 @@ More languages to evaluate with org-babel (by default, only elisp is evaluated).
 
 #+END_SRC
 
-#+
-| s | Super Powered Agenda | ((agenda  ((org-agenda-span 'day) (org-super-agenda-groups '((:name Today :time-grid t :date today :scheduled today))))) (alltodo  ((org-agenda-overriding-header ) (org-super-agenda-groups '((:name What I've been doing :todo ACTIVE) (:name Plans for the foreseeable future :todo NEXT) (:name You GOTTA check this one out :priority A) (:name As easy as they get :effort< 0:10) (:discard (:anything)))))))                        |
-| u | University Projects  | ((alltodo  ((org-agenda-overriding-header ) (org-super-agenda-groups '((:name Currently Working on :and (:tag University :todo ACTIVE)) (:name What you gonna start next (probably) :and (:priority A :tag University)) (:name Medium Priority Projects :and (:tag University :priority B)) (:name Trivial Projects, I'ma do them at some point :D :and (:tag University :priority C)) (:discard (:not (:tag University))))))))            |
-| e | Emacs Projects       | ((alltodo  ((org-agenda-overriding-header ) (org-super-agenda-groups '((:name Configuring Emacs, the Present :and (:tag Emacs :todo ACTIVE) :and (:tag Emacs :todo NEXT)) (:name What to add, What to add?? :and (:tag Emacs :priority A)) (:name Wow, this one's easy, lets do it :and (:tag Emacs :effort< 0:15)) (:discard (:not (:tag Emacs))) (:name But wait, this was only the beginning. The real fun starts here! :anything)))))) |
 
 * Skeletons
   Skeletons are a very neat feature of Emacs. Think of a snippet and a template, now combine them and you have a skeleton. A skeleton is bound to a key which when pressed enters a piece of text. This is helpful when initialising a file whose format is certain. I currently use this for initialising my lab reports which have a rather standard format all the time.
@@ -855,9 +863,9 @@ More languages to evaluate with org-babel (by default, only elisp is evaluated).
    - I define the org_roam directory and org-roam-dailies directory
    - Change the org-roam-node-find UI to display the number of backlinks a file has, the directory it is under and its todostate if it has one. 
    - Make the org-roam buffer a little smaller cause it doesnt need to take half the screen
+   - Define a "replacement" function for org-roam-buffer-toggle, temporarily disabling latex previews. If you by default use latex previews in org, you will notice that the org-roam buffer will take it time to load if I do not use this
+   - Define a function that queries the roam database for every file linked to the node at point and then using that in a second function which saves a list of the absolute paths of those files to a buffer local variable. The ability to similtaneously act on every file linked to an index file in my database is in my opinion very important and a feature I was missing from org_roam. 
    
-I also define a "replacement" function for org-roam-buffer-toggle which temporarily disables latex previews in org files. I had the issue that opening the backlinks buffer in a big index file caused a lot of lag as org roam was trying to preview the latex in every file that links to the index file. As this was a large number of files, this was annoying. 
-
   #+BEGIN_SRC elisp
     
     (add-hook 'after-init-hook 'org-roam-setup)
@@ -900,18 +908,49 @@ I also define a "replacement" function for org-roam-buffer-toggle which temporar
     (defun org-roam-buffer-without-latex ()
       "Essentially org-roam-buffer-toggle but it ensures latex previews are turned off before toggling the buffer.
     
-    This is useful because especially with index files, having latex previews on, makes opening the buffer very slow as it needs to load previews of many files. But since I like starting my org files with latex preview on, I only turn it off when toggling visibility of the org-roam-buffer, which is when it causes issues."
+    This is useful because especially with index files, having latex
+    previews on, makes opening the buffer very slow as it needs to load
+    previews of many files. If you by default have
+    org-startup-with-latex-preview set to t, you have probably noticed
+    this issue before. This function solves it."
       (interactive)
       (let ((org-startup-with-latex-preview nil))
 	(org-roam-buffer-toggle)))
     
-    (defun org-roam-buffer-dedicated-without-latex ()
-      "Same logic as the above function, but this time wrapping the let expression around the org-roam-buffer-display-dedicated function"
-      (interactive)
-      (let ((org-startup-with-latex-preview nil))
-	(org-roam-buffer-display-dedicated)))
+    (defun org-roam-backlink-query ()
+      "Simple org-roam query function that stores all the files that link
+    to the node at point. This is a modified part of the
+    org-roam-backlinks-get function keeping only the part necessary for
+    org-roam-backlink-files to work as this is a complimentary function to
+    that"
+      (org-roam-db-query
+       [:select [source dest]
+		:from links
+		:where (= dest $s1)
+		:and (= type "id")]
+       (org-roam-node-id (org-roam-node-at-point))))
     
-    (setq org-roam-node-default-sort 'file-atime)
+    (defun org-roam-backlink-files ()
+      "Get all nodes that link to the node at point with the
+      org-roam-backlink-query function, find their absolute path and save
+      a list of those paths to the buffer local variable
+      org-roam-backlinks.
+    
+    With the list, you can act on all those files together. This is
+    exceptionally useful with index files as it allows you to do an action
+    on all files linked to this index automatically."
+      (interactive)
+      (setq-local org-roam-backlinks nil)
+      (let ((backlinks (length (org-roam-backlink-query))))
+	(dotimes (number backlinks)
+	  (let* ((id (car (nth number (org-roam-backlink-query))))
+		 (node (org-roam-node-from-id id))
+		 )
+	    (setq-local org-roam-backlinks (cons (org-roam-node-file node) org-roam-backlinks))
+	    (message "%s" "Files linking to this buffer have been saved in buffer-local variable org-roam-backlinks")
+	    ))))
+    
+    
   #+END_SRC
 
 
@@ -1012,7 +1051,6 @@ Lastly, for this system to work properly for fleeting notes I need a seamless wa
    This helps automate the process of creating new fleeting notes in combination with the org-journal commands"
     (interactive)
     (org-id-get-create)
-    (evil-next-visual-line)
     (evil-open-below 1)
     (project-skeleton)
     (org-todo))
@@ -1032,7 +1070,7 @@ Lastly, for this system to work properly for fleeting notes I need a seamless wa
 
 
 ** Capture Templates
-   Capture templates are really the "heart" of my zettelkasten workflow. By having a prefefined form for all files I create with the system I do not lose time trying to get a standard format on them. Its very important therefore to have at least a well customised default template. The rest of my templates here are for the capturing of specific things. Mine isn't that special but it has some important things. After the title, I add glatex_roam which is the key to a snippet of mine which basically adds some useful latex packages for writing the most major one being greek characters in latex equations which I use all the time (I am greek). 
+   Capture templates are really the "heart" of my zettelkasten workflow. By having a prefefined form for all files I create with the system I do not lose time trying to get a standard format on them. Its very important therefore to have at least a well customised default template. The rest of my templates here are for the capturing of specific things. Mine isn't that special but it has some important things.  
 
 The project template is a rather new one to my workflow. The zettelkasten workflow defines a type of notes called project notes which you are meant to use to plan out your project inside the zettelkasten. Because of all the ideas there, you never have to start from a blank box but you can take ideas from anywhere and add them to a project file. This part of my workflow isn't polished yet, but I am thinking of using a project file for each project and then headings which I can make nodes for each part of the project I want to document. Each heading can be archived easily with the same method as the daily files. For the central project file, I could archive them by removing their ID manually or something better if I figure it out. 
 
@@ -1055,7 +1093,7 @@ Lastly, I define the org-roam-dailies-capture-templates. As discussed above I do
 	      :jump-to-captured t)
      
 	     ("p" "project" plain "%?" :if-new
-	      (file+head "project/${slug}-%<%d-%m-%y>.org" "#+title: ${title}\nglatex_roam\n
+	      (file+head "project/${slug}-%<%d-%m-%y>.org" "#+title: ${title}\n
      - index ::  
      - tags ::  
      ,#+filetags: ")
@@ -1093,7 +1131,7 @@ Lastly, I define the org-roam-dailies-capture-templates. As discussed above I do
      
      (setq org-roam-capture-ref-templates 
 	   '(("r" "ref" entry "* %?" :target
-	      (file+head "ref/${slug}.org" "#+title: ${title}\nglatex_roam\n
+	      (file+head "ref/${slug}.org" "#+title: ${title}\n
      ,#+filetags: 
       - tags :: ")
 	      :unnarrowed t
@@ -1159,7 +1197,7 @@ Lastly, I define the org-roam-dailies-capture-templates. As discussed above I do
 	 ;; if file doesn't exist create it
 	 (if (not (file-exists-p (concat "./" dirname "/" string ".svg")))
 	 (progn
-	     (setq command (concat "echo " "'<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?><svg xmlns:dc=\"http://purl.org/dc/elements/1.1/\" xmlns:cc=\"http://creativecommons.org/ns#\" xmlns:rdf=\"http://www.w3.org/1999/02/22-rdf-syntax-ns#\" xmlns:svg=\"http://www.w3.org/2000/svg\" xmlns=\"http://www.w3.org/2000/svg\" xmlns:sodipodi=\"http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd\" xmlns:inkscape=\"http://www.inkscape.org/namespaces/inkscape\" width=\"240mm\" height=\"120mm\" viewBox=\"0 0 164.13576 65.105995\" version=\"1.1\" id=\"svg8\" inkscape:version=\"1.0.2 (e86c8708, 2021-01-15)\" sodipodi:docname=\"disegno.svg\"> <defs id=\"defs2\" /> <sodipodi:namedview id=\"base\" pagecolor=\"#292d3e\" bordercolor=\"#666666\" borderopacity=\"1.0\" inkscape:zoom=\"1.2541194\" inkscape:cx=\"310.17781\" inkscape:cy=\"123.03495\"z inkscape:window-width=\"1440\" inkscape:window-height=\"847\" inkscape:window-x=\"1665\" inkscape:window-y=\"131\" inkscape:window-maximized=\"1\"  inkscape:current-layer=\"svg8\" /><g/></svg>' >> " dirname "/" string ".svg; inkscape " dirname "/" string ".svg"))
+	     (setq command (concat "echo " "'<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?><svg xmlns:dc=\"http://purl.org/dc/elements/1.1/\" xmlns:cc=\"http://creativecommons.org/ns#\" xmlns:rdf=\"http://www.w3.org/1999/02/22-rdf-syntax-ns#\" xmlns:svg=\"http://www.w3.org/2000/svg\" xmlns=\"http://www.w3.org/2000/svg\" xmlns:sodipodi=\"http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd\" xmlns:inkscape=\"http://www.inkscape.org/namespaces/inkscape\" width=\"260mm\" height=\"130mm\" viewBox=\"0 0 164.13576 65.105995\" version=\"1.1\" id=\"svg8\" inkscape:version=\"1.0.2 (e86c8708, 2021-01-15)\" sodipodi:docname=\"disegno.svg\"> <defs id=\"defs2\" /> <sodipodi:namedview id=\"base\" pagecolor=\"#292d3e\" bordercolor=\"#666666\" borderopacity=\"1.0\" inkscape:zoom=\"1.2541194\" inkscape:cx=\"310.17781\" inkscape:cy=\"123.03495\"z inkscape:window-width=\"1440\" inkscape:window-height=\"847\" inkscape:window-x=\"1665\" inkscape:window-y=\"131\" inkscape:window-maximized=\"1\"  inkscape:current-layer=\"svg8\" /><g/></svg>' >> " dirname "/" string ".svg; inkscape " dirname "/" string ".svg"))
 		(shell-command command)
 		(concat "#+begin_export latex\n\\begin{figure}\n\\centering\n\\def\\svgwidth{0.9\\columnwidth}\n\\import{" "./" dirname "/}{" string ".pdf_tex" "}\n\\end{figure}\n#+end_export"))
 	    ;; if file exists opens it
@@ -1186,11 +1224,20 @@ Lastly, I define the org-roam-dailies-capture-templates. As discussed above I do
       (shell-command export))
     
     (defun insert-svg (NAME)
-      "Prompts for an svg's name (without the prefix) and inserts an working orglink to the svg if it is located under a directory with the name of the buffer suffixed by -org-img.
+      "Prompts for an svg's name (without the prefix) and inserts an
+      working orglink to the svg if it is located under a directory with
+      the name of the buffer suffixed by -org-img.
     
-    This is really useful for me as by default the function org-inkscape-img I use extensively saves inkscape's svgs in that directory. The problem is that that command was made with the latex export in mind (which is perfectly fine as I use it a lot) but in my org_roam setup I dont export files to latex so I just want to see the svg. 
+    This is really useful for me as by default the function
+    org-inkscape-img I use extensively saves inkscape's svgs in that
+    directory. The problem is that that command was made with the latex
+    export in mind (which is perfectly fine as I use it a lot) but in my
+    org_roam setup I dont export files to latex so I just want to see the
+    svg.
     
-    For this reason, this command inserts an org link to an svg in that directory with the prompted file name and toggles image-preview to see it."
+    For this reason, this command inserts an org link to an svg in that
+    directory with the prompted file name and toggles image-preview to see
+    it."
       (interactive "Msvg name: ")
       (insert (concat "[[" (file-name-sans-extension buffer-file-name) "-org-img/" NAME ".svg" "]]"))
       (org-toggle-inline-images))
