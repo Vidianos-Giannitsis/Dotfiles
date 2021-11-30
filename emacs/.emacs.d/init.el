@@ -252,6 +252,8 @@
       (set-variable 'org-hide-emphasis-markers nil)
     (set-variable 'org-hide-emphasis-markers t)))
 
+(setq org-export-with-broken-links t)
+
 (setq org-format-latex-options '(:foreground default :background default :scale 1.8 :html-foreground "Black" :html-background "Transparent" :html-scale 1.0 :matchers))
 
 (setq org-latex-pdf-process (list "latexmk -shell-escape -bibtex -f -pdf %f"))
@@ -267,6 +269,17 @@
 			    (turn-on-org-cdlatex)
 			    (org-fragtog-mode)
 			    (laas-mode)))
+
+(setq org-latex-packages-alist '(("" "booktabs")
+				 ("" "import")
+				 ("LGR, T1" "fontenc")
+				 ("greek, english" "babel")
+				 ("" "alphabeta")
+				 ("" "esint")
+				 ("" "mathtools")
+				 ("" "esdiff")
+				 ("" "makeidx")
+				 ("" "glossaries")))
 
 (defun org-renumber-environment (orig-func &rest args)
   (let ((results '()) 
@@ -552,24 +565,68 @@
 	       '("\\*org-roam\\*"
 		 (display-buffer-in-direction)
 		 (direction . right)
-		 (window-width . 0.33)
-		 (window-height . fit-window-to-buffer)))
-
-  )
+		 (window-width . 0.40)
+		 (window-height . fit-window-to-buffer))))
 
 (defun org-roam-buffer-without-latex ()
-  "Essentially org-roam-buffer-toggle but it ensures latex previews are turned off before toggling the buffer.
+    "Essentially org-roam-buffer-toggle but it ensures latex previews are turned off before toggling the buffer.
 
-This is useful because especially with index files, having latex previews on, makes opening the buffer very slow as it needs to load previews of many files. But since I like starting my org files with latex preview on, I only turn it off when toggling visibility of the org-roam-buffer, which is when it causes issues."
-  (interactive)
-  (let ((org-startup-with-latex-preview nil))
-    (org-roam-buffer-toggle)))
+  This is useful because especially with index files, having latex
+  previews on, makes opening the buffer very slow as it needs to load
+  previews of many files. If you by default have
+  org-startup-with-latex-preview set to t, you have probably noticed
+  this issue before. This function solves it."
+    (interactive)
+    (let ((org-startup-with-latex-preview nil))
+      (org-roam-buffer-toggle)))
 
-(defun org-roam-buffer-dedicated-without-latex ()
-  "Same logic as the above function, but this time wrapping the let expression around the org-roam-buffer-display-dedicated function"
-  (interactive)
-  (let ((org-startup-with-latex-preview nil))
-    (org-roam-buffer-display-dedicated)))
+  (defun org-roam-backlink-query ()
+    "Simple org-roam query function that stores all the files that link
+  to the node at point. This is a modified part of the
+  org-roam-backlinks-get function keeping only the part necessary for
+  org-roam-backlink-files to work as this is a complimentary function to
+  that"
+    (org-roam-db-query
+     [:select [source dest]
+	      :from links
+	      :where (= dest $s1)
+	      :and (= type "id")]
+     (org-roam-node-id (org-roam-node-at-point))))
+
+  (defun org-roam-backlink-files ()
+    "Get all nodes that link to the node at point with the
+    org-roam-backlink-query function, find their absolute path and save
+    a list of those paths to the buffer local variable
+    org-roam-backlinks.
+
+  With the list, you can act on all those files together. This is
+  exceptionally useful with index files as it allows you to do an action
+  on all files linked to this index automatically."
+    (interactive)
+    (let ((backlinks (length (org-roam-backlink-query)))
+	  (org-roam-backlinks))
+      (dotimes (number backlinks)
+	(let* ((id (car (nth number (org-roam-backlink-query))))
+	       (node (org-roam-node-from-id id)))
+	  (setq-local org-roam-backlinks (cons (org-roam-node-file node) org-roam-backlinks))))
+      (message "%s" org-roam-backlinks)))
+
+  (defun org-roam-export-backlinks-to-latex-pdf ()
+    "Export the current buffer and every buffer that mentions it to a pdf through latex and pandoc. Makes use of the org-roam-backlink-files function to find all the backlinks. Also saves all the pdf names in a variable called org-roam-backlink-pdfs. These names can then be passed to something like pdftk to merge them into one pdf"
+    (interactive)
+    (org-roam-backlink-files)
+    (setq org-roam-backlink-pdfs nil)
+    (save-current-buffer
+      (let ((backlinks (cons (buffer-file-name) org-roam-backlinks))
+	    (org-startup-with-latex-preview nil))
+	(while backlinks
+	  (find-file (car backlinks))
+	  (org-pandoc-export-to-latex-pdf)
+	  (setq org-roam-backlink-pdfs
+		      (cons (concat (file-name-sans-extension (car backlinks)) ".pdf") org-roam-backlink-pdfs))
+	  (setq backlinks (cdr backlinks)))
+	))
+    (message "%s" "Done!"))
 
 (setq bibtex-completion-bibliography
       '("~/Sync/My_Library.bib")
@@ -578,7 +635,7 @@ This is useful because especially with index files, having latex previews on, ma
 
 (setq bibtex-completion-additional-search-fields '(keywords abstract))
 
-(setq ivy-bibtex-default-action 'ivy-bibtex-insert-citation)
+(setq ivy-bibtex-default-action 'ivy-bibtex-edit-notes)
 (ivy-add-actions
  'ivy-bibtex
  '(("p" ivy-bibtex-open-any "Open pdf, url or DOI")))
@@ -590,6 +647,19 @@ This is useful because especially with index files, having latex previews on, ma
 	(python-mode . bibtex-completion-format-citation-sphinxcontrib-bibtex)
 	(rst-mode . bibtex-completion-format-citation-sphinxcontrib-bibtex)
 	(default . bibtex-completion-format-citation-default)))
+
+(require 'org-roam-bibtex)
+(org-roam-bibtex-mode 1)
+
+(setq orb-insert-interface 'ivy-bibtex
+      orb-note-actions-interface 'ivy)
+(setq orb-preformat-keywords '("citekey" "author" "date" "entry-type" "keywords" "url" "file"))
+
+(require 'org-protocol)
+(require 'org-roam-protocol)
+
+(require 'websocket)
+(require 'org-roam-ui)
 
 (setq org-todo-keywords
       '((sequence "INBOX(i)"
@@ -603,7 +673,10 @@ This is useful because especially with index files, having latex previews on, ma
 		  )))
 
 (setq org-agenda-files
-      '("~/org_roam/daily"))
+      '("~/org_roam"
+	"~/org_roam/daily"
+	"~/org_roam/ref"))
+
 (setq org-journal-dir "~/org_roam/daily"
       org-journal-file-format "%d-%m-%Y.org"
       org-journal-time-format "%a, %m/%d-%R")
@@ -623,7 +696,6 @@ Its used in my fleeting note initialization function as a means to always make n
  This helps automate the process of creating new fleeting notes in combination with the org-journal commands"
   (interactive)
   (org-id-get-create)
-  (evil-next-visual-line)
   (evil-open-below 1)
   (project-skeleton)
   (org-todo))
@@ -640,19 +712,6 @@ Its used in my fleeting note initialization function as a means to always make n
 	       (when (equal org-state "DONE")
 		 (org-id-delete-entry))))
 
-(require 'org-roam-bibtex)
-(org-roam-bibtex-mode 1)
-
-(setq orb-insert-interface 'ivy-bibtex
-      orb-note-actions-interface 'ivy)
-(setq orb-preformat-keywords '("citekey" "author" "date" "entry-type" "keywords" "url" "file"))
-
-(require 'org-protocol)
-(require 'org-roam-protocol)
-
-(require 'websocket)
-(require 'org-roam-ui)
-
 (setq org-roam-capture-templates
       '(("d" "default" plain "%?" :if-new
 	 (file+head "${slug}-%<%d-%m-%y>.org" "#+title: ${title}\nglatex_roam\n
@@ -661,10 +720,11 @@ Its used in my fleeting note initialization function as a means to always make n
 	 :unarrowed t
 	 :jump-to-captured t)
 
-	("p" "private" plain "%?" :if-new
-	 (file+head "private/${slug}-%<%d-%m-%y>.org" "#+title: ${title}\nglatex_roam\n
+	("p" "project" plain "%?" :if-new
+	 (file+head "project/${slug}-%<%d-%m-%y>.org" "#+title: ${title}\n
 - index ::  
-- tags ::  ")
+- tags ::  
+#+filetags: ")
 	 :unarrowed t
 	 :jump-to-captured t)
 
@@ -697,23 +757,21 @@ Its used in my fleeting note initialization function as a means to always make n
 ")
 	 :unnarowed t)))
 
-(setq org-roam-dailies-capture-templates
-      '(("d" "default" entry "* %?" :if-new
-	 (file+head "%<%Y-%m-%d>.org" "#+title: %<%Y-%m-%d>\n#+filetags: daily")
-	 :empty-lines 1)))
-
 (setq org-roam-capture-ref-templates 
       '(("r" "ref" entry "* %?" :target
-	 (file+head "ref/${slug}.org" "#+title: ${title}\nglatex_roam\n
+	 (file+head "ref/${slug}.org" "#+title: ${title}\n
 #+filetags: 
  - tags :: ")
 	 :unnarrowed t
 	 :jump-to-captured t)))
 
+(setq org-roam-dailies-capture-templates
+      '(("d" "default" entry "* %?" :if-new
+	 (file+head "%<%Y-%m-%d>.org" "#+title: %<%Y-%m-%d>\n#+filetags: daily")
+	 :empty-lines 1)))
+
 (setq bookmark-version-control t
       delete-old-versions t)
-
-;(require 'bookmark+)
 
 (defun org-scratchpad ()
   "Yank the entire document, delete it and save the buffer. This is very useful for my scratchpad setup"
@@ -734,7 +792,7 @@ Its used in my fleeting note initialization function as a means to always make n
      ;; if file doesn't exist create it
      (if (not (file-exists-p (concat "./" dirname "/" string ".svg")))
      (progn
-	 (setq command (concat "echo " "'<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?><svg xmlns:dc=\"http://purl.org/dc/elements/1.1/\" xmlns:cc=\"http://creativecommons.org/ns#\" xmlns:rdf=\"http://www.w3.org/1999/02/22-rdf-syntax-ns#\" xmlns:svg=\"http://www.w3.org/2000/svg\" xmlns=\"http://www.w3.org/2000/svg\" xmlns:sodipodi=\"http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd\" xmlns:inkscape=\"http://www.inkscape.org/namespaces/inkscape\" width=\"164.13576mm\" height=\"65.105995mm\" viewBox=\"0 0 164.13576 65.105995\" version=\"1.1\" id=\"svg8\" inkscape:version=\"1.0.2 (e86c8708, 2021-01-15)\" sodipodi:docname=\"disegno.svg\"> <defs id=\"defs2\" /> <sodipodi:namedview id=\"base\" pagecolor=\"#292d3e\" bordercolor=\"#666666\" borderopacity=\"1.0\" inkscape:zoom=\"1.2541194\" inkscape:cx=\"310.17781\" inkscape:cy=\"123.03495\"z inkscape:window-width=\"1440\" inkscape:window-height=\"847\" inkscape:window-x=\"1665\" inkscape:window-y=\"131\" inkscape:window-maximized=\"1\"  inkscape:current-layer=\"svg8\" /><g/></svg>' >> " dirname "/" string ".svg; inkscape " dirname "/" string ".svg"))
+	 (setq command (concat "echo " "'<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?><svg xmlns:dc=\"http://purl.org/dc/elements/1.1/\" xmlns:cc=\"http://creativecommons.org/ns#\" xmlns:rdf=\"http://www.w3.org/1999/02/22-rdf-syntax-ns#\" xmlns:svg=\"http://www.w3.org/2000/svg\" xmlns=\"http://www.w3.org/2000/svg\" xmlns:sodipodi=\"http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd\" xmlns:inkscape=\"http://www.inkscape.org/namespaces/inkscape\" width=\"240mm\" height=\"120mm\" viewBox=\"0 0 164.13576 65.105995\" version=\"1.1\" id=\"svg8\" inkscape:version=\"1.0.2 (e86c8708, 2021-01-15)\" sodipodi:docname=\"disegno.svg\"> <defs id=\"defs2\" /> <sodipodi:namedview id=\"base\" pagecolor=\"#292d3e\" bordercolor=\"#666666\" borderopacity=\"1.0\" inkscape:zoom=\"1.2541194\" inkscape:cx=\"310.17781\" inkscape:cy=\"123.03495\"z inkscape:window-width=\"1440\" inkscape:window-height=\"847\" inkscape:window-x=\"1665\" inkscape:window-y=\"131\" inkscape:window-maximized=\"1\"  inkscape:current-layer=\"svg8\" /><g/></svg>' >> " dirname "/" string ".svg; inkscape " dirname "/" string ".svg"))
 	    (shell-command command)
 	    (concat "#+begin_export latex\n\\begin{figure}\n\\centering\n\\def\\svgwidth{0.9\\columnwidth}\n\\import{" "./" dirname "/}{" string ".pdf_tex" "}\n\\end{figure}\n#+end_export"))
 	;; if file exists opens it
@@ -759,6 +817,25 @@ Its used in my fleeting note initialization function as a means to always make n
   (interactive "MEnter svg file name: ")
   (setq export (concat "inkscape -D --export-latex --export-pdf=" file_name ".pdf" file_name ".svg" ))
   (shell-command export))
+
+(defun insert-svg (NAME)
+  "Prompts for an svg's name (without the prefix) and inserts an
+  working orglink to the svg if it is located under a directory with
+  the name of the buffer suffixed by -org-img.
+
+This is really useful for me as by default the function
+org-inkscape-img I use extensively saves inkscape's svgs in that
+directory. The problem is that that command was made with the latex
+export in mind (which is perfectly fine as I use it a lot) but in my
+org_roam setup I dont export files to latex so I just want to see the
+svg.
+
+For this reason, this command inserts an org link to an svg in that
+directory with the prompted file name and toggles image-preview to see
+it."
+  (interactive "Msvg name: ")
+  (insert (concat "[[" (file-name-sans-extension buffer-file-name) "-org-img/" NAME ".svg" "]]"))
+  (org-toggle-inline-images))
 
 (with-eval-after-load 'org
   (require 'edraw-org)
@@ -797,6 +874,9 @@ Its used in my fleeting note initialization function as a means to always make n
 	))
 
 (require 'ox-word)
+(require 'org-show)
+
+(require 'scimax-jupyter)
 
 (require 'scimax-autoformat-abbrev)
 (add-hook 'org-mode-hook '(lambda ()
@@ -985,11 +1065,10 @@ Its used in my fleeting note initialization function as a means to always make n
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(bmkp-last-as-first-bookmark-file "~/.emacs.d/bookmarks")
  '(custom-safe-themes
    '("0fffa9669425ff140ff2ae8568c7719705ef33b7a927a0ba7c5e2ffcfac09b75" default))
  '(package-selected-packages
-   '(pretty-hydra gnuplot-mode magit git-commit with-editor git-timemachine org-ql transient jupyter python-info ob-ipython ac-octave evil-collection openwith sequences cl-lib-highlight helm-system-packages async-await popup-complete helm-fuzzy-find evil-space yapfify yaml-mode ws-butler winum which-key web-mode web-beautify vterm volatile-highlights vi-tilde-fringe uuidgen use-package toc-org tagedit spaceline solarized-theme slim-mode scss-mode sass-mode restart-emacs request rainbow-delimiters pyvenv pytest pyenv-mode py-isort pug-mode pspp-mode popwin pip-requirements persp-mode pcre2el paradox org-projectile-helm org-present org-pomodoro org-mime org-download org-bullets open-junk-file neotree move-text mmm-mode markdown-toc macrostep lorem-ipsum livid-mode live-py-mode linum-relative link-hint json-mode js2-refactor js-doc intero indent-guide hy-mode hungry-delete htmlize hlint-refactor hl-todo hindent highlight-parentheses highlight-numbers highlight-indentation helm-themes helm-swoop helm-pydoc helm-projectile helm-mode-manager helm-make helm-hoogle helm-flx helm-descbinds helm-css-scss helm-ag haskell-snippets gruvbox-theme google-translate golden-ratio gnuplot gh-md flx-ido fill-column-indicator fancy-battery eyebrowse expand-region exec-path-from-shell evil-visualstar evil-visual-mark-mode evil-unimpaired evil-tutor evil-surround evil-search-highlight-persist evil-numbers evil-nerd-commenter evil-mc evil-matchit evil-lisp-state evil-indent-plus evil-iedit-state evil-exchange evil-escape evil-ediff evil-args evil-anzu eval-sexp-fu emmet-mode elisp-slime-nav dumb-jump diminish define-word cython-mode csv-mode company-ghci company-ghc column-enforce-mode coffee-mode cmm-mode clean-aindent-mode auto-highlight-symbol auto-compile auctex-latexmk anaconda-mode aggressive-indent adaptive-wrap ace-window ace-link ace-jump-helm-line)))
+   '(evil-collection openwith sequences cl-lib-highlight helm-system-packages async-await popup-complete helm-fuzzy-find evil-space yapfify yaml-mode ws-butler winum which-key web-mode web-beautify vterm volatile-highlights vi-tilde-fringe uuidgen use-package toc-org tagedit spaceline solarized-theme slim-mode scss-mode sass-mode restart-emacs request rainbow-delimiters pyvenv pytest pyenv-mode py-isort pug-mode pspp-mode popwin pip-requirements persp-mode pcre2el paradox org-projectile-helm org-present org-pomodoro org-mime org-download org-bullets open-junk-file neotree move-text mmm-mode markdown-toc magit macrostep lorem-ipsum livid-mode live-py-mode linum-relative link-hint json-mode js2-refactor js-doc intero indent-guide hy-mode hungry-delete htmlize hlint-refactor hl-todo hindent highlight-parentheses highlight-numbers highlight-indentation helm-themes helm-swoop helm-pydoc helm-projectile helm-mode-manager helm-make helm-hoogle helm-flx helm-descbinds helm-css-scss helm-ag haskell-snippets gruvbox-theme google-translate golden-ratio gnuplot gh-md flx-ido fill-column-indicator fancy-battery eyebrowse expand-region exec-path-from-shell evil-visualstar evil-visual-mark-mode evil-unimpaired evil-tutor evil-surround evil-search-highlight-persist evil-numbers evil-nerd-commenter evil-mc evil-matchit evil-lisp-state evil-indent-plus evil-iedit-state evil-exchange evil-escape evil-ediff evil-args evil-anzu eval-sexp-fu emmet-mode elisp-slime-nav dumb-jump diminish define-word cython-mode csv-mode company-ghci company-ghc column-enforce-mode coffee-mode cmm-mode clean-aindent-mode auto-highlight-symbol auto-compile auctex-latexmk anaconda-mode aggressive-indent adaptive-wrap ace-window ace-link ace-jump-helm-line)))
 
 (custom-set-faces
  ;; custom-set-faces was added by Custom.

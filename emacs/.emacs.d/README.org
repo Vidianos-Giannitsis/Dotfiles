@@ -1,8 +1,6 @@
 #+TITLE: Literate Emacs Config
-#+PROPERTY: header-args :tangle init.el 
+#+PROPERTY: header-args :tangle init.el
 #+PROPERTY: header-args :results silent
-#+INFOJS_OPT: view:t toc:t ltoc:t mouse:underline buttons:0 path:http://thomasf.github.io/solarized-css/org-info.min.js
-#+HTML_HEAD: <link rel="stylesheet" type="text/css" href="http://thomasf.github.io/solarized-css/solarized-dark.min.css" />
 
 * About this config
 
@@ -12,7 +10,7 @@ I have drawn inspiration from a lot of other init.el's but the most apparent one
 
 Note that I am no elisp ninja and know just enough to write this config in a simple way, so some things are probably not done in the most efficient way possible, but everything I have set has its desired behaviour, which is enough for me.
 
-I hope you will find something useful here that you can put to your emacs config as well.
+I hope you will find something useful here that you can put to your emacs config as well. 
 
 * Table of Contents                                                     :TOC:
 - [[#about-this-config][About this config]]
@@ -33,8 +31,8 @@ I hope you will find something useful here that you can put to your emacs config
 - [[#org-roam-references-and-the-zettelkasten-workflow][Org Roam, References and the Zettelkasten Workflow]]
   - [[#org-roam-general-setup][Org-Roam general setup]]
   - [[#bibtex-completion-ivy-and-org-ref][Bibtex completion (Ivy) and Org-Ref]]
-  - [[#fleeting-notes][Fleeting notes]]
   - [[#org-roam-bibtex-protocols-reference-notes-and-ui-graphing-capabilities][Org Roam Bibtex, Protocols (Reference notes) and UI (graphing capabilities)]]
+  - [[#fleeting-notes][Fleeting notes]]
   - [[#capture-templates][Capture Templates]]
 - [[#bookmarks][Bookmarks]]
 - [[#emacs-scratchpad][Emacs Scratchpad]]
@@ -45,6 +43,7 @@ I hope you will find something useful here that you can put to your emacs config
 - [[#elfeed---rss-feeds][Elfeed - RSS Feeds]]
 - [[#scimax][Scimax]]
   - [[#exporting][Exporting]]
+  - [[#python][Python]]
   - [[#abbreviations--spellchecking][Abbreviations & Spellchecking]]
   - [[#elfeed][Elfeed]]
 - [[#ebib][Ebib]]
@@ -64,8 +63,8 @@ I hope you will find something useful here that you can put to your emacs config
 Setting up my packages to work properly. 
 The first section has to do with packages installed from melpa, the second with packages installed manually to my load path and the third about auto-updates to my packages which will be issued once a week.
 
-#+BEGIN_SRC elisp
-
+#+BEGIN_SRC elisp :tangle init.el
+  
   (require 'package)
   (setq package-archives '(("melpa" . "https://melpa.org/packages/")
 			   ("org" . "https://orgmode.org/elpa/")
@@ -73,11 +72,11 @@ The first section has to do with packages installed from melpa, the second with 
   (package-initialize)
   (unless package-archive-contents
     (package-refresh-contents))
-
+  
   (let ((default-directory  "~/.emacs.d/libs/"))
     (normal-top-level-add-to-load-path '("."))
     (normal-top-level-add-subdirs-to-load-path))
-
+  
   (use-package auto-package-update
     :custom
     (auto-package-update-interval 7)
@@ -87,7 +86,7 @@ The first section has to do with packages installed from melpa, the second with 
     :config
     (auto-package-update-maybe)
     (auto-package-update-at-time "10:00"))
-
+  
 #+END_SRC
 
 
@@ -108,7 +107,7 @@ This includes:
 + Hide elements such as asterisks when writing a bold word by default. In the [[*Utilities][Utilities]] section of the config, I also define a function which toggles this behaviour
 + Set my font to Source Code Pro with the right font size for me. To use daemon mode properly, this needs a bit more code.
 
-#+BEGIN_SRC elisp
+#+BEGIN_SRC elisp :tangle init.el
   
   (gcmh-mode 1)
   
@@ -170,7 +169,7 @@ This includes:
 * Evil Mode
 Enabling Evil Mode, my preffered editing mode for Emacs, with the evil-collection loaded. It helps me with defining vim type keybindings for more programs, which I like. Then I also load evil-org which is a package for evil keys inside org as evil-collection doesn't have that. 
 
-#+BEGIN_SRC elisp
+#+BEGIN_SRC elisp :tangle init.el
   
   (setq evil-collection-setup-minibuffer t)
   (setq evil-want-keybinding nil)
@@ -206,7 +205,7 @@ This enables:
 + Create a function to interactively name new vterm sessions from the minibuffer and open them in another window.
 + Making .m files open in octave-mode and .epub in nov-mode (as they should do). For Octave configurations also check init_octave.m inside this directory
 
-#+BEGIN_SRC elisp
+#+BEGIN_SRC elisp :tangle init.el
   
   (add-to-list 'load-path
 	       "~/.emacs.d/plugins/yasnippet")
@@ -261,7 +260,7 @@ This enables:
 * Keybindings
   This is my absolute favourite section of this entire config. But its a very big part of my config and I considered it more prudent to include it as its own file. You can find [[https://github.com/AuroraDragoon/Dotfiles/blob/master/emacs/.emacs.d/libs/keybindings.org][keybindings.org]] inside the libs directory (which contains all the external elisp "libraries" I have installed manually). The org file is the literate configuration of my keybindings. In that directory you will also find the keybindings.el file which I require in this section of the config to load. It acts as if it was an external package for Emacs which helps make this config more tidy. 
 
-  #+BEGIN_SRC elisp
+  #+BEGIN_SRC elisp :tangle init.el
 
     (require 'keybindings)
 
@@ -278,7 +277,7 @@ This enables:
   + Added the functionality of when a folder has a single item, directly go to that item (open if its file, display the directory if its a directory). This is how you vieew folders in github, which behaviour I really like it so since I found a package with this behaviour (dired-collapse) I added it to my config and hooked it to dired mode.
   + Require helm-dired-open, a small package to prompt for opening files outside of Emacs. 
 
-  #+BEGIN_SRC elisp
+  #+BEGIN_SRC elisp :tangle init.el
      (require 'dired-x)
     
     ;(add-hook 'dired-mode-hook 'treemacs-icons-dired-mode)
@@ -312,7 +311,7 @@ This enables:
 + Make the default flyspell dictionary greek and run flyspell on the whole buffer when flyspell mode is activated. I find spellchecking software to be very annoying and intrusive in my typical writing workflow so I dont want this to activate when I enter text buffers. Rather, I want to be able to run this once, when I am done with the writing and fix any errors at that point. This does just that
 + Winner mode is a mode for navigating through buffer history
   
-  #+BEGIN_SRC elisp
+  #+BEGIN_SRC elisp :tangle init.el
     
     (show-paren-mode 1)
     (electric-pair-mode 1)
@@ -376,7 +375,7 @@ Some settings (now using the word some here might be an underestimation, as with
    + Require the org export beamer, hugo and pandoc packages so their export options are there by default
    + Require org-marginalia
      
-#+BEGIN_SRC elisp
+#+BEGIN_SRC elisp :tangle init.el
   
     (add-hook 'org-mode-hook #'(lambda ()
 				 (org-superstar-mode)
@@ -411,7 +410,7 @@ Some settings (now using the word some here might be an underestimation, as with
    + When exporting, I want the export to work regardless of if the links work or not. If I am exporting a link heavy file (such as something from my Zettelkasten) I want it to export even if the links will not work.
 
  
-#+BEGIN_SRC elisp
+#+BEGIN_SRC elisp :tangle init.el
   (add-to-list 'org-file-apps '("\\.pdf\\'" . emacs))
   
   (setq org-odt-preferred-output-format "docx")
@@ -445,8 +444,8 @@ Some settings (now using the word some here might be an underestimation, as with
       (set-variable 'org-hide-emphasis-markers t)))
   
   (setq org-export-with-broken-links t)
+  
 #+END_SRC
-
 
 ** Latex Stuff
    I love Latex for writing mathematical equations. Org understands latex very well and can preview it. But I want some things changed in it. 
@@ -460,7 +459,7 @@ Some settings (now using the word some here might be an underestimation, as with
     + The next few were taken by John Kitchin's [[https://kitchingroup.cheme.cmu.edu/blog/2016/11/07/Better-equation-numbering-in-LaTeX-fragments-in-org-mode/][website]]. Its about equations in org not being properly numbered as the org latex preview takes them as independent fragments and not as a whole. This code snippet, makes org number equations properly using an advice on org-create-formula-image. Its very neat and I am glad to have found it.
     + Lastly, I redefine the laas basic snippets as there are some useful symbols not included (such as laplace transformation) or some others which I dont like the letter they are bound to. A lot of the snippets included are for adding greek letters to text. I have a greek keyboard, so to me these are useless and I replaced some of them with these symbols. I left the rest of them the same, as I dont really care about them.
 
-   #+BEGIN_SRC elisp
+   #+BEGIN_SRC elisp :tangle init.el
      (setq org-format-latex-options '(:foreground default :background default :scale 1.8 :html-foreground "Black" :html-background "Transparent" :html-scale 1.0 :matchers))
      
      (setq org-latex-pdf-process (list "latexmk -shell-escape -bibtex -f -pdf %f"))
@@ -666,7 +665,7 @@ Some settings (now using the word some here might be an underestimation, as with
    
    Org-noter is an excellent program for annotating pdfs using org. Its main problem is that when you open it it creates its frame in a new emacs window which for me is inconvenient, so I change that behaviour to open the notes the current buffer. I also make another change. Because the typical file that includes a lot of org-noter annotations is crammed with :PROPERTIES: arguments I use a custom function to hide them. They can be useful so I dont hide them by default, but instead make the function interactive (can be called from M-x) and when given the 'all argument on the prompt hides all the :PROPERTIES: arguments. Below is the source code for these changes. Also, since I am not the one who wrote the function have a link to the stack-overflow page where this is answered [[https://stackoverflow.com/questions/17478260/completely-hide-the-properties-drawer-in-org-mode]]
 
-   #+BEGIN_SRC elisp
+   #+BEGIN_SRC elisp :tangle init.el
 
      (setq org-noter-always-create-frame nil)
 
@@ -713,7 +712,7 @@ Some settings (now using the word some here might be an underestimation, as with
 ** Org Babel
 More languages to evaluate with org-babel (by default, only elisp is evaluated). I dont use this extensively but for those times that I need to evaluate code in org, its probably going to be in one of these so might as well add them.
 
-#+BEGIN_SRC elisp
+#+BEGIN_SRC elisp :tangle init.el
   
   (org-babel-do-load-languages
      'org-babel-load-languages
@@ -729,93 +728,10 @@ More languages to evaluate with org-babel (by default, only elisp is evaluated).
 #+END_SRC
 
 
-** COMMENT Org-agenda and TODOs
-    I set everything I need for TODOs and the org-agenda in this section. In my keybindings file you can see the keybindings I have set for each action while here are the configurations I want to make. This helps keep this consistent by having those keybindings in that section. I track all my todo files in one directory, my org_roam directory (more on that in the next section, its an important part of my workflow). So I want every todo defined in that directory to be loaded inside Org-agenda.
-
-   I define a custom function org-make-todo which makes an item todo, gives it a priority and effort value. I like this for initialization of a todo file as it helps with organizing tasks with which one is more urgent and which is harder outside of the already existing file system to manage different kinds of todos.
-
-   I activate org-super-agenda which gives me very easy to use queries for anything you can think of. I use it in conjuction with org-agenda-custom-commands which allows me to define new agenda shortcuts within which I define my new custom queries, which fit my personal workflow. Also, because some of my todos are rather large I disable truncate lines inside the agenda buffer. This is supposed to be the default behaviour but for some reason agenda is disobedient.
-   
-#+BEGIN_SRC elisp
-
-  (setq org-todo-keywords
-	  '((sequence "TODO(t)"
-		      "ACTIVE(a)"
-		      "NEXT(n)"
-		      "WAIT(w)"
-		      "|"
-		      "DONE(d@)"
-		      "CANCELLED(c@)"
-		      )))
-
-    (setq org-agenda-files
-	    '("~/org_roam"))
-
-  (defun org-make-todo ()
-    "Set todo keyword, priority, effort and tags for a todo item. This is very useful for initialising todo items"
-    (interactive)
-    (org-todo)
-    (org-priority)
-    (org-set-effort)
-    (org-set-tags-command))
-
-  (org-super-agenda-mode 1)
-
-  (add-hook 'org-agenda-mode-hook 'toggle-truncate-lines)
-
-  (setq org-agenda-custom-commands
-	'(("q" "Quick Check for the day"
-	   ((agenda "" ((org-agenda-span 'day)
-			(org-super-agenda-groups
-			 '((:name "Today"
-				  :time-grid t
-				  :date today
-				  :scheduled today)))))
-	   (alltodo "" ((org-agenda-overriding-header "")
-			 (org-super-agenda-groups
-			  '((:name "What I've been doing"
-				   :todo "ACTIVE")
-			    (:name "Plans for the foreseeable future"
-				   :todo "NEXT")
-			    (:name "You GOTTA check this one out"
-				   :priority "A")
-			    (:name "As easy as they get"
-				   :effort< "0:10")
-			    (:discard (:anything))))))))
-	  ("u" "University Projects"
-	   ((alltodo "" ((org-agenda-overriding-header "")
-			 (org-super-agenda-groups
-			  '((:name "Currently Working on"
-				   :and (:tag "University" :todo "ACTIVE"))
-			    (:name "This one's next (probably)"
-				   :and (:priority "A" :tag "University"))
-			    (:name "Medium Priority Projects"
-				   :and (:tag "University" :priority "B"))
-			    (:name "Trivial Projects, I'ma do them at some point though :D"
-				   :and (:tag "University" :priority "C"))
-			    (:discard (:not (:tag "University")))))))))
-	  ("e" "Emacs Projects"
-	   ((alltodo "" ((org-agenda-overriding-header "")
-			 (org-super-agenda-groups
-			  '((:name "Configuring Emacs, the Present"
-				   :and (:tag "Emacs" :todo "ACTIVE")
-				   :and (:tag "Emacs" :todo "NEXT"))
-			    (:name "What to add, What to add??"
-				   :and (:tag "Emacs" :priority "A"))
-			    (:name "Wow, this one's easy, lets do it"
-				   :and (:tag "Emacs" :effort< "0:15"))
-			    (:discard (:not (:tag "Emacs")))
-			    (:name "But wait, this was only the beginning. The real fun starts here!"
-				   :anything)))))))))
-
-
-#+END_SRC
-
-
 * Skeletons
   Skeletons are a very neat feature of Emacs. Think of a snippet and a template, now combine them and you have a skeleton. A skeleton is bound to a key which when pressed enters a piece of text. This is helpful when initialising a file whose format is certain. I currently use this for initialising my lab reports which have a rather standard format all the time.
 
-  #+BEGIN_SRC elisp
+  #+BEGIN_SRC elisp :tangle init.el
     
     (define-skeleton lab-skeleton
       "A skeleton which I use for initialising my lab reports which have standard formatting"
@@ -863,10 +779,8 @@ More languages to evaluate with org-babel (by default, only elisp is evaluated).
    - I define the org_roam directory and org-roam-dailies directory
    - Change the org-roam-node-find UI to display the number of backlinks a file has, the directory it is under and its todostate if it has one. 
    - Make the org-roam buffer a little smaller cause it doesnt need to take half the screen
-   - Define a "replacement" function for org-roam-buffer-toggle, temporarily disabling latex previews. If you by default use latex previews in org, you will notice that the org-roam buffer will take it time to load if I do not use this
-   - Define a function that queries the roam database for every file linked to the node at point and then using that in a second function which saves a list of the absolute paths of those files to a buffer local variable. The ability to similtaneously act on every file linked to an index file in my database is in my opinion very important and a feature I was missing from org_roam. 
    
-  #+BEGIN_SRC elisp
+  #+BEGIN_SRC elisp :tangle init.el
     
     (add-hook 'after-init-hook 'org-roam-setup)
     (setq org-roam-v2-ack t)
@@ -901,58 +815,76 @@ More languages to evaluate with org-babel (by default, only elisp is evaluated).
 		     (display-buffer-in-direction)
 		     (direction . right)
 		     (window-width . 0.40)
-		     (window-height . fit-window-to-buffer)))
+		     (window-height . fit-window-to-buffer))))
     
-      )
-    
-    (defun org-roam-buffer-without-latex ()
-      "Essentially org-roam-buffer-toggle but it ensures latex previews are turned off before toggling the buffer.
-    
-    This is useful because especially with index files, having latex
-    previews on, makes opening the buffer very slow as it needs to load
-    previews of many files. If you by default have
-    org-startup-with-latex-preview set to t, you have probably noticed
-    this issue before. This function solves it."
-      (interactive)
-      (let ((org-startup-with-latex-preview nil))
-	(org-roam-buffer-toggle)))
-    
-    (defun org-roam-backlink-query ()
-      "Simple org-roam query function that stores all the files that link
-    to the node at point. This is a modified part of the
-    org-roam-backlinks-get function keeping only the part necessary for
-    org-roam-backlink-files to work as this is a complimentary function to
-    that"
-      (org-roam-db-query
-       [:select [source dest]
-		:from links
-		:where (= dest $s1)
-		:and (= type "id")]
-       (org-roam-node-id (org-roam-node-at-point))))
-    
-    (defun org-roam-backlink-files ()
-      "Get all nodes that link to the node at point with the
-      org-roam-backlink-query function, find their absolute path and save
-      a list of those paths to the buffer local variable
-      org-roam-backlinks.
-    
-    With the list, you can act on all those files together. This is
-    exceptionally useful with index files as it allows you to do an action
-    on all files linked to this index automatically."
-      (interactive)
-      (setq-local org-roam-backlinks nil)
-      (let ((backlinks (length (org-roam-backlink-query))))
-	(dotimes (number backlinks)
-	  (let* ((id (car (nth number (org-roam-backlink-query))))
-		 (node (org-roam-node-from-id id))
-		 )
-	    (setq-local org-roam-backlinks (cons (org-roam-node-file node) org-roam-backlinks))
-	    (message "%s" "Files linking to this buffer have been saved in buffer-local variable org-roam-backlinks")
-	    ))))
-    
-    
-  #+END_SRC
+    #+END_SRC
 
+** Useful Functions
+   Org roam is a cornerstone of my workflow (which is the reason this section is so stupidly large). I have written various "helper" functions for my own assistance that are meant to be used with org-roam. This section includes those functions. They are all documented well so I do not think I need to describe them. 
+
+#+BEGIN_SRC elisp :tangle init.el
+  
+    (defun org-roam-buffer-without-latex ()
+	"Essentially org-roam-buffer-toggle but it ensures latex previews are turned off before toggling the buffer.
+      
+      This is useful because especially with index files, having latex
+      previews on, makes opening the buffer very slow as it needs to load
+      previews of many files. If you by default have
+      org-startup-with-latex-preview set to t, you have probably noticed
+      this issue before. This function solves it."
+	(interactive)
+	(let ((org-startup-with-latex-preview nil))
+	  (org-roam-buffer-toggle)))
+      
+      (defun org-roam-backlink-query ()
+	"Simple org-roam query function that stores all the files that link
+      to the node at point. This is a modified part of the
+      org-roam-backlinks-get function keeping only the part necessary for
+      org-roam-backlink-files to work as this is a complimentary function to
+      that"
+	(org-roam-db-query
+	 [:select [source dest]
+		  :from links
+		  :where (= dest $s1)
+		  :and (= type "id")]
+	 (org-roam-node-id (org-roam-node-at-point))))
+      
+      (defun org-roam-backlink-files ()
+	"Get all nodes that link to the node at point with the
+	org-roam-backlink-query function, find their absolute path and save
+	a list of those paths to the buffer local variable
+	org-roam-backlinks.
+      
+      With the list, you can act on all those files together. This is
+      exceptionally useful with index files as it allows you to do an action
+      on all files linked to this index automatically."
+	(interactive)
+	(let ((backlinks (length (org-roam-backlink-query)))
+	      (org-roam-backlinks))
+	  (dotimes (number backlinks)
+	    (let* ((id (car (nth number (org-roam-backlink-query))))
+		   (node (org-roam-node-from-id id)))
+	      (setq-local org-roam-backlinks (cons (org-roam-node-file node) org-roam-backlinks))))
+	  (message "%s" org-roam-backlinks)))
+      
+      (defun org-roam-export-backlinks-to-latex-pdf ()
+	"Export the current buffer and every buffer that mentions it to a pdf through latex and pandoc. Makes use of the org-roam-backlink-files function to find all the backlinks. Also saves all the pdf names in a variable called org-roam-backlink-pdfs. These names can then be passed to something like pdftk to merge them into one pdf"
+	(interactive)
+	(org-roam-backlink-files)
+	(setq org-roam-backlink-pdfs nil)
+	(save-current-buffer
+	  (let ((backlinks (cons (buffer-file-name) org-roam-backlinks))
+		(org-startup-with-latex-preview nil))
+	    (while backlinks
+	      (find-file (car backlinks))
+	      (org-pandoc-export-to-latex-pdf)
+	      (setq org-roam-backlink-pdfs
+			  (cons (concat (file-name-sans-extension (car backlinks)) ".pdf") org-roam-backlink-pdfs))
+	      (setq backlinks (cdr backlinks)))
+	    ))
+	(message "%s" "Done!"))
+  
+#+END_SRC
 
 ** Bibtex completion (Ivy) and Org-Ref
    Ivy Bibtex and Org ref are two excellent packages for managing bibliography. The main thing I need to configure is the location of my master .bib file and pdfs (which are exported with Zotero). I also change some other variables where I see fit.
@@ -964,7 +896,7 @@ More languages to evaluate with org-babel (by default, only elisp is evaluated).
    - Since opening the pdf, url or DOI of a bibtex entry is no longer the default action in my config, I bind it to the letter p in the options menu of Ivy-bibtex
    - Change the citation format bibtex uses on org mode. I enter cite links with org-ref-insert-cite-links so I make the ivy-bibtex link be a link to the pdf. 
 
-      #+BEGIN_SRC elisp
+      #+BEGIN_SRC elisp :tangle init.el
 	(setq bibtex-completion-bibliography
 	      '("~/Sync/My_Library.bib")
 	      bibtex-completion-pdf-field "File"
@@ -992,7 +924,7 @@ More languages to evaluate with org-babel (by default, only elisp is evaluated).
 
    For a brief description of each ones use case, org-roam-bibtex (aka ORB) is an excellent package for bibliography management inside org-roam. Since other packages help out with this, the big thing this one does is that it hooks bibtex-completion to use the org-roam ecosystem for its notes. Org-protocol is for capturing info from a web page and adding it to an org file. The org-roam-protocol is basically integrating that to the org-roam ecosystem. Org-roam-ui is the new graphing package designed for org-roam-v2. We used to use org-roam-server for this, but with the migration to v2, this package was created (which is honestly better than org-roam-server) for an excellent visual graph of your org roam directory. There are many advantages to viewing your knowledge repository with a graph so this is a must have package. 
 
-#+BEGIN_SRC elisp
+#+BEGIN_SRC elisp :tangle init.el
   
   (require 'org-roam-bibtex)
   (org-roam-bibtex-mode 1)
@@ -1017,7 +949,7 @@ Now which files have a todo state? Since org-roam-v2, headings can have IDs and 
 
 Lastly, for this system to work properly for fleeting notes I need a seamless way of archiving my daily notes once I am done with the idea they store. For that, we need to define a function which deleted the ID of a node. But running that manually is by no means seamless and in my opinion unacceptable. An idea I found which works perfectly for this is the last code snippet in this section. Essentially, it adds to the org-after-todo-state-change-hook a check of what the new keyword is. If it is DONE, it runs org-id-delete-entry, deleting the ID. Therefore, whenever I set the item's state to done, it removes its ID archiving it from the system. But the file is never deleted, so if I want the context again, I can look for it in the daily directory. But, if I were to do this with the org-roam-dailies package I would reach a big problem. As the file itself gets an ID but not a todo state, it would have an ID which isn't removable automatically, something which would as mentioned above break the system in my opinion. So, these files are created with org-journal so that I can give IDs only to the headings. There isn't much configuration on that end, just some different formatting to a format I think makes more sense. 
    
-#+BEGIN_SRC elisp
+#+BEGIN_SRC elisp :tangle init.el
   
   (setq org-todo-keywords
 	'((sequence "INBOX(i)"
@@ -1031,7 +963,10 @@ Lastly, for this system to work properly for fleeting notes I need a seamless wa
 		    )))
   
   (setq org-agenda-files
-	'("~/org_roam/daily"))
+	'("~/org_roam"
+	  "~/org_roam/daily"
+	  "~/org_roam/ref"))
+  
   (setq org-journal-dir "~/org_roam/daily"
 	org-journal-file-format "%d-%m-%Y.org"
 	org-journal-time-format "%a, %m/%d-%R")
@@ -1082,7 +1017,7 @@ Also part of my templates I use for bibliographic information, is the org-roam-c
 
 Lastly, I define the org-roam-dailies-capture-templates. As discussed above I do not use these too much, but since I have tried them I have kept the template I made for them. Its got the same formatting as the org-journal ones so if a file is created with one method the other can add things to it.
 
-   #+BEGIN_SRC elisp
+   #+BEGIN_SRC elisp :tangle init.el
      
      (setq org-roam-capture-templates
 	   '(("d" "default" plain "%?" :if-new
@@ -1147,12 +1082,10 @@ Lastly, I define the org-roam-dailies-capture-templates. As discussed above I do
 * Bookmarks
   I want to explore the bookmark system in emacs more. I enable version control for bookmarks and auto deletion of old ones as well as activate bookmark+, a set of libraries which make useful additions to the vanilla bookmarks
 
-#+BEGIN_SRC elisp
+#+BEGIN_SRC elisp :tangle init.el
   
   (setq bookmark-version-control t
 	delete-old-versions t)
-  
-  ;(require 'bookmark+)
   
 #+END_SRC
 
@@ -1162,7 +1095,7 @@ Lastly, I define the org-roam-dailies-capture-templates. As discussed above I do
 
   The Emacs part is basically just a function which allows me to copy all the text in a buffer, then delete it and save the buffer. As such, I can open the scratchpad instance of Emacs on an empty file, write something, and then easily cut it from the document to paste it in the other interface. For ease of use I considered it easier to "bind" this command to a snippet rather than a keybinding. As such, pressing "done" and expanding with yasnippet will run the org-scratchpad command. The other command in this block suppreses a warning that triggers when this command is expanded from a snippet. I know very well what I am doing to the buffer and I dont need a warning for it. 
   
-  #+BEGIN_SRC elisp
+  #+BEGIN_SRC elisp :tangle init.el
 
     (defun org-scratchpad ()
       "Yank the entire document, delete it and save the buffer. This is very useful for my scratchpad setup"
@@ -1185,7 +1118,7 @@ Lastly, I define the org-roam-dailies-capture-templates. As discussed above I do
 
   Big thanks to u/ozzopp on reddit for providing the source code for this as its truly amazing but something I couldn't have made on my own. 
   
-  #+BEGIN_SRC elisp
+  #+BEGIN_SRC elisp :tangle init.el
     
     (defun org-inkscape-img ()
 	(interactive "P")
@@ -1197,7 +1130,7 @@ Lastly, I define the org-roam-dailies-capture-templates. As discussed above I do
 	 ;; if file doesn't exist create it
 	 (if (not (file-exists-p (concat "./" dirname "/" string ".svg")))
 	 (progn
-	     (setq command (concat "echo " "'<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?><svg xmlns:dc=\"http://purl.org/dc/elements/1.1/\" xmlns:cc=\"http://creativecommons.org/ns#\" xmlns:rdf=\"http://www.w3.org/1999/02/22-rdf-syntax-ns#\" xmlns:svg=\"http://www.w3.org/2000/svg\" xmlns=\"http://www.w3.org/2000/svg\" xmlns:sodipodi=\"http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd\" xmlns:inkscape=\"http://www.inkscape.org/namespaces/inkscape\" width=\"260mm\" height=\"130mm\" viewBox=\"0 0 164.13576 65.105995\" version=\"1.1\" id=\"svg8\" inkscape:version=\"1.0.2 (e86c8708, 2021-01-15)\" sodipodi:docname=\"disegno.svg\"> <defs id=\"defs2\" /> <sodipodi:namedview id=\"base\" pagecolor=\"#292d3e\" bordercolor=\"#666666\" borderopacity=\"1.0\" inkscape:zoom=\"1.2541194\" inkscape:cx=\"310.17781\" inkscape:cy=\"123.03495\"z inkscape:window-width=\"1440\" inkscape:window-height=\"847\" inkscape:window-x=\"1665\" inkscape:window-y=\"131\" inkscape:window-maximized=\"1\"  inkscape:current-layer=\"svg8\" /><g/></svg>' >> " dirname "/" string ".svg; inkscape " dirname "/" string ".svg"))
+	     (setq command (concat "echo " "'<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?><svg xmlns:dc=\"http://purl.org/dc/elements/1.1/\" xmlns:cc=\"http://creativecommons.org/ns#\" xmlns:rdf=\"http://www.w3.org/1999/02/22-rdf-syntax-ns#\" xmlns:svg=\"http://www.w3.org/2000/svg\" xmlns=\"http://www.w3.org/2000/svg\" xmlns:sodipodi=\"http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd\" xmlns:inkscape=\"http://www.inkscape.org/namespaces/inkscape\" width=\"240mm\" height=\"120mm\" viewBox=\"0 0 164.13576 65.105995\" version=\"1.1\" id=\"svg8\" inkscape:version=\"1.0.2 (e86c8708, 2021-01-15)\" sodipodi:docname=\"disegno.svg\"> <defs id=\"defs2\" /> <sodipodi:namedview id=\"base\" pagecolor=\"#292d3e\" bordercolor=\"#666666\" borderopacity=\"1.0\" inkscape:zoom=\"1.2541194\" inkscape:cx=\"310.17781\" inkscape:cy=\"123.03495\"z inkscape:window-width=\"1440\" inkscape:window-height=\"847\" inkscape:window-x=\"1665\" inkscape:window-y=\"131\" inkscape:window-maximized=\"1\"  inkscape:current-layer=\"svg8\" /><g/></svg>' >> " dirname "/" string ".svg; inkscape " dirname "/" string ".svg"))
 		(shell-command command)
 		(concat "#+begin_export latex\n\\begin{figure}\n\\centering\n\\def\\svgwidth{0.9\\columnwidth}\n\\import{" "./" dirname "/}{" string ".pdf_tex" "}\n\\end{figure}\n#+end_export"))
 	    ;; if file exists opens it
@@ -1247,7 +1180,7 @@ Lastly, I define the org-roam-dailies-capture-templates. As discussed above I do
 ** Drawing inside emacs
 Besides the inkscape integration, I also load the package "el-easydraw", a package that allows for drawing basic svgs inside of emacs. For smaller scale drawings on the fly, its more convenient to use this rather than have to open inkscape. 
 
-#+BEGIN_SRC elisp
+#+BEGIN_SRC elisp :tangle init.el
   
   (with-eval-after-load 'org
     (require 'edraw-org)
@@ -1259,7 +1192,7 @@ Besides the inkscape integration, I also load the package "el-easydraw", a packa
 * Company
   Company is a minor mode, which I enable globally, which allows for autocompletions. This is useful when programming, or writing latex for completing what you want, but also can speed up the writing of long words. The lambda I add to the company-mode-hook adds latex autocompletions and allows them to be used anywhere. It also sets up company to read and give autocompletions for citations from my master .bib file in Zotero. I usually enter them with the ivy-bibtex package (my current default action is add citation there) but this is worth a try. 
   
-  #+BEGIN_SRC elisp
+  #+BEGIN_SRC elisp :tangle init.el
     
     (add-hook 'after-init-hook 'global-company-mode)
     (add-hook 'company-mode-hook '(lambda ()
@@ -1275,7 +1208,7 @@ Besides the inkscape integration, I also load the package "el-easydraw", a packa
 * Elfeed - RSS Feeds
 Elfeed is an RSS reader for Emacs. I have started looking into it and adding things to my feed.
 
-#+BEGIN_SRC elisp :results silent
+#+BEGIN_SRC elisp :results silent :tangle init.el
   
   (setq elfeed-feeds
 	'(("https://feeds.feedburner.com/chemengntua" university)
@@ -1310,7 +1243,7 @@ Elfeed is an RSS reader for Emacs. I have started looking into it and adding thi
 ** Exporting
    Some exporting libraries provided by scimax which are useful
 
-#+BEGIN_SRC elisp
+#+BEGIN_SRC elisp :tangle init.el
   
   (require 'ox-word)
   (require 'org-show)
@@ -1320,7 +1253,7 @@ Elfeed is an RSS reader for Emacs. I have started looking into it and adding thi
 ** Python
    Improvements to jupyter interaction with emacs.
 
-#+BEGIN_SRC elisp
+#+BEGIN_SRC elisp :tangle init.el
   
   (require 'scimax-jupyter)
   
@@ -1328,7 +1261,7 @@ Elfeed is an RSS reader for Emacs. I have started looking into it and adding thi
 
 ** Abbreviations & Spellchecking
    I just import the entire autoformat library and enable two minor modes from it
-#+BEGIN_SRC elisp
+#+BEGIN_SRC elisp :tangle init.el
   
   (require 'scimax-autoformat-abbrev)
   (add-hook 'org-mode-hook '(lambda ()
@@ -1341,7 +1274,7 @@ Elfeed is an RSS reader for Emacs. I have started looking into it and adding thi
 ** Elfeed
    I want a more personalised elfeed config rather than what scimax uses, but there are some functions in the scimax elfeed config such as the one that grabs the doi of an article in your rss feed and adds it to a your .bib file using doi-utils and org-ref. That will be useful once I start using rss more so I would like to add them to my config
 
-#+BEGIN_SRC elisp
+#+BEGIN_SRC elisp :tangle init.el
   
   (defun doi-utils-add-entry-from-elfeed-entry ()
     "Add elfeed entry to bibtex."
@@ -1481,7 +1414,7 @@ Elfeed is an RSS reader for Emacs. I have started looking into it and adding thi
 * Ebib
 Ebib is an emacs bibliography manager program. My customisations for it live here
 
-#+BEGIN_SRC elisp
+#+BEGIN_SRC elisp :tangle init.el
   (setq ebib-preload-bib-files '("~/Sync/My_Library.bib"))
   
   (add-hook 'ebib-entry-mode-hook 'visual-line-mode)
@@ -1502,7 +1435,7 @@ Some other extensions inside my Emacs config that require some changes for their
 ** Calc
    The M-x calc is a powerful calculator software built for Emacs. I set up some small utilities for it like making angles counted in radians and keeping symbols like sqrt(2) as sqrt(2) and not substituting it for a number. 
 
-#+BEGIN_SRC elisp
+#+BEGIN_SRC elisp :tangle init.el
   
   (setq calc-angle-mode 'rad
 	calc-symbolic-mode t)
@@ -1513,7 +1446,7 @@ Some other extensions inside my Emacs config that require some changes for their
 ** Ebuku
   Ebuku is the Emacs major mode for buku, a simple terminal bookmark manager. Since I store all my bookmarks there, this gives me a way to launch my favourite pages from inside Emacs, which is a utility I deem very useful. For some reason, evil-collections keybindings didn't work by default so I enabled them manually (this is the first package I have had this happen to me with)
 
-  #+BEGIN_SRC elisp
+  #+BEGIN_SRC elisp :tangle init.el
     (require 'ebuku)
     (require 'evil-collection-ebuku)
 
@@ -1524,7 +1457,7 @@ Some other extensions inside my Emacs config that require some changes for their
 
 Configuration for PDF-tools, my favourite Emacs pdf viewer. I set it as the default pdf viewer for Emacs and enable the midnight minor mode for it as it makes it match my dark theme which is cool.
 
-#+BEGIN_SRC elisp
+#+BEGIN_SRC elisp :tangle init.el
 
     (use-package pdf-tools
       :mode (("\\.pdf\\'" . pdf-view-mode))
@@ -1542,7 +1475,7 @@ Configuration for PDF-tools, my favourite Emacs pdf viewer. I set it as the defa
   
      EAF is a very promising package for Emacs giving it some useful gui apps that are not so easy to find in other packages (such as a browser) and in general a full suite of applications. Unfortunately its got a weird behaviour in tiling window managers such as i3 and qtile, which I use not allowing me to use Emacs commands inside its buffers. It seems that when the cursor is outside the Emacs buffer (in my bar) this fixes but its still annoying so its use is limited unfortunately.
 
-   #+BEGIN_SRC elisp
+   #+BEGIN_SRC elisp :tangle init.el
      (require 'eaf)
 
      (require 'eaf-evil)
@@ -1554,7 +1487,7 @@ Configuration for PDF-tools, my favourite Emacs pdf viewer. I set it as the defa
 ** Elisp
    Elisp is the internal language of Emacs. I enable eldoc-mode in Elisp and ielm which is just awesome for writing elisp. 
    
-   #+BEGIN_SRC elisp
+   #+BEGIN_SRC elisp :tangle init.el
      
      (add-hook 'emacs-lisp-mode-hook 'eldoc-mode)
      (add-hook 'ielm-mode-hook 'eldoc-mode)
@@ -1564,7 +1497,7 @@ Configuration for PDF-tools, my favourite Emacs pdf viewer. I set it as the defa
 ** Deft
    Deft is a package which provides a nice interface for browsing your network of notes in org-roam.
 
-   #+BEGIN_SRC elisp
+   #+BEGIN_SRC elisp :tangle init.el
      
      (setq deft-extensions '("org"))
      (setq deft-directory "~/org_roam")
@@ -1576,7 +1509,7 @@ Configuration for PDF-tools, my favourite Emacs pdf viewer. I set it as the defa
 * Custom Variables
 These are some variables automatically generated by the "M-x customize" menu. Its better not to play around with this section of the config file as to not mess something up accidentally. I honestly almost never set something with the customize menu because I prefer writing it manually in my config. Gives me a sense of order really. 
 
-#+BEGIN_SRC elisp
+#+BEGIN_SRC elisp :tangle init.el
 ;; CUSTOM VARIABLES
 (custom-set-variables
  ;; custom-set-variables was added by Custom.

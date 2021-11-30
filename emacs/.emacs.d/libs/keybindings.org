@@ -24,7 +24,7 @@
     "o" '(inferior-octave :which-key "octave")
     "D" 'dired
     "d" '(:ignore t :which-key "Dired functions")
-    "q" 'quickmarks-hydra/body
+    "q" '(my/quickmarks-hydra/body :which-key "Quickmarks")
     "t" '(:ignore t :which-key "Move between vterms")
     "T" 'org-babel-tangle
     "RET" 'vterm-toggle
@@ -38,7 +38,7 @@
     "R" 'recover-this-file
     "m" 'magit
     "B" 'ivy-bibtex
-    "r" '(:ignore t :which-key "Org Roam/Ref")
+    "r" '(my/roam-ref-hydra/body :which-key "Org Roam/Ref")
     "j" '(:ignore t :which-key "Daily notes")
     "H" 'counsel-imenu
     "C" '(:ignore t :which-key "Calendar Commands")
@@ -51,7 +51,7 @@
     "W" 'wolfram-alpha
     "n" 'winner-redo
     "p" 'winner-undo
-    "i" 'org-pandoc-hydra/body
+    "i" '(my/org-pandoc-hydra/body :which-key "Org Pandoc Import")
     "y" 'ivy-yasnippet)
   
   (general-define-key
@@ -80,7 +80,7 @@
    "d" 'deft
    "o" 'mediator-open-file)
   
-  (pretty-hydra-define quickmarks-hydra (:color blue :title "Quickmarks")
+  (pretty-hydra-define my/quickmarks-hydra (:color blue :title "Quickmarks")
     ("Emacs Stuff"
      (("c" (lambda() (interactive)(find-file "~/.emacs.d/README.org")) "Literate Emacs Config")
       ("k" (lambda() (interactive)(find-file "~/.emacs.d/libs/keybindings.org")) "Emacs keybindings")
@@ -95,27 +95,31 @@
      "General Computer Things"
      (("h" (lambda() (interactive)(dired "~")) "Home directory")
       ("q" (lambda() (interactive)(find-file "~/.config/qtile/README.org")) "Literate Qtile config")
-      ("w" (lambda() (interactive)(find-file "~/startpage/script/var.js")) "Web Start page source"))
+      ("w" (lambda() (interactive)(find-file "~/startpage/script/var.js")) "Web Start page source")
+      ("b" (lambda() (interactive)(dired "~/Books")) "Books Directory"))
      ))
   
-  (general-define-key
-   :states 'normal
-   :keymaps 'override
-   :prefix "SPC r"
-   "f" 'org-roam-node-find
-   "G" 'org-roam-ui-mode
-   "C" 'org-roam-capture
-   "g" 'counsel-rg
-   "i" '((lambda () (interactive)(find-file "~/org_roam/index.org")) :which-key "Master index file for org_roam")
-   "s" 'org-roam-db-sync
-   "D" '(org-roam-buffer-display-dedicated :which-key "Org-roam dedicated buffer")
-   "r" 'org-roam-ref-find
-   "B" 'isbn-to-bibtex
-   "n" '(ivy-bibtex-with-notes :which-key "Find bibliographic node")
-   "d" 'doi-utils-add-bibtex-entry-from-doi
-   "c" 'org-ref-insert-cite-link
-   "h" 'org-ref-insert-link-hydra/body
-   "b" 'org-ref-bibtex-hydra/body)
+  (pretty-hydra-define my/roam-ref-hydra (:color blue :title "Org Roam and Org Ref")
+    ("Note Specific Commands"
+     (("f" org-roam-node-find "org-roam-node-find")
+      ("i" (lambda () (interactive)(find-file "~/org_roam/index.org")) "Master index file for org_roam")
+      ("n" ivy-bibtex-with-notes "Find Bibliography Note")
+      ("g" 'counsel-rg "Search regex in the org-roam db"))
+  
+     "References"
+     (("B" isbn-to-bibtex "Get ref from isbn")
+      ("d" doi-utils-add-bibtex-entry-from-doi "Get ref from DOI")
+      ("r" org-roam-ref-find "Find Reference")
+      ("c" org-ref-insert-cite-link "Insert Citation")
+      ("h" org-ref-insert-link-hydra/body "Org Ref Insert-Link Hydra")
+      ("b" org-ref-bibtex-hydra/body "Org Ref Bibtex Hydra"))
+  
+     "General Org Roam Commands"
+     (("G" org-roam-ui-mode "Open the Org Roam UI")
+      ("s" org-roam-db-sync "Sync the Org Roam db")
+      ("D" org-roam-buffer-display-dedicated "Dedicated Org Roam buffer"))
+     )
+    )
   
   (general-define-key
    :states 'normal
@@ -162,7 +166,7 @@
    "n" 'vterm-toggle-forward
    "N" 'vterm-toggle-backward)
   
-  (pretty-hydra-define org-pandoc-hydra (:color blue :title "Import files to Org")
+  (pretty-hydra-define my/org-pandoc-hydra (:color blue :title "Import files to Org")
     ("Import to org file"
      (("i" org-pandoc-import-to-org "General Import")
       ("c" org-pandoc-import-csv-to-org "Import CSV")
@@ -180,7 +184,7 @@
  #+END_SRC
 
  #+RESULTS:
- : org-pandoc-hydra/body
+ : my/org-pandoc-hydra/body
 
 
 #+RESULTS:
@@ -205,7 +209,8 @@
     "/" 'swiper
     "M-g" 'toggle-input-method
     "M-SPC" 'org-mark-ring-goto
-    "<menu>" 'elfeed)
+    "<menu>" 'elfeed
+    "M-r" 'counsel-linux-app)
    
    (general-define-key
     :states 'insert
