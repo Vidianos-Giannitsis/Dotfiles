@@ -18,7 +18,7 @@
 	 ("Leo Liu" . "sdl.web@gmail.com"))
 	(:keywords "tools" "processes" "convenience"))])
  (ada-mode .
-	   [(7 1 9)
+	   [(7 2 0)
 	    ((uniquify-files
 	      (1 0 1))
 	     (wisi
@@ -283,7 +283,7 @@
 		("Artur Malabarba" . "emacs@endlessparentheses.com"))
 	       (:keywords "lisp"))])
  (capf-autosuggest .
-		   [(0 2)
+		   [(0 3)
 		    ((emacs
 		      (25 1)))
 		    "History autosuggestions for comint and eshell" tar
@@ -440,7 +440,7 @@
 		      ("Jackson Ray Hamilton" . "jackson@jacksonrayhamilton.com"))
 		     (:keywords "convenience" "faces" "tools"))])
  (corfu .
-	[(0 15)
+	[(0 16)
 	 ((emacs
 	   (27 1)))
 	 "Completion Overlay Region FUnction" tar
@@ -449,7 +449,7 @@
 	  (:authors
 	   ("Daniel Mendler" . "mail@daniel-mendler.de")))])
  (coterm .
-	 [(1 2)
+	 [(1 3)
 	  ((emacs
 	    (26 1)))
 	  "Terminal emulation for comint" tar
@@ -499,7 +499,7 @@
 	   ("Gary D. Foster" . "Gary.Foster@Corp.Sun.COM"))
 	  (:maintainer "Luke Lee" . "luke.yx.lee@gmail.com"))])
  (csharp-mode .
-	      [(1 1 0)
+	      [(1 1 1)
 	       ((emacs
 		 (26 1)))
 	       "C# mode derived mode" tar
@@ -509,7 +509,7 @@
 		(:authors
 		 ("Theodor Thornhill" . "theo@thornhill.no")))])
  (csv-mode .
-	   [(1 16)
+	   [(1 17)
 	    ((emacs
 	      (24 1))
 	     (cl-lib
@@ -757,7 +757,7 @@
 	      (:maintainer "Markus Triska" . "triska@metalevel.at")
 	      (:url . "https://www.metalevel.at/ediprolog/"))])
  (eev .
-      [(20211110)
+      [(20211216)
        ((emacs
 	 (24 4)))
        "Support for e-scripts (eepitch blocks, elisp hyperlinks, etc)" tar
@@ -825,12 +825,12 @@
 		      ("William Xu" . "william.xwl@gmail.com"))
 		     (:maintainer "William Xu" . "william.xwl@gmail.com"))])
  (elisp-benchmarks .
-		   [(1 12)
+		   [(1 13)
 		    nil "elisp benchmarks collection" tar
-		    ((:maintainer "Andrea Corallo" . "akrl@sdf.org")
+		    ((:keywords "languages" "lisp")
+		     (:maintainer "Andrea Corallo" . "akrl@sdf.org")
 		     (:authors
 		      ("Andrea Corallo" . "akrl@sdf.org"))
-		     (:keywords "languages" "lisp")
 		     (:url . "https://elpa.gnu.org/packages/elisp-benchmarks.html"))])
  (embark .
 	 [(0 13)
@@ -1355,13 +1355,13 @@
 		  ("Feng Shu" . "tumashu@163.com")
 		  ("Naoya Yamashita" . "conao3@gmail.com")))])
  (javaimp .
-	  [(0 7 1)
+	  [(0 8)
 	   nil "Add and reorder Java import statements in Maven/Gradle projects" tar
-	   ((:maintainer "Filipp Gunbin" . "fgunbin@fastmail.fm")
+	   ((:keywords "java" "maven" "gradle" "programming")
+	    (:maintainer "Filipp Gunbin" . "fgunbin@fastmail.fm")
 	    (:authors
 	     ("Filipp Gunbin" . "fgunbin@fastmail.fm"))
-	    (:keywords "java" "maven" "gradle" "programming")
-	    (:url . "http://elpa.gnu.org/packages/javaimp.html"))])
+	    (:url . "https://elpa.gnu.org/packages/javaimp.html"))])
  (jgraph-mode .
 	      [(1 1)
 	       ((cl-lib
@@ -1414,7 +1414,7 @@
 	   ("Ivan Kanis" . "ivan@kanis.fr"))
 	  (:maintainer "Ivan Kanis" . "ivan@kanis.fr"))])
  (kind-icon .
-	    [(0 1 1)
+	    [(0 1 3)
 	     ((emacs
 	       (27 1))
 	      (svg-lib
@@ -1851,7 +1851,7 @@
 	      (:maintainer "Michael Heerdegen" . "michael_heerdegen@web.de")
 	      (:url . "https://github.com/michael-heerdegen/on-screen.el"))])
  (org .
-      [(9 5)
+      [(9 5 1)
        ((emacs
 	 (25 1)))
        "Outline-based notes management and organizer" tar
@@ -1888,6 +1888,18 @@
 	     (:maintainer "Tyler Grinn" . "tylergrinn@gmail.com")
 	     (:authors
 	      ("Tyler Grinn" . "tylergrinn@gmail.com")))])
+ (org-transclusion .
+		   [(1 0 1)
+		    ((emacs
+		      (27 1))
+		     (org
+		      (9 4)))
+		    "transclude text contents of linked target" tar
+		    ((:url . "https://github.com/nobiot/org-transclusion")
+		     (:keywords "org-mode" "transclusion" "writing")
+		     (:maintainer "Noboru Ota" . "me@nobiot.com")
+		     (:authors
+		      ("Noboru Ota" . "me@nobiot.com")))])
  (org-translate .
 		[(0 1 3)
 		 ((emacs
@@ -1958,6 +1970,16 @@
 	   (:authors
 	    ("Junpeng Qiu" . "qjpchmail@gmail.com"))
 	   (:keywords "extensions"))])
+ (parser-generator .
+		   [(0 1 3)
+		    ((emacs
+		      (26)))
+		    "Parser Generator library" tar
+		    ((:url . "https://github.com/cjohansson/emacs-parser-generator")
+		     (:keywords "tools" "convenience")
+		     (:maintainer "Christian Johansson" . "christian@cvj.se")
+		     (:authors
+		      ("Christian Johansson" . "christian@cvj.se")))])
  (path-iterator .
 		[(1 0)
 		 ((emacs
@@ -2010,7 +2032,7 @@
 	   ("Mario Lang" . "mlang@delysid.org"))
 	  (:maintainer "Mario Lang" . "mlang@delysid.org"))])
  (posframe .
-	   [(1 1 1)
+	   [(1 1 2)
 	    ((emacs
 	      (26 1)))
 	    "Pop a posframe (just a frame) at point" tar
@@ -2045,7 +2067,7 @@
 	       ("Scott Andrew Borton" . "scott@pp.htv.fi"))
 	      (:maintainer "John Darrington" . "john@darrington.wattle.id.au"))])
  (pyim .
-       [(3 9 4)
+       [(3 9 5)
 	((emacs
 	  (24 4))
 	 (async
@@ -2054,11 +2076,11 @@
 	  (1 13)))
 	"A Chinese input method support quanpin, shuangpin, wubi, cangjie and rime." tar
 	((:url . "https://github.com/tumashu/pyim")
+	 (:keywords "convenience" "chinese" "pinyin" "input-method")
 	 (:maintainer "Feng Shu" . "tumashu@163.com")
 	 (:authors
 	  ("Ye Wenbin" . "wenbinye@163.com")
-	  ("Feng Shu" . "tumashu@163.com"))
-	 (:keywords "convenience" "chinese" "pinyin" "input-method"))])
+	  ("Feng Shu" . "tumashu@163.com")))])
  (pyim-basedict .
 		[(0 5 0)
 		 nil "The default pinyin dict of pyim" tar
@@ -2233,7 +2255,7 @@
 		      (:authors
 		       ("Rocky Bernstein" . "rocky@gnu.org")))])
  (rec-mode .
-	   [(1 8 1)
+	   [(1 8 2)
 	    ((emacs
 	      (25)))
 	    "Major mode for viewing/editing rec files" tar
@@ -2293,10 +2315,10 @@
 		[(2 4)
 		 nil "Emacs interface to RT" tar
 		 ((:url . "http://www.nongnu.org/rtliber/")
+		  (:keywords "rt" "tickets")
 		  (:maintainer "Yoni Rabkin" . "yrk@gnu.org")
 		  (:authors
-		   ("Yoni Rabkin" . "yrk@gnu.org"))
-		  (:keywords "rt" "tickets"))])
+		   ("Yoni Rabkin" . "yrk@gnu.org")))])
  (rudel .
 	[(0 3 2)
 	 ((emacs
@@ -2506,12 +2528,12 @@
 	    (:keywords "processes" "mode-line"))])
  (sql-beeline .
 	      [(0 1)
-	       nil "Beeline support for sql.el" single
-	       ((:url . "http://elpa.gnu.org/packages/sql-beeline.html")
-		(:keywords "sql" "hive" "beeline" "hiveserver2")
+	       nil "Beeline support for sql.el" tar
+	       ((:keywords "sql" "hive" "beeline" "hiveserver2")
+		(:maintainer "Filipp Gunbin" . "fgunbin@fastmail.fm")
 		(:authors
 		 ("Filipp Gunbin" . "fgunbin@fastmail.fm"))
-		(:maintainer "Filipp Gunbin" . "fgunbin@fastmail.fm"))])
+		(:url . "https://elpa.gnu.org/packages/sql-beeline.html"))])
  (sql-indent .
 	     [(1 6)
 	      ((cl-lib
@@ -2654,7 +2676,7 @@
 	  ("Oleh Krehel" . "ohwoeowho@gmail.com"))
 	 (:keywords "convenience"))])
  (tramp .
-	[(2 5 1 4)
+	[(2 5 1 5)
 	 ((emacs
 	   (25 1)))
 	 "Transparent Remote Access, Multiple Protocol" tar
@@ -2714,17 +2736,17 @@
 		  [(0 2)
 		   nil "Unicode confusables table" tar
 		   ((:maintainer "Teodor Zlatanov" . "tzz@lifelogs.com")
-		    (:url . "http://elpa.gnu.org/packages/uni-confusables.html"))])
+		    (:url . "https://elpa.gnu.org/packages/uni-confusables.html"))])
  (uniquify-files .
 		 [(1 0 3)
 		  ((emacs
 		    (25 0)))
 		  "Completion style for files, minimizing directories" tar
-		  ((:maintainer "Stephen Leake" . "stephen_leake@stephe-leake.org")
+		  ((:keywords "completion" "table" "uniquify")
+		   (:maintainer "Stephen Leake" . "stephen_leake@stephe-leake.org")
 		   (:authors
 		    ("Stephen Leake" . "stephen_leake@stephe-leake.org"))
-		   (:keywords "completion" "table" "uniquify")
-		   (:url . "http://elpa.gnu.org/packages/uniquify-files.html"))])
+		   (:url . "https://elpa.gnu.org/packages/uniquify-files.html"))])
  (url-http-ntlm .
 		[(2 0 4)
 		 ((cl-lib
@@ -2829,7 +2851,7 @@
 		  ("Michael McNamara" . "mac@verilog.com")
 		  ("Wilson Snyder" . "wsnyder@wsnyder.org")))])
  (vertico .
-	  [(0 16)
+	  [(0 17)
 	   ((emacs
 	     (27 1)))
 	   "VERTical Interactive COmpletion" tar
@@ -2838,7 +2860,7 @@
 	    (:authors
 	     ("Daniel Mendler" . "mail@daniel-mendler.de")))])
  (vertico-posframe .
-		   [(0 4 1)
+		   [(0 4 2)
 		    ((emacs
 		      (26 0))
 		     (posframe
@@ -2885,13 +2907,13 @@
 	(:maintainer "Andrey Kotlarski" . "m00naticus@gmail.com")
 	(:keywords "large files" "utilities"))])
  (wcheck-mode .
-	      [(2020 10 4)
-	       nil "General interface for text checkers" single
-	       ((:keywords "text" "spell" "check" "languages" "ispell")
-		(:authors
-		 ("Teemu Likonen" . "tlikonen@iki.fi"))
+	      [(2021)
+	       nil "General interface for text checkers" tar
+	       ((:url . "https://github.com/tlikonen/wcheck-mode")
+		(:keywords "text" "spell" "check" "languages" "ispell")
 		(:maintainer "Teemu Likonen" . "tlikonen@iki.fi")
-		(:url . "https://github.com/tlikonen/wcheck-mode"))])
+		(:authors
+		 ("Teemu Likonen" . "tlikonen@iki.fi")))])
  (wconf .
 	[(0 2 1)
 	 ((emacs
@@ -2960,7 +2982,7 @@
 		("Bastien" . "bzg@gnu.org"))
 	       (:maintainer "Bastien" . "bzg@gnu.org"))])
  (wisi .
-       [(3 1 6)
+       [(3 1 7)
 	((emacs
 	  (25 3))
 	 (seq

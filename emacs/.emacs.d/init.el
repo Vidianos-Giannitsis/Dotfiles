@@ -1,7 +1,9 @@
 (require 'package)
 (setq package-archives '(("melpa" . "https://melpa.org/packages/")
-			 ("org" . "https://orgmode.org/elpa/")
-			 ("elpa" . "https://elpa.gnu.org/packages/")))
+			 ("nongnu" . "https://elpa.nongnu.org/nongnu/")
+			 ("elpa" . "https://elpa.gnu.org/packages/")
+			 ("org" . "https://orgmode.org/elpa/")))
+
 (package-initialize)
 (unless package-archive-contents
   (package-refresh-contents))
@@ -198,7 +200,6 @@
 	      ("M-p" . projectile-command-map)))
 
 (setq flyspell-default-dictionary "greek")
-(add-hook 'flyspell-mode 'flyspell-buffer)
 
 (winner-mode 1)
 
@@ -522,6 +523,33 @@
   "bibliography:~/Sync/My_Library.bib\n"
   "bibliographystyle:unsrt")
 
+(define-skeleton uo-lab-skeleton
+  "My lab on unit operations has a really specific template which albeit similar is not identical to the typical structure of a lab report. This is a skeleton initialising those lab reports"
+  ""
+  "#+TITLE:"str"\n"
+  "glatex"-"\n"
+  "#+LATEX_HEADER: \\usepackage[a4paper, margin=2cm]{geometry}\n"
+  "#+LATEX_CLASS_OPTIONS: [9pt]\n"
+  "#+OPTIONS: toc:nil\n"
+  "#+AUTHOR: \n"
+  "#+DATE: Εκτέλεση: , Παράδοση: \n\n"
+  "ab\n\\pagebreak\n\\tableofcontents\n\n"
+
+  "* Εισαγωγή\n\n"
+
+  "* Πειραματικό Μέρος\n\n"
+  "** Πειραματική Διάταξη - Διάγραμμα Ροής\n\n"
+  "** Πειραματική Διαδικασία\n\n"
+  "** Μετρήσεις\n\n"
+
+  "* Επεξεργασία Μετρήσεων\n\n"
+
+  "* Συζήτηση Αποτελεσμάτων - Συμπεράσματα\n\n"
+
+  "* Βιβλιογραφία\n"
+  "bibliography:~/Sync/My_Library.bib\n"
+  "bibliographystyle:unsrt")
+
 (define-skeleton hw-skeleton
   "A skeleton for quickly adding a list of this semester's lessons to a new note which I use for tracking what I need to do for each lesson"
   ""
@@ -648,6 +676,32 @@
 	(rst-mode . bibtex-completion-format-citation-sphinxcontrib-bibtex)
 	(default . bibtex-completion-format-citation-default)))
 
+(defvar-local zettelkasten-desktop "default"
+  "Buffer local variable that determines whether a buffer is part of the current zettelkasten-desktop. A buffer is part of the zettelkasten-desktop only if the value of this variable is not its default value in that buffer. Its default value is default because I am not creative.")
+
+(defun zettelkasten-desktop-p (BUFFER)
+  "Check if BUFFER is part of the current zettelkasten-desktop
+
+This function is used as the filter to create the zettelkasten-switch-to-buffer function."
+  (print (not (eq (default-value 'zettelkasten-desktop) (buffer-local-value 'zettelkasten-desktop (cdr BUFFER))))))
+
+(defun zettelkasten-add-to-desktop (BUFFER)
+  "Add BUFFER to the current zettelkasten-desktop"
+  (interactive "b")
+  (with-current-buffer BUFFER
+    (setq-local zettelkasten-desktop "foo")))
+
+(defun zettelkasten-remove-from-desktop (BUFFER)
+  "Remove BUFFER from the current zettelkasten-desktop"
+  (interactive "b")
+  (with-current-buffer BUFFER
+    (kill-local-variable zettelkasten-desktop)))
+
+(defun zettelkasten-switch-to-buffer ()
+  "Execute switch-to-buffer with the buffer list being filtered (using zettelkasten-desktop-p) to show only buffers that are part of the current zettelkasten-desktop."
+  (interactive)
+  (switch-to-buffer (read-buffer "Zettelkasten Desktop Buffers: " nil nil #'zettelkasten-desktop-p)))
+
 (require 'org-roam-bibtex)
 (org-roam-bibtex-mode 1)
 
@@ -714,7 +768,7 @@ Its used in my fleeting note initialization function as a means to always make n
 
 (setq org-roam-capture-templates
       '(("d" "default" plain "%?" :if-new
-	 (file+head "${slug}-%<%d-%m-%y>.org" "#+title: ${title}\nglatex_roam\n
+	 (file+head "${slug}-%<%d-%m-%y>.org" "#+title: ${title}\n
 - index ::  
 - tags ::  ")
 	 :unarrowed t
@@ -792,7 +846,7 @@ Its used in my fleeting note initialization function as a means to always make n
      ;; if file doesn't exist create it
      (if (not (file-exists-p (concat "./" dirname "/" string ".svg")))
      (progn
-	 (setq command (concat "echo " "'<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?><svg xmlns:dc=\"http://purl.org/dc/elements/1.1/\" xmlns:cc=\"http://creativecommons.org/ns#\" xmlns:rdf=\"http://www.w3.org/1999/02/22-rdf-syntax-ns#\" xmlns:svg=\"http://www.w3.org/2000/svg\" xmlns=\"http://www.w3.org/2000/svg\" xmlns:sodipodi=\"http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd\" xmlns:inkscape=\"http://www.inkscape.org/namespaces/inkscape\" width=\"240mm\" height=\"120mm\" viewBox=\"0 0 164.13576 65.105995\" version=\"1.1\" id=\"svg8\" inkscape:version=\"1.0.2 (e86c8708, 2021-01-15)\" sodipodi:docname=\"disegno.svg\"> <defs id=\"defs2\" /> <sodipodi:namedview id=\"base\" pagecolor=\"#292d3e\" bordercolor=\"#666666\" borderopacity=\"1.0\" inkscape:zoom=\"1.2541194\" inkscape:cx=\"310.17781\" inkscape:cy=\"123.03495\"z inkscape:window-width=\"1440\" inkscape:window-height=\"847\" inkscape:window-x=\"1665\" inkscape:window-y=\"131\" inkscape:window-maximized=\"1\"  inkscape:current-layer=\"svg8\" /><g/></svg>' >> " dirname "/" string ".svg; inkscape " dirname "/" string ".svg"))
+	 (setq command (concat "echo " "'<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?><svg xmlns:dc=\"http://purl.org/dc/elements/1.1/\" xmlns:cc=\"http://creativecommons.org/ns#\" xmlns:rdf=\"http://www.w3.org/1999/02/22-rdf-syntax-ns#\" xmlns:svg=\"http://www.w3.org/2000/svg\" xmlns=\"http://www.w3.org/2000/svg\" xmlns:sodipodi=\"http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd\" xmlns:inkscape=\"http://www.inkscape.org/namespaces/inkscape\" width=\"230mm\" height=\"110mm\" viewBox=\"0 0 164.13576 65.105995\" version=\"1.1\" id=\"svg8\" inkscape:version=\"1.0.2 (e86c8708, 2021-01-15)\" sodipodi:docname=\"disegno.svg\"> <defs id=\"defs2\" /> <sodipodi:namedview id=\"base\" pagecolor=\"#292d3e\" bordercolor=\"#666666\" borderopacity=\"1.0\" inkscape:zoom=\"1.2541194\" inkscape:cx=\"310.17781\" inkscape:cy=\"123.03495\"z inkscape:window-width=\"1440\" inkscape:window-height=\"847\" inkscape:window-x=\"1665\" inkscape:window-y=\"131\" inkscape:window-maximized=\"1\"  inkscape:current-layer=\"svg8\" /><g/></svg>' >> " dirname "/" string ".svg; inkscape " dirname "/" string ".svg"))
 	    (shell-command command)
 	    (concat "#+begin_export latex\n\\begin{figure}\n\\centering\n\\def\\svgwidth{0.9\\columnwidth}\n\\import{" "./" dirname "/}{" string ".pdf_tex" "}\n\\end{figure}\n#+end_export"))
 	;; if file exists opens it
@@ -837,10 +891,6 @@ it."
   (insert (concat "[[" (file-name-sans-extension buffer-file-name) "-org-img/" NAME ".svg" "]]"))
   (org-toggle-inline-images))
 
-(with-eval-after-load 'org
-  (require 'edraw-org)
-  (edraw-org-setup-default))
-
 (add-hook 'after-init-hook 'global-company-mode)
 (add-hook 'company-mode-hook '(lambda ()
 				(add-to-list 'company-backends 'company-math-symbols-latex)
@@ -875,8 +925,6 @@ it."
 
 (require 'ox-word)
 (require 'org-show)
-
-(require 'scimax-jupyter)
 
 (require 'scimax-autoformat-abbrev)
 (add-hook 'org-mode-hook '(lambda ()
@@ -1027,6 +1075,10 @@ it."
 			   ("Note" 10 t)))
 
 (setq ebib-notes-directory "~/org_roam/ref")
+
+(use-package python-mls
+  :config
+  (python-mls-setup))
 
 (setq calc-angle-mode 'rad
       calc-symbolic-mode t)

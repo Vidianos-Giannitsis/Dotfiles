@@ -64,19 +64,21 @@ Setting up my packages to work properly.
 The first section has to do with packages installed from melpa, the second with packages installed manually to my load path and the third about auto-updates to my packages which will be issued once a week.
 
 #+BEGIN_SRC elisp :tangle init.el
-  
+
   (require 'package)
   (setq package-archives '(("melpa" . "https://melpa.org/packages/")
-			   ("org" . "https://orgmode.org/elpa/")
-			   ("elpa" . "https://elpa.gnu.org/packages/")))
+			   ("nongnu" . "https://elpa.nongnu.org/nongnu/")
+			   ("elpa" . "https://elpa.gnu.org/packages/")
+			   ("org" . "https://orgmode.org/elpa/")))
+  
   (package-initialize)
   (unless package-archive-contents
     (package-refresh-contents))
-  
+
   (let ((default-directory  "~/.emacs.d/libs/"))
     (normal-top-level-add-to-load-path '("."))
     (normal-top-level-add-subdirs-to-load-path))
-  
+
   (use-package auto-package-update
     :custom
     (auto-package-update-interval 7)
@@ -86,7 +88,7 @@ The first section has to do with packages installed from melpa, the second with 
     :config
     (auto-package-update-maybe)
     (auto-package-update-at-time "10:00"))
-  
+
 #+END_SRC
 
 
@@ -358,7 +360,6 @@ This enables:
 		  ("M-p" . projectile-command-map)))
     
     (setq flyspell-default-dictionary "greek")
-    (add-hook 'flyspell-mode 'flyspell-buffer)
     
     (winner-mode 1)
   #+END_SRC
@@ -731,37 +732,65 @@ More languages to evaluate with org-babel (by default, only elisp is evaluated).
 * Skeletons
   Skeletons are a very neat feature of Emacs. Think of a snippet and a template, now combine them and you have a skeleton. A skeleton is bound to a key which when pressed enters a piece of text. This is helpful when initialising a file whose format is certain. I currently use this for initialising my lab reports which have a rather standard format all the time.
 
-  #+BEGIN_SRC elisp :tangle init.el
-    
-    (define-skeleton lab-skeleton
-      "A skeleton which I use for initialising my lab reports which have standard formatting"
-      ""
-      "#+TITLE:"str"\n"
-      "glatex"-"\n"
-      "ab\n\\pagebreak\n\n"
-    
-      "* Εισαγωγή\n\n"
-    
-      "* Πειραματικό Μέρος\n\n"
-    
-      "* Αποτελέσματα - Συζήτηση\n\n"
-    
-      "* Συμπεράσματα\n\n"
-    
-      "* Βιβλιογραφία\n"
-      "bibliography:~/Sync/My_Library.bib\n"
-      "bibliographystyle:unsrt")
-    
-    (define-skeleton hw-skeleton
-      "A skeleton for quickly adding a list of this semester's lessons to a new note which I use for tracking what I need to do for each lesson"
-      ""
-      "*** ΜΦΔ\n\n"
-      "*** Φαινόμενα Μεταφοράς\n\n"
-      "*** ΗΕΔ (Υδραυλικό)\n\n"
-      "*** ΗΕΔ (Ηλεκτρικό)\n\n"
-      "*** Υλικά\n\n"
-      "*** Προηγμένα Κεραμικά\n\n"
-      "*** Βιολογία\n\n")
+#+BEGIN_SRC elisp :tangle init.el
+
+  (define-skeleton lab-skeleton
+    "A skeleton which I use for initialising my lab reports which have standard formatting"
+    ""
+    "#+TITLE:"str"\n"
+    "glatex"-"\n"
+    "ab\n\\pagebreak\n\n"
+
+    "* Εισαγωγή\n\n"
+
+    "* Πειραματικό Μέρος\n\n"
+
+    "* Αποτελέσματα - Συζήτηση\n\n"
+
+    "* Συμπεράσματα\n\n"
+
+    "* Βιβλιογραφία\n"
+    "bibliography:~/Sync/My_Library.bib\n"
+    "bibliographystyle:unsrt")
+
+  (define-skeleton uo-lab-skeleton
+    "My lab on unit operations has a really specific template which albeit similar is not identical to the typical structure of a lab report. This is a skeleton initialising those lab reports"
+    ""
+    "#+TITLE:"str"\n"
+    "glatex"-"\n"
+    "#+LATEX_HEADER: \\usepackage[a4paper, margin=2cm]{geometry}\n"
+    "#+LATEX_CLASS_OPTIONS: [9pt]\n"
+    "#+OPTIONS: toc:nil\n"
+    "#+AUTHOR: \n"
+    "#+DATE: Εκτέλεση: , Παράδοση: \n\n"
+    "ab\n\\pagebreak\n\\tableofcontents\n\n"
+
+    "* Εισαγωγή\n\n"
+
+    "* Πειραματικό Μέρος\n\n"
+    "** Πειραματική Διάταξη - Διάγραμμα Ροής\n\n"
+    "** Πειραματική Διαδικασία\n\n"
+    "** Μετρήσεις\n\n"
+
+    "* Επεξεργασία Μετρήσεων\n\n"
+
+    "* Συζήτηση Αποτελεσμάτων - Συμπεράσματα\n\n"
+
+    "* Βιβλιογραφία\n"
+    "bibliography:~/Sync/My_Library.bib\n"
+    "bibliographystyle:unsrt")
+
+  (define-skeleton hw-skeleton
+    "A skeleton for quickly adding a list of this semester's lessons to a new note which I use for tracking what I need to do for each lesson"
+    ""
+    "*** ΜΦΔ\n\n"
+    "*** Φαινόμενα Μεταφοράς\n\n"
+    "*** ΗΕΔ (Υδραυλικό)\n\n"
+    "*** ΗΕΔ (Ηλεκτρικό)\n\n"
+    "*** Υλικά\n\n"
+    "*** Προηγμένα Κεραμικά\n\n"
+    "*** Βιολογία\n\n")
+
   #+END_SRC
 
  
@@ -918,6 +947,42 @@ More languages to evaluate with org-babel (by default, only elisp is evaluated).
 		(default . bibtex-completion-format-citation-default)))
      #+END_SRC
 
+** Implementing the Zettelkasten "desktop" to org-roam 
+   While reading "How to take smart notes" (one of the best books out there concerning this method) one feature that the recommended by the author app has which org-roam doesn't feature by default is the so called desktop. Its the digital equivalent to spreading notes around in your desk so you can look at all of them together. Its basically a way to narrow down the files you are looking at to only the ones that interest you currently. Since this is Emacs, when a feature you want isn't implemented by default, you just write it yourself. So that's what I did. And not only that, but I expanded this idea a bit so this doesn't necessarily need a file from my Zettelkasten but any emacs buffer as for one, having the supplementary materials to what I am looking at is useful and also this workflow can easily be extended to other things besides my note files. Following is the code I used to do this.
+
+#+BEGIN_SRC elisp :tangle init.el
+
+  (defvar-local zettelkasten-desktop "default"
+    "Buffer local variable that determines whether a buffer is part of the current zettelkasten-desktop. A buffer is part of the zettelkasten-desktop only if the value of this variable is not its default value in that buffer. Its default value is default because I am not creative.")
+
+  (defun zettelkasten-desktop-p (BUFFER)
+    "Check if BUFFER is part of the current zettelkasten-desktop
+
+  This function is used as the filter to create the zettelkasten-switch-to-buffer function."
+    (print (not (eq (default-value 'zettelkasten-desktop) (buffer-local-value 'zettelkasten-desktop (cdr BUFFER))))))
+
+  (defun zettelkasten-add-to-desktop (BUFFER)
+    "Add BUFFER to the current zettelkasten-desktop"
+    (interactive "b")
+    (with-current-buffer BUFFER
+      (setq-local zettelkasten-desktop "foo")))
+
+  (defun zettelkasten-remove-from-desktop (BUFFER)
+    "Remove BUFFER from the current zettelkasten-desktop"
+    (interactive "b")
+    (with-current-buffer BUFFER
+      (kill-local-variable zettelkasten-desktop)))
+
+  (defun zettelkasten-switch-to-buffer ()
+    "Execute switch-to-buffer with the buffer list being filtered (using zettelkasten-desktop-p) to show only buffers that are part of the current zettelkasten-desktop."
+    (interactive)
+    (switch-to-buffer (read-buffer "Zettelkasten Desktop Buffers: " nil nil #'zettelkasten-desktop-p)))
+
+#+END_SRC
+
+I tried to follow a rather simple idea to do this and not overcomplicate things. Essentially, I define a buffer-local variable and give it a default value. Then I define the predicate function that shows when a buffer is part of the zettelkasten desktop. A buffer will be part of the desktop only if the value of that variable in the buffer is not equal to the default. 
+
+Then I define a way to add or remove a file from the desktop, and finally the point of all of this, my custom switch-to-buffer function which lists only buffers that belong to the desktop and nothing more using the predicate function defined above to filter. 
     
 ** Org Roam Bibtex, Protocols (Reference notes) and UI (graphing capabilities)
    I require a bunch of packages so ORB, org roam ui and the roam protocols work as intended. I also make orb use ivy for completions.
@@ -1021,7 +1086,7 @@ Lastly, I define the org-roam-dailies-capture-templates. As discussed above I do
      
      (setq org-roam-capture-templates
 	   '(("d" "default" plain "%?" :if-new
-	      (file+head "${slug}-%<%d-%m-%y>.org" "#+title: ${title}\nglatex_roam\n
+	      (file+head "${slug}-%<%d-%m-%y>.org" "#+title: ${title}\n
      - index ::  
      - tags ::  ")
 	      :unarrowed t
@@ -1130,7 +1195,7 @@ Lastly, I define the org-roam-dailies-capture-templates. As discussed above I do
 	 ;; if file doesn't exist create it
 	 (if (not (file-exists-p (concat "./" dirname "/" string ".svg")))
 	 (progn
-	     (setq command (concat "echo " "'<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?><svg xmlns:dc=\"http://purl.org/dc/elements/1.1/\" xmlns:cc=\"http://creativecommons.org/ns#\" xmlns:rdf=\"http://www.w3.org/1999/02/22-rdf-syntax-ns#\" xmlns:svg=\"http://www.w3.org/2000/svg\" xmlns=\"http://www.w3.org/2000/svg\" xmlns:sodipodi=\"http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd\" xmlns:inkscape=\"http://www.inkscape.org/namespaces/inkscape\" width=\"240mm\" height=\"120mm\" viewBox=\"0 0 164.13576 65.105995\" version=\"1.1\" id=\"svg8\" inkscape:version=\"1.0.2 (e86c8708, 2021-01-15)\" sodipodi:docname=\"disegno.svg\"> <defs id=\"defs2\" /> <sodipodi:namedview id=\"base\" pagecolor=\"#292d3e\" bordercolor=\"#666666\" borderopacity=\"1.0\" inkscape:zoom=\"1.2541194\" inkscape:cx=\"310.17781\" inkscape:cy=\"123.03495\"z inkscape:window-width=\"1440\" inkscape:window-height=\"847\" inkscape:window-x=\"1665\" inkscape:window-y=\"131\" inkscape:window-maximized=\"1\"  inkscape:current-layer=\"svg8\" /><g/></svg>' >> " dirname "/" string ".svg; inkscape " dirname "/" string ".svg"))
+	     (setq command (concat "echo " "'<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?><svg xmlns:dc=\"http://purl.org/dc/elements/1.1/\" xmlns:cc=\"http://creativecommons.org/ns#\" xmlns:rdf=\"http://www.w3.org/1999/02/22-rdf-syntax-ns#\" xmlns:svg=\"http://www.w3.org/2000/svg\" xmlns=\"http://www.w3.org/2000/svg\" xmlns:sodipodi=\"http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd\" xmlns:inkscape=\"http://www.inkscape.org/namespaces/inkscape\" width=\"230mm\" height=\"110mm\" viewBox=\"0 0 164.13576 65.105995\" version=\"1.1\" id=\"svg8\" inkscape:version=\"1.0.2 (e86c8708, 2021-01-15)\" sodipodi:docname=\"disegno.svg\"> <defs id=\"defs2\" /> <sodipodi:namedview id=\"base\" pagecolor=\"#292d3e\" bordercolor=\"#666666\" borderopacity=\"1.0\" inkscape:zoom=\"1.2541194\" inkscape:cx=\"310.17781\" inkscape:cy=\"123.03495\"z inkscape:window-width=\"1440\" inkscape:window-height=\"847\" inkscape:window-x=\"1665\" inkscape:window-y=\"131\" inkscape:window-maximized=\"1\"  inkscape:current-layer=\"svg8\" /><g/></svg>' >> " dirname "/" string ".svg; inkscape " dirname "/" string ".svg"))
 		(shell-command command)
 		(concat "#+begin_export latex\n\\begin{figure}\n\\centering\n\\def\\svgwidth{0.9\\columnwidth}\n\\import{" "./" dirname "/}{" string ".pdf_tex" "}\n\\end{figure}\n#+end_export"))
 	    ;; if file exists opens it
@@ -1177,18 +1242,6 @@ Lastly, I define the org-roam-dailies-capture-templates. As discussed above I do
   #+END_SRC
 
 
-** Drawing inside emacs
-Besides the inkscape integration, I also load the package "el-easydraw", a package that allows for drawing basic svgs inside of emacs. For smaller scale drawings on the fly, its more convenient to use this rather than have to open inkscape. 
-
-#+BEGIN_SRC elisp :tangle init.el
-  
-  (with-eval-after-load 'org
-    (require 'edraw-org)
-    (edraw-org-setup-default))
-  
-#+END_SRC
-
- 
 * Company
   Company is a minor mode, which I enable globally, which allows for autocompletions. This is useful when programming, or writing latex for completing what you want, but also can speed up the writing of long words. The lambda I add to the company-mode-hook adds latex autocompletions and allows them to be used anywhere. It also sets up company to read and give autocompletions for citations from my master .bib file in Zotero. I usually enter them with the ivy-bibtex package (my current default action is add citation there) but this is worth a try. 
   
@@ -1250,7 +1303,7 @@ Elfeed is an RSS reader for Emacs. I have started looking into it and adding thi
   
 #+END_SRC
 
-** Python
+** COMMENT Python
    Improvements to jupyter interaction with emacs.
 
 #+BEGIN_SRC elisp :tangle init.el
@@ -1431,7 +1484,15 @@ Ebib is an emacs bibliography manager program. My customisations for it live her
 
 * Other Major Modes
 Some other extensions inside my Emacs config that require some changes for their major modes to function as I want them. 
- 
+
+** Python 
+   Python-mls is a small utility package to allow the python repl for emacs to have multi line commands
+
+#+BEGIN_SRC elisp :tangle init.el
+(use-package python-mls
+  :config
+  (python-mls-setup))
+#+END_SRC
 ** Calc
    The M-x calc is a powerful calculator software built for Emacs. I set up some small utilities for it like making angles counted in radians and keeping symbols like sqrt(2) as sqrt(2) and not substituting it for a number. 
 

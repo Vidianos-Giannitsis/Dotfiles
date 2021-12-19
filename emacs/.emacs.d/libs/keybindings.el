@@ -16,19 +16,18 @@
   "<C-return>" 'named-vterm 
   "b" 'counsel-switch-buffer
   "a" 'org-agenda
-  "g" 'run-gnuplot
   "h" 'split-window-horizontally
   "v" 'split-window-vertically
   "c" '(calc-dispatch :which-key "Open the calc dispatcher")
-  "R" 'recover-this-file
+  "R" '(:ignore t :which-key "REPLs")
   "m" 'magit
   "B" 'ivy-bibtex
   "r" '(my/roam-ref-hydra/body :which-key "Org Roam/Ref")
   "j" '(:ignore t :which-key "Daily notes")
   "H" 'counsel-imenu
   "C" '(:ignore t :which-key "Calendar Commands")
-  "l" '(linum-mode :which-key "Line numbers")
-  "I" 'ielm
+  "l" '(:ignore t :which-key "Org Links")
+  "L" '(linum-mode :which-key "Line numbers")
   "s" '(:ignore t :which-key "Counsel-spotify")
   "e" '(:ignore t :which-key "Evaluate Emacs-Lisp")
   "f" '(ace-window :which-key "Switch focus")
@@ -38,6 +37,24 @@
   "p" 'winner-undo
   "i" '(my/org-pandoc-hydra/body :which-key "Org Pandoc Import")
   "y" 'ivy-yasnippet)
+
+(general-define-key
+ :states 'normal
+ :keymaps 'override
+ :prefix "SPC l"
+ "o" 'org-open-at-point
+ "n" 'org-next-link
+ "p" 'org-previous-link)
+
+(general-define-key
+ :states 'normal
+ :keymaps 'override
+ :prefix "SPC R"
+ "o" '(inferior-octave :which-key "Octave")
+ "p" '(run-python :which-key "Python")
+ "j" '(ein:jupyter-server-start :which-key "Jupyter Notebook")
+ "g" '(run-gnuplot :which-key "Gnuplot")
+ "e" '(ielm :which-key "Emacs Lisp"))
 
 (general-define-key
  :states 'normal
@@ -69,7 +86,8 @@
   ("Emacs Stuff"
    (("c" (lambda() (interactive)(find-file "~/.emacs.d/README.org")) "Literate Emacs Config")
     ("k" (lambda() (interactive)(find-file "~/.emacs.d/libs/keybindings.org")) "Emacs keybindings")
-    ("s" (lambda() (interactive)(dired "~/.emacs.d/snippets/org-mode")) "Org-mode snippets"))
+    ("s" (lambda() (interactive)(dired "~/.emacs.d/snippets/org-mode")) "Org-mode snippets")
+    ("S" (lambda() (interactive)(find-file "~/scratchpad.org")) "Emacs Scratchpad file"))
 
    "University"
    (("u" (lambda() (interactive)(dired "~/Documents/5o_εξάμηνο")) "University Documents folder")
@@ -220,7 +238,7 @@
      "t" '(:ignore t :which-key "To-do management")
      "y" 'org-download-clipboard
      "r" '(:ignore t :which-key "Org Roam/Ref commands")
-     "h" '(org-cycle-hide-drawers :which-key "Hide properties drawers")
+     "H" '(org-cycle-hide-drawers :which-key "Hide properties drawers")
      "S" 'org-store-link
      "I" 'org-insert-link
      "s" '(:ignore t :which-key "SVG commands/Inkscape")
@@ -229,6 +247,8 @@
      "p" '(org-plot/gnuplot :which-key "Plot table data")
      "f" 'org-footnote-action
      "L" '(lab-skeleton :which-key "Insert my lab report template")
+     "h" 'hw-skeleton
+     "u" '(uo-lab-skeleton :which-key "Unit Operations lab template")
      "T" '(toc-org-mode :which-key "Insert ToC")
      "b" 'org-beamer-select-environment
      "m" '(:ignore t :which-key "Org-Marginalia commands"))
@@ -324,7 +344,10 @@
 (general-define-key
  :states 'normal
  :keymaps 'Info-mode-map
- ", c" '((lambda() (interactive) (org-roam-capture nil "i")) :which-key "org-roam-capture info-template"))
+ ", c" '((lambda() (interactive) (org-roam-capture nil "i")) :which-key "org-roam-capture info-template")
+ ", h" 'Info-history
+ ", f" 'Info-history-forward
+ ", b" 'Info-history-back)
 
 (general-define-key
  :states 'normal
