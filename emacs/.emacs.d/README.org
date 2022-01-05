@@ -10,7 +10,7 @@ I have drawn inspiration from a lot of other init.el's but the most apparent one
 
 Note that I am no elisp ninja and know just enough to write this config in a simple way, so some things are probably not done in the most efficient way possible, but everything I have set has its desired behaviour, which is enough for me.
 
-I hope you will find something useful here that you can put to your emacs config as well. 
+I hope you will find something useful here that you can put to your emacs config as well.
 
 * Table of Contents                                                     :TOC:
 - [[#about-this-config][About this config]]
@@ -30,6 +30,8 @@ I hope you will find something useful here that you can put to your emacs config
 - [[#skeletons][Skeletons]]
 - [[#org-roam-references-and-the-zettelkasten-workflow][Org Roam, References and the Zettelkasten Workflow]]
   - [[#org-roam-general-setup][Org-Roam general setup]]
+  - [[#useful-functions][Useful Functions]]
+  - [[#implementing-the-zettelkasten-desktop-to-org-roam][Implementing the Zettelkasten "desktop" to org-roam]]
   - [[#bibtex-completion-ivy-and-org-ref][Bibtex completion (Ivy) and Org-Ref]]
   - [[#org-roam-bibtex-protocols-reference-notes-and-ui-graphing-capabilities][Org Roam Bibtex, Protocols (Reference notes) and UI (graphing capabilities)]]
   - [[#fleeting-notes][Fleeting notes]]
@@ -38,16 +40,15 @@ I hope you will find something useful here that you can put to your emacs config
 - [[#emacs-scratchpad][Emacs Scratchpad]]
 - [[#drawing-with-emacs][Drawing with Emacs]]
   - [[#inkscape][Inkscape]]
-  - [[#drawing-inside-emacs][Drawing inside emacs]]
 - [[#company][Company]]
 - [[#elfeed---rss-feeds][Elfeed - RSS Feeds]]
 - [[#scimax][Scimax]]
   - [[#exporting][Exporting]]
-  - [[#python][Python]]
   - [[#abbreviations--spellchecking][Abbreviations & Spellchecking]]
   - [[#elfeed][Elfeed]]
 - [[#ebib][Ebib]]
 - [[#other-major-modes][Other Major Modes]]
+  - [[#python][Python]]
   - [[#calc][Calc]]
   - [[#ebuku][Ebuku]]
   - [[#pdf-tools][PDF Tools]]
@@ -456,27 +457,30 @@ Some settings (now using the word some here might be an underestimation, as with
     + I tell org to preview latex fragments by default when opening a document, as I use them extensively so this makes my life easier.
     + I activate calctex and activate it when I go into calc's embedded mode. Its a neat package that allows me to type a formula inside calc and renders it automatically into latex. Latex snippets are what I use mostly but this is a very neat package and I had to include it here.
     + I activate org-cdlatex-mode which makes typing latex equations easier inside org and massively improves speed of typing equations together with snippets for org, org-fragtog mode which automatically creates previews for latex fragments when the cursor is not on them and laas mode which is a bunch of helpful latex snippets which autocomplete.
+    + I tell latex to export my code blocks using the minted package so they look better
     + I add some packages I use in all my documents in org-latex-packages-alist. 
     + The next few were taken by John Kitchin's [[https://kitchingroup.cheme.cmu.edu/blog/2016/11/07/Better-equation-numbering-in-LaTeX-fragments-in-org-mode/][website]]. Its about equations in org not being properly numbered as the org latex preview takes them as independent fragments and not as a whole. This code snippet, makes org number equations properly using an advice on org-create-formula-image. Its very neat and I am glad to have found it.
     + Lastly, I redefine the laas basic snippets as there are some useful symbols not included (such as laplace transformation) or some others which I dont like the letter they are bound to. A lot of the snippets included are for adding greek letters to text. I have a greek keyboard, so to me these are useless and I replaced some of them with these symbols. I left the rest of them the same, as I dont really care about them.
 
    #+BEGIN_SRC elisp :tangle init.el
      (setq org-format-latex-options '(:foreground default :background default :scale 1.8 :html-foreground "Black" :html-background "Transparent" :html-scale 1.0 :matchers))
-     
+
      (setq org-latex-pdf-process (list "latexmk -shell-escape -bibtex -f -pdf %f"))
-     
+
      (setq org-preview-latex-default-process 'dvisvgm)
-     
+
      (setq org-startup-with-latex-preview t)
-     
+
      (require 'calctex)
      (add-hook 'calc-embedded-new-formula-hook 'calctex-mode)
-     
+
      (add-hook 'org-mode-hook '(lambda ()
 				 (turn-on-org-cdlatex)
 				 (org-fragtog-mode)
 				 (laas-mode)))
-     
+
+     (setq org-latex-listings 'minted)
+
      (setq org-latex-packages-alist '(("" "booktabs")
 				      ("" "import")
 				      ("LGR, T1" "fontenc")
@@ -486,13 +490,15 @@ Some settings (now using the word some here might be an underestimation, as with
 				      ("" "mathtools")
 				      ("" "esdiff")
 				      ("" "makeidx")
-				      ("" "glossaries")))
-     
+				      ("" "glossaries")
+				      ("" "newfloat")
+				      ("" "minted")))
+
      (defun org-renumber-environment (orig-func &rest args)
        (let ((results '()) 
 	     (counter -1)
 	     (numberp))
-     
+
 	 (setq results (loop for (begin .  env) in 
 			     (org-element-map (org-element-parse-buffer) 'latex-environment
 			       (lambda (env)
@@ -519,17 +525,17 @@ Some settings (now using the word some here might be an underestimation, as with
 				   (decf counter (count-matches "\\nonumber")))))
 			      (t
 			       (cons begin nil)))))
-     
+
 	 (when (setq numberp (cdr (assoc (point) results)))
 	   (setf (car args)
 		 (concat
 		  (format "\\setcounter{equation}{%s}\n" numberp)
 		  (car args)))))
-     
+
        (apply orig-func args))
-     
+
      (advice-add 'org-create-formula-image :around #'org-renumber-environment)
-     
+
      (setq laas-basic-snippets
        '(:cond laas-mathp
 	 "!="    "\\neq"
@@ -560,7 +566,7 @@ Some settings (now using the word some here might be an underestimation, as with
 	 "||"    "\\mid"
 	 "~="    "\\approx"
 	 "~~"    "\\sim"
-     
+
 	 "arccos" "\\arccos"
 	 "arccot" "\\arccot"
 	 "arccot" "\\arccot"
@@ -580,7 +586,7 @@ Some settings (now using the word some here might be an underestimation, as with
 	 "gcd"    "\\gcd"
 	 "min"    "\\min"
 	 "max"    "\\max"
-     
+
 	 "CC" "\\CC"
 	 "FF" "\\FF"
 	 "HH" "\\HH"
@@ -589,7 +595,7 @@ Some settings (now using the word some here might be an underestimation, as with
 	 "QQ" "\\QQ"
 	 "RR" "\\RR"
 	 "ZZ" "\\ZZ"
-     
+
 	 ";a"  "\\alpha"
 	 ";A"  "\\forall"        ";;A" "\\aleph"
 	 ";b"  "\\beta"
@@ -810,21 +816,23 @@ More languages to evaluate with org-babel (by default, only elisp is evaluated).
    - Make the org-roam buffer a little smaller cause it doesnt need to take half the screen
    
   #+BEGIN_SRC elisp :tangle init.el
-    
+
     (add-hook 'after-init-hook 'org-roam-setup)
     (setq org-roam-v2-ack t)
-    
+
     (use-package org-roam
       :config
       (setq org-roam-directory "~/org_roam"
 	    org-roam-dailies-directory "~/org_roam/daily")
-    
+
       (cl-defmethod org-roam-node-directories ((node org-roam-node))
+	"Access slot \"directory\" of org-roam-node struct CL-X"
 	(if-let ((dirs (file-name-directory (file-relative-name (org-roam-node-file node) org-roam-directory))))
 	    (format "(%s)" (car (f-split dirs)))
 	  ""))
-    
+
       (cl-defmethod org-roam-node-backlinkscount ((node org-roam-node))
+	"Access slot \"backlinks\" of org-roam-node struct CL-X"
 	(let* ((count (caar (org-roam-db-query
 			     [:select (funcall count source)
 				      :from links
@@ -832,89 +840,191 @@ More languages to evaluate with org-babel (by default, only elisp is evaluated).
 				      :and (= type "id")]
 			     (org-roam-node-id node)))))
 	  (format "[%d]" count)))
-    
+
       (cl-defmethod org-roam-node-todostate ((node org-roam-node))
+	"Modified version of org-roam-node-todo to look a bit better"
 	(if-let ((state (org-roam-node-todo node)))
 	  (format "Status: %s" state)))
-    
+
+      (cl-defmethod org-roam-node-buffer ((node org-roam-node))
+	"Access slot \"buffer\" of org-roam-node struct CL-X"
+	(let ((buffer (get-file-buffer (org-roam-node-file node))))
+	  buffer))
+
       (setq org-roam-node-display-template "${title:100} ${backlinkscount:6} ${todostate:20} ${directories:8} ${tags:25}")
-    
+
       (add-to-list 'display-buffer-alist
 		   '("\\*org-roam\\*"
 		     (display-buffer-in-direction)
 		     (direction . right)
 		     (window-width . 0.40)
 		     (window-height . fit-window-to-buffer))))
-    
+
     #+END_SRC
 
 ** Useful Functions
    Org roam is a cornerstone of my workflow (which is the reason this section is so stupidly large). I have written various "helper" functions for my own assistance that are meant to be used with org-roam. This section includes those functions. They are all documented well so I do not think I need to describe them. 
 
 #+BEGIN_SRC elisp :tangle init.el
-  
-    (defun org-roam-buffer-without-latex ()
-	"Essentially org-roam-buffer-toggle but it ensures latex previews are turned off before toggling the buffer.
-      
-      This is useful because especially with index files, having latex
-      previews on, makes opening the buffer very slow as it needs to load
-      previews of many files. If you by default have
-      org-startup-with-latex-preview set to t, you have probably noticed
-      this issue before. This function solves it."
-	(interactive)
-	(let ((org-startup-with-latex-preview nil))
-	  (org-roam-buffer-toggle)))
-      
-      (defun org-roam-backlink-query ()
-	"Simple org-roam query function that stores all the files that link
-      to the node at point. This is a modified part of the
-      org-roam-backlinks-get function keeping only the part necessary for
-      org-roam-backlink-files to work as this is a complimentary function to
-      that"
-	(org-roam-db-query
-	 [:select [source dest]
-		  :from links
-		  :where (= dest $s1)
-		  :and (= type "id")]
-	 (org-roam-node-id (org-roam-node-at-point))))
-      
-      (defun org-roam-backlink-files ()
-	"Get all nodes that link to the node at point with the
-	org-roam-backlink-query function, find their absolute path and save
-	a list of those paths to the buffer local variable
-	org-roam-backlinks.
-      
-      With the list, you can act on all those files together. This is
-      exceptionally useful with index files as it allows you to do an action
-      on all files linked to this index automatically."
-	(interactive)
-	(let ((backlinks (length (org-roam-backlink-query)))
-	      (org-roam-backlinks))
-	  (dotimes (number backlinks)
-	    (let* ((id (car (nth number (org-roam-backlink-query))))
-		   (node (org-roam-node-from-id id)))
-	      (setq-local org-roam-backlinks (cons (org-roam-node-file node) org-roam-backlinks))))
-	  (message "%s" org-roam-backlinks)))
-      
-      (defun org-roam-export-backlinks-to-latex-pdf ()
-	"Export the current buffer and every buffer that mentions it to a pdf through latex and pandoc. Makes use of the org-roam-backlink-files function to find all the backlinks. Also saves all the pdf names in a variable called org-roam-backlink-pdfs. These names can then be passed to something like pdftk to merge them into one pdf"
-	(interactive)
-	(org-roam-backlink-files)
-	(setq org-roam-backlink-pdfs nil)
-	(save-current-buffer
-	  (let ((backlinks (cons (buffer-file-name) org-roam-backlinks))
-		(org-startup-with-latex-preview nil))
-	    (while backlinks
-	      (find-file (car backlinks))
-	      (org-pandoc-export-to-latex-pdf)
-	      (setq org-roam-backlink-pdfs
-			  (cons (concat (file-name-sans-extension (car backlinks)) ".pdf") org-roam-backlink-pdfs))
-	      (setq backlinks (cdr backlinks)))
-	    ))
-	(message "%s" "Done!"))
-  
+
+  (defun org-roam-buffer-without-latex ()
+      "Essentially `org-roam-buffer-toggle' but it ensures latex previews are turned off before toggling the buffer.
+
+    This is useful because especially with index files, having latex
+    previews on, makes opening the buffer very slow as it needs to load
+    previews of many files. If you by default have
+    `org-startup-with-latex-preview' set to t, you have probably noticed
+    this issue before. This function solves it."
+      (interactive)
+      (let ((org-startup-with-latex-preview nil))
+	(org-roam-buffer-toggle)))
+
+  (defvar-local org-roam-backlinks nil
+    "Buffer local variable displaying a list of the absolute paths of all the files that are backlinked to current node. These are not added by default, and as such this variable has the value nil but they can be added by running the `org-roam-backlink-files' function on a node.")
+
+  (defvar-local org-roam-backlink-pdfs nil
+    "After running `org-roam-export-backlinks-to-latex-pdf', to export a node and all its backlinks to pdf, the value of this variable in the original node's buffer will become a list of all the pdfs that were created. This is to ease the process of combining them as the value of this variable can then be passed to a program such as pdftk to combine them.")
+
+  (defun org-roam-backlink-query ()
+    "Simple org-roam query function that stores the IDs of all the files that link
+    to the node at point. This is a modified part of the
+    `org-roam-backlinks-get' function keeping only the part necessary for
+    `org-roam-backlink-files' to work as this is a complimentary function to
+    that"
+    (org-roam-db-query
+     [:select [source dest]
+	      :from links
+	      :where (= dest $s1)
+	      :and (= type "id")]
+     (org-roam-node-id (org-roam-node-at-point))))
+
+  (defun org-roam-backlink-files ()
+      "Get all nodes that link to the node at point with the
+      `org-roam-backlink-query' function, find their absolute path and save
+      a list of those paths to the buffer local variable
+      `org-roam-backlinks'.
+
+    With the list, you can act on all those files together. This is
+    exceptionally useful with index files as it allows you to do an action
+    on all files linked to this index automatically."
+      (interactive)
+      (let ((backlinks (length (org-roam-backlink-query)))
+	    (org-roam-backlinks))
+	(dotimes (number backlinks)
+	  (let* ((id (car (nth number (org-roam-backlink-query))))
+		 (node (org-roam-node-from-id id)))
+	    (setq-local org-roam-backlinks (cons (org-roam-node-file node) org-roam-backlinks))))
+	(message "%s" org-roam-backlinks)))
+
+  (defun org-roam-export-backlinks-to-latex-pdf ()
+    "Export the current buffer and every buffer that mentions it to a pdf through latex and pandoc. Makes use of the `org-roam-backlink-files' function to find all the backlinks. Also saves all the pdf names in a variable called `org-roam-backlink-pdfs'. These names can then be passed to something like pdftk to merge them into one pdf"
+    (interactive)
+    (org-roam-backlink-files)
+    (setq org-roam-backlink-pdfs nil)
+    (save-current-buffer
+      (let ((backlinks (cons (buffer-file-name) org-roam-backlinks))
+	    (org-startup-with-latex-preview nil))
+	(while backlinks
+	  (find-file (car backlinks))
+	  (org-pandoc-export-to-latex-pdf)
+	  (setq org-roam-backlink-pdfs
+		(cons (concat (file-name-sans-extension (car backlinks)) ".pdf") org-roam-backlink-pdfs))
+	  (setq backlinks (cdr backlinks)))
+	))
+    (message "%s" "Done!"))
+
+  (defun org-roam-permanent-note-p (NODE)
+    "Check if NODE is at the top level org_roam directory using the `org-roam-node-directories' function. If it isn't, `org-roam-node-directories' will return a non empty string, therefore this expression will evaluate to nil. The way my notes are sorted, when a note is placed on the top level its a permanent note, while fleeting and reference notes are placed in subdirectories. 
+
+  Therefore, this predicate function allows me to create a version of `org-roam-node-find' which only shows my permanent notes, which can be useful in some cases. That filtered function is `org-roam-find-permanent-node'."
+    (string-equal (org-roam-node-directories NODE) ""))
+
+  (defun org-roam-find-permanent-node ()
+    "Execute `org-roam-node-find' with the list being filtered to only include permanent notes. In my system that is synonymous to saying include only notes at the top level directory. The filtering is done with the `org-roam-permanent-note-p' predicate function."
+    (interactive)
+    (org-roam-node-find nil nil #'org-roam-permanent-note-p))
 #+END_SRC
 
+** Implementing the Zettelkasten "desktop" to org-roam 
+   While reading "How to take smart notes" (one of the best books out there concerning this method) one feature that the recommended by the author app has which org-roam doesn't feature by default is the so called desktop. Its the digital equivalent to spreading notes around in your desk so you can look at all of them together. Its basically a way to narrow down the files you are looking at to only the ones that interest you currently. Since this is Emacs, when a feature you want isn't implemented by default, you just write it yourself. So that's what I did. And not only that, but I expanded this idea a bit so this doesn'tnecessarily need a file from my Zettelkasten but any emacs buffer as for one, having the supplementary materials to what I am looking at is useful and also this workflow can easily be extended to other things besides my note files. Following is the code I used to do this.
+
+#+BEGIN_SRC elisp :tangle init.el
+
+  (defvar-local zettelkasten-desktop "default"
+    "Buffer local variable that determines whether a buffer is part of the current zettelkasten-desktop. A buffer is part of the zettelkasten-desktop only if the value of this variable is not its default value in that buffer. Its default value is default because I am not creative.")
+
+  (defun zettelkasten-desktop-p (BUFFER)
+    "Check if BUFFER is part of the current `zettelkasten-desktop'
+
+  This function is used as the filter to create the `zettelkasten-desktop-switch-to-buffer' function."
+    (not (eq (default-value 'zettelkasten-desktop) (buffer-local-value 'zettelkasten-desktop (cdr BUFFER)))))
+
+  (defun zettelkasten-desktop-node-p (NODE)
+    "Check if NODE is associated with an open buffer. If it is, check if that buffer ispart of the current `zettelkasten-desktop'. If it isn't, return nil. 
+
+  This function is used as a filter function to create `zettelkasten-desktop-node-find' which is a filtered view of `org-roam-node-find'"
+    (if (org-roam-node-buffer NODE)
+	(not (eq (default-value 'zettelkasten-desktop) (buffer-local-value 'zettelkasten-desktop (org-roam-node-buffer NODE))))
+      nil))
+
+  (defun zettelkasten-desktop-add-to-desktop (BUFFER)
+    "Add BUFFER to the current `zettelkasten-desktop'"
+    (interactive "b")
+    (with-current-buffer BUFFER
+      (setq-local zettelkasten-desktop "foo")))
+
+  (defun zettelkasten-desktop-remove-from-desktop (BUFFER)
+    "Remove BUFFER from the current `zettelkasten-desktop'"
+    (interactive "b")
+    (with-current-buffer BUFFER
+      (kill-local-variable zettelkasten-desktop)))
+
+  (defun zettelkasten-desktop-add-backlinks-to-desktop ()
+    "Add the current buffer and all its currently open backlinks to the `zettelkasten-desktop'. 
+
+  This function queries the database for all the nodes that link to the current node with the `org-roam-backlink-query' function and then recursively checks if there is an open buffer associated with them, and if so adds it to the `zettelkasten-desktop'"
+    (interactive)
+    (setq-local zettelkasten-desktop "foo")
+    (let ((backlinks (length (org-roam-backlink-query))))
+      (dotimes (number backlinks)
+	(let* ((id (car (nth number (org-roam-backlink-query))))
+		(node (org-roam-node-from-id id))
+		(buffer (org-roam-node-buffer node)))
+	  (unless (eq buffer nil)
+	    (with-current-buffer buffer
+	      (setq-local zettelkasten-desktop "foo")))))))
+
+  (defun zettelkasten-desktop-remove-backlinks-from-desktop ()
+    "Remove the current buffer and all its currently open backlinks from the `zettelkasten-desktop'. 
+
+  This function is essentially a carbon copy of `zettelkasten-desktop-add-backlinks-to-desktop' but instead of adding the buffer to the desktop it removes it."
+    (interactive)
+    (kill-local-variable zettelkasten-desktop)
+    (let ((backlinks (length (org-roam-backlink-query))))
+      (dotimes (number backlinks)
+	(let* ((id (car (nth number (org-roam-backlink-query))))
+		(node (org-roam-node-from-id id))
+		(buffer (org-roam-node-buffer node)))
+	  (unless (eq buffer nil)
+	    (with-current-buffer buffer
+	      (kill-local-variable zettelkasten-desktop)))))))
+
+  (defun zettelkasten-desktop-switch-to-buffer ()
+    "Execute `switch-to-buffer' with the buffer list being filtered (using `zettelkasten-desktop-p') to show only buffers that are part of the current `zettelkasten-desktop'."
+    (interactive)
+    (switch-to-buffer (read-buffer "Zettelkasten Desktop Buffers: " nil nil #'zettelkasten-desktop-p)))
+
+  (defun zettelkasten-desktop-node-find ()
+    "Execute `org-roam-node-find' with the list being filtered (using `zettelkasten-desktop-node-p') to show only nodes that are part of the current `zettelkasten-desktop'"
+    (interactive)
+    (org-roam-node-find nil nil #'zettelkasten-desktop-node-p))
+
+#+END_SRC
+
+I tried to follow a rather simple idea to do this and not overcomplicate things. Essentially, I define a buffer-local variable and give it a default value. Then I define the predicate function that shows when a buffer is part of the zettelkasten desktop. A buffer will be part of the desktop only if the value of that variable in the buffer is not equal to the default. 
+
+Then I define a way to add or remove a file from the desktop, and finally the point of all of this, my custom switch-to-buffer function which lists only buffers that belong to the desktop and nothing more using the predicate function defined above to filter. 
+    
 ** Bibtex completion (Ivy) and Org-Ref
    Ivy Bibtex and Org ref are two excellent packages for managing bibliography. The main thing I need to configure is the location of my master .bib file and pdfs (which are exported with Zotero). I also change some other variables where I see fit.
    
@@ -947,43 +1057,6 @@ More languages to evaluate with org-babel (by default, only elisp is evaluated).
 		(default . bibtex-completion-format-citation-default)))
      #+END_SRC
 
-** Implementing the Zettelkasten "desktop" to org-roam 
-   While reading "How to take smart notes" (one of the best books out there concerning this method) one feature that the recommended by the author app has which org-roam doesn't feature by default is the so called desktop. Its the digital equivalent to spreading notes around in your desk so you can look at all of them together. Its basically a way to narrow down the files you are looking at to only the ones that interest you currently. Since this is Emacs, when a feature you want isn't implemented by default, you just write it yourself. So that's what I did. And not only that, but I expanded this idea a bit so this doesn't necessarily need a file from my Zettelkasten but any emacs buffer as for one, having the supplementary materials to what I am looking at is useful and also this workflow can easily be extended to other things besides my note files. Following is the code I used to do this.
-
-#+BEGIN_SRC elisp :tangle init.el
-
-  (defvar-local zettelkasten-desktop "default"
-    "Buffer local variable that determines whether a buffer is part of the current zettelkasten-desktop. A buffer is part of the zettelkasten-desktop only if the value of this variable is not its default value in that buffer. Its default value is default because I am not creative.")
-
-  (defun zettelkasten-desktop-p (BUFFER)
-    "Check if BUFFER is part of the current zettelkasten-desktop
-
-  This function is used as the filter to create the zettelkasten-switch-to-buffer function."
-    (print (not (eq (default-value 'zettelkasten-desktop) (buffer-local-value 'zettelkasten-desktop (cdr BUFFER))))))
-
-  (defun zettelkasten-add-to-desktop (BUFFER)
-    "Add BUFFER to the current zettelkasten-desktop"
-    (interactive "b")
-    (with-current-buffer BUFFER
-      (setq-local zettelkasten-desktop "foo")))
-
-  (defun zettelkasten-remove-from-desktop (BUFFER)
-    "Remove BUFFER from the current zettelkasten-desktop"
-    (interactive "b")
-    (with-current-buffer BUFFER
-      (kill-local-variable zettelkasten-desktop)))
-
-  (defun zettelkasten-switch-to-buffer ()
-    "Execute switch-to-buffer with the buffer list being filtered (using zettelkasten-desktop-p) to show only buffers that are part of the current zettelkasten-desktop."
-    (interactive)
-    (switch-to-buffer (read-buffer "Zettelkasten Desktop Buffers: " nil nil #'zettelkasten-desktop-p)))
-
-#+END_SRC
-
-I tried to follow a rather simple idea to do this and not overcomplicate things. Essentially, I define a buffer-local variable and give it a default value. Then I define the predicate function that shows when a buffer is part of the zettelkasten desktop. A buffer will be part of the desktop only if the value of that variable in the buffer is not equal to the default. 
-
-Then I define a way to add or remove a file from the desktop, and finally the point of all of this, my custom switch-to-buffer function which lists only buffers that belong to the desktop and nothing more using the predicate function defined above to filter. 
-    
 ** Org Roam Bibtex, Protocols (Reference notes) and UI (graphing capabilities)
    I require a bunch of packages so ORB, org roam ui and the roam protocols work as intended. I also make orb use ivy for completions.
 
@@ -1015,7 +1088,7 @@ Now which files have a todo state? Since org-roam-v2, headings can have IDs and 
 Lastly, for this system to work properly for fleeting notes I need a seamless way of archiving my daily notes once I am done with the idea they store. For that, we need to define a function which deleted the ID of a node. But running that manually is by no means seamless and in my opinion unacceptable. An idea I found which works perfectly for this is the last code snippet in this section. Essentially, it adds to the org-after-todo-state-change-hook a check of what the new keyword is. If it is DONE, it runs org-id-delete-entry, deleting the ID. Therefore, whenever I set the item's state to done, it removes its ID archiving it from the system. But the file is never deleted, so if I want the context again, I can look for it in the daily directory. But, if I were to do this with the org-roam-dailies package I would reach a big problem. As the file itself gets an ID but not a todo state, it would have an ID which isn't removable automatically, something which would as mentioned above break the system in my opinion. So, these files are created with org-journal so that I can give IDs only to the headings. There isn't much configuration on that end, just some different formatting to a format I think makes more sense. 
    
 #+BEGIN_SRC elisp :tangle init.el
-  
+
   (setq org-todo-keywords
 	'((sequence "INBOX(i)"
 		    "PROCESSING(p)"
@@ -1026,46 +1099,52 @@ Lastly, for this system to work properly for fleeting notes I need a seamless wa
 		    "|"
 		    "DONE(d)"
 		    )))
-  
+
   (setq org-agenda-files
 	'("~/org_roam"
 	  "~/org_roam/daily"
 	  "~/org_roam/ref"))
-  
+
   (setq org-journal-dir "~/org_roam/daily"
 	org-journal-file-format "%d-%m-%Y.org"
 	org-journal-time-format "%a, %m/%d-%R")
-  
+
   (add-hook 'org-agenda-mode-hook 'visual-line-mode)
-  
+
   (define-skeleton project-skeleton
     "This skeleton inserts a link to the Current Projects file in the org-roam directory. 
-  
+
   Its used in my fleeting note initialization function as a means to always make new fleeting notes point to the current projects file, as that is that files purpose"
     ""
     "- tags :: [[id:b5e71fe5-9d76-4f7f-b58d-df6a561e6a6b][Current Projects]]")
-  
+
   (defun org-roam-init-fleeting-note ()
-    "Prescribe an ID to the heading making it a node in org-roam, then add it the inbox by giving it a todo keyword. Finally, insert a new line and the project skeleton, linking the new file to the Current Projects file.
-  
-   This helps automate the process of creating new fleeting notes in combination with the org-journal commands"
+    "Prescribe an ID to the heading making it a node in org-roam, then add it the inbox by giving it a todo keyword. Finally, insert a new line and the `project-skeleton', linking the new file to the Current Projects file.
+
+   This helps automate the process of creating new fleeting notes in combination with the `org-journal' commands"
     (interactive)
     (org-id-get-create)
     (evil-open-below 1)
     (project-skeleton)
     (org-todo))
-  
+
   (defun org-id-delete-entry ()
   "Remove/delete an ID entry. Saves the current point and only does this if inside an org-heading."
   (interactive)
     (save-excursion
       (org-back-to-heading t)
       (when (org-entry-delete (point) "ID"))))
-  
+
   (add-to-list 'org-after-todo-state-change-hook
 	       (lambda ()
 		 (when (equal org-state "DONE")
 		   (org-id-delete-entry))))
+
+  (defun org-roam-node-find-todos ()
+    "Filtered view of org-roam-node-find which displays only nodes with a todo state. All my fleeting notes typically have a todo state indicating I need to work on them so this filter helps me out"
+    (interactive)
+    (org-roam-node-find nil nil #'org-roam-node-todo))
+
 #+END_SRC
 
 
@@ -1184,7 +1263,7 @@ Lastly, I define the org-roam-dailies-capture-templates. As discussed above I do
   Big thanks to u/ozzopp on reddit for providing the source code for this as its truly amazing but something I couldn't have made on my own. 
   
   #+BEGIN_SRC elisp :tangle init.el
-    
+
     (defun org-inkscape-img ()
 	(interactive "P")
 	(setq string (read-from-minibuffer "Insert image name: "))
@@ -1203,10 +1282,10 @@ Lastly, I define the org-roam-dailies-capture-templates. As discussed above I do
 		(setq command (concat "inkscape " dirname "/" string ".svg"))
 		(shell-command command)
 		(concat "" ""))))
-    
+
     (add-to-list 'org-latex-packages-alist '("" "booktabs"))
     (add-to-list 'org-latex-packages-alist '("" "import"))
-    
+
     (defun org-svg-pdf-export ()
       (interactive)
       (setq dirname (concat (f-base (buffer-file-name)) "-org-img"))
@@ -1214,25 +1293,25 @@ Lastly, I define the org-roam-dailies-capture-templates. As discussed above I do
 	  (progn
 	    (setq command (concat "/usr/bin/inkscape -D --export-latex --export-type=\"pdf\" " dirname "/" "*.svg"))
 	    (shell-command command))))
-    
+
     (defun svglatex (file_name)
       "Prompts for a file name (without any file prefix), takes an svg with that file name and exports the file as a latex compatible pdf file"
       (interactive "MEnter svg file name: ")
       (setq export (concat "inkscape -D --export-latex --export-pdf=" file_name ".pdf" file_name ".svg" ))
       (shell-command export))
-    
+
     (defun insert-svg (NAME)
       "Prompts for an svg's name (without the prefix) and inserts an
       working orglink to the svg if it is located under a directory with
       the name of the buffer suffixed by -org-img.
-    
+
     This is really useful for me as by default the function
-    org-inkscape-img I use extensively saves inkscape's svgs in that
+    `org-inkscape-img' I use extensively saves inkscape's svgs in that
     directory. The problem is that that command was made with the latex
     export in mind (which is perfectly fine as I use it a lot) but in my
     org_roam setup I dont export files to latex so I just want to see the
     svg.
-    
+
     For this reason, this command inserts an org link to an svg in that
     directory with the prompted file name and toggles image-preview to see
     it."
@@ -1498,8 +1577,8 @@ Some other extensions inside my Emacs config that require some changes for their
 
 #+BEGIN_SRC elisp :tangle init.el
   
-  (setq calc-angle-mode 'rad
-	calc-symbolic-mode t)
+  (setq calc-angle-mode 'rad)
+;	calc-symbolic-mode t)
   
 #+END_SRC
 

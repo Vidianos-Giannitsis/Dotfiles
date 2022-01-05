@@ -10,6 +10,8 @@
 #+LATEX_HEADER: \usepackage{esdiff}
 #+LATEX_HEADER: \usepackage{makeidx}
 #+LATEX_HEADER: \usepackage{glossaries}
+#+LATEX_HEADER: \usepackage{listings}
 \renewcommand{\abstractname}{Περίληψη}
 \renewcommand{\tablename}{Πίνακας}
 \renewcommand{\figurename}{Σχήμα}
+\renewcommand\listingscaption{Κώδικας}

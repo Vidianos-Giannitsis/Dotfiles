@@ -48,7 +48,6 @@ var favorites = [
   [ "University",
     [
       ["Chemeng" , "https://www.chemeng.ntua.gr/", "ch"],
-      ["MyCourses" , "https://mycourses.ntua.gr/index.php", "mc"],
       ["ChemengCourses" , "https://courses.chemeng.ntua.gr/", "cc"],
       ["Submissions" , "https://www.chemeng.ntua.gr/submission/", "cs"],
       ["Wolfram Alpha" , "https://www.wolframalpha.com", "wa"],
@@ -74,6 +73,7 @@ var favorites = [
 	["Octave" , "https://octave.org/doc/v5.2.0/", "oc"],
 	["Org-Roam" , "https://www.orgroam.com/manual.html", "or"],
 	["Org-Roam-Bibtex" , "https://github.com/org-roam/org-roam-bibtex", "orb"],
+	["Org-Roam Discourse", "https://org-roam.discourse.group/", "ord"],
 	["Qtile", "http://docs.qtile.org/en/latest/", "qt"],
 	["EXWM", "https://github.com/ch11ng/exwm/wiki", "ex"]
     ]
@@ -90,23 +90,30 @@ var favorites = [
   ],
   [ "Games",
     [
-	["Showdown", "https://play.pokemonshowdown.com/", "ps"],
 	["Smogon", "https://smogon.com", "sm"],
 	["Dod", "https://www.dod.gr", "d"],
 	["LolChess Account", "https://lolchess.gg/profile/eune/auroradraco", "lcm"],
-	["Damage Calc", "https://calc.pokemonshowdown.com/index.html", "calc"],
 	["Proton", "https://www.protondb.com/", "pr"],
-	["EV training guide", "https://bulbapedia.bulbagarden.net/wiki/List_of_Pok%C3%A9mon_by_effort_value_yield", "ev"],
 	["DuelingBook", "https://www.duelingbook.com/", "db"],
+	["MC Biome Finder", "https://www.chunkbase.com/apps/biome-finder#-3038289977291799158", "bf"],
 	["Pack Opener", "https://db.ygoprodeck.com/pack-open/", "po"]
 
     ]
   ],
+    [ "Pokemon",
+      [
+	  ["Unbound Learnsets", "https://github.com/Skeli789/Dynamic-Pokemon-Expansion/blob/Unbound/src/Learnsets.c", "lr"],
+	  ["Unbound Egg Moves", "https://github.com/Skeli789/Dynamic-Pokemon-Expansion/blob/Unbound/src/Egg_Moves.c", "em"],
+	  ["Unbound Evolutions", "https://github.com/Skeli789/Dynamic-Pokemon-Expansion/blob/Unbound/src/Evolution%20Table.c", "evo"],
+	  ["Showdown", "https://play.pokemonshowdown.com/", "ps"],
+	  ["Damage Calc", "https://calc.pokemonshowdown.com/index.html", "calc"],
+	  ["EV training guide", "https://bulbapedia.bulbagarden.net/wiki/List_of_Pok%C3%A9mon_by_effort_value_yield", "ev"],
+	  ["Wild Held Items", "https://github.com/Skeli789/Dynamic-Pokemon-Expansion/blob/Unbound/src/Base_Stats.c", "whi"]
+      ]
+    ],
   [ "Other",
     [
 	["Darebee", "https://darebee.com/", "d"],
-	["Org-Roam Discourse", "https://org-roam.discourse.group/", "ord"],
-	["MC Biome Finder", "https://www.chunkbase.com/apps/biome-finder#-3038289977291799158", "bf"],
 	["Raindrop", "https://app.raindrop.io/my/0", "rd"],
 	["Hex Color Codes", "https://www.color-hex.com/", "ch"],
 	["Detexify", "https://detexify.kirelabs.org/classify.html", "dt"]

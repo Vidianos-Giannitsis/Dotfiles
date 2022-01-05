@@ -1,1 +1,2 @@
-cd "/home/vidianos/Documents/Octave"
+pkg load ga
+pkg load optim

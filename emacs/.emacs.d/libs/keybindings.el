@@ -36,7 +36,9 @@
   "n" 'winner-redo
   "p" 'winner-undo
   "i" '(my/org-pandoc-hydra/body :which-key "Org Pandoc Import")
-  "y" 'ivy-yasnippet)
+  "y" 'ivy-yasnippet
+  "z" '(:ignore t :which-key "Zettelkasten Desktop")
+  "g" 'counsel-rg)
 
 (general-define-key
  :states 'normal
@@ -76,6 +78,17 @@
 (general-define-key
  :states 'normal
  :keymaps 'override
+ :prefix "SPC z"
+ "b" 'zettelkasten-desktop-switch-to-buffer
+ "a" 'zettelkasten-desktop-add-to-desktop
+ "r" 'zettelkasten-desktop-remove-from-desktop
+ "n" 'zettelkasten-desktop-node-find
+ "A" 'zettelkasten-desktop-add-backlinks-to-desktop
+ "R" 'zettelkasten-desktop-remove-backlinks-from-desktop)
+
+(general-define-key
+ :states 'normal
+ :keymaps 'override
  :prefix "SPC d"
  "f" 'counsel-find-file
  "j" '(dired-jump :which-key "Open dired in the current buffer's directory")
@@ -107,7 +120,9 @@
    (("f" org-roam-node-find "org-roam-node-find")
     ("i" (lambda () (interactive)(find-file "~/org_roam/index.org")) "Master index file for org_roam")
     ("n" ivy-bibtex-with-notes "Find Bibliography Note")
-    ("g" 'counsel-rg "Search regex in the org-roam db"))
+    ("p" org-roam-find-permanent-node "Find Permanent Note")
+    ("C" (lambda() (interactive) (org-roam-capture nil "d")) "Capture with default template")
+    ("t" org-roam-node-find-todos "Find Fleeting Note"))
 
    "References"
    (("B" isbn-to-bibtex "Get ref from isbn")
@@ -120,6 +135,7 @@
    "General Org Roam Commands"
    (("G" org-roam-ui-mode "Open the Org Roam UI")
     ("s" org-roam-db-sync "Sync the Org Roam db")
+    ("g" counsel-rg "Search regex in the org-roam db")
     ("D" org-roam-buffer-display-dedicated "Dedicated Org Roam buffer"))
    )
   )
@@ -200,7 +216,11 @@
  "M-g" 'toggle-input-method
  "M-SPC" 'org-mark-ring-goto
  "<menu>" 'elfeed
- "M-r" 'counsel-linux-app)
+ "M-r" 'counsel-linux-app
+ "C-γ" 'keyboard-quit
+ "θ" 'undo-tree-undo
+ "C-ρ" 'undo-tree-redo
+ "ο" 'evil-open-below)
 
 (general-define-key
  :states 'insert
@@ -218,7 +238,11 @@
  :states 'motion
  :keymaps 'override
  "j" 'evil-next-visual-line
- "k" 'evil-previous-visual-line)
+ "k" 'evil-previous-visual-line
+ "ξ" 'evil-next-visual-line
+ "κ" 'evil-previous-visual-line
+ "η" 'evil-backward-char
+ "λ" 'evil-forward-char)
 
 (general-define-key
  :keymaps 'override
@@ -238,6 +262,7 @@
      "t" '(:ignore t :which-key "To-do management")
      "y" 'org-download-clipboard
      "r" '(:ignore t :which-key "Org Roam/Ref commands")
+     "ρ ι" 'org-roam-node-insert
      "H" '(org-cycle-hide-drawers :which-key "Hide properties drawers")
      "S" 'org-store-link
      "I" 'org-insert-link
@@ -298,14 +323,12 @@
 (general-define-key
  :states 'normal
  :keymaps 'org-mode-map
- "`" 'org-roam-buffer-without-latex)
-
-(general-define-key
- :states 'normal
- :keymaps 'org-mode-map
  "C-j" '(org-tree-slide-move-next-tree :which-key "Next Slide")
  "C-k" '(org-tree-slide-move-previous-tree :which-key "Previous Slide")
- "=" 'math-at-point)
+ "`" 'org-roam-buffer-without-latex
+ "=" 'math-at-point
+ "α" 'evil-append
+ "ι" 'evil-insert)
 
 (general-define-key
  :states 'normal
