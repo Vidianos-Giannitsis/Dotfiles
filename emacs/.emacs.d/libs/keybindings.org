@@ -94,12 +94,14 @@
    :states 'normal
    :keymaps 'override
    :prefix "SPC z"
-   "b" 'zettelkasten-desktop-switch-to-buffer
-   "a" 'zettelkasten-desktop-add-to-desktop
-   "r" 'zettelkasten-desktop-remove-from-desktop
-   "n" 'zettelkasten-desktop-node-find
-   "A" 'zettelkasten-desktop-add-backlinks-to-desktop
-   "R" 'zettelkasten-desktop-remove-backlinks-from-desktop)
+   "b" 'zetteldesk-switch-to-buffer
+   "A" 'zetteldesk-add-to-desktop
+   "r" 'zetteldesk-remove-from-desktop
+   "n" 'zetteldesk-node-find
+   "a" '(:ignore t :which-key "Other add-to-desktop functions")
+   "a b" 'zetteldesk-add-backlinks-to-desktop
+   "a n" 'zetteldesk-add-node-to-desktop
+   "R" 'zetteldesk-remove-backlinks-from-desktop)
 
   (general-define-key
    :states 'normal
@@ -115,11 +117,12 @@
      (("c" (lambda() (interactive)(find-file "~/.emacs.d/README.org")) "Literate Emacs Config")
       ("k" (lambda() (interactive)(find-file "~/.emacs.d/libs/keybindings.org")) "Emacs keybindings")
       ("s" (lambda() (interactive)(dired "~/.emacs.d/snippets/org-mode")) "Org-mode snippets")
+      ("r" (lambda() (interactive)(find-file "~/.emacs.d/libs/zettelkasten.org")) "Org-Roam and friends")
       ("S" (lambda() (interactive)(find-file "~/scratchpad.org")) "Emacs Scratchpad file"))
 
      "University"
      (("u" (lambda() (interactive)(dired "~/Documents/5o_εξάμηνο")) "University Documents folder")
-      ("b" (lambda() (interactive)(find-file "~/Sync/My_Library.bib")) "Master Bibliography file")
+      ("B" (lambda() (interactive)(find-file "~/Sync/My_Library.bib")) "Master Bibliography file")
       ("e" (lambda() (interactive)(find-file "~/org_roam/erasmus-08-10-21.org")) "Erasmus index file")
       ("o" (lambda() (interactive)(dired "~/Documents/Octave")) "Octave scripts directory"))
 
@@ -136,11 +139,11 @@
       ("i" (lambda () (interactive)(find-file "~/org_roam/index.org")) "Master index file for org_roam")
       ("n" ivy-bibtex-with-notes "Find Bibliography Note")
       ("p" org-roam-find-permanent-node "Find Permanent Note")
-      ("C" (lambda() (interactive) (org-roam-capture nil "d")) "Capture with default template")
+      ("B" org-roam-node-find-by-backlinks "Sort by Backlink Count")
       ("t" org-roam-node-find-todos "Find Fleeting Note"))
 
      "References"
-     (("B" isbn-to-bibtex "Get ref from isbn")
+     (("I" isbn-to-bibtex "Get ref from isbn")
       ("d" doi-utils-add-bibtex-entry-from-doi "Get ref from DOI")
       ("r" org-roam-ref-find "Find Reference")
       ("c" org-ref-insert-cite-link "Insert Citation")
@@ -151,6 +154,7 @@
      (("G" org-roam-ui-mode "Open the Org Roam UI")
       ("s" org-roam-db-sync "Sync the Org Roam db")
       ("g" counsel-rg "Search regex in the org-roam db")
+      ("C" (lambda() (interactive) (org-roam-capture nil "d")) "Capture with default template")
       ("D" org-roam-buffer-display-dedicated "Dedicated Org Roam buffer"))
      )
     )
