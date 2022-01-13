@@ -80,13 +80,11 @@
  :keymaps 'override
  :prefix "SPC z"
  "b" 'zetteldesk-switch-to-buffer
- "A" 'zetteldesk-add-to-desktop
+ "a" 'zetteldesk-add-to-desktop
+ "A" 'zetteldesk-add-node-to-desktop
  "r" 'zetteldesk-remove-from-desktop
- "n" 'zetteldesk-node-find
- "a" '(:ignore t :which-key "Other add-to-desktop functions")
- "a b" 'zetteldesk-add-backlinks-to-desktop
- "a n" 'zetteldesk-add-node-to-desktop
- "R" 'zetteldesk-remove-backlinks-from-desktop)
+ "R" 'zetteldesk-remove-node-from-desktop
+ "n" 'zetteldesk-node-find)
 
 (general-define-key
  :states 'normal
@@ -289,6 +287,15 @@
  "i" 'insert-svg
  "l" 'svglatex
  "p" 'org-svg-pdf-export)
+
+(general-define-key
+ :states 'normal
+ :keymaps 'org-mode-map
+ :prefix ", z"
+ "i" 'zetteldesk-node-insert
+ "r" 'zetteldesk-remove-backlinks-from-desktop
+ "b" 'zetteldesk-add-backlinks-to-desktop
+ "p" 'zetteldesk-node-insert-if-poi)
 
 (general-define-key
  :states 'normal

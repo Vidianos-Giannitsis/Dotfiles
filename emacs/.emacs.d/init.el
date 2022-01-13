@@ -565,6 +565,7 @@
   "*** Προηγμένα Κεραμικά\n\n"
   "*** Βιολογία\n\n")
 
+(require 'zetteldesk)
 (require 'zettelkasten)
 
 (setq bookmark-version-control t

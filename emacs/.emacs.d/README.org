@@ -794,11 +794,12 @@ More languages to evaluate with org-babel (by default, only elisp is evaluated).
 
  
 * Org Roam, References and the Zettelkasten Workflow 
-  This is one of the largest and most important sections of my entire config. It is about org roam, the various reference management packages and the whole overarching workflow. It is really large so I decided to split it into its own file, [[https://github.com/Vidianos-Giannitsis/Dotfiles/blob/master/emacs/.emacs.d/libs/zettelkasten.org][zettelkasten.org]] (which can be found in the libs directory). 
+  This is one of the largest and most important sections of my entire config. It is about org roam, the various reference management packages and the whole overarching workflow. It is really large so I decided to split it into its own file, [[https://github.com/Vidianos-Giannitsis/Dotfiles/blob/master/emacs/.emacs.d/libs/zettelkasten.org][zettelkasten.org]] (which can be found in the libs directory). One section of it, I envision to publish as a seperate library, so it tangles to a different file called zetteldesk.el. So here, I require both. 
 
 #+BEGIN_SRC elisp :tangle init.el
 
-    (require 'zettelkasten)
+  (require 'zetteldesk)
+  (require 'zettelkasten)
 
 #+END_SRC
   

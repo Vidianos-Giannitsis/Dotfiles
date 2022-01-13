@@ -87,6 +87,10 @@ This file is a core part of my emacs configuration and is all about my Org-roam 
   Therefore, this predicate function allows me to create a version of `org-roam-node-find' which only shows my permanent notes, which can be useful in some cases. That filtered function is `org-roam-find-permanent-node'."
     (string-equal (org-roam-node-directories NODE) ""))
 
+  (defun org-roam-node-poi-p (NODE)
+    "Check if NODE has the tag POI. Return t if it does"
+    (string-equal (car (org-roam-node-tags NODE)) "POI"))
+
   (defun org-roam-find-permanent-node ()
     "Execute `org-roam-node-find' with the list being filtered to only include permanent notes. In my system that is synonymous to saying include only notes at the top level directory. The filtering is done with the `org-roam-permanent-note-p' predicate function."
     (interactive)
@@ -168,114 +172,6 @@ This file is a core part of my emacs configuration and is all about my Org-roam 
 
   #+END_SRC
   
-* Implementing the Zettelkasten "desktop" to org-roam 
-  A desktop, is the top surface of a desk, or in the digital world an area in a computer screen in which some people arrange their icons, similarly to how they would arrange stuff in their desk. Now if I had an irl zettelkasten, I know for sure that my desktop would be filled with little notes with various topic when studying something. So why shouldn't I have a digital desktop where I can spread all my notes and look at them one by one, when studying. Wouldn't that be handy?
-
-  This very thought is what started this idea. The idea of the zettelkasten-desktop, which I shortened to zetteldesk as I wanted my functions to not have huge names. The plan for the finished project is a dedicated buffer in which I can input whichever note I want and view them all at the same time, a way to create a true desktop experience inside emacs. Once done, it will be a great benefit to my workflow I believe.
-
-  So far, I have done only what I would consider to be the first part of the workflow. I have created a system which marks an org-roam-node (from a completion menu) and adds it to the zetteldesk and a filtered org-roam-node-find which shows me only those nodes. Furthermore, the node doesn't have to be open currently, the functions take care of opening nodes. As I liked the idea, I thought it should be something I can do with any buffer. A lot of the times when studying, or doing any sort of research, you need not only your notes and a place to combine your ideas, but also supplementary materials to that work. That might be a pdf, a directory structure, an info page or whatever else suits your boat. So all the functionality written has a version for nodes and one generally for buffers.
-
-  If for some reason you like this idea and want to use it, take note that the functions below depend on the functions org-roam-backlink-query and org-roam-node-buffer defined in above sections. 
-
-#+BEGIN_SRC elisp :tangle yes
-
-  (defvar-local zetteldesk "default"
-    "Buffer local variable that determines whether a buffer is part of the current zetteldesk. A buffer is part of the zetteldesk only if the value of this variable is not its default value in that buffer. Its default value is default because I am not creative.")
-
-  (defun zetteldesk-p (BUFFER)
-    "Check if BUFFER is part of the current `zetteldesk'
-
-  This function is used as the filter to create the `zetteldesk-switch-to-buffer' function."
-    (not (eq (default-value 'zetteldesk) (buffer-local-value 'zetteldesk (cdr BUFFER)))))
-
-  (defun zetteldesk-node-p (NODE)
-    "Check if NODE is associated with an open buffer. If it is, check if that buffer is part of the current `zetteldesk'. If it isn't, return nil. 
-
-  This function is used as a filter function to create `zetteldesk-node-find' which is a filtered view of `org-roam-node-find'"
-    (if (org-roam-node-buffer NODE)
-	(not (eq (default-value 'zetteldesk) (buffer-local-value 'zetteldesk (org-roam-node-buffer NODE))))
-      nil))
-
-  (defun zetteldesk-add-to-desktop (BUFFER)
-    "Add BUFFER to the current `zetteldesk'"
-    (interactive "b")
-    (with-current-buffer BUFFER
-      (setq-local zetteldesk "foo")))
-
-  (defun zetteldesk-add-node-to-desktop ()
-    "Add an org-roam-node to the `zetteldesk' and if there isn't a buffer associated to it, create it.
-
-  The node is read through `org-roam-node-read'"
-    (interactive)
-    (let* ((node (org-roam-node-read))
-	   (buffer (org-roam-node-buffer node))
-	   (file (org-roam-node-file node))
-	   (org-startup-with-latex-preview nil))
-      (if (not (eq buffer nil))
-	  (with-current-buffer buffer
-	    (setq-local zetteldesk "foo"))
-	(with-current-buffer (find-file-noselect file)
-	  (setq-local zetteldesk "foo")))))
-
-  (defun zetteldesk-remove-from-desktop (BUFFER)
-    "Remove BUFFER from the current `zetteldesk'"
-    (interactive "b")
-    (with-current-buffer BUFFER
-      (kill-local-variable 'zetteldesk)))
-
-  (defun zetteldesk-add-backlinks-to-desktop ()
-    "Add the current buffer and all its backlinks to the `zetteldesk'. 
-
-  This function queries the database for all the nodes that link to the current node with the `org-roam-backlink-query' function and then recursively checks if there is an open buffer associated with them, and if so adds it to the `zetteldesk'"
-    (interactive)
-    (setq-local zetteldesk "foo")
-    (let ((backlinks (length (org-roam-backlink-query)))
-	  (org-startup-with-latex-preview nil))
-      (dotimes (number backlinks)
-	(let* ((id (car (nth number (org-roam-backlink-query))))
-		(node (org-roam-node-from-id id))
-		(buffer (org-roam-node-buffer node))
-		(file (org-roam-node-file node)))
-	  (if (not (eq buffer nil))
-	      (with-current-buffer buffer
-		(setq-local zetteldesk "foo"))
-	    (with-current-buffer (find-file-noselect file)
-	      (setq-local zetteldesk "foo")))))))
-
-  (defun zetteldesk-remove-backlinks-from-desktop ()
-    "Remove the current buffer and all its currently open backlinks from the `zetteldesk'. 
-
-  This function is essentially a carbon copy of `zetteldesk-add-backlinks-to-desktop' but instead of adding the buffer to the desktop it removes it."
-    (interactive)
-    (kill-local-variable 'zetteldesk)
-    (let ((backlinks (length (org-roam-backlink-query))))
-      (dotimes (number backlinks)
-	(let* ((id (car (nth number (org-roam-backlink-query))))
-		(node (org-roam-node-from-id id))
-		(buffer (org-roam-node-buffer node)))
-	  (unless (eq buffer nil)
-	    (with-current-buffer buffer
-	      (kill-local-variable 'zetteldesk)))))))
-
-  (defun zetteldesk-switch-to-buffer ()
-    "Execute `switch-to-buffer' with the buffer list being filtered (using `zetteldesk-p') to show only buffers that are part of the current `zetteldesk'."
-    (interactive)
-    (switch-to-buffer (read-buffer "Zettelkasten Desktop Buffers: " nil nil #'zetteldesk-p)))
-
-  (defun zetteldesk-node-find ()
-    "Execute `org-roam-node-find' with the list being filtered (using `zetteldesk-node-p') to show only nodes that are part of the current `zetteldesk'"
-    (interactive)
-    (org-roam-node-find nil nil #'zetteldesk-node-p))
-
-#+END_SRC
-
-#+RESULTS:
-: zetteldesk-node-find
-
-I tried to follow a rather simple idea to do this and not overcomplicate things. Essentially, I define a buffer-local variable and give it a default value. Then I define the predicate function that shows when a buffer is part of the zettelkasten desktop. A buffer will be part of the desktop only if the value of that variable in the buffer is not equal to the default. 
-
-Then I define a way to add or remove a file from the desktop, and finally the point of all of this, my custom switch-to-buffer function which lists only buffers that belong to the desktop and nothing more using the predicate function defined above to filter. 
-    
 * Bibtex completion (Ivy) and Org-Ref
   Ivy Bibtex and Org ref are two excellent packages for managing bibliography. The main thing I need to configure is the location of my master .bib file and pdfs (which are exported with Zotero). I also change some other variables where I see fit.
    
@@ -475,6 +371,201 @@ Lastly, I define the org-roam-dailies-capture-templates. As discussed above I do
    #+END_SRC
 
 
+* Implementing the Zettelkasten "desktop" to org-roam 
+  A desktop, is the top surface of a desk, or in the digital world an area in a computer screen in which some people arrange their icons, similarly to how they would arrange stuff in their desk. Now if I had an irl zettelkasten, I know for sure that my desktop would be filled with little notes with various topic when studying something. So why shouldn't I have a digital desktop where I can spread all my notes and look at them one by one, when studying. Wouldn't that be handy?
+
+  This very thought is what started this idea. The idea of the zettelkasten-desktop, which I shortened to zetteldesk as I wanted my functions to not have huge names. The plan for the finished project is a dedicated buffer in which I can input whichever note I want and view them all at the same time, a way to create a true desktop experience inside emacs. Once done, it will be a great benefit to my workflow I believe.
+
+  So far, I have done only what I would consider to be the first part of the workflow. I have created a system which marks an org-roam-node (from a completion menu) and adds it to the zetteldesk and a filtered org-roam-node-find which shows me only those nodes. Furthermore, the node doesn't have to be open currently, the functions take care of opening nodes. As I liked the idea, I thought it should be something I can do with any buffer. A lot of the times when studying, or doing any sort of research, you need not only your notes and a place to combine your ideas, but also supplementary materials to that work. That might be a pdf, a directory structure, an info page or whatever else suits your boat. So all the functionality written has a version for nodes and one generally for buffers.
+
+  I plan for this to become its own emacs package for people to use. Now some of its functionality is and will be really specific to my workflow, but hopefully others may like it and use it. For this reason this section tangles to a different file zetteldesk.el. 
+
+** Dependencies
+   As I want this to work independently to my config, this section has a copy of all the custom function I use which were not defined in this section as I felt they fit more somewhere else in my config. These are the dependencies this has from my config. For general dependencies I will do those once this is actually complete enough to make its own package
+
+   #+BEGIN_SRC elisp :tangle zetteldesk.el
+
+     (cl-defmethod org-roam-node-buffer ((node org-roam-node))
+       "Access slot \"buffer\" of org-roam-node struct CL-X"
+       (let ((buffer (get-file-buffer (org-roam-node-file node))))
+	 buffer))
+
+     (defun org-roam-node-poi-p (NODE)
+       "Check if NODE has the tag POI. Return t if it does"
+       (string-equal (car (org-roam-node-tags NODE)) "POI"))
+
+     (defun org-roam-backlink-query ()
+       "Simple org-roam query function that stores the IDs of all the files that link
+       to the node at point. This is a modified part of the
+       `org-roam-backlinks-get' function keeping only the part necessary for
+       `org-roam-backlink-files' to work as this is a complimentary function to
+       that"
+       (org-roam-db-query
+	[:select [source dest]
+		 :from links
+		 :where (= dest $s1)
+		 :and (= type "id")]
+	(org-roam-node-id (org-roam-node-at-point))))
+
+   #+END_SRC
+   
+** Predicate Functions and Adding/Removing things
+I tried to follow a rather simple idea to do this and not overcomplicate things. Essentially, I define a buffer-local variable and give it a default value. Then I define the predicate function that shows when a buffer is part of the zettelkasten desktop. A buffer will be part of the desktop only if the value of that variable in the buffer is not equal to the default. I define the predicate functions that check if a buffer or node is part of the zetteldesk and then I define a way to add or remove a buffer, a node or all the nodes backlinked to the current node to the desktop. 
+
+#+BEGIN_SRC elisp :tangle zetteldesk.el
+
+  (defvar-local zetteldesk "default"
+    "Buffer local variable that determines whether a buffer is part of the current zetteldesk. A buffer is part of the zetteldesk only if the value of this variable is not its default value in that buffer. Its default value is default because I am not creative.")
+
+  (defun zetteldesk-p (BUFFER)
+    "Check if BUFFER is part of the current `zetteldesk'
+
+  This function is used as the filter to create the `zetteldesk-switch-to-buffer' function."
+    (not (eq (default-value 'zetteldesk) (buffer-local-value 'zetteldesk (cdr BUFFER)))))
+
+  (defun zetteldesk-node-p (NODE)
+    "Check if NODE is associated with an open buffer. If it is, check if that buffer is part of the current `zetteldesk'. If it isn't, return nil. 
+
+  This function is used as a filter function to create `zetteldesk-node-find' which is a filtered view of `org-roam-node-find'"
+    (if (org-roam-node-buffer NODE)
+	(not (eq (default-value 'zetteldesk) (buffer-local-value 'zetteldesk (org-roam-node-buffer NODE))))
+      nil))
+
+  (defun zetteldesk-add-to-desktop (BUFFER)
+    "Add BUFFER to the current `zetteldesk'"
+    (interactive "b")
+    (with-current-buffer BUFFER
+      (setq-local zetteldesk "foo")))
+
+  (defun zetteldesk-add-node-to-desktop ()
+    "Add an org-roam-node to the `zetteldesk' and if there isn't a buffer associated to it, create it.
+
+  The node is read through `org-roam-node-read'"
+    (interactive)
+    (let* ((node (org-roam-node-read))
+	   (buffer (org-roam-node-buffer node))
+	   (file (org-roam-node-file node))
+	   (org-startup-with-latex-preview nil))
+      (if (not (eq buffer nil))
+	  (with-current-buffer buffer
+	    (setq-local zetteldesk "foo"))
+	(with-current-buffer (find-file-noselect file)
+	  (setq-local zetteldesk "foo")))))
+
+  (defun zetteldesk-add-backlinks-to-desktop ()
+    "Add the current buffer and all its backlinks to the `zetteldesk'. 
+
+  This function queries the database for all the nodes that link to the current node with the `org-roam-backlink-query' function and then recursively checks if there is an open buffer associated with them, and if so adds it to the `zetteldesk'"
+    (interactive)
+    (setq-local zetteldesk "foo")
+    (let ((backlinks (length (org-roam-backlink-query)))
+	  (org-startup-with-latex-preview nil))
+      (dotimes (number backlinks)
+	(let* ((id (car (nth number (org-roam-backlink-query))))
+		(node (org-roam-node-from-id id))
+		(buffer (org-roam-node-buffer node))
+		(file (org-roam-node-file node)))
+	  (if (not (eq buffer nil))
+	      (with-current-buffer buffer
+		(setq-local zetteldesk "foo"))
+	    (with-current-buffer (find-file-noselect file)
+	      (setq-local zetteldesk "foo")))))))
+
+  (defun zetteldesk-remove-from-desktop (BUFFER)
+    "Remove BUFFER from the current `zetteldesk'"
+    (interactive "b")
+    (with-current-buffer BUFFER
+      (kill-local-variable 'zetteldesk)))
+
+  (defun zetteldesk-remove-node-from-desktop ()
+    "Add an org-roam-node to the `zetteldesk' and if there isn't a buffer associated to it, create it.
+
+  The node is read through `org-roam-node-read'"
+    (interactive)
+    (let* ((node (org-roam-node-read nil #'zetteldesk-node-p))
+	   (buffer (org-roam-node-buffer node)))
+      (with-current-buffer buffer
+	(kill-local-variable 'zetteldesk))))
+
+  (defun zetteldesk-remove-backlinks-from-desktop ()
+    "Remove the current buffer and all its currently open backlinks from the `zetteldesk'. 
+
+  This function is essentially a carbon copy of `zetteldesk-add-backlinks-to-desktop' but instead of adding the buffer to the desktop it removes it."
+    (interactive)
+    (kill-local-variable 'zetteldesk)
+    (let ((backlinks (length (org-roam-backlink-query))))
+      (dotimes (number backlinks)
+	(let* ((id (car (nth number (org-roam-backlink-query))))
+		(node (org-roam-node-from-id id))
+		(buffer (org-roam-node-buffer node)))
+	  (unless (eq buffer nil)
+	    (with-current-buffer buffer
+	      (kill-local-variable 'zetteldesk)))))))
+
+#+END_SRC
+
+#+RESULTS:
+: zetteldesk-node-insert
+
+** Filter functions
+   Here I define the functions which give you a filtered view of switch-to-buffer and org-roam-node-find to the current zetteldesk. I also define a filtered view of org-roam-node-insert as its not rare to want to insert a link to a file from the zetteldesk
+
+   #+BEGIN_SRC elisp :tangle zetteldesk.el
+
+     (defun zetteldesk-switch-to-buffer ()
+       "Execute `switch-to-buffer' with the buffer list being filtered (using `zetteldesk-p') to show only buffers that are part of the current `zetteldesk'."
+       (interactive)
+       (switch-to-buffer (read-buffer "Zettelkasten Desktop Buffers: " nil nil #'zetteldesk-p)))
+
+     (defun zetteldesk-node-find ()
+       "Execute `org-roam-node-find' with the list being filtered (using `zetteldesk-node-p') to show only nodes that are part of the current `zetteldesk'"
+       (interactive)
+       (org-roam-node-find nil nil #'zetteldesk-node-p))
+
+     (defun zetteldesk-node-insert ()
+       "Execute `org-roam-node-insert' with the list being filtered (using `zetteldesk-node-p') to show only nodes that are part of the current `zetteldesk'"
+       (interactive)
+       (org-roam-node-insert #'zetteldesk-node-p))
+
+   #+END_SRC
+    
+** On the zetteldesk-scratch buffer
+   The zetteldesk-scratch buffer is a bit equivalent to the emacs scratch buffer. Its essentially a buffer unique to the session in which you can drop all the links, node contents or whatever else interests you and use it as the place to hold your crude notes until you drop them where they belong. I also envision this to be the buffer in which you drop all the notes you want to view at one time, in the way you would spread them on your desk.
+
+   The only thing I have implemented currently is creating the zetteldesk-scratch buffer and a function that inserts links to all the POIs in the zetteldesk to the current buffer. The way I have my zettelkasten sorted, my index files have the MOC (map of contents) tag and other important files of a subject have the POI (point of interest) tag. POIs are chosen by opening org-roam UI, blacklisting index files (in my case blacklisting the MOC tag), having a high value for "Node connections size scale" and seeing which nodes stand out the most. This is an idea taken from the book How to make a complete map of every thought you think. I use my zettelkasten for university notes and when revisioning its a great tool to be able to insert links to all POIs in some sort of scratch buffer, then sorting them and with that writing an outline of everything in that lesson. In a way, this does function as an outliner tool.
+
+   #+BEGIN_SRC elisp :tangle zetteldesk.el
+
+     (defun zetteldesk-create-scratch-buffer ()
+       "Create the zetteldesk-scratch buffer, open it in a split with the current buffer and put it in `org-mode'"
+       (interactive)
+       (switch-to-buffer-other-window (generate-new-buffer "*zetteldesk-scratch*"))
+       (org-mode))
+
+     (defun zetteldesk-node-insert-if-poi ()
+       "Filter `org-roam-node-list' to only include files in the current `zetteldesk' that have the POI tag with `zetteldesk-node-p' and `org-roam-node-poi-p'. Then insert a link to every one of those nodes and seperate them with commas"
+       (interactive)
+       (let* ((init_list (org-roam-node-list))
+	      (zetteldesk_nodes (cl-remove-if-not #'zetteldesk-node-p init_list))
+	      (nodes_poi (cl-remove-if-not #'org-roam-node-poi-p zetteldesk_nodes)))
+	 (while nodes_poi
+	   (let* ((node (car nodes_poi))
+		  (description (org-roam-node-formatted (car nodes_poi))))
+	     (insert (org-link-make-string
+		      (concat "id:" (org-roam-node-id (car nodes_poi)))
+		      description))
+	     (insert ", "))
+	   (setq nodes_poi (cdr nodes_poi)))))
+
+   #+END_SRC
+   
+** Providing the package
+#+BEGIN_SRC elisp :tangle zetteldesk.el
+
+  (provide 'zetteldesk)
+
+#+END_SRC
+   
 * Providing the package to be loaded in init.el
   #+BEGIN_SRC elisp :tangle yes
 
