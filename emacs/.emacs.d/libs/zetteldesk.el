@@ -124,10 +124,16 @@ This function is essentially a carbon copy of `zetteldesk-add-backlinks-to-deskt
   (org-roam-node-insert #'zetteldesk-node-p))
 
 (defun zetteldesk-create-scratch-buffer ()
-  "Create the zetteldesk-scratch buffer, open it in a split with the current buffer and put it in `org-mode'"
+  "Create the zetteldesk-scratch buffer and put it in `org-mode'"
   (interactive)
-  (switch-to-buffer-other-window (generate-new-buffer "*zetteldesk-scratch*"))
-  (org-mode))
+  (let ((buffer (generate-new-buffer "*zetteldesk-scratch*")))
+    (with-current-buffer buffer
+      (org-mode))))
+
+(defun zetteldesk-switch-to-scratch-buffer ()
+  "Open the zetteldesk-scratch buffer in a split with the current buffer"
+  (interactive)
+  (switch-to-buffer-other-window "*zetteldesk-scratch*"))
 
 (defun zetteldesk-node-insert-if-poi ()
   "Filter `org-roam-node-list' to only include files in the current `zetteldesk' that have the POI tag with `zetteldesk-node-p' and `org-roam-node-poi-p'. Then insert a link to every one of those nodes and seperate them with commas"
@@ -143,5 +149,16 @@ This function is essentially a carbon copy of `zetteldesk-add-backlinks-to-deskt
 		 description))
 	(insert ", "))
       (setq nodes_poi (cdr nodes_poi)))))
+
+(defun zetteldesk-insert-node-contents ()
+  "Select a node that is part of the current `zetteldesk' and insert its contents to the buffer (might also add switching to the zetteldesk-scratch buffer as its really meant to be used there). Remove the properties section as its unneeded and change the string #+title to a top level heading."
+  (interactive)
+  (let* ((node (org-roam-node-read nil #'zetteldesk-node-p))
+	 (file (org-roam-node-file node)))
+    (with-current-buffer "*zetteldesk-scratch*"
+      (goto-char (point-max))
+      (insert-file-contents file nil 67)
+      (replace-string "#+title: " "* ")))
+  (switch-to-buffer "*zetteldesk-scratch*"))
 
 (provide 'zetteldesk)

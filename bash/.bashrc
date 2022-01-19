@@ -330,3 +330,4 @@ pfetch
 #sysinfo-retro
 #cpufetch
 #colorscript random
+#neofetch

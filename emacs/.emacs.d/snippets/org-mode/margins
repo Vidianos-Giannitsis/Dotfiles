@@ -1,5 +1,5 @@
 # -*- mode: snippet -*-
-# name: margins
-# key: marg
+# name: margin
+# key: margin
 # --
 #+LATEX_HEADER: \usepackage[a4paper, margin=$0cm]{geometry}

@@ -532,15 +532,27 @@ I tried to follow a rather simple idea to do this and not overcomplicate things.
 ** On the zetteldesk-scratch buffer
    The zetteldesk-scratch buffer is a bit equivalent to the emacs scratch buffer. Its essentially a buffer unique to the session in which you can drop all the links, node contents or whatever else interests you and use it as the place to hold your crude notes until you drop them where they belong. I also envision this to be the buffer in which you drop all the notes you want to view at one time, in the way you would spread them on your desk.
 
-   The only thing I have implemented currently is creating the zetteldesk-scratch buffer and a function that inserts links to all the POIs in the zetteldesk to the current buffer. The way I have my zettelkasten sorted, my index files have the MOC (map of contents) tag and other important files of a subject have the POI (point of interest) tag. POIs are chosen by opening org-roam UI, blacklisting index files (in my case blacklisting the MOC tag), having a high value for "Node connections size scale" and seeing which nodes stand out the most. This is an idea taken from the book How to make a complete map of every thought you think. I use my zettelkasten for university notes and when revisioning its a great tool to be able to insert links to all POIs in some sort of scratch buffer, then sorting them and with that writing an outline of everything in that lesson. In a way, this does function as an outliner tool.
+   I am considering generating this buffer in the after-init-hook and then having a function that simply raises it. 
+
+   Things I have implemented so far
+   - Creating the zetteldesk-scratch buffer
+   - A function that inserts links to all the POIs in the zetteldesk to the current buffer. The way I have my zettelkasten sorted, my index files have the MOC (map of contents) tag and other important files of a subject have the POI (point of interest) tag. POIs are chosen by opening org-roam UI, blacklisting index files (in my case blacklisting the MOC tag), having a high value for "Node connections size scale" and seeing which nodes stand out the most. This is an idea taken from the book How to make a complete map of every thought you think. I use my zettelkasten for university notes and when revisioning its a great tool to be able to insert links to all POIs in some sort of scratch buffer, then sorting them and with that writing an outline of everything in that lesson. In a way, this does function as an outliner tool.
+   - A function that prompts for a node inside the zetteldesk and inserts its contents to the zetteldesk-scratch buffer omitting the properties section where the id is stored. As it uses an absolute number for this, it doesn't exactly omit properties if the node has aliases or refs, I could consider trying to fix that, but I do not know how as of now. It also replaces the title keyword with a top level heading. This way you can add any node to your scratch buffer. This is equivalent to taking the note out of the drawer and putting it into your desk, the very first part of what I plan for this tool.
+    
 
    #+BEGIN_SRC elisp :tangle zetteldesk.el
 
      (defun zetteldesk-create-scratch-buffer ()
-       "Create the zetteldesk-scratch buffer, open it in a split with the current buffer and put it in `org-mode'"
+       "Create the zetteldesk-scratch buffer and put it in `org-mode'"
        (interactive)
-       (switch-to-buffer-other-window (generate-new-buffer "*zetteldesk-scratch*"))
-       (org-mode))
+       (let ((buffer (generate-new-buffer "*zetteldesk-scratch*")))
+	 (with-current-buffer buffer
+	   (org-mode))))
+
+     (defun zetteldesk-switch-to-scratch-buffer ()
+       "Open the zetteldesk-scratch buffer in a split with the current buffer"
+       (interactive)
+       (switch-to-buffer-other-window "*zetteldesk-scratch*"))
 
      (defun zetteldesk-node-insert-if-poi ()
        "Filter `org-roam-node-list' to only include files in the current `zetteldesk' that have the POI tag with `zetteldesk-node-p' and `org-roam-node-poi-p'. Then insert a link to every one of those nodes and seperate them with commas"
@@ -557,7 +569,21 @@ I tried to follow a rather simple idea to do this and not overcomplicate things.
 	     (insert ", "))
 	   (setq nodes_poi (cdr nodes_poi)))))
 
+     (defun zetteldesk-insert-node-contents ()
+       "Select a node that is part of the current `zetteldesk' and insert its contents to the buffer (might also add switching to the zetteldesk-scratch buffer as its really meant to be used there). Remove the properties section as its unneeded and change the string #+title to a top level heading."
+       (interactive)
+       (let* ((node (org-roam-node-read nil #'zetteldesk-node-p))
+	      (file (org-roam-node-file node)))
+	 (with-current-buffer "*zetteldesk-scratch*"
+	   (goto-char (point-max))
+	   (insert-file-contents file nil 67)
+	   (replace-string "#+title: " "* ")))
+       (switch-to-buffer "*zetteldesk-scratch*"))
+
    #+END_SRC
+
+   #+RESULTS:
+   : zetteldesk-insert-node-contents
    
 ** Providing the package
 #+BEGIN_SRC elisp :tangle zetteldesk.el

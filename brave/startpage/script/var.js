@@ -45,80 +45,82 @@ var searchs = [
   ["!b", "https://bulbapedia.bulbagarden.net/w/index.php?title="]
 ];
 var favorites = [
-  [ "University",
-    [
-      ["Chemeng" , "https://www.chemeng.ntua.gr/", "ch"],
-      ["ChemengCourses" , "https://courses.chemeng.ntua.gr/", "cc"],
-      ["Submissions" , "https://www.chemeng.ntua.gr/submission/", "cs"],
-      ["Wolfram Alpha" , "https://www.wolframalpha.com", "wa"],
-      ["Chemeng Forum" , "https://forum.chemeng.ntua.gr/", "cf"],
-	["Science Direct" , "https://www.sciencedirect.com/", "sc"],
-	["Research Rabbit" , "https://www.researchrabbitapp.com/home", "rr"],
-	["Helios", "https://helios.ntua.gr/my/", "h"]
-    ]
-  ],
-  [ "Socials",
-    [
-      ["Messenger" , "https://www.messenger.com", "ms"],
-      ["Twitch" , "https://www.twitch.tv", "tw"],
-      ["Personal Github" , "https://github.com/Vidianos-Giannitsis", "gh"],
-      ["Youtube" , "https://www.youtube.com/", "yt"],
-      ["Discord" , "https://discord.com/channels/@me", "dc"],
-      ["Instagram" , "https://instagram.com/", "in"]
-    ]
-  ],
-  [ "Documentation pages",
-    [
-	["Emacs", "https://www.gnu.org/software/emacs/manual/html_node/emacs/index.html", "em"],
-	["Octave" , "https://octave.org/doc/v5.2.0/", "oc"],
-	["Org-Roam" , "https://www.orgroam.com/manual.html", "or"],
-	["Org-Roam-Bibtex" , "https://github.com/org-roam/org-roam-bibtex", "orb"],
-	["Org-Roam Discourse", "https://org-roam.discourse.group/", "ord"],
-	["Qtile", "http://docs.qtile.org/en/latest/", "qt"],
-	["EXWM", "https://github.com/ch11ng/exwm/wiki", "ex"]
-    ]
-  ],
-  [ "Reddit",
-    [
-      ["Main Page", "https://www.reddit.com/", "rm"],
-      ["Emacs Subreddit", "https://www.reddit.com/r/emacs/", "er"],
-      ["r/unixporn", "https://www.reddit.com/r/unixporn/", "up"],
-      ["CompetitiveTFT", "https://www.reddit.com/r/CompetitiveTFT/", "ct"],
-	["TFT Subreddit", "https://www.reddit.com/r/TeamfightTactics/", "tft"],
-	["Bodyweightfitness' RR", "https://www.reddit.com/r/bodyweightfitness/wiki/kb/recommended_routine", "brr"]
-    ]
-  ],
-  [ "Games",
-    [
-	["Smogon", "https://smogon.com", "sm"],
-	["Dod", "https://www.dod.gr", "d"],
-	["LolChess Account", "https://lolchess.gg/profile/eune/auroradraco", "lcm"],
-	["Proton", "https://www.protondb.com/", "pr"],
-	["DuelingBook", "https://www.duelingbook.com/", "db"],
-	["MC Biome Finder", "https://www.chunkbase.com/apps/biome-finder#-3038289977291799158", "bf"],
-	["Pack Opener", "https://db.ygoprodeck.com/pack-open/", "po"]
-
-    ]
-  ],
-    [ "Pokemon",
+    [ "University",
       [
-	  ["Unbound Learnsets", "https://github.com/Skeli789/Dynamic-Pokemon-Expansion/blob/Unbound/src/Learnsets.c", "lr"],
-	  ["Unbound Egg Moves", "https://github.com/Skeli789/Dynamic-Pokemon-Expansion/blob/Unbound/src/Egg_Moves.c", "em"],
-	  ["Unbound Evolutions", "https://github.com/Skeli789/Dynamic-Pokemon-Expansion/blob/Unbound/src/Evolution%20Table.c", "evo"],
+	  ["Chemeng" , "https://www.chemeng.ntua.gr/", "ch"],
+	  ["ChemengCourses" , "https://courses.chemeng.ntua.gr/", "cc"],
+	  ["Submissions" , "https://www.chemeng.ntua.gr/submission/", "cs"],
+	  ["Wolfram Alpha" , "https://www.wolframalpha.com", "wa"],
+	  ["Chemeng Forum" , "https://forum.chemeng.ntua.gr/", "cf"],
+	  ["Science Direct" , "https://www.sciencedirect.com/", "sc"],
+	  ["Research Rabbit" , "https://www.researchrabbitapp.com/home", "rr"],
+	  ["Helios", "https://helios.ntua.gr/my/", "h"]
+      ]
+    ],
+    [ "Socials",
+      [
+	  ["Messenger" , "https://www.messenger.com", "ms"],
+	  ["Twitch" , "https://www.twitch.tv", "tw"],
+	  ["Personal Github" , "https://github.com/Vidianos-Giannitsis", "gh"],
+	  ["Youtube" , "https://www.youtube.com/", "yt"],
+	  ["Discord" , "https://discord.com/channels/@me", "dc"],
+	  ["Instagram" , "https://instagram.com/", "in"]
+      ]
+    ],
+    [ "Documentation pages",
+      [
+	  ["Emacs", "https://www.gnu.org/software/emacs/manual/html_node/emacs/index.html", "em"],
+	  ["Octave" , "https://octave.org/doc/v5.2.0/", "oc"],
+	  ["Org-Roam" , "https://www.orgroam.com/manual.html", "or"],
+	  ["Org-Roam-Bibtex" , "https://github.com/org-roam/org-roam-bibtex", "orb"],
+	  ["Org-Roam Discourse", "https://org-roam.discourse.group/", "ord"],
+	  ["Qtile", "http://docs.qtile.org/en/latest/", "qt"],
+	  ["EXWM", "https://github.com/ch11ng/exwm/wiki", "ex"]
+      ]
+    ],
+    [ "Reddit",
+      [
+	  ["Main Page", "https://www.reddit.com/", "rm"],
+	  ["Emacs Subreddit", "https://www.reddit.com/r/emacs/", "er"],
+	  ["r/unixporn", "https://www.reddit.com/r/unixporn/", "up"],
+	  ["CompetitiveTFT", "https://www.reddit.com/r/CompetitiveTFT/", "ct"],
+	  ["TFT Subreddit", "https://www.reddit.com/r/TeamfightTactics/", "tft"],
+	  ["Bodyweightfitness' RR", "https://www.reddit.com/r/bodyweightfitness/wiki/kb/recommended_routine", "brr"]
+      ]
+    ],
+    [ "Games",
+      [
+	  ["Smogon", "https://smogon.com", "sm"],
+	  ["Dod", "https://www.dod.gr", "d"],
+	  ["LolChess Account", "https://lolchess.gg/profile/eune/auroradraco", "lcm"],
+	  ["Proton", "https://www.protondb.com/", "pr"],
+	  ["DuelingBook", "https://www.duelingbook.com/", "db"],
+	  ["MC Biome Finder", "https://www.chunkbase.com/apps/biome-finder#-3038289977291799158", "bf"],
 	  ["Showdown", "https://play.pokemonshowdown.com/", "ps"],
 	  ["Damage Calc", "https://calc.pokemonshowdown.com/index.html", "calc"],
+	  ["Pack Opener", "https://db.ygoprodeck.com/pack-open/", "po"]
+      ]
+    ],
+    [ "Pokemon Unbound Docs",
+      [
+	  ["Learnsets", "https://github.com/Skeli789/Dynamic-Pokemon-Expansion/blob/Unbound/src/Learnsets.c", "lr"],
+	  ["Egg Moves", "https://github.com/Skeli789/Dynamic-Pokemon-Expansion/blob/Unbound/src/Egg_Moves.c", "em"],
+	  ["Evolutions", "https://github.com/Skeli789/Dynamic-Pokemon-Expansion/blob/Unbound/src/Evolution%20Table.c", "evo"],
+	  ["Bosses (Insane Difficulty)", "https://docs.google.com/spreadsheets/d/1pLTQKQkWTnSkev4_kcjHbY0AkBujbTUDybxXFNZ_aVY/edit#gid=707456878", "bs"],
+	  ["Damage Calcs", "https://pastebin.com/raw/iyN9Ls90", "calcs"],
+	  ["Locations", "https://docs.google.com/spreadsheets/d/1LFSBZuPDtJrwAz7t6ZkJ-il4j8M3qCdaKLNe6EZdPmQ/edit#gid=309549967", "lc"],
 	  ["EV training guide", "https://bulbapedia.bulbagarden.net/wiki/List_of_Pok%C3%A9mon_by_effort_value_yield", "ev"],
 	  ["Wild Held Items", "https://github.com/Skeli789/Dynamic-Pokemon-Expansion/blob/Unbound/src/Base_Stats.c", "whi"]
       ]
     ],
-  [ "Other",
-    [
-	["Darebee", "https://darebee.com/", "d"],
-	["Raindrop", "https://app.raindrop.io/my/0", "rd"],
-	["Hex Color Codes", "https://www.color-hex.com/", "ch"],
-	["Detexify", "https://detexify.kirelabs.org/classify.html", "dt"]
-          ]
-  ]
+    [ "Other",
+      [
+	  ["Darebee", "https://darebee.com/", "d"],
+	  ["Raindrop", "https://app.raindrop.io/my/0", "rd"],
+	  ["Hex Color Codes", "https://www.color-hex.com/", "ch"],
+	  ["Detexify", "https://detexify.kirelabs.org/classify.html", "dt"]
+      ]
+    ],
 ];
 var feeds = [
 ];

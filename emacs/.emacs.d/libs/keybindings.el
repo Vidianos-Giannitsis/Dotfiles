@@ -31,6 +31,7 @@
   "s" '(:ignore t :which-key "Counsel-spotify")
   "e" '(:ignore t :which-key "Evaluate Emacs-Lisp")
   "f" '(ace-window :which-key "Switch focus")
+  "φ" '(ace-window :which-key "Switch focus")
   "w" '(:ignore t :which-key "Motion commands")
   "W" 'wolfram-alpha
   "n" 'winner-redo
@@ -38,7 +39,8 @@
   "i" '(my/org-pandoc-hydra/body :which-key "Org Pandoc Import")
   "y" 'ivy-yasnippet
   "z" '(:ignore t :which-key "Zettelkasten Desktop")
-  "g" 'counsel-rg)
+  "g" 'counsel-rg
+  "E" 'eperiodic)
 
 (general-define-key
  :states 'normal
@@ -84,7 +86,10 @@
  "A" 'zetteldesk-add-node-to-desktop
  "r" 'zetteldesk-remove-from-desktop
  "R" 'zetteldesk-remove-node-from-desktop
- "n" 'zetteldesk-node-find)
+ "n" 'zetteldesk-node-find
+ "S" 'zetteldesk-create-scratch-buffer
+ "s" 'zetteldesk-switch-to-scratch-buffer
+ "i" 'zetteldesk-insert-node-contents)
 
 (general-define-key
  :states 'normal
@@ -222,7 +227,9 @@
  "C-γ" 'keyboard-quit
  "θ" 'undo-tree-undo
  "C-ρ" 'undo-tree-redo
- "ο" 'evil-open-below)
+ "ο" 'evil-open-below
+ "M-λ" 'org-metaright
+ "Μ-η" 'org-metaleft)
 
 (general-define-key
  :states 'insert
@@ -259,6 +266,7 @@
      :states 'normal
      :keymaps 'org-mode-map
      "l" 'org-latex-preview
+     "λ" 'org-latex-preview
      "n" 'org-noter
      "e" 'org-export-dispatch
      "t" '(:ignore t :which-key "To-do management")

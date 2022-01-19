@@ -19,6 +19,7 @@ music_player = "spotify"
 calculator = "qalculate-gtk"
 screenshots = "flameshot gui"
 run_launcher = 'dmenu_run -fn "Source Code Pro Bold" -i -nb "#292d3e" -sb "#5b76b2" -nf "#839496" -sf "#eeffff" -p "Launch program"'
+emacs_run_launcher = 'emacsclient -e "(emacs-run-launcher)"'
 
 @hook.subscribe.startup_once
 def autostart():
@@ -28,6 +29,11 @@ def autostart():
 @hook.subscribe.client_new
 def floating_calc(c):
     if c.name == "Qalculate!":
+        c.toggle_floating()
+
+@hook.subscribe.client_new
+def floating_run_launcher(c):
+    if c.name == "emacs-run-launcher":
         c.toggle_floating()
 
 keys = [
@@ -86,6 +92,7 @@ Key2("M-C-i", lazy.spawn("inkscape"), desc="Launch inkscape"),
 Key2("M-S-c", lazy.spawn("tuxedo-control-center"), desc="Launch computer settings manager"),
 Key2("M-C-p", lazy.spawn("system-config-printer"), desc="Launch printer software"),
 Key2("M-t", lazy.spawn("rofi-theme-selector"), desc="Launch a theme selector using rofi"),
+Key2("M-C-r", lazy.spawn(emacs_run_launcher), desc="Launch an emacs based run launcher"),
 
 Key2("<XF86AudioRaiseVolume>", lazy.spawn("amixer -c 1 sset Master 5%+ unmute"), desc="Raise Volume and unmute if muted"),
 Key2("<XF86AudioLowerVolume>", lazy.spawn("amixer -c 1 sset Master 5%- unmute"), desc="Lower Volume and unmute if muted"),
