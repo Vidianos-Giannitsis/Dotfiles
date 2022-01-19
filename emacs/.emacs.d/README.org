@@ -202,56 +202,66 @@ This enables:
 + Making .m files open in octave-mode and .epub in nov-mode (as they should do). For Octave configurations also check init_octave.m inside this directory
 
 #+BEGIN_SRC elisp :tangle init.el
-  
+
   (add-to-list 'load-path
 	       "~/.emacs.d/plugins/yasnippet")
   (require 'yasnippet)
   (yas-global-mode 1)
-  
+
   (require 'general)
   (require 'vterm-toggle)
-  
+
   (setq large-file-warning-threshold nil)
   (setq vc-follow-symlinks t)
-  
+
   (setq counsel-spotify-client-id "0df2796a793b41dc91711eb9f85c0e77")
   (setq counsel-spotify-client-secret "bcdbb823795640248ff2c29eedadb800")
   (setq espotify-client-id "0df2796a793b41dc91711eb9f85c0e77")
   (setq espotify-client-secret "bcdbb823795640248ff2c29eedadb800")
-  
+
   (require 'math-at-point)
   (require 'molar-mass)
-  
+
   (setq-default tab-jump-out-delimiters '(";" ")" "]" "}" "|" "'" "\"" "`" "."))
-  
+
   (require 'mediator)
-  
+
   (ace-window-display-mode 1)
   (setq aw-keys '(?a ?s ?d ?f ?g ?h ?j ?k ?l))
-  
+
   (require 'info+)
-  
+
   (require 'pdftotext)
-  
+
   (defun set-font-size (SIZE)
     "Change font size of Emacs window according to SIZE. Font remains Source Code Pro."
     (interactive "MFont Size: ")
     (set-face-attribute 'default nil :font (concat "Source Code Pro " SIZE)))
-  
+
   (defun named-vterm (NAME)
     "Create a new vterm session with name NAME and open it in a new window"
     (interactive "sEnter Name: ")
     (vterm-other-window NAME))
-  
+
   (add-to-list 'auto-mode-alist '("\\.m\\'" . octave-mode))
   (add-to-list 'auto-mode-alist '("\\.epub\\'" . nov-mode))
-  
+
   (setq org-confirm-elisp-link-function nil)
-  
+
   (setq ivy-youtube-key "224520591375-p6v36u3r9k8qt2k7qthb12gnjarc8c7t")
+
+  (defun emacs-run-launcher ()
+    "Create and select a frame called emacs-run-launcher which consists only of a minibuffer and has specific dimensions. Run counsel-linux-app on that frame, which is an emacs command that prompts you to select an app and open it in a dmenu like behaviour. Delete the frame after that command has exited"
+    (interactive)
+    (with-selected-frame (make-frame '((name . "emacs-run-launcher")
+				       (minibuffer . only)
+				       (width . 120)
+				       (height . 11)))
+      (unwind-protect
+	  (counsel-linux-app)
+	(delete-frame))))
+
 #+END_SRC
-
-
 
 * Keybindings
   This is my absolute favourite section of this entire config. But its a very big part of my config and I considered it more prudent to include it as its own file. You can find [[https://github.com/AuroraDragoon/Dotfiles/blob/master/emacs/.emacs.d/libs/keybindings.org][keybindings.org]] inside the libs directory (which contains all the external elisp "libraries" I have installed manually). The org file is the literate configuration of my keybindings. In that directory you will also find the keybindings.el file which I require in this section of the config to load. It acts as if it was an external package for Emacs which helps make this config more tidy. 
@@ -798,8 +808,8 @@ More languages to evaluate with org-babel (by default, only elisp is evaluated).
 
 #+BEGIN_SRC elisp :tangle init.el
 
-  (require 'zetteldesk)
   (require 'zettelkasten)
+  (require 'zetteldesk)
 
 #+END_SRC
   
@@ -1190,6 +1200,14 @@ Configuration for PDF-tools, my favourite Emacs pdf viewer. I set it as the defa
   (add-hook 'pdf-view-mode-hook 'pdf-view-midnight-minor-mode)
 #+END_SRC
 
+** Periodic Table in emacs
+   Eperiodic is a small emacs library for viewing a periodic table inside emacs. Its actually pretty detailed and has more info than just a periodic table and I really like it. I just require the package here as I found it in emacs wiki (https://www.emacswiki.org/emacs/eperiodic.el) and not on Melpa. 
+
+#+BEGIN_SRC elisp :tangle init.el
+
+  (require 'eperiodic)
+
+#+END_SRC
 
 ** Emacs Application Framework
   

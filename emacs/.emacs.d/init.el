@@ -137,6 +137,17 @@
 
 (setq ivy-youtube-key "224520591375-p6v36u3r9k8qt2k7qthb12gnjarc8c7t")
 
+(defun emacs-run-launcher ()
+  "Create and select a frame called emacs-run-launcher which consists only of a minibuffer and has specific dimensions. Run counsel-linux-app on that frame, which is an emacs command that prompts you to select an app and open it in a dmenu like behaviour. Delete the frame after that command has exited"
+  (interactive)
+  (with-selected-frame (make-frame '((name . "emacs-run-launcher")
+				     (minibuffer . only)
+				     (width . 120)
+				     (height . 11)))
+    (unwind-protect
+	(counsel-linux-app)
+      (delete-frame))))
+
 (require 'keybindings)
 
 (require 'dired-x)
@@ -565,8 +576,8 @@
   "*** Προηγμένα Κεραμικά\n\n"
   "*** Βιολογία\n\n")
 
-(require 'zetteldesk)
 (require 'zettelkasten)
+(require 'zetteldesk)
 
 (setq bookmark-version-control t
       delete-old-versions t)
@@ -841,6 +852,8 @@ it."
     )
 
 (add-hook 'pdf-view-mode-hook 'pdf-view-midnight-minor-mode)
+
+(require 'eperiodic)
 
 (require 'eaf)
 

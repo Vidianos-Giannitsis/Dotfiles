@@ -57,6 +57,7 @@ Defining them here helps if I want to use them in multiple locations of my confi
   calculator = "qalculate-gtk"
   screenshots = "flameshot gui"
   run_launcher = 'dmenu_run -fn "Source Code Pro Bold" -i -nb "#292d3e" -sb "#5b76b2" -nf "#839496" -sf "#eeffff" -p "Launch program"'
+  emacs_run_launcher = 'emacsclient -e "(emacs-run-launcher)"'
 #+END_SRC
 
 #+RESULTS:
@@ -71,12 +72,17 @@ The second hook is my favourite calculator program "Qalculate". I really find it
   def autostart():
       home = os.path.expanduser('~/.config/qtile/autostart.sh')
       subprocess.call([home])
-  
+
   @hook.subscribe.client_new
   def floating_calc(c):
       if c.name == "Qalculate!":
 	  c.toggle_floating()
-  
+
+  @hook.subscribe.client_new
+  def floating_run_launcher(c):
+      if c.name == "emacs-run-launcher":
+	  c.toggle_floating()
+
 #+END_SRC
 
 * Keybindings
@@ -169,6 +175,7 @@ Some notes about them are:
   Key2("M-S-c", lazy.spawn("tuxedo-control-center"), desc="Launch computer settings manager"),
   Key2("M-C-p", lazy.spawn("system-config-printer"), desc="Launch printer software"),
   Key2("M-t", lazy.spawn("rofi-theme-selector"), desc="Launch a theme selector using rofi"),
+  Key2("M-C-r", lazy.spawn(emacs_run_launcher), desc="Launch an emacs based run launcher"),
 #+END_SRC
 
 ** Multimedia Keys
