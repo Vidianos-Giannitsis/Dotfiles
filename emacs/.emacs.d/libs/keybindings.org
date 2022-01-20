@@ -53,7 +53,7 @@
     "p" 'winner-undo
     "i" '(my/org-pandoc-hydra/body :which-key "Org Pandoc Import")
     "y" 'ivy-yasnippet
-    "z" '(:ignore t :which-key "Zettelkasten Desktop")
+    "z" '(:ignore t :which-key "Zetteldesk")
     "g" 'counsel-rg
     "E" 'eperiodic)
 
@@ -322,6 +322,7 @@
        "u" '(uo-lab-skeleton :which-key "Unit Operations lab template")
        "T" '(toc-org-mode :which-key "Insert ToC")
        "b" 'org-beamer-select-environment
+       "z" '(:ignore t :which-key "Zetteldesk")
        "m" '(:ignore t :which-key "Org-Marginalia commands"))
 
   (general-define-key

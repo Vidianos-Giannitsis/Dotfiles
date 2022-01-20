@@ -23,7 +23,11 @@
       (format "[%d]" count)))
 
   (cl-defmethod org-roam-node-backlinkscount-number ((node org-roam-node))
-    "Access slot \"backlinks\" of org-roam-node struct CL-X. This is identical to `org-roam-node-backlinkscount' with the difference that it returns a number instead of a fromatted string. This is to be used in `org-roam-node-sort-by-backlinks'"
+    "Access slot \"backlinks\" of org-roam-node struct CL-X. This
+    is identical to `org-roam-node-backlinkscount' with the
+    difference that it returns a number instead of a fromatted
+    string. This is to be used in
+    `org-roam-node-sort-by-backlinks'"
     (let* ((count (caar (org-roam-db-query
 			 [:select (funcall count source)
 				  :from links
@@ -54,19 +58,28 @@
 (defun org-roam-buffer-without-latex ()
     "Essentially `org-roam-buffer-toggle' but it ensures latex previews are turned off before toggling the buffer.
 
-  This is useful because especially with index files, having latex
-  previews on, makes opening the buffer very slow as it needs to load
-  previews of many files. If you by default have
-  `org-startup-with-latex-preview' set to t, you have probably noticed
-  this issue before. This function solves it."
+  This is useful because especially with index files, having
+  latex previews on, makes opening the buffer very slow as it
+  needs to load previews of many files. If you by default have
+  `org-startup-with-latex-preview' set to t, you have probably
+  noticed this issue before. This function solves it."
     (interactive)
     (let ((org-startup-with-latex-preview nil))
       (org-roam-buffer-toggle)))
 
 (defun org-roam-permanent-note-p (NODE)
-  "Check if NODE is at the top level org_roam directory using the `org-roam-node-directories' function. If it isn't, `org-roam-node-directories' will return a non empty string, therefore this expression will evaluate to nil. The way my notes are sorted, when a note is placed on the top level its a permanent note, while fleeting and reference notes are placed in subdirectories. 
+  "Check if NODE is at the top level org_roam directory using the
+  `org-roam-node-directories' function. If it isn't,
+  `org-roam-node-directories' will return a non empty string,
+  therefore this expression will evaluate to nil. The way my
+  notes are sorted, when a note is placed on the top level its a
+  permanent note, while fleeting and reference notes are placed
+  in subdirectories.
 
-Therefore, this predicate function allows me to create a version of `org-roam-node-find' which only shows my permanent notes, which can be useful in some cases. That filtered function is `org-roam-find-permanent-node'."
+Therefore, this predicate function allows me to create a version
+of `org-roam-node-find' which only shows my permanent notes,
+which can be useful in some cases. That filtered function is
+`org-roam-find-permanent-node'."
   (string-equal (org-roam-node-directories NODE) ""))
 
 (defun org-roam-node-poi-p (NODE)
@@ -74,34 +87,55 @@ Therefore, this predicate function allows me to create a version of `org-roam-no
   (string-equal (car (org-roam-node-tags NODE)) "POI"))
 
 (defun org-roam-find-permanent-node ()
-  "Execute `org-roam-node-find' with the list being filtered to only include permanent notes. In my system that is synonymous to saying include only notes at the top level directory. The filtering is done with the `org-roam-permanent-note-p' predicate function."
+  "Execute `org-roam-node-find' with the list being filtered to
+only include permanent notes. In my system that is synonymous to
+saying include only notes at the top level directory. The
+filtering is done with the `org-roam-permanent-note-p' predicate
+function."
   (interactive)
   (org-roam-node-find nil nil #'org-roam-permanent-note-p))
 
 (defvar-local org-roam-backlinks nil
-  "Buffer local variable displaying a list of the absolute paths of all the files that are backlinked to current node. These are not added by default, and as such this variable has the value nil but they can be added by running the `org-roam-backlink-files' function on a node.")
+  "Buffer local variable displaying a list of the absolute paths
+  of all the files that are backlinked to current node. These are
+  not added by default, and as such this variable has the value
+  nil but they can be added by running the
+  `org-roam-backlink-files' function on a node.")
 
 (defvar-local org-roam-backlink-pdfs nil
-  "After running `org-roam-export-backlinks-to-latex-pdf', to export a node and all its backlinks to pdf, the value of this variable in the original node's buffer will become a list of all the pdfs that were created. This is to ease the process of combining them as the value of this variable can then be passed to a program such as pdftk to combine them.")
+  "After running `org-roam-export-backlinks-to-latex-pdf', to
+  export a node and all its backlinks to pdf, the value of this
+  variable in the original node's buffer will become a list of
+  all the pdfs that were created. This is to ease the process of
+  combining them as the value of this variable can then be passed
+  to a program such as pdftk to combine them.")
 
 (defun org-roam-node-sort-by-backlinks (completion-a completion-b)
-  "Sorting function for org-roam that sorts the list of nodes by the number of backlinks. This is the sorting function in `org-roam-node-find-by-backlinks'"
+  "Sorting function for org-roam that sorts the list of nodes by
+the number of backlinks. This is the sorting function in
+`org-roam-node-find-by-backlinks'"
   (let ((node-a (cdr completion-a))
 	(node-b (cdr completion-b)))
     (>= (org-roam-node-backlinkscount-number node-a)
 	(org-roam-node-backlinkscount-number node-b))))
 
 (defun org-roam-node-find-by-backlinks ()
-  "Essentially works like `org-roam-node-find' (although it uses a combination of `find-file' and `org-roam-node-read' to accomplish that and not `org-roam-node-find' as only `org-roam-node-read' can take a sorting function as an argument) but the list of nodes is sorted by the number of backlinks instead of most recent nodes. Sorting is done with `org-roam-node-sort-by-backlinks'"
+  "Essentially works like `org-roam-node-find' (although it uses
+a combination of `find-file' and `org-roam-node-read' to
+accomplish that and not `org-roam-node-find' as only
+`org-roam-node-read' can take a sorting function as an argument)
+but the list of nodes is sorted by the number of backlinks
+instead of most recent nodes. Sorting is done with
+`org-roam-node-sort-by-backlinks'"
   (interactive)
   (find-file (org-roam-node-file (org-roam-node-read nil nil #'org-roam-node-sort-by-backlinks))))
 
 (defun org-roam-backlink-query ()
-  "Simple org-roam query function that stores the IDs of all the files that link
-  to the node at point. This is a modified part of the
-  `org-roam-backlinks-get' function keeping only the part necessary for
-  `org-roam-backlink-files' to work as this is a complimentary function to
-  that"
+  "Simple org-roam query function that stores the IDs of all the
+  files that link to the node at point. This is a modified part
+  of the `org-roam-backlinks-get' function keeping only the part
+  necessary for `org-roam-backlink-files' to work as this is a
+  complimentary function to that"
   (org-roam-db-query
    [:select [source dest]
 	    :from links
@@ -111,13 +145,13 @@ Therefore, this predicate function allows me to create a version of `org-roam-no
 
 (defun org-roam-backlink-files ()
     "Get all nodes that link to the node at point with the
-    `org-roam-backlink-query' function, find their absolute path and save
-    a list of those paths to the buffer local variable
+    `org-roam-backlink-query' function, find their absolute path
+    and save a list of those paths to the buffer local variable
     `org-roam-backlinks'.
 
   With the list, you can act on all those files together. This is
-  exceptionally useful with index files as it allows you to do an action
-  on all files linked to this index automatically."
+  exceptionally useful with index files as it allows you to do an
+  action on all files linked to this index automatically."
     (interactive)
     (let ((backlinks (length (org-roam-backlink-query)))
 	  (org-roam-backlinks))
@@ -128,7 +162,12 @@ Therefore, this predicate function allows me to create a version of `org-roam-no
       (message "%s" org-roam-backlinks)))
 
 (defun org-roam-export-backlinks-to-latex-pdf ()
-  "Export the current buffer and every buffer that mentions it to a pdf through latex and pandoc. Makes use of the `org-roam-backlink-files' function to find all the backlinks. Also saves all the pdf names in a variable called `org-roam-backlink-pdfs'. These names can then be passed to something like pdftk to merge them into one pdf"
+  "Export the current buffer and every buffer that mentions it to
+a pdf through latex and pandoc. Makes use of the
+`org-roam-backlink-files' function to find all the
+backlinks. Also saves all the pdf names in a variable called
+`org-roam-backlink-pdfs'. These names can then be passed to
+something like pdftk to merge them into one pdf"
   (interactive)
   (org-roam-backlink-files)
   (setq org-roam-backlink-pdfs nil)
@@ -202,14 +241,20 @@ Therefore, this predicate function allows me to create a version of `org-roam-no
 (define-skeleton project-skeleton
   "This skeleton inserts a link to the Current Projects file in the org-roam directory. 
 
-Its used in my fleeting note initialization function as a means to always make new fleeting notes point to the current projects file, as that is that files purpose"
+Its used in my fleeting note initialization function as a means
+to always make new fleeting notes point to the current projects
+file, as that is that files purpose"
   ""
   "- tags :: [[id:b5e71fe5-9d76-4f7f-b58d-df6a561e6a6b][Current Projects]]")
 
 (defun org-roam-init-fleeting-note ()
-  "Prescribe an ID to the heading making it a node in org-roam, then add it the inbox by giving it a todo keyword. Finally, insert a new line and the `project-skeleton', linking the new file to the Current Projects file.
+  "Prescribe an ID to the heading making it a node in org-roam, then
+  add it the inbox by giving it a todo keyword. Finally, insert a new
+  line and the `project-skeleton', linking the new file to the Current
+  Projects file.
 
- This helps automate the process of creating new fleeting notes in combination with the `org-journal' commands"
+ This helps automate the process of creating new fleeting notes
+ in combination with the `org-journal' commands"
   (interactive)
   (org-id-get-create)
   (evil-open-below 1)
@@ -229,7 +274,10 @@ Its used in my fleeting note initialization function as a means to always make n
 		 (org-id-delete-entry))))
 
 (defun org-roam-node-find-todos ()
-  "Filtered view of org-roam-node-find which displays only nodes with a todo state. All my fleeting notes typically have a todo state indicating I need to work on them so this filter helps me out"
+  "Filtered view of org-roam-node-find which displays only nodes
+with a todo state. All my fleeting notes typically have a todo
+state indicating I need to work on them so this filter helps me
+out"
   (interactive)
   (org-roam-node-find nil nil #'org-roam-node-todo))
 
