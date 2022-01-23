@@ -36,7 +36,7 @@
 (which-key-mode 1)
 
 (setq inhibit-startup-screen t)
-(add-hook 'after-init-hook 'dired-jump)
+(setq initial-buffer-choice "/home/vidianos")
 
 (ivy-mode 1)
 (all-the-icons-ivy-setup)
@@ -136,6 +136,8 @@
 (setq org-confirm-elisp-link-function nil)
 
 (setq ivy-youtube-key "224520591375-p6v36u3r9k8qt2k7qthb12gnjarc8c7t")
+
+(setq counsel-linux-app-format-function 'counsel-linux-app-format-function-name-pretty)
 
 (defun emacs-run-launcher ()
   "Create and select a frame called emacs-run-launcher which consists only of a minibuffer and has specific dimensions. Run counsel-linux-app on that frame, which is an emacs command that prompts you to select an app and open it in a dmenu like behaviour. Delete the frame after that command has exited"
@@ -579,6 +581,8 @@
 (require 'zettelkasten)
 (require 'zetteldesk)
 
+(zetteldesk-mode 1)
+
 (setq bookmark-version-control t
       delete-old-versions t)
 
@@ -647,17 +651,16 @@ it."
   (org-toggle-inline-images))
 
 (add-hook 'after-init-hook 'global-company-mode)
+(require 'company-maxima)
 (add-hook 'company-mode-hook '(lambda ()
-				(add-to-list 'company-backends 'company-math-symbols-latex)
+				(add-to-list 'company-backends '(company-math-symbols-latex company-bibtex company-capf))
+				(add-to-list 'company-backends '(company-maxima-symbols company-maxima-libraries))
 				(setq company-math-allow-latex-symbols-in-faces t)
-				(add-to-list 'company-backends 'company-bibtex)
-				(add-to-list 'company-backends 'company-capf)
 				(setq company-bibtex-bibliography '("~/org_roam/Zotero_library.bib"))))
 
 (setq elfeed-feeds
-      '(("https://feeds.feedburner.com/chemengntua" university)
-	("https://www.reddit.com/r/emacs.rss" emacs linux reddit)
-	("https://www.reddit.com/r/LaTeX.rss" emacs org reddit)
+      '(("https://www.reddit.com/r/emacs.rss" emacs lisp reddit)
+	("https://www.reddit.com/r/LaTeX.rss" latex reddit)
 	("https://www.reddit.com/r/commandline.rss" linux reddit)
 	("https://www.reddit.com/r/vim.rss" linux reddit)
 	("https://www.reddit.com/r/linux.rss" linux reddit)
@@ -665,18 +668,27 @@ it."
 	("https://www.reddit.com/r/git.rss" linux reddit)
 	("https://www.reddit.com/r/OrgRoam.rss" emacs org zettelkasten reddit)
 	("https://www.reddit.com/r/planetemacs.rss" emacs reddit)
+	("https://www.reddit.com/r/ChemicalEngineering.rss" chemeng reddit)
+	("https://www.reddit.com/r/Nyxt.rss" lisp reddit)
 	("https://www.youtube.com/feeds/videos.xml?channel_id=UCQp2VLAOlvq142YN3JO3y8w" emacs org python youtube) ; John Kitchin's YT
 	("https://www.youtube.com/feeds/videos.xml?channel_id=UCVls1GmFKf6WlTraIb_IaJg" linux youtube) ; DistroTube's YT
 	("https://www.youtube.com/feeds/videos.xml?channel_id=UCld68syR8Wi-GY_n4CaoJGA" linux youtube) ; Brodie Robertson's YT
-	("https://www.youtube.com/feeds/videos.xml?channel_id=UCAiiOTio8Yu69c3XnR7nQBQ" emacs org youtube) ; SystemCrafters YT
+	("https://www.youtube.com/feeds/videos.xml?channel_id=UCAiiOTio8Yu69c3XnR7nQBQ" emacs org lisp youtube) ; SystemCrafters YT
 	("https://www.youtube.com/feeds/videos.xml?channel_id=UC0uTPqBCFIpZxlz_Lv1tk_g" emacs youtube) ; Protesilaos Stavrou's YT
+	("https://www.youtube.com/feeds/videos.xml?channel_id=UCJetJ7nDNLlEzDLXv7KIo0w" lisp youtube) ; Gavin Freeborn's YT
 	("https://org-roam.discourse.group/c/how-to/6.rss" emacs org zettelkasten)
 	("https://org-roam.discourse.group/c/dev/5.rss" emacs org zettelkasten)
 	("https://org-roam.discourse.group/c/meta/11.rss" emacs org zettelkasten)
 	("https://planet.emacslife.com/atom.xml" emacs)
 	("https://irreal.org/blog/?feed=rss2" emacs linux org)
 	("https://sachachua.com/blog/category/emacs-news/feed/" emacs)
+	("https://www.emacswiki.org/emacs?action=rss;match=%5E%5Cd%5Cd%5Cd%5Cd-%5Cd%5Cd-%5Cd%5Cd" emacs)
+	("https://ag91.github.io/rss.xml" emacs)
+	("https://takeonrules.com/index.xml" emacs org)
 	))
+
+(require 'elfeed-score)
+(elfeed-score-enable)
 
 (require 'ox-word)
 (require 'org-show)
@@ -877,7 +889,7 @@ it."
  '(custom-safe-themes
    '("0fffa9669425ff140ff2ae8568c7719705ef33b7a927a0ba7c5e2ffcfac09b75" default))
  '(package-selected-packages
-   '(evil-collection openwith sequences cl-lib-highlight helm-system-packages async-await popup-complete helm-fuzzy-find evil-space yapfify yaml-mode ws-butler winum which-key web-mode web-beautify vterm volatile-highlights vi-tilde-fringe uuidgen use-package toc-org tagedit spaceline solarized-theme slim-mode scss-mode sass-mode restart-emacs request rainbow-delimiters pyvenv pytest pyenv-mode py-isort pug-mode pspp-mode popwin pip-requirements persp-mode pcre2el paradox org-projectile-helm org-present org-pomodoro org-mime org-download org-bullets open-junk-file neotree move-text mmm-mode markdown-toc magit macrostep lorem-ipsum livid-mode live-py-mode linum-relative link-hint json-mode js2-refactor js-doc intero indent-guide hy-mode hungry-delete htmlize hlint-refactor hl-todo hindent highlight-parentheses highlight-numbers highlight-indentation helm-themes helm-swoop helm-pydoc helm-projectile helm-mode-manager helm-make helm-hoogle helm-flx helm-descbinds helm-css-scss helm-ag haskell-snippets gruvbox-theme google-translate golden-ratio gnuplot gh-md flx-ido fill-column-indicator fancy-battery eyebrowse expand-region exec-path-from-shell evil-visualstar evil-visual-mark-mode evil-unimpaired evil-tutor evil-surround evil-search-highlight-persist evil-numbers evil-nerd-commenter evil-mc evil-matchit evil-lisp-state evil-indent-plus evil-iedit-state evil-exchange evil-escape evil-ediff evil-args evil-anzu eval-sexp-fu emmet-mode elisp-slime-nav dumb-jump diminish define-word cython-mode csv-mode company-ghci company-ghc column-enforce-mode coffee-mode cmm-mode clean-aindent-mode auto-highlight-symbol auto-compile auctex-latexmk anaconda-mode aggressive-indent adaptive-wrap ace-window ace-link ace-jump-helm-line)))
+   '(org-transclusion evil-collection openwith sequences cl-lib-highlight helm-system-packages async-await popup-complete helm-fuzzy-find evil-space yapfify yaml-mode ws-butler winum which-key web-mode web-beautify vterm volatile-highlights vi-tilde-fringe uuidgen use-package toc-org tagedit spaceline solarized-theme slim-mode scss-mode sass-mode restart-emacs request rainbow-delimiters pyvenv pytest pyenv-mode py-isort pug-mode pspp-mode popwin pip-requirements persp-mode pcre2el paradox org-projectile-helm org-present org-pomodoro org-mime org-download org-bullets open-junk-file neotree move-text mmm-mode markdown-toc magit macrostep lorem-ipsum livid-mode live-py-mode linum-relative link-hint json-mode js2-refactor js-doc intero indent-guide hy-mode hungry-delete htmlize hlint-refactor hl-todo hindent highlight-parentheses highlight-numbers highlight-indentation helm-themes helm-swoop helm-pydoc helm-projectile helm-mode-manager helm-make helm-hoogle helm-flx helm-descbinds helm-css-scss helm-ag haskell-snippets gruvbox-theme google-translate golden-ratio gnuplot gh-md flx-ido fill-column-indicator fancy-battery eyebrowse expand-region exec-path-from-shell evil-visualstar evil-visual-mark-mode evil-unimpaired evil-tutor evil-surround evil-search-highlight-persist evil-numbers evil-nerd-commenter evil-mc evil-matchit evil-lisp-state evil-indent-plus evil-iedit-state evil-exchange evil-escape evil-ediff evil-args evil-anzu eval-sexp-fu emmet-mode elisp-slime-nav dumb-jump diminish define-word cython-mode csv-mode company-ghci company-ghc column-enforce-mode coffee-mode cmm-mode clean-aindent-mode auto-highlight-symbol auto-compile auctex-latexmk anaconda-mode aggressive-indent adaptive-wrap ace-window ace-link ace-jump-helm-line)))
 
 (custom-set-faces
  ;; custom-set-faces was added by Custom.

@@ -1,0 +1,2 @@
+;;; Generated package description from company-maxima.el  -*- no-byte-compile: t -*-
+(define-package "company-maxima" "20210520.2034" "Maxima company integration" '((emacs "25.1") (maxima "0.6.1") (seq "2.20") (company "0.9.13")) :commit "ce5fd160c193e387d9e2bacdba4065c4b4262cb1" :authors '(("Fermin Munoz")) :maintainer '("Fermin Munoz" . "fmfs@posteo.net") :keywords '("languages" "tools" "convenience") :url "https://gitlab.com/sasanidas/maxima")

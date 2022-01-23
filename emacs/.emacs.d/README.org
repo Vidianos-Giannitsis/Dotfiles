@@ -104,51 +104,51 @@ This includes:
 + Set my font to Source Code Pro with the right font size for me. To use daemon mode properly, this needs a bit more code.
 
 #+BEGIN_SRC elisp :tangle init.el
-  
+
   (gcmh-mode 1)
-  
+
   (load-theme 'doom-palenight t)
-  
+
   (menu-bar-mode -1)
   (scroll-bar-mode -1)
   (tool-bar-mode -1)
   (setq ring-bell-function 'ignore)
-  
+
   (display-battery-mode 1)
-  
+
   (which-key-mode 1)
-  
+
   (setq inhibit-startup-screen t)
-  (add-hook 'after-init-hook 'dired-jump)
-  
+  (setq initial-buffer-choice "/home/vidianos")
+
   (ivy-mode 1)
   (all-the-icons-ivy-setup)
   (global-set-key (kbd "M-x") #'counsel-M-x)
   (marginalia-mode 1)
-  
+
   (setq backup-directory-alist `(("." . ,(expand-file-name "tmp/backups/" user-emacs-directory))))
   (make-directory (expand-file-name "tmp/auto-saves/" user-emacs-directory) t)
   (setq auto-save-list-file-prefix (expand-file-name "tmp/auto-saves/sessions/" user-emacs-directory)
 	auto-save-file-name-transforms `((".*" ,(expand-file-name "tmp/auto-saves/" user-emacs-directory) t)))
-  
+
   (require 'dash-functional)
   (require 'helpful)
-  
+
   (use-package doom-modeline
     :ensure t
     :init (doom-modeline-mode 1)
     :config (setq doom-modeline-minor-modes nil
 		  doom-modeline-enable-word-count t
 		  doom-modeline-modal-icon t))
-  
+
   (defalias 'yes-or-no-p 'y-or-n-p)
-  
+
   (setq org-hide-emphasis-markers t)
-  
+
   (defun set-font-faces ()
     "Needed to set up my fonts to work with the emacs daemon"
     (set-face-attribute 'default nil :font "Source Code Pro 14"))
-  
+
   (if (daemonp)
       (add-hook 'after-make-frame-functions
 		(lambda (frame)
@@ -156,7 +156,7 @@ This includes:
 		  (with-selected-frame frame
 		    (set-font-faces))))
     (set-font-faces))
-  
+
   (setq default-input-method "greek")
 #+END_SRC
 
@@ -249,6 +249,8 @@ This enables:
   (setq org-confirm-elisp-link-function nil)
 
   (setq ivy-youtube-key "224520591375-p6v36u3r9k8qt2k7qthb12gnjarc8c7t")
+
+  (setq counsel-linux-app-format-function 'counsel-linux-app-format-function-name-pretty)
 
   (defun emacs-run-launcher ()
     "Create and select a frame called emacs-run-launcher which consists only of a minibuffer and has specific dimensions. Run counsel-linux-app on that frame, which is an emacs command that prompts you to select an app and open it in a dmenu like behaviour. Delete the frame after that command has exited"
@@ -804,12 +806,14 @@ More languages to evaluate with org-babel (by default, only elisp is evaluated).
 
  
 * Org Roam, References and the Zettelkasten Workflow 
-  This is one of the largest and most important sections of my entire config. It is about org roam, the various reference management packages and the whole overarching workflow. It is really large so I decided to split it into its own file, [[https://github.com/Vidianos-Giannitsis/Dotfiles/blob/master/emacs/.emacs.d/libs/zettelkasten.org][zettelkasten.org]] (which can be found in the libs directory). One section of it, I envision to publish as a seperate library, so it tangles to a different file called zetteldesk.el. So here, I require both. 
+  This is one of the largest and most important sections of my entire config. It is about org roam, the various reference management packages and the whole overarching workflow. It is really large so I decided to split it into its own file, [[https://github.com/Vidianos-Giannitsis/Dotfiles/blob/master/emacs/.emacs.d/libs/zettelkasten.org][zettelkasten.org]] (which can be found in the libs directory). One section of it, I envision to publish as a seperate library, so it tangles to a different file called zetteldesk.el. So here, I require both. I also enable the zetteldesk-mode, a helpful mode which initialises the zetteldesk-scratch buffer and isolates all the bindings of the package. 
 
 #+BEGIN_SRC elisp :tangle init.el
 
   (require 'zettelkasten)
   (require 'zetteldesk)
+
+  (zetteldesk-mode 1)
 
 #+END_SRC
   
@@ -915,15 +919,15 @@ More languages to evaluate with org-babel (by default, only elisp is evaluated).
   Company is a minor mode, which I enable globally, which allows for autocompletions. This is useful when programming, or writing latex for completing what you want, but also can speed up the writing of long words. The lambda I add to the company-mode-hook adds latex autocompletions and allows them to be used anywhere. It also sets up company to read and give autocompletions for citations from my master .bib file in Zotero. I usually enter them with the ivy-bibtex package (my current default action is add citation there) but this is worth a try. 
   
   #+BEGIN_SRC elisp :tangle init.el
-    
+
     (add-hook 'after-init-hook 'global-company-mode)
+    (require 'company-maxima)
     (add-hook 'company-mode-hook '(lambda ()
-				    (add-to-list 'company-backends 'company-math-symbols-latex)
+				    (add-to-list 'company-backends '(company-math-symbols-latex company-bibtex company-capf))
+				    (add-to-list 'company-backends '(company-maxima-symbols company-maxima-libraries))
 				    (setq company-math-allow-latex-symbols-in-faces t)
-				    (add-to-list 'company-backends 'company-bibtex)
-				    (add-to-list 'company-backends 'company-capf)
 				    (setq company-bibtex-bibliography '("~/org_roam/Zotero_library.bib"))))
-    
+
   #+END_SRC
   
  
@@ -931,11 +935,10 @@ More languages to evaluate with org-babel (by default, only elisp is evaluated).
 Elfeed is an RSS reader for Emacs. I have started looking into it and adding things to my feed.
 
 #+BEGIN_SRC elisp :results silent :tangle init.el
-  
+
   (setq elfeed-feeds
-	'(("https://feeds.feedburner.com/chemengntua" university)
-	  ("https://www.reddit.com/r/emacs.rss" emacs linux reddit)
-	  ("https://www.reddit.com/r/LaTeX.rss" emacs org reddit)
+	'(("https://www.reddit.com/r/emacs.rss" emacs lisp reddit)
+	  ("https://www.reddit.com/r/LaTeX.rss" latex reddit)
 	  ("https://www.reddit.com/r/commandline.rss" linux reddit)
 	  ("https://www.reddit.com/r/vim.rss" linux reddit)
 	  ("https://www.reddit.com/r/linux.rss" linux reddit)
@@ -943,19 +946,28 @@ Elfeed is an RSS reader for Emacs. I have started looking into it and adding thi
 	  ("https://www.reddit.com/r/git.rss" linux reddit)
 	  ("https://www.reddit.com/r/OrgRoam.rss" emacs org zettelkasten reddit)
 	  ("https://www.reddit.com/r/planetemacs.rss" emacs reddit)
+	  ("https://www.reddit.com/r/ChemicalEngineering.rss" chemeng reddit)
+	  ("https://www.reddit.com/r/Nyxt.rss" lisp reddit)
 	  ("https://www.youtube.com/feeds/videos.xml?channel_id=UCQp2VLAOlvq142YN3JO3y8w" emacs org python youtube) ; John Kitchin's YT
 	  ("https://www.youtube.com/feeds/videos.xml?channel_id=UCVls1GmFKf6WlTraIb_IaJg" linux youtube) ; DistroTube's YT
 	  ("https://www.youtube.com/feeds/videos.xml?channel_id=UCld68syR8Wi-GY_n4CaoJGA" linux youtube) ; Brodie Robertson's YT
-	  ("https://www.youtube.com/feeds/videos.xml?channel_id=UCAiiOTio8Yu69c3XnR7nQBQ" emacs org youtube) ; SystemCrafters YT
+	  ("https://www.youtube.com/feeds/videos.xml?channel_id=UCAiiOTio8Yu69c3XnR7nQBQ" emacs org lisp youtube) ; SystemCrafters YT
 	  ("https://www.youtube.com/feeds/videos.xml?channel_id=UC0uTPqBCFIpZxlz_Lv1tk_g" emacs youtube) ; Protesilaos Stavrou's YT
+	  ("https://www.youtube.com/feeds/videos.xml?channel_id=UCJetJ7nDNLlEzDLXv7KIo0w" lisp youtube) ; Gavin Freeborn's YT
 	  ("https://org-roam.discourse.group/c/how-to/6.rss" emacs org zettelkasten)
 	  ("https://org-roam.discourse.group/c/dev/5.rss" emacs org zettelkasten)
 	  ("https://org-roam.discourse.group/c/meta/11.rss" emacs org zettelkasten)
 	  ("https://planet.emacslife.com/atom.xml" emacs)
 	  ("https://irreal.org/blog/?feed=rss2" emacs linux org)
 	  ("https://sachachua.com/blog/category/emacs-news/feed/" emacs)
+	  ("https://www.emacswiki.org/emacs?action=rss;match=%5E%5Cd%5Cd%5Cd%5Cd-%5Cd%5Cd-%5Cd%5Cd" emacs)
+	  ("https://ag91.github.io/rss.xml" emacs)
+	  ("https://takeonrules.com/index.xml" emacs org)
 	  ))
-  
+
+  (require 'elfeed-score)
+  (elfeed-score-enable)
+
 #+END_SRC
 
 

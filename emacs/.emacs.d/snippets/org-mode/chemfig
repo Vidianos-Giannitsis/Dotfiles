@@ -1,5 +1,5 @@
 # -*- mode: snippet -*-
 # name: chemfig
-# key: ch
+# key: chem
 # --
 \chemfig[atom sep=2em]{$0}

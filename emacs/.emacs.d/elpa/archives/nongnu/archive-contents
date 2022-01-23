@@ -91,6 +91,16 @@
 		  (:maintainer "Bryan Gilbert" . "bryan@bryan.sh")
 		  (:authors
 		   ("Bryan Gilbert <http://github/gilbertw1>")))])
+ (bind-map .
+	   [(1 1 2)
+	    ((emacs
+	      (24 3)))
+	    "Bind personal keymaps in multiple locations" tar
+	    ((:url . "https://github.com/justbur/emacs-bind-map")
+	     (:maintainer "Justin Burkett" . "justin@burkett.cc")
+	     (:authors
+	      ("Justin Burkett" . "justin@burkett.cc"))
+	     (:commit . "6977e0fec5c4a3c62a10503798c2a15194167046"))])
  (bison-mode .
 	     [(0 4)
 	      nil "Major mode for editing bison, yacc and lex files." tar
@@ -665,6 +675,14 @@
 	  nil "Major mode for editing J programs" tar
 	  ((:url . "http://github.com/zellio/j-mode")
 	   (:keywords "j" "languages"))])
+ (jinja2-mode .
+	      [(0 3)
+	       nil "A major mode for jinja2" tar
+	       ((:maintainer "Florian Mounier aka paradoxxxzero")
+		(:authors
+		 ("Florian Mounier aka paradoxxxzero"))
+		(:url . "https://elpa.nongnu.org/nongnu/jinja2-mode.html")
+		(:commit . "a598357069a68b0ac2bf128c19edd8e899084cdc"))])
  (julia-mode .
 	     [(0 4)
 	      ((emacs
@@ -850,6 +868,23 @@
 		(:maintainer "Bastien Guerry" . "bzg@gnu.org")
 		(:authors
 		 ("Bastien Guerry" . "bzg@gnu.org")))])
+ (org-drill .
+	    [(2 7 0)
+	     ((emacs
+	       (25 3))
+	      (seq
+	       (2 14))
+	      (org
+	       (9 3))
+	      (persist
+	       (0 3)))
+	     "Self-testing using spaced repetition" tar
+	     ((:url . "https://gitlab.com/phillord/org-drill/issues")
+	      (:keywords "games" "outlines" "multimedia")
+	      (:maintainer "Phillip Lord" . "phillip.lord@russet.org.uk")
+	      (:authors
+	       ("Paul Sexton" . "eeeickythump@gmail.com"))
+	      (:commit . "4c114489e682e514e79701045d541ab6f3dc3fb4"))])
  (org-journal .
 	      [(2 1 2)
 	       ((emacs
@@ -893,6 +928,17 @@
 		  (:maintainer "D. Williams" . "d.williams@posteo.net")
 		  (:authors
 		   ("D. Williams" . "d.williams@posteo.net")))])
+ (org-tree-slide .
+		 [(2 8 18)
+		  ((emacs
+		    (24 4)))
+		  "A presentation tool for org-mode" tar
+		  ((:url . "https://github.com/takaxp/org-tree-slide")
+		   (:keywords "convenience" "org-mode" "presentation" "narrowing")
+		   (:maintainer "Takaaki ISHIKAWA <takaxp at ieee dot org>")
+		   (:authors
+		    ("Takaaki ISHIKAWA <takaxp at ieee dot org>"))
+		   (:commit . "1fb3ecb637d0baff40dff7965dcac63b9674377b"))])
  (orgit .
 	[(1 7 2)
 	 ((emacs

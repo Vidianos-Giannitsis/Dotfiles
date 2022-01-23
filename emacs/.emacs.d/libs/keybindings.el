@@ -28,7 +28,7 @@
   "C" '(:ignore t :which-key "Calendar Commands")
   "l" '(:ignore t :which-key "Org Links")
   "L" '(linum-mode :which-key "Line numbers")
-  "s" '(:ignore t :which-key "Counsel-spotify")
+  "S" '(:ignore t :which-key "Counsel-spotify")
   "e" '(:ignore t :which-key "Evaluate Emacs-Lisp")
   "f" '(ace-window :which-key "Switch focus")
   "φ" '(ace-window :which-key "Switch focus")
@@ -39,6 +39,7 @@
   "i" '(my/org-pandoc-hydra/body :which-key "Org Pandoc Import")
   "y" 'ivy-yasnippet
   "z" '(:ignore t :which-key "Zetteldesk")
+  "s" '(:ignore t :which-key "Sly Commands")
   "g" 'counsel-rg
   "E" 'eperiodic)
 
@@ -59,6 +60,16 @@
  "j" '(ein:jupyter-server-start :which-key "Jupyter Notebook")
  "g" '(run-gnuplot :which-key "Gnuplot")
  "e" '(ielm :which-key "Emacs Lisp"))
+
+(general-define-key
+ :states 'normal
+ :keymaps 'override
+ :prefix "SPC s"
+ "r" '(sly :which-key "Start the REPL")
+ "h" '(sly-documentation-lookup :whick-key "describe-symbol")
+ "l" 'sly-load-file
+ "c" 'sly-compile-and-load-file
+ "e" 'sly-interactive-eval)
 
 (general-define-key
  :states 'normal
@@ -87,7 +98,6 @@
  "r" 'zetteldesk-remove-from-desktop
  "R" 'zetteldesk-remove-node-from-desktop
  "n" 'zetteldesk-node-find
- "S" 'zetteldesk-create-scratch-buffer
  "s" 'zetteldesk-switch-to-scratch-buffer
  "i" 'zetteldesk-insert-node-contents)
 
@@ -162,7 +172,7 @@
 (general-define-key
  :states 'normal
  :keymaps 'override
- :prefix "SPC s"
+ :prefix "SPC S"
  "n" 'counsel-spotify-next
  "p" 'counsel-spotify-previous
  "t" 'counsel-spotify-toggle-play-pause
@@ -283,6 +293,8 @@
      "f" 'org-footnote-action
      "L" '(lab-skeleton :which-key "Insert my lab report template")
      "h" 'hw-skeleton
+     "E" 'org-table-export
+     "c" 'org-table-create-or-convert-from-region
      "u" '(uo-lab-skeleton :which-key "Unit Operations lab template")
      "T" '(toc-org-mode :which-key "Insert ToC")
      "b" 'org-beamer-select-environment
@@ -396,5 +408,11 @@
  :states 'normal
  :keymaps 'ebib-index-mode-map
  "/" 'ebib-jump-to-entry)
+
+(general-define-key
+ :states 'normal
+ :keymaps 'lisp-mode-map
+ ", f" 'sly-compile-defun
+ ", h" '(sly-documentation :which-key "Documentation at point"))
 
 (provide 'keybindings)
