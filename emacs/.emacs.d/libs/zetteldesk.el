@@ -1,11 +1,16 @@
+;; -- DEPENDENCIES --
+;; These are some functions that are needed for the package to work as
+;; it should, but that are not specific to the package
+
 (cl-defmethod org-roam-node-buffer ((node org-roam-node))
   "Access slot \"buffer\" of org-roam-node struct CL-X"
   (let ((buffer (get-file-buffer (org-roam-node-file node))))
     buffer))
 
-(defun org-roam-node-poi-p (NODE)
-  "Check if NODE has the tag POI. Return t if it does"
-  (string-equal (car (org-roam-node-tags NODE)) "POI"))
+(defun org-roam-node-poi-or-moc-p (NODE)
+  "Check if NODE has the tag POI or the tag MOC. Return t if it does"
+  (or (string-equal (car (org-roam-node-tags NODE)) "POI")
+      (string-equal (car (org-roam-node-tags NODE)) "MOC")))
 
 (defun org-roam-backlink-query ()
   "Simple org-roam query function that stores the IDs of all the files that link
@@ -19,6 +24,24 @@
 	    :where (= dest $s1)
 	    :and (= type "id")]
    (org-roam-node-id (org-roam-node-at-point))))
+
+(defun org-roam-backlink-query* (NODE)
+  "Run `org-roam-backlink-query', but instead of returning a list
+of the backlinks of `org-roam-node-at-point', find the backlinks
+of NODE. This is handy in cases where NODE is read through
+`org-roam-node-read' and doesn't have to be the `current-buffer'"
+  (org-roam-db-query
+	[:select [source dest]
+		 :from links
+		 :where (= dest $s1)
+		 :and (= type "id")]
+	(org-roam-node-id NODE)))
+
+;; -- PREDICATE FUNCTIONS --
+;; This section contains the predicate functions the package uses. The
+;; core of the package is that it provides well filtered completion
+;; menus as chosen by the user, so obviously predicate functions are
+;; core to the package
 
 (defvar-local zetteldesk "default"
   "Buffer local variable that determines whether a buffer is part
@@ -68,27 +91,49 @@ those files"
   "Check if BUFFER is part of the current `zetteldesk' and also a pdf file."
   (and (zetteldesk-p BUFFER) (eq (buffer-local-value 'major-mode (cdr BUFFER)) 'pdf-view-mode)))
 
+;; -- ADD/REMOVE THINGS IN THE ZETTELDESK --
+;; To get a system where the user can get multiple filtered views of
+;; the nodes/buffers of their choice, obviously you need functions
+;; that allow the user to add them to something. And then, you also
+;; need ways to remove things, because people make mistakes.
+
+(defvar zetteldesk-info-nodes '()
+  "List of info nodes that are part of the
+  zetteldesk. Initialised as an empty list")
+
 (defun zetteldesk-add-to-desktop (BUFFER)
   "Add BUFFER to the current `zetteldesk'"
   (interactive "b")
   (with-current-buffer BUFFER
     (setq-local zetteldesk "foo")))
 
-(defun zetteldesk-add-node-to-desktop ()
-  "Add an org-roam-node to the `zetteldesk' and if there isn't a
-  buffer associated to it, create it.
-
-The node is read through `org-roam-node-read'"
-  (interactive)
-  (let* ((node (org-roam-node-read))
-	 (buffer (org-roam-node-buffer node))
-	 (file (org-roam-node-file node))
+(defun zetteldesk-add-node-to-desktop (NODE)
+  "Add NODE to the `zetteldesk' and if there isn't a buffer associated
+  to it, create it. NODE is an org-roam node read through `org-roam-node-read'"
+  (interactive (list (org-roam-node-read)))
+  (let ((buffer (org-roam-node-buffer NODE))
+	 (file (org-roam-node-file NODE))
 	 (org-startup-with-latex-preview nil))
     (if (not (eq buffer nil))
 	(with-current-buffer buffer
 	  (setq-local zetteldesk "foo"))
       (with-current-buffer (find-file-noselect file)
 	(setq-local zetteldesk "foo")))))
+
+(defun zetteldesk-add-moc-or-poi-backlink-to-desktop ()
+  "Prompts the user to select an org-roam node that has the POI
+or MOC tag (filtering done with `org-roam-node-poi-or-moc-p') and
+collects its ID and backlinks. Then, prompt the user to select
+one of its backlinks and add that to the zetteldesk."
+  (interactive)
+  (let* ((source (org-roam-node-read nil #'org-roam-node-poi-or-moc-p))
+	 (source-id (org-roam-node-id source))
+	 (backlinks (org-roam-backlink-query* source)))
+    (zetteldesk-add-node-to-desktop
+     (org-roam-node-read nil (lambda (NODE)
+			       (let* ((id (org-roam-node-id NODE))
+				      (id-list (list id source-id)))
+				 (member id-list backlinks)))))))
 
 (defun zetteldesk-add-backlinks-to-desktop ()
   "Add the current buffer and all its backlinks to the `zetteldesk'. 
@@ -112,20 +157,23 @@ with them, and if so adds it to the `zetteldesk'"
 	  (with-current-buffer (find-file-noselect file)
 	    (setq-local zetteldesk "foo")))))))
 
+(defun zetteldesk-add-info-node-to-desktop ()
+  "If the current buffer is an info node, add its name to the
+list of the variable `zetteldesk-info-nodes'"
+  (interactive)
+  (add-to-list 'zetteldesk-info-nodes (Info-copy-current-node-name)))
+
 (defun zetteldesk-remove-from-desktop (BUFFER)
   "Remove BUFFER from the current `zetteldesk'"
   (interactive "b")
   (with-current-buffer BUFFER
     (kill-local-variable 'zetteldesk)))
 
-(defun zetteldesk-remove-node-from-desktop ()
-  "Add an org-roam-node to the `zetteldesk' and if there isn't a
-  buffer associated to it, create it.
-
-The node is read through `org-roam-node-read'"
-  (interactive)
-  (let* ((node (org-roam-node-read nil #'zetteldesk-node-p))
-	 (buffer (org-roam-node-buffer node)))
+(defun zetteldesk-remove-node-from-desktop (NODE)
+  "Remove NODE from the `zetteldesk'. NODE is an org-roam node
+and is read through `org-roam-node-read'"
+  (interactive (list (org-roam-node-read nil #'zetteldesk-node-p)))
+  (let ((buffer (org-roam-node-buffer NODE)))
     (with-current-buffer buffer
       (kill-local-variable 'zetteldesk))))
 
@@ -146,6 +194,19 @@ buffer to the desktop it removes it."
 	(unless (eq buffer nil)
 	  (with-current-buffer buffer
 	    (kill-local-variable 'zetteldesk)))))))
+
+(defun zetteldesk-remove-info-node-from-desktop ()
+  "Remove an info-node from the `zetteldesk'. The node is
+selected through a `completing-read' menu of
+`zetteldesk-info-nodes'"
+  (interactive)
+  (setq zetteldesk-info-nodes (remove
+			       (completing-read "Info Nodes: " zetteldesk-info-nodes)
+			       zetteldesk-info-nodes)))
+
+;; -- FILTER FUNCTIONS --
+;; This section is about defining all the functions that show you the
+;; filtered results of all your nodes/buffers
 
 (defun zetteldesk-switch-to-buffer ()
   "Execute `switch-to-buffer' with the buffer list being
@@ -168,6 +229,19 @@ part of the current `zetteldesk'"
   (interactive)
   (org-roam-node-insert #'zetteldesk-node-p))
 
+(defun zetteldesk-info-goto-node ()
+  "Zetteldesk filter function for `Info-goto-node'.
+
+Prompts the user to select a node from the list
+`zetteldesk-info-nodes' and jumps to that node"
+  (interactive)
+  (Info-goto-node (completing-read "Nodes: " zetteldesk-info-nodes)))
+
+;; -- *ZETTELDESK-SCRATCH* --
+;; This is the section where it all comes together. The
+;; zetteldesk-scratch buffer is a special buffer defined here on which
+;; you drop all your stuff. Its what molds the whole workflow together
+
 (define-minor-mode zetteldesk-mode
   "Toggles the global zetteldesk-mode.
 
@@ -187,20 +261,25 @@ buffer, a useful part of the whole zetteldesk workflow."
 
 (add-hook 'zetteldesk-mode-on-hook 'zetteldesk--create-scratch-buffer)
 
-(defun zetteldesk-switch-to-scratch-buffer ()
-  "Open the zetteldesk-scratch buffer in a split with the current buffer"
-  (interactive)
-  (switch-to-buffer-other-window "*zetteldesk-scratch*"))
+(defun zetteldesk-switch-to-scratch-buffer (&optional arg)
+  "Open the zetteldesk-scratch buffer in a split with the current buffer.
 
-(defun zetteldesk-node-insert-if-poi ()
+Optionally, with a `\\[universal-argument]' switch to the
+*zetteldesk-scratch* buffer without issuing a split."
+  (interactive "P")
+  (if (equal arg '(4))
+      (switch-to-buffer "*zetteldesk-scratch*")
+    (switch-to-buffer-other-window "*zetteldesk-scratch*")))
+
+(defun zetteldesk-node-insert-if-poi-or-moc ()
   "Filter `org-roam-node-list' to only include files in the current
-`zetteldesk' that have the POI tag with `zetteldesk-node-p' and
-`org-roam-node-poi-p'. Then insert a link to every one of those nodes
+`zetteldesk' that have the POI or MOC tag with `zetteldesk-node-p' and
+`org-roam-node-poi-or-moc-p'. Then insert a link to every one of those nodes
 and seperate them with commas"
   (interactive)
   (let* ((init_list (org-roam-node-list))
 	 (zetteldesk_nodes (cl-remove-if-not #'zetteldesk-node-p init_list))
-	 (nodes_poi (cl-remove-if-not #'org-roam-node-poi-p zetteldesk_nodes)))
+	 (nodes_poi (cl-remove-if-not #'org-roam-node-poi-or-moc-p zetteldesk_nodes)))
     (while nodes_poi
       (let* ((node (car nodes_poi))
 	     (description (org-roam-node-formatted (car nodes_poi))))
@@ -326,5 +405,53 @@ remember why it was useful."
 	      (org-link-make-string
 	       (concat "pdf:" file "::" page)
 	       description)))))
+
+(defun zetteldesk-insert-info-contents (&optional arg)
+  "Select an info node that is part of the current `zetteldesk'
+  using a `completing-read' prompt for the selection.
+
+Then, in the *zetteldesk-scratch* buffer, go to the end of the
+buffer, insert a newline and a heading of the form \"Supportive
+Material - \" the node's name \"(Info)\" akin to what is done in
+`zetteldesk-insert-link-to-pdf'. Then, insert the contents of the
+chosen info node, removing the first 2 lines which have the
+contextual links of the buffer, as they are not functional
+outside of the info buffer. Also insert a link with the title
+\"See this node in its context\" which opens the node inside the
+info program. Finally, restore the buffer from which this
+function was called. Ideally, this wouldn't require a
+switch-to-buffer statement, but the function `Info-goto-node'
+used for this function switches the visible buffer to the info
+node and I couldn't find an alternative that only makes it
+current for editing operations, but doesn't change the visible
+buffer to it.
+
+I find the link to the actual info buffer is useful as a lot of
+the time, you might want to insert the buffer so you can store it
+with other useful information inside the zetteldesk-scratch
+buffer, but then, you are interested in looking into the other
+nodes of the manual you were reading.
+
+Optionally, with a `\\[universal-argument]' switch to the
+zetteldesk-scratch buffer in a split."
+  (interactive "P")
+  (let ((info_node (completing-read "Nodes: " zetteldesk-info-nodes))
+	(buffer (current-buffer)))
+    (Info-goto-node info_node)
+    (with-current-buffer "*zetteldesk-scratch*"
+      (goto-char (point-max))
+      (newline)
+      (org-insert-heading)
+      (insert "Supportive Material - " info_node " (Info)")
+      (newline)
+      (save-excursion (insert-buffer-substring "*info*")
+		      (insert
+		       (org-link-make-string
+			(concat "elisp:(Info-goto-node \"" info_node "\")")
+			"See this node in its context")))
+      (kill-whole-line 2))
+    (switch-to-buffer buffer)
+    (when (equal arg '(4))
+      (switch-to-buffer-other-window "*zetteldesk-scratch*"))))
 
 (provide 'zetteldesk)

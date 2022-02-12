@@ -46,7 +46,7 @@
     (let ((buffer (get-file-buffer (org-roam-node-file node))))
       buffer))
 
-  (setq org-roam-node-display-template "${title:100} ${backlinkscount:6} ${todostate:20} ${directories:8} ${tags:25}")
+  (setq org-roam-node-display-template "${title:100} ${backlinkscount:6} ${todostate:20} ${directories:10} ${tags:25}")
 
   (add-to-list 'display-buffer-alist
 	       '("\\*org-roam\\*"
@@ -82,9 +82,10 @@ which can be useful in some cases. That filtered function is
 `org-roam-find-permanent-node'."
   (string-equal (org-roam-node-directories NODE) ""))
 
-(defun org-roam-node-poi-p (NODE)
-  "Check if NODE has the tag POI. Return t if it does"
-  (string-equal (car (org-roam-node-tags NODE)) "POI"))
+(defun org-roam-node-poi-or-moc-p (NODE)
+  "Check if NODE has the tag POI or the tag MOC. Return t if it does"
+  (or (string-equal (car (org-roam-node-tags NODE)) "POI")
+      (string-equal (car (org-roam-node-tags NODE)) "MOC")))
 
 (defun org-roam-find-permanent-node ()
   "Execute `org-roam-node-find' with the list being filtered to
@@ -289,11 +290,8 @@ out"
 	 :unarrowed t
 	 :jump-to-captured t)
 
-	("p" "project" plain "%?" :if-new
-	 (file+head "project/${slug}-%<%d-%m-%y>.org" "#+title: ${title}\n
-- index ::  
-- tags ::  
-#+filetags: ")
+	("o" "outline" plain "%?" :if-new
+	 (file+head "outlines/${slug}-%<%d-%m-%y>.org" "#+title: ${title}\n")
 	 :unarrowed t
 	 :jump-to-captured t)
 
@@ -319,7 +317,7 @@ out"
 	 :if-new
 	 (file+head "ref/${slug}.org" "#+title: ${title}\n
 #+filetags: %:type
-- tags :: 
+- tags :: \n
 
 [[elisp:(Info-goto-node \"(%:file)%:node\")][Link to Info page]]
 \n
@@ -330,7 +328,7 @@ out"
       '(("r" "ref" entry "* %?" :target
 	 (file+head "ref/${slug}.org" "#+title: ${title}\n
 #+filetags: 
- - tags :: ")
+ - tags :: \n")
 	 :unnarrowed t
 	 :jump-to-captured t)))
 

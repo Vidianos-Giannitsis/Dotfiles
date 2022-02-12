@@ -292,7 +292,7 @@
 		("Artur Malabarba" . "emacs@endlessparentheses.com"))
 	       (:keywords "lisp"))])
  (cape .
-       [(0 5)
+       [(0 6)
 	((emacs
 	  (27 1)))
 	"Completion At Point Extensions" tar
@@ -300,7 +300,7 @@
 	 (:maintainer "Daniel Mendler" . "mail@daniel-mendler.de")
 	 (:authors
 	  ("Daniel Mendler" . "mail@daniel-mendler.de"))
-	 (:commit . "9567f1ca09a3867e50ef8f990b486e916460df9d"))])
+	 (:commit . "92c3168283c6d9faa3fcf2e72d0d71afbfa5d6e1"))])
  (capf-autosuggest .
 		   [(0 3)
 		    ((emacs
@@ -440,14 +440,15 @@
 			("Ingo Lohmar" . "i.lohmar@gmail.com"))
 		       (:keywords "abbrev" "convenience" "matching"))])
  (consult .
-	  [(0 14)
+	  [(0 15)
 	   ((emacs
 	     (26 1)))
 	   "Consulting completing-read" tar
 	   ((:url . "https://github.com/minad/consult")
 	    (:maintainer "Daniel Mendler" . "mail@daniel-mendler.de")
 	    (:authors
-	     ("Daniel Mendler and Consult contributors")))])
+	     ("Daniel Mendler and Consult contributors"))
+	    (:commit . "e1e17965a98515a620c439be1eb28cd125f984a0"))])
  (context-coloring .
 		   [(8 1 0)
 		    ((emacs
@@ -459,16 +460,17 @@
 		      ("Jackson Ray Hamilton" . "jackson@jacksonrayhamilton.com"))
 		     (:keywords "convenience" "faces" "tools"))])
  (corfu .
-	[(0 17)
+	[(0 18)
 	 ((emacs
 	   (27 1)))
 	 "Completion Overlay Region FUnction" tar
 	 ((:url . "https://github.com/minad/corfu")
 	  (:maintainer "Daniel Mendler" . "mail@daniel-mendler.de")
 	  (:authors
-	   ("Daniel Mendler" . "mail@daniel-mendler.de")))])
+	   ("Daniel Mendler" . "mail@daniel-mendler.de"))
+	  (:commit . "2caa3e0088be4c1d970d788a14a8d9f4e1b993b7"))])
  (coterm .
-	 [(1 3)
+	 [(1 4)
 	  ((emacs
 	    (26 1)))
 	  "Terminal emulation for comint" tar
@@ -476,7 +478,8 @@
 	   (:keywords "processes")
 	   (:maintainer "jakanakaevangeli" . "jakanakaevangeli@chiru.no")
 	   (:authors
-	    ("jakanakaevangeli" . "jakanakaevangeli@chiru.no")))])
+	    ("jakanakaevangeli" . "jakanakaevangeli@chiru.no"))
+	   (:commit . "28ea65f0f88b65e561359d0fb8fc8dd84d6258d6"))])
  (counsel .
 	  [(0 13 4)
 	   ((emacs
@@ -578,17 +581,18 @@
 		  ("Daiki Ueno" . "ueno@gnu.org"))
 		 (:maintainer nil . "emacs-devel@gnu.org"))])
  (debbugs .
-	  [(0 29)
+	  [(0 30)
 	   ((emacs
 	     (25 1))
 	    (soap-client
 	     (3 1 5)))
 	   "SOAP library to access debbugs servers" tar
-	   ((:maintainer "Michael Albinus" . "michael.albinus@gmx.de")
+	   ((:keywords "comm" "hypermedia")
+	    (:maintainer "Michael Albinus" . "michael.albinus@gmx.de")
 	    (:authors
 	     ("Michael Albinus" . "michael.albinus@gmx.de"))
-	    (:keywords "comm" "hypermedia")
-	    (:url . "https://elpa.gnu.org/packages/debbugs.html"))])
+	    (:url . "https://elpa.gnu.org/packages/debbugs.html")
+	    (:commit . "e875a34129ddddefd88895017701607e8affa6d7"))])
  (delight .
 	  [(1 7)
 	   ((cl-lib
@@ -645,6 +649,17 @@
 	      ("Mitchel Humpherys" . "mitch.special@gmail.com"))
 	     (:maintainer "Mitchel Humpherys" . "mitch.special@gmail.com")
 	     (:url . "https://github.com/mgalgs/diffview-mode"))])
+ (diminish .
+	   [(0 46)
+	    ((emacs
+	      (24 3)))
+	    "Diminished modes are minor modes with no modeline display" tar
+	    ((:url . "https://github.com/myrjola/diminish.el")
+	     (:keywords "extensions" "diminish" "minor" "codeprose")
+	     (:maintainer "Martin Yrjölä" . "martin.yrjola@gmail.com")
+	     (:authors
+	      ("Will Mengarini" . "seldon@eskimo.com"))
+	     (:commit . "66b3902401059d161424b1b8d0abc3cb0a7d6df0"))])
  (dired-du .
 	   [(0 5 2)
 	    ((emacs
@@ -705,6 +720,17 @@
 	    (:authors
 	     ("Chong Yidong" . "cyd@gnu.org"))
 	    (:maintainer "Chong Yidong" . "cyd@gnu.org"))])
+ (dtache .
+	 [(0 5)
+	  ((emacs
+	    (27 1)))
+	  "Run and interact with detached shell commands" tar
+	  ((:url . "https://www.gitlab.com/niklaseklund/dtache.git")
+	   (:keywords "convenience" "processes")
+	   (:maintainer "Niklas Eklund" . "niklas.eklund@posteo.net")
+	   (:authors
+	    ("Niklas Eklund" . "niklas.eklund@posteo.net"))
+	   (:commit . "ecf4c57d96eda400d9b2d5cfeaa9244993ae3603"))])
  (dts-mode .
 	   [(0 1 1)
 	    nil "Major mode for Device Tree source files" tar
@@ -734,7 +760,7 @@
 	       ("Leo Liu" . "sdl.web@gmail.com"))
 	      (:keywords "killing" "convenience"))])
  (ebdb .
-       [(0 8 8)
+       [(0 8 10)
 	((emacs
 	  (25 1))
 	 (seq
@@ -744,7 +770,8 @@
 	 (:keywords "convenience" "mail")
 	 (:maintainer "Eric Abrahamsen" . "eric@ericabrahamsen.net")
 	 (:authors
-	  ("Eric Abrahamsen" . "eric@ericabrahamsen.net")))])
+	  ("Eric Abrahamsen" . "eric@ericabrahamsen.net"))
+	 (:commit . "8fcd14c9a9e1710716ddef8195bc123140473912"))])
  (ebdb-gnorb .
 	     [(1 0 2)
 	      ((gnorb
@@ -881,7 +908,7 @@
 		    ("Omar Antolín Camarena" . "omar@matem.unam.mx"))
 		   (:commit . "7745ad00091bbf3bdf98a2dcdbb20fc9cb05d5c1"))])
  (emms .
-       [(8)
+       [(9)
 	((cl-lib
 	  (0 5))
 	 (nadvice
@@ -893,7 +920,8 @@
 	 (:keywords "emms" "mp3" "ogg" "flac" "music" "mpeg" "video" "multimedia")
 	 (:maintainer "Yoni Rabkin" . "yrk@gnu.org")
 	 (:authors
-	  ("Jorgen Schäfer" . "forcer@forcix.cx")))])
+	  ("Jorgen Schäfer" . "forcer@forcix.cx"))
+	 (:commit . "c3596ae7166db2de004c57da303b5eb8d3e1f2e8"))])
  (engrave-faces .
 		[(0 2 0)
 		 ((emacs
@@ -1571,14 +1599,15 @@
 	 ("Nicolas Petton" . "nicolas@petton.fr"))
 	(:url . "https://elpa.gnu.org/packages/map.html"))])
  (marginalia .
-	     [(0 11)
+	     [(0 12)
 	      ((emacs
 		(26 1)))
 	      "Enrich existing commands with completion annotations" tar
 	      ((:url . "https://github.com/minad/marginalia")
 	       (:maintainer "Omar Antolín Camarena <omar@matem.unam.mx>, Daniel Mendler" . "mail@daniel-mendler.de")
 	       (:authors
-		("Omar Antolín Camarena <omar@matem.unam.mx>, Daniel Mendler" . "mail@daniel-mendler.de")))])
+		("Omar Antolín Camarena <omar@matem.unam.mx>, Daniel Mendler" . "mail@daniel-mendler.de"))
+	       (:commit . "e9540a7b80f9c4d044748b88720e5cba3e30c20a"))])
  (markchars .
 	    [(0 2 2)
 	     nil "Mark chars fitting certain characteristics" single
@@ -1786,13 +1815,14 @@
 		  (:keywords "convenience" "mode-line" "header-line")
 		  (:maintainer "Nicolas P. Rougier" . "Nicolas.Rougier@inria.fr"))])
  (nano-theme .
-	     [(0 2 1)
+	     [(0 3 0)
 	      ((emacs
 		(27 1)))
 	      "N Λ N O theme" tar
 	      ((:url . "https://github.com/rougier/nano-theme")
 	       (:keywords "theme" "dark" "light")
-	       (:maintainer "Nicolas P. Rougier" . "Nicolas.Rougier@inria.fr"))])
+	       (:maintainer "Nicolas P. Rougier" . "Nicolas.Rougier@inria.fr")
+	       (:commit . "11362f22ba631d84ae300fd3c4bd6db128ba5960"))])
  (nhexl-mode .
 	     [(1 5)
 	      ((emacs
@@ -2053,15 +2083,16 @@
 	     ("Phillip Lord" . "phillip.lord@russet.org.uk"))
 	    (:url . "http://elpa.gnu.org/packages/persist.html"))])
  (phps-mode .
-	    [(0 4 13)
+	    [(0 4 16)
 	     ((emacs
 	       (26)))
-	     "Major mode for PHP with Semantic integration" tar
+	     "Major mode for PHP with code intelligence" tar
 	     ((:url . "https://github.com/cjohansson/emacs-phps-mode")
 	      (:keywords "tools" "convenience")
 	      (:maintainer "Christian Johansson" . "christian@cvj.se")
 	      (:authors
-	       ("Christian Johansson" . "christian@cvj.se")))])
+	       ("Christian Johansson" . "christian@cvj.se"))
+	      (:commit . "a42188a24fd0c02bf83df8795a2977078fadcf45"))])
  (pinentry .
 	   [(0 1)
 	    nil "GnuPG Pinentry server implementation" single
@@ -2079,7 +2110,7 @@
 	   ("Mario Lang" . "mlang@delysid.org"))
 	  (:maintainer "Mario Lang" . "mlang@delysid.org"))])
  (posframe .
-	   [(1 1 6)
+	   [(1 1 7)
 	    ((emacs
 	      (26 1)))
 	    "Pop a posframe (just a frame) at point" tar
@@ -2087,7 +2118,8 @@
 	     (:keywords "convenience" "tooltip")
 	     (:maintainer "Feng Shu" . "tumashu@163.com")
 	     (:authors
-	      ("Feng Shu" . "tumashu@163.com")))])
+	      ("Feng Shu" . "tumashu@163.com"))
+	     (:commit . "c91d4d53fa479ceb604071008ce0a901770eff57"))])
  (project .
 	  [(0 8 1)
 	   ((emacs
@@ -2535,15 +2567,18 @@
 	    (:authors
 	     ("Phil Sainty" . "psainty@orcon.net.nz")))])
  (soap-client .
-	      [(3 2 0)
-	       ((cl-lib
+	      [(3 2 1)
+	       ((emacs
+		 (24 1))
+		(cl-lib
 		 (0 6 1)))
 	       "Access SOAP web services" tar
 	       ((:url . "https://github.com/alex-hhh/emacs-soap-client")
+		(:keywords "soap" "web-services" "comm" "hypermedia")
 		(:maintainer "Alexandru Harsanyi" . "AlexHarsanyi@gmail.com")
 		(:authors
 		 ("Alexandru Harsanyi" . "AlexHarsanyi@gmail.com"))
-		(:keywords "soap" "web-services" "comm" "hypermedia"))])
+		(:commit . "37eef19fd608ca81acb40f974b8d7bbe7fc27127"))])
  (sokoban .
 	  [(1 4 8)
 	   ((emacs
@@ -2749,7 +2784,7 @@
 	  ("Oleh Krehel" . "ohwoeowho@gmail.com"))
 	 (:keywords "convenience"))])
  (tramp .
-	[(2 5 2)
+	[(2 5 2 1)
 	 ((emacs
 	   (25 1)))
 	 "Transparent Remote Access, Multiple Protocol" tar
@@ -2757,7 +2792,8 @@
 	  (:keywords "comm" "processes")
 	  (:maintainer "Michael Albinus" . "michael.albinus@gmx.de")
 	  (:authors
-	   ("Kai Großjohann" . "kai.grossjohann@gmx.net")))])
+	   ("Kai Großjohann" . "kai.grossjohann@gmx.net"))
+	  (:commit . "974db74a36729d67dc758301e1cc9341396c79d9"))])
  (tramp-theme .
 	      [(0 2)
 	       ((emacs
@@ -2866,16 +2902,17 @@
 	      (:authors
 	       ("Philip Kaludercic" . "philipk@posteo.net")))])
  (vc-got .
-	 [(1 0)
+	 [(1 1)
 	  ((emacs
 	    (25 1)))
 	  "VC backend for Game of Trees VCS" tar
 	  ((:url . "https://git.omarpolo.com/vc-got/")
+	   (:keywords "vc" "tools")
 	   (:maintainer "Omar Polo" . "op@omarpolo.com")
 	   (:authors
 	    ("Omar Polo" . "op@omarpolo.com")
 	    ("Timo Myyrä" . "timo.myyra@bittivirhe.fi"))
-	   (:keywords "vc" "tools"))])
+	   (:commit . "86d9909a7e54c02179e40afd05693c00f6689edc"))])
  (vc-hgcmd .
 	   [(1 14 1)
 	    ((emacs
@@ -2925,16 +2962,17 @@
 		  ("Michael McNamara" . "mac@verilog.com")
 		  ("Wilson Snyder" . "wsnyder@wsnyder.org")))])
  (vertico .
-	  [(0 19)
+	  [(0 20)
 	   ((emacs
 	     (27 1)))
 	   "VERTical Interactive COmpletion" tar
 	   ((:url . "https://github.com/minad/vertico")
 	    (:maintainer "Daniel Mendler" . "mail@daniel-mendler.de")
 	    (:authors
-	     ("Daniel Mendler" . "mail@daniel-mendler.de")))])
+	     ("Daniel Mendler" . "mail@daniel-mendler.de"))
+	    (:commit . "1bd5438da9c661e2df5e9516f36d9cbc6d100a34"))])
  (vertico-posframe .
-		   [(0 5 1)
+		   [(0 5 2)
 		    ((emacs
 		      (26 0))
 		     (posframe
@@ -2947,7 +2985,7 @@
 		     (:maintainer "Feng Shu" . "tumashu@163.com")
 		     (:authors
 		      ("Feng Shu" . "tumashu@163.com"))
-		     (:commit . "7a75271fdaf593e6f491a953b511d2540553b532"))])
+		     (:commit . "cd54c3f022a47afc0a540eee117efc38289ae72d"))])
  (vigenere .
 	   [(1 0)
 	    ((emacs

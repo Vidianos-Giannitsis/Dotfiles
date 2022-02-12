@@ -98,6 +98,7 @@ var favorites = [
 	  ["MC Biome Finder", "https://www.chunkbase.com/apps/biome-finder#-3038289977291799158", "bf"],
 	  ["Showdown", "https://play.pokemonshowdown.com/", "ps"],
 	  ["Damage Calc", "https://calc.pokemonshowdown.com/index.html", "calc"],
+	  ["Master Duel Meta", "https://www.masterduelmeta.com/", "mdm"],
 	  ["Pack Opener", "https://db.ygoprodeck.com/pack-open/", "po"]
       ]
     ],

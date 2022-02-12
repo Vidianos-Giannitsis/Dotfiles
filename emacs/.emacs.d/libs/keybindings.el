@@ -8,7 +8,7 @@
   "P" 'package-install
   "o" '(inferior-octave :which-key "octave")
   "D" 'dired
-  "d" '(:ignore t :which-key "Dired functions")
+  "d" '(:ignore t :which-key "Dired - File operations")
   "q" '(my/quickmarks-hydra/body :which-key "Quickmarks")
   "t" '(:ignore t :which-key "Move between vterms")
   "T" 'org-babel-tangle
@@ -41,7 +41,8 @@
   "z" '(:ignore t :which-key "Zetteldesk")
   "s" '(:ignore t :which-key "Sly Commands")
   "g" 'counsel-rg
-  "E" 'eperiodic)
+  "E" 'eperiodic
+  "ζ ι" 'zetteldesk-insert-node-contents)
 
 (general-define-key
  :states 'normal
@@ -93,13 +94,22 @@
  :keymaps 'override
  :prefix "SPC z"
  "b" 'zetteldesk-switch-to-buffer
- "a" 'zetteldesk-add-to-desktop
- "A" 'zetteldesk-add-node-to-desktop
- "r" 'zetteldesk-remove-from-desktop
- "R" 'zetteldesk-remove-node-from-desktop
+ "a" '(:ignore t :which-key "Add to Zetteldesk")
+ "a b" 'zetteldesk-add-to-desktop
+ "a n" 'zetteldesk-add-node-to-desktop
+ "a i" 'zetteldesk-add-info-node-to-desktop
+ "r" '(:ignore t :which-key "Remove from Zetteldesk")
+ "r b" 'zetteldesk-remove-from-desktop
+ "r n" 'zetteldesk-remove-node-from-desktop
+ "r i" 'zetteldesk-remove-info-node-from-desktop
  "n" 'zetteldesk-node-find
  "s" 'zetteldesk-switch-to-scratch-buffer
- "i" 'zetteldesk-insert-node-contents)
+ "i" '(:ignore t :which-key "Insert to Scratch Buffer")
+ "i n" 'zetteldesk-insert-node-contents
+ "i N" 'zetteldesk-insert-node-contents-without-link
+ "i o" 'zetteldesk-insert-org-file-contents
+ "i p" 'zetteldesk-insert-link-to-pdf
+ "i i" 'zetteldesk-insert-info-contents)
 
 (general-define-key
  :states 'normal
@@ -108,6 +118,7 @@
  "f" 'counsel-find-file
  "j" '(dired-jump :which-key "Open dired in the current buffer's directory")
  "d" 'deft
+ "w" 'write-file
  "o" 'mediator-open-file)
 
 (pretty-hydra-define my/quickmarks-hydra (:color blue :title "Quickmarks")
@@ -122,7 +133,8 @@
    (("u" (lambda() (interactive)(dired "~/Documents/5o_εξάμηνο")) "University Documents folder")
     ("B" (lambda() (interactive)(find-file "~/Sync/My_Library.bib")) "Master Bibliography file")
     ("e" (lambda() (interactive)(find-file "~/org_roam/erasmus-08-10-21.org")) "Erasmus index file")
-    ("o" (lambda() (interactive)(dired "~/Documents/Octave")) "Octave scripts directory"))
+    ("o" (lambda() (interactive)(dired "~/Documents/Octave")) "Octave scripts directory")
+    ("z" (lambda() (interactive)(dired "~/org_roam/outlines")) "Zetteldesk Outlines"))
 
    "General Computer Things"
    (("h" (lambda() (interactive)(dired "~")) "Home directory")
@@ -283,6 +295,7 @@
      "y" 'org-download-clipboard
      "r" '(:ignore t :which-key "Org Roam/Ref commands")
      "ρ ι" 'org-roam-node-insert
+     "ζ ι" 'zetteldesk-node-insert
      "H" '(org-cycle-hide-drawers :which-key "Hide properties drawers")
      "S" 'org-store-link
      "I" 'org-insert-link
@@ -316,7 +329,7 @@
  "i" 'zetteldesk-node-insert
  "r" 'zetteldesk-remove-backlinks-from-desktop
  "b" 'zetteldesk-add-backlinks-to-desktop
- "p" 'zetteldesk-node-insert-if-poi)
+ "p" 'zetteldesk-node-insert-if-poi-or-moc)
 
 (general-define-key
  :states 'normal

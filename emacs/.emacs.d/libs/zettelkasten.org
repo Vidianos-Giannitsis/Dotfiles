@@ -2,6 +2,23 @@
 
 This file is a core part of my emacs configuration and is all about my Org-roam setup and my reference management inside org. Its based on the Zettelkasten method and the Roam Research website. Notes are linked with one another. Bibtex completion (and the existence of .bib files in general) as well as Org-ref help manage bibliographic references inside org. I also use Zotero as it easily allows me to gather my bibliographies. It exports a .bib file which these two use. Org Roam Bibtex (ORB) is a package that combines all of these to help you add citation links from org-ref inside an org-roam buffer. This section includes all the customisations and settings of these packages. This is a very large section of my config (hence why it has its own file) as I have really customised this workflow a lot. 
 
+* Table of Contents                                                     :TOC:
+- [[#org-roam-general-setup][Org-Roam general setup]]
+- [[#useful-functions][Useful Functions]]
+- [[#acting-on-backlinks][Acting on backlinks]]
+- [[#bibtex-completion-ivy-and-org-ref][Bibtex completion (Ivy) and Org-Ref]]
+- [[#org-roam-bibtex-protocols-reference-notes-and-ui-graphing-capabilities][Org Roam Bibtex, Protocols (Reference notes) and UI (graphing capabilities)]]
+- [[#fleeting-notes][Fleeting notes]]
+- [[#capture-templates][Capture Templates]]
+- [[#implementing-the-zettelkasten-desktop-to-org-roam][Implementing the Zettelkasten "desktop" to org-roam]]
+  - [[#dependencies][Dependencies]]
+  - [[#predicate-functions][Predicate Functions]]
+  - [[#adding-and-removing-things-in-the-zetteldesk][Adding and Removing things in the Zetteldesk]]
+  - [[#filter-functions][Filter functions]]
+  - [[#on-the-zetteldesk-scratch-buffer][On the zetteldesk-scratch buffer]]
+  - [[#providing-the-package][Providing the package]]
+- [[#providing-the-package-to-be-loaded-in-initel][Providing the package to be loaded in init.el]]
+
 * Org-Roam general setup
   This part is the general setup of org-roam. It contains the setup, removing the warning message for the migration to v2, and the use-package declaration for org-roam. There I put the org roam directory, the various defmethods I use, my display template and a resize to the org-roam buffer as taking half the screen isn't something I like. I much prefer it to be a bit smaller than the main window.
 
@@ -57,7 +74,7 @@ This file is a core part of my emacs configuration and is all about my Org-roam 
        (let ((buffer (get-file-buffer (org-roam-node-file node))))
 	 buffer))
 
-     (setq org-roam-node-display-template "${title:100} ${backlinkscount:6} ${todostate:20} ${directories:8} ${tags:25}")
+     (setq org-roam-node-display-template "${title:100} ${backlinkscount:6} ${todostate:20} ${directories:10} ${tags:25}")
 
      (add-to-list 'display-buffer-alist
 		  '("\\*org-roam\\*"
@@ -100,9 +117,10 @@ This file is a core part of my emacs configuration and is all about my Org-roam 
   `org-roam-find-permanent-node'."
     (string-equal (org-roam-node-directories NODE) ""))
 
-  (defun org-roam-node-poi-p (NODE)
-    "Check if NODE has the tag POI. Return t if it does"
-    (string-equal (car (org-roam-node-tags NODE)) "POI"))
+  (defun org-roam-node-poi-or-moc-p (NODE)
+    "Check if NODE has the tag POI or the tag MOC. Return t if it does"
+    (or (string-equal (car (org-roam-node-tags NODE)) "POI")
+	(string-equal (car (org-roam-node-tags NODE)) "MOC")))
 
   (defun org-roam-find-permanent-node ()
     "Execute `org-roam-node-find' with the list being filtered to
@@ -344,20 +362,18 @@ Lastly, for this system to work properly for fleeting notes I need a seamless wa
 
 
 * Capture Templates
-   Capture templates are really the "heart" of my zettelkasten workflow. By having a prefefined form for all files I create with the system I do not lose time trying to get a standard format on them. Its very important therefore to have at least a well customised default template. The rest of my templates here are for the capturing of specific things. Mine isn't that special but it has some important things.  
+   Capture templates are really the "heart" of my zettelkasten workflow. By having a prefefined form for all files I create with the system I do not lose time trying to get a standard format on them. Its very important therefore to have at least a well customised default template. The rest of my templates here are for the capturing of specific things. Mine isn't that special but it has some important things.
 
-The project template is a rather new one to my workflow. The zettelkasten workflow defines a type of notes called project notes which you are meant to use to plan out your project inside the zettelkasten. Because of all the ideas there, you never have to start from a blank box but you can take ideas from anywhere and add them to a project file. This part of my workflow isn't polished yet, but I am thinking of using a project file for each project and then headings which I can make nodes for each part of the project I want to document. Each heading can be archived easily with the same method as the daily files. For the central project file, I could archive them by removing their ID manually or something better if I figure it out. 
+   The outline capture template is part of the workflow I have crafted with the functions of the zetteldesk (see below). Essentially they are used for outlining a subject during revision and are files that are densely linked with everything that has to do with the subject. After done, they are archived (meaning I remove their ID) as they annoy me in org-roam-node-find and org-roam-ui. I have a shortcut to jump to the directory in which they are located so I do not really fear losing them. One might ask why make them through org roam in the first place if I am going to remove their ID. Well the answer is simple. Its easier this way. While working on it, I want it to be a node so I can find it faster with org-roam commands. But when done, its not actually useful info to keep, so I archive it, but its stored in its own directory so I can find it if I need it again. 
 
-Anoter idea for this which is more zettelkasten-y (yes that is a word now, deal with it) is to have a file for each section of the project and link all of them (either to an index or through the use of filetags) together. The problem is that then archiving becomes harder unless I figure out a good, easy and frictionless way of archiving files by removing their ID. This part is heavily WIP though as I said already
+   Then the other 2 templates I define are used for bibliographic information. Basic part of these is that they are stored in a subdirectory of the org_roam folder named ref and have tags depending on what type of file they are. For example, all articles I have have a tag article, and books have a tag book. The bibliography reference template is for things stored in my .bib file. This is mostly things like scientific articles. This is a very neat template as it uses a lot of the information the bibliography file has to make the template really functional. My favourite part of it is that if the entry has a pdf file attached to it, it will automatically set up org-noter to work with that file. The other template I use (info reference) is for creating reference notes from emacs info buffers. org-roam-capture-templates holds some special values if it is invoked in some special buffers one of which is the info-buffer. Specifically, it stores that the capture process was started in an info buffer, which file the buffer was visiting and which node it was in. With this info (no pun intended) and some elisp magic, you can automatically create a link that points to the info buffer the capture was invoked from so you have a reference point when you look at the note again. I found this a very cool feature of org-roam-capture-templates so I integrated it in a template. 
 
-Then the other 2 templates I define are used for bibliographic information. Basic part of these is that they are stored in a subdirectory of the org_roam folder named ref and have tags depending on what type of file they are. For example, all articles I have have a tag article, and books have a tag book. The bibliography reference template is for things stored in my .bib file. This is mostly things like scientific articles. This is a very neat template as it uses a lot of the information the bibliography file has to make the template really functional. My favourite part of it is that if the entry has a pdf file attached to it, it will automatically set up org-noter to work with that file. The other template I use (info reference) is for creating reference notes from emacs info buffers. org-roam-capture-templates holds some special values if it is invoked in some special buffers one of which is the info-buffer. Specifically, it stores that the capture process was started in an info buffer, which file the buffer was visiting and which node it was in. With this info (no pun intended) and some elisp magic, you can automatically create a link that points to the info buffer the capture was invoked from so you have a reference point when you look at the note again. I found this a very cool feature of org-roam-capture-templates so I integrated it in a template. 
+   Also part of my templates I use for bibliographic information, is the org-roam-capture-ref-templates variable. This one is invoked when one captures a web page using org-roam-protocol. Besides books, articles, info pages and whatever else the above 2 cover, capturing info from a web page, is very important to my workflow. So I need to have a good template for it. Its not much, but its important. Org-roam-protocol doesn't store much special info besides the title of the web page so this template is about as simple as my default one. 
 
-Also part of my templates I use for bibliographic information, is the org-roam-capture-ref-templates variable. This one is invoked when one captures a web page using org-roam-protocol. Besides books, articles, info pages and whatever else the above 2 cover, capturing info from a web page, is very important to my workflow. So I need to have a good template for it. Its not much, but its important. Org-roam-protocol doesn't store much special info besides the title of the web page so this template is about as simple as my default one. 
-
-Lastly, I define the org-roam-dailies-capture-templates. As discussed above I do not use these too much, but since I have tried them I have kept the template I made for them. Its got the same formatting as the org-journal ones so if a file is created with one method the other can add things to it.
+   Lastly, I define the org-roam-dailies-capture-templates. As discussed above I do not use these too much, but since I have tried them I have kept the template I made for them. Its got the same formatting as the org-journal ones so if a file is created with one method the other can add things to it.
 
    #+BEGIN_SRC elisp :tangle yes
-     
+
      (setq org-roam-capture-templates
 	   '(("d" "default" plain "%?" :if-new
 	      (file+head "${slug}-%<%d-%m-%y>.org" "#+title: ${title}\n
@@ -365,15 +381,12 @@ Lastly, I define the org-roam-dailies-capture-templates. As discussed above I do
      - tags ::  ")
 	      :unarrowed t
 	      :jump-to-captured t)
-     
-	     ("p" "project" plain "%?" :if-new
-	      (file+head "project/${slug}-%<%d-%m-%y>.org" "#+title: ${title}\n
-     - index ::  
-     - tags ::  
-     ,#+filetags: ")
+
+	     ("o" "outline" plain "%?" :if-new
+	      (file+head "outlines/${slug}-%<%d-%m-%y>.org" "#+title: ${title}\n")
 	      :unarrowed t
 	      :jump-to-captured t)
-     
+
 	     ("r" "bibliography reference" plain
 	      "%?"
 	      :if-new
@@ -381,7 +394,7 @@ Lastly, I define the org-roam-dailies-capture-templates. As discussed above I do
      ,#+filetags: ${entry-type}
      - keywords :: ${keywords}
      - tags :: 
-     
+
      ,* Analysis of ${entry-type} by ${author}
      :PROPERTIES:
      :URL: ${url}
@@ -390,33 +403,36 @@ Lastly, I define the org-roam-dailies-capture-templates. As discussed above I do
      :END:")
 	      :unnarrowed t
 	      :jump-to-captured t)
-     
+
 	     ("i" "info reference" plain
 	      "%?"
 	      :if-new
 	      (file+head "ref/${slug}.org" "#+title: ${title}\n
      ,#+filetags: %:type
-     - tags :: 
-     
+     - tags :: \n
+
      [[elisp:(Info-goto-node \"(%:file)%:node\")][Link to Info page]]
      \n
      ")
 	      :unnarowed t)))
-     
+
      (setq org-roam-capture-ref-templates 
 	   '(("r" "ref" entry "* %?" :target
 	      (file+head "ref/${slug}.org" "#+title: ${title}\n
      ,#+filetags: 
-      - tags :: ")
+      - tags :: \n")
 	      :unnarrowed t
 	      :jump-to-captured t)))
-     
+
      (setq org-roam-dailies-capture-templates
 	   '(("d" "default" entry "* %?" :if-new
 	      (file+head "%<%Y-%m-%d>.org" "#+title: %<%Y-%m-%d>\n#+filetags: daily")
 	      :empty-lines 1)))
-     
+
    #+END_SRC
+
+   #+RESULTS:
+   | d | default | entry | * %? | :if-new | (file+head %<%Y-%m-%d>.org #+title: %<%Y-%m-%d> |
 
 
 * Implementing the Zettelkasten "desktop" to org-roam 
@@ -433,14 +449,19 @@ Lastly, I define the org-roam-dailies-capture-templates. As discussed above I do
 
    #+BEGIN_SRC elisp :tangle zetteldesk.el
 
+     ;; -- DEPENDENCIES --
+     ;; These are some functions that are needed for the package to work as
+     ;; it should, but that are not specific to the package
+
      (cl-defmethod org-roam-node-buffer ((node org-roam-node))
        "Access slot \"buffer\" of org-roam-node struct CL-X"
        (let ((buffer (get-file-buffer (org-roam-node-file node))))
 	 buffer))
 
-     (defun org-roam-node-poi-p (NODE)
-       "Check if NODE has the tag POI. Return t if it does"
-       (string-equal (car (org-roam-node-tags NODE)) "POI"))
+     (defun org-roam-node-poi-or-moc-p (NODE)
+       "Check if NODE has the tag POI or the tag MOC. Return t if it does"
+       (or (string-equal (car (org-roam-node-tags NODE)) "POI")
+	   (string-equal (car (org-roam-node-tags NODE)) "MOC")))
 
      (defun org-roam-backlink-query ()
        "Simple org-roam query function that stores the IDs of all the files that link
@@ -455,12 +476,29 @@ Lastly, I define the org-roam-dailies-capture-templates. As discussed above I do
 		 :and (= type "id")]
 	(org-roam-node-id (org-roam-node-at-point))))
 
+     (defun org-roam-backlink-query* (NODE)
+       "Run `org-roam-backlink-query', but instead of returning a list
+     of the backlinks of `org-roam-node-at-point', find the backlinks
+     of NODE. This is handy in cases where NODE is read through
+     `org-roam-node-read' and doesn't have to be the `current-buffer'"
+       (org-roam-db-query
+	     [:select [source dest]
+		      :from links
+		      :where (= dest $s1)
+		      :and (= type "id")]
+	     (org-roam-node-id NODE)))
    #+END_SRC
    
 ** Predicate Functions
 I tried to follow a rather simple idea to do this and not overcomplicate things. Essentially, I define a buffer-local variable and give it a default value. Then I define the predicate function that shows when a buffer is part of the zettelkasten desktop. A buffer will be part of the desktop only if the value of that variable in the buffer is not equal to the default. I define the low level predicate functions that check if a buffer or node is part of the zetteldesk and then I define a predicate that checks if a buffer is part of the zetteldesk but not an org-roam file, as on the switch-to-buffer prompt I do not care about org-roam files (I can view them with org-roam-node-file) and another predicate which filters the list down further to only include org files that are part of the zetteldesk but not org-roam files (which is handy for another function below).
 
 #+BEGIN_SRC elisp :tangle zetteldesk.el
+
+  ;; -- PREDICATE FUNCTIONS --
+  ;; This section contains the predicate functions the package uses. The
+  ;; core of the package is that it provides well filtered completion
+  ;; menus as chosen by the user, so obviously predicate functions are
+  ;; core to the package
 
   (defvar-local zetteldesk "default"
     "Buffer local variable that determines whether a buffer is part
@@ -509,15 +547,28 @@ I tried to follow a rather simple idea to do this and not overcomplicate things.
   (defun zetteldesk-pdf-p (BUFFER)
     "Check if BUFFER is part of the current `zetteldesk' and also a pdf file."
     (and (zetteldesk-p BUFFER) (eq (buffer-local-value 'major-mode (cdr BUFFER)) 'pdf-view-mode)))
+
 #+END_SRC
 
 #+RESULTS:
 : zetteldesk-node-insert
 
 ** Adding and Removing things in the Zetteldesk
-   I define 3 adding mechanisms and the matching removing ones, as can seen below. The first is adding/removing a buffer, the second is for a node and the third is adding/removing a node and all its backlinks. They are all really handy for various reasons. 
+   I define a few adding mechanisms and the matching removing ones, as can seen below. The first is adding/removing a buffer, the second is for a node and then I have two ways of playing with a nodes backlinks. I can add a node and all its backlinks to the zetteldesk, or I can select a node and add one of its backlinks to the zetteldesk. Both have their use cases imo. For the last one, I believe there is no need for a matching removing one. 
+
+   Lastly, I add a mechanism to add info nodes to the Zetteldesk. The info buffer is a single persistent buffer. Therefore, the typical things done for eveything else don't work here. However, there is a function that gives the nodes name in a format that all other Info functions accept. I use that function and add the nodes selected to a variable. The rest of the functions, choose something from that list with completing-read and that is how this system works. For example, the removing mechanisms works by using remove with its argument being the output of the completing-read.
    
   #+BEGIN_SRC elisp :tangle zetteldesk.el
+
+    ;; -- ADD/REMOVE THINGS IN THE ZETTELDESK --
+    ;; To get a system where the user can get multiple filtered views of
+    ;; the nodes/buffers of their choice, obviously you need functions
+    ;; that allow the user to add them to something. And then, you also
+    ;; need ways to remove things, because people make mistakes.
+
+    (defvar zetteldesk-info-nodes '()
+      "List of info nodes that are part of the
+      zetteldesk. Initialised as an empty list")
 
     (defun zetteldesk-add-to-desktop (BUFFER)
       "Add BUFFER to the current `zetteldesk'"
@@ -525,21 +576,33 @@ I tried to follow a rather simple idea to do this and not overcomplicate things.
       (with-current-buffer BUFFER
 	(setq-local zetteldesk "foo")))
 
-    (defun zetteldesk-add-node-to-desktop ()
-      "Add an org-roam-node to the `zetteldesk' and if there isn't a
-      buffer associated to it, create it.
-
-    The node is read through `org-roam-node-read'"
-      (interactive)
-      (let* ((node (org-roam-node-read))
-	     (buffer (org-roam-node-buffer node))
-	     (file (org-roam-node-file node))
+    (defun zetteldesk-add-node-to-desktop (NODE)
+      "Add NODE to the `zetteldesk' and if there isn't a buffer associated
+      to it, create it. NODE is an org-roam node read through `org-roam-node-read'"
+      (interactive (list (org-roam-node-read)))
+      (let ((buffer (org-roam-node-buffer NODE))
+	     (file (org-roam-node-file NODE))
 	     (org-startup-with-latex-preview nil))
 	(if (not (eq buffer nil))
 	    (with-current-buffer buffer
 	      (setq-local zetteldesk "foo"))
 	  (with-current-buffer (find-file-noselect file)
 	    (setq-local zetteldesk "foo")))))
+
+    (defun zetteldesk-add-moc-or-poi-backlink-to-desktop ()
+      "Prompts the user to select an org-roam node that has the POI
+    or MOC tag (filtering done with `org-roam-node-poi-or-moc-p') and
+    collects its ID and backlinks. Then, prompt the user to select
+    one of its backlinks and add that to the zetteldesk."
+      (interactive)
+      (let* ((source (org-roam-node-read nil #'org-roam-node-poi-or-moc-p))
+	     (source-id (org-roam-node-id source))
+	     (backlinks (org-roam-backlink-query* source)))
+	(zetteldesk-add-node-to-desktop
+	 (org-roam-node-read nil (lambda (NODE)
+				   (let* ((id (org-roam-node-id NODE))
+					  (id-list (list id source-id)))
+				     (member id-list backlinks)))))))
 
     (defun zetteldesk-add-backlinks-to-desktop ()
       "Add the current buffer and all its backlinks to the `zetteldesk'. 
@@ -563,20 +626,23 @@ I tried to follow a rather simple idea to do this and not overcomplicate things.
 	      (with-current-buffer (find-file-noselect file)
 		(setq-local zetteldesk "foo")))))))
 
+    (defun zetteldesk-add-info-node-to-desktop ()
+      "If the current buffer is an info node, add its name to the
+    list of the variable `zetteldesk-info-nodes'"
+      (interactive)
+      (add-to-list 'zetteldesk-info-nodes (Info-copy-current-node-name)))
+
     (defun zetteldesk-remove-from-desktop (BUFFER)
       "Remove BUFFER from the current `zetteldesk'"
       (interactive "b")
       (with-current-buffer BUFFER
 	(kill-local-variable 'zetteldesk)))
 
-    (defun zetteldesk-remove-node-from-desktop ()
-      "Add an org-roam-node to the `zetteldesk' and if there isn't a
-      buffer associated to it, create it.
-
-    The node is read through `org-roam-node-read'"
-      (interactive)
-      (let* ((node (org-roam-node-read nil #'zetteldesk-node-p))
-	     (buffer (org-roam-node-buffer node)))
+    (defun zetteldesk-remove-node-from-desktop (NODE)
+      "Remove NODE from the `zetteldesk'. NODE is an org-roam node
+    and is read through `org-roam-node-read'"
+      (interactive (list (org-roam-node-read nil #'zetteldesk-node-p)))
+      (let ((buffer (org-roam-node-buffer NODE)))
 	(with-current-buffer buffer
 	  (kill-local-variable 'zetteldesk))))
 
@@ -598,12 +664,27 @@ I tried to follow a rather simple idea to do this and not overcomplicate things.
 	      (with-current-buffer buffer
 		(kill-local-variable 'zetteldesk)))))))
 
+    (defun zetteldesk-remove-info-node-from-desktop ()
+      "Remove an info-node from the `zetteldesk'. The node is
+    selected through a `completing-read' menu of
+    `zetteldesk-info-nodes'"
+      (interactive)
+      (setq zetteldesk-info-nodes (remove
+				   (completing-read "Info Nodes: " zetteldesk-info-nodes)
+				   zetteldesk-info-nodes)))
+
   #+END_SRC 
    
 ** Filter functions
-   Here I define the functions which give you a filtered view of switch-to-buffer and org-roam-node-find to the current zetteldesk. I also define a filtered view of org-roam-node-insert as its not rare to want to insert a link to a file from the zetteldesk
+   Here I define the functions which give you a filtered view of switch-to-buffer and org-roam-node-find to the current zetteldesk. I also define a filtered view of org-roam-node-insert as its not rare to want to insert a link to a file from the zetteldesk.
+
+   Lastly, trying to handle info buffers, I add a filtered view of Info-goto-node, using completing-read.
 
    #+BEGIN_SRC elisp :tangle zetteldesk.el
+
+     ;; -- FILTER FUNCTIONS --
+     ;; This section is about defining all the functions that show you the
+     ;; filtered results of all your nodes/buffers
 
      (defun zetteldesk-switch-to-buffer ()
        "Execute `switch-to-buffer' with the buffer list being
@@ -626,6 +707,14 @@ I tried to follow a rather simple idea to do this and not overcomplicate things.
        (interactive)
        (org-roam-node-insert #'zetteldesk-node-p))
 
+     (defun zetteldesk-info-goto-node ()
+       "Zetteldesk filter function for `Info-goto-node'.
+
+     Prompts the user to select a node from the list
+     `zetteldesk-info-nodes' and jumps to that node"
+       (interactive)
+       (Info-goto-node (completing-read "Nodes: " zetteldesk-info-nodes)))
+
    #+END_SRC
     
 ** On the zetteldesk-scratch buffer
@@ -639,13 +728,17 @@ I tried to follow a rather simple idea to do this and not overcomplicate things.
    - A function that inserts links to all the POIs in the zetteldesk to the current buffer. The way I have my zettelkasten sorted, my index files have the MOC (map of contents) tag and other important files of a subject have the POI (point of interest) tag. POIs are chosen by opening org-roam UI, blacklisting index files (in my case blacklisting the MOC tag), having a high value for "Node connections size scale" and seeing which nodes stand out the most. This is an idea taken from the book How to make a complete map of every thought you think. I use my zettelkasten for university notes and when revisioning its a great tool to be able to insert links to all POIs in some sort of scratch buffer, then sorting them and with that writing an outline of everything in that lesson. In a way, this does function as an outliner tool.
    - A function that prompts for a node inside the zetteldesk and inserts its contents to the zetteldesk-scratch buffer omitting the properties section where the id is stored. As it uses an absolute number for this, it doesn't exactly omit properties if the node has aliases or refs, I could consider trying to fix that, but I do not know how as of now. It also replaces the title keyword with a top level heading. This way you can add any node to your scratch buffer. This is equivalent to taking the note out of the drawer and putting it into your desk, the very first part of what I plan for this tool.
    - A similar function which prompts for org files in the zetteldesk but excluding org-roam files. Its behaviour is a bit different. No links are inserted as they are not needed, no part of the file is truncated as typically the first line is the title, the title is again changed to a top level heading, but as most big org files have some kind of structure to them, I also demote all their headings by 1, as their top level heading will be the title. This is part of an idea I had that this system should integrate with more than org-roam files (albeit that being the main plan) because your notes could also be in other org files.
-   - For this reason, I plan to also add something that allows for pdfs to be inserted in the scratch buffer. Besides the notes themselves, the most important supplementary material is arguably pdfs. So the system needs to handle pdfs very well
-   - Lastly, the only other kind of supportive material that I believe this should be able to handle is info buffers. Reading manuals through info is great. Capturing a link to a useful topic is made possible with my capture template for info buffers, but I believe for this application, I need to select a section from the manual and be able to automatically insert it to the zetteldesk. One difficulty I will face with this is that emacs only opens one info buffer and has its own navigation commands to navigate through it. Therefore, I cannot (at least by default) save a specific section to the zetteldesk (whose behaviour relies on a buffer local variable) and have a completion menu of all these info nodes and then insert what I need to the zetteldesk-scratch. I believe that if I look into it I can set up a pretty neat system for it, but it will require some work.
+   - A function that prompts the user to select a pdf that is part of the zetteldesk and a page in that pdf and inserts a link to that pdf, in that page. The link sits under a heading which has a specifically formatted name of the type "Supplementary Material - name_of_pdf (PDF)". Also has functionality of inserting the highlighted region of text to the zetteldesk-scratch buffer.
+   - A function that prompts the user to select an info buffer that is part of the zetteldesk and inserts its contents to the zetteldesk-scratch buffer under a similarly to above formatted heading. Furthermore, it inserts a link to the info node so you can see it in its context. 
 
    Only other supportive material for any kind of work/research I could think of is source code files and browser pages. For source code files, it is in my opinion trivial to paste the code into an org mode source code block. I might automate it a bit better in the future, but for now I am not that interested in setting up something like this. For web pages, there really wouldn't be a point in inserting the web page verbatim, but only a link and some notes about it. This is already handled by org-roam protocol and that capture template of mine so if anything I will mention it and prompt to that capture template for what I think it should have. There is also screenshots and MS Office formats I guess but screenshots can be pasted into an org file from the clipboard and therefore require no automation and all MS Office formats aren't that readable in Emacs in the first place so they should be converted to pdf and handled by that imo. 
-    
 
    #+BEGIN_SRC elisp :tangle zetteldesk.el
+
+     ;; -- *ZETTELDESK-SCRATCH* --
+     ;; This is the section where it all comes together. The
+     ;; zetteldesk-scratch buffer is a special buffer defined here on which
+     ;; you drop all your stuff. Its what molds the whole workflow together
 
      (define-minor-mode zetteldesk-mode
        "Toggles the global zetteldesk-mode.
@@ -666,20 +759,25 @@ I tried to follow a rather simple idea to do this and not overcomplicate things.
 
      (add-hook 'zetteldesk-mode-on-hook 'zetteldesk--create-scratch-buffer)
 
-     (defun zetteldesk-switch-to-scratch-buffer ()
-       "Open the zetteldesk-scratch buffer in a split with the current buffer"
-       (interactive)
-       (switch-to-buffer-other-window "*zetteldesk-scratch*"))
+     (defun zetteldesk-switch-to-scratch-buffer (&optional arg)
+       "Open the zetteldesk-scratch buffer in a split with the current buffer.
 
-     (defun zetteldesk-node-insert-if-poi ()
+     Optionally, with a `\\[universal-argument]' switch to the
+     ,*zetteldesk-scratch* buffer without issuing a split."
+       (interactive "P")
+       (if (equal arg '(4))
+	   (switch-to-buffer "*zetteldesk-scratch*")
+	 (switch-to-buffer-other-window "*zetteldesk-scratch*")))
+
+     (defun zetteldesk-node-insert-if-poi-or-moc ()
        "Filter `org-roam-node-list' to only include files in the current
-     `zetteldesk' that have the POI tag with `zetteldesk-node-p' and
-     `org-roam-node-poi-p'. Then insert a link to every one of those nodes
+     `zetteldesk' that have the POI or MOC tag with `zetteldesk-node-p' and
+     `org-roam-node-poi-or-moc-p'. Then insert a link to every one of those nodes
      and seperate them with commas"
        (interactive)
        (let* ((init_list (org-roam-node-list))
 	      (zetteldesk_nodes (cl-remove-if-not #'zetteldesk-node-p init_list))
-	      (nodes_poi (cl-remove-if-not #'org-roam-node-poi-p zetteldesk_nodes)))
+	      (nodes_poi (cl-remove-if-not #'org-roam-node-poi-or-moc-p zetteldesk_nodes)))
 	 (while nodes_poi
 	   (let* ((node (car nodes_poi))
 		  (description (org-roam-node-formatted (car nodes_poi))))
@@ -806,19 +904,65 @@ I tried to follow a rather simple idea to do this and not overcomplicate things.
 		    (concat "pdf:" file "::" page)
 		    description)))))
 
+     (defun zetteldesk-insert-info-contents (&optional arg)
+       "Select an info node that is part of the current `zetteldesk'
+       using a `completing-read' prompt for the selection.
+
+     Then, in the *zetteldesk-scratch* buffer, go to the end of the
+     buffer, insert a newline and a heading of the form \"Supportive
+     Material - \" the node's name \"(Info)\" akin to what is done in
+     `zetteldesk-insert-link-to-pdf'. Then, insert the contents of the
+     chosen info node, removing the first 2 lines which have the
+     contextual links of the buffer, as they are not functional
+     outside of the info buffer. Also insert a link with the title
+     \"See this node in its context\" which opens the node inside the
+     info program. Finally, restore the buffer from which this
+     function was called. Ideally, this wouldn't require a
+     switch-to-buffer statement, but the function `Info-goto-node'
+     used for this function switches the visible buffer to the info
+     node and I couldn't find an alternative that only makes it
+     current for editing operations, but doesn't change the visible
+     buffer to it.
+
+     I find the link to the actual info buffer is useful as a lot of
+     the time, you might want to insert the buffer so you can store it
+     with other useful information inside the zetteldesk-scratch
+     buffer, but then, you are interested in looking into the other
+     nodes of the manual you were reading.
+
+     Optionally, with a `\\[universal-argument]' switch to the
+     zetteldesk-scratch buffer in a split."
+       (interactive "P")
+       (let ((info_node (completing-read "Nodes: " zetteldesk-info-nodes))
+	     (buffer (current-buffer)))
+	 (Info-goto-node info_node)
+	 (with-current-buffer "*zetteldesk-scratch*"
+	   (goto-char (point-max))
+	   (newline)
+	   (org-insert-heading)
+	   (insert "Supportive Material - " info_node " (Info)")
+	   (newline)
+	   (save-excursion (insert-buffer-substring "*info*")
+			   (insert
+			    (org-link-make-string
+			     (concat "elisp:(Info-goto-node \"" info_node "\")")
+			     "See this node in its context")))
+	   (kill-whole-line 2))
+	 (switch-to-buffer buffer)
+	 (when (equal arg '(4))
+	   (switch-to-buffer-other-window "*zetteldesk-scratch*"))))
    #+END_SRC
 
    #+RESULTS:
    : zetteldesk-insert-node-contents
    
-** Providing the package
+* Providing the packages to be loaded in init.el
 #+BEGIN_SRC elisp :tangle zetteldesk.el
 
   (provide 'zetteldesk)
 
 #+END_SRC
-   
-* Providing the package to be loaded in init.el
+  
   #+BEGIN_SRC elisp :tangle yes
 
     (provide 'zettelkasten)
