@@ -37,6 +37,15 @@ of NODE. This is handy in cases where NODE is read through
 		 :and (= type "id")]
 	(org-roam-node-id NODE)))
 
+(defun org-roam-node-sort-by-backlinks (completion-a completion-b)
+  "Sorting function for org-roam that sorts the list of nodes by
+the number of backlinks. This is the sorting function in
+`org-roam-node-find-by-backlinks' and `zetteldesk-node-insert-sort-backlinks'"
+  (let ((node-a (cdr completion-a))
+	(node-b (cdr completion-b)))
+    (>= (org-roam-node-backlinkscount-number node-a)
+	(org-roam-node-backlinkscount-number node-b))))
+
 ;; -- PREDICATE FUNCTIONS --
 ;; This section contains the predicate functions the package uses. The
 ;; core of the package is that it provides well filtered completion
@@ -120,7 +129,7 @@ those files"
       (with-current-buffer (find-file-noselect file)
 	(setq-local zetteldesk "foo")))))
 
-(defun zetteldesk-add-moc-or-poi-backlink-to-desktop ()
+(defun zetteldesk-add-poi-or-moc-backlink-to-desktop ()
   "Prompts the user to select an org-roam node that has the POI
 or MOC tag (filtering done with `org-roam-node-poi-or-moc-p') and
 collects its ID and backlinks. Then, prompt the user to select
@@ -228,6 +237,26 @@ filtered (using `zetteldesk-node-p') to show only nodes that are
 part of the current `zetteldesk'"
   (interactive)
   (org-roam-node-insert #'zetteldesk-node-p))
+
+(defun zetteldesk-node-insert-sort-backlinks ()
+  "Select a node that is part of the zetteldesk through
+  `org-roam-node-read' in a UI sorted by the number of
+  backlinks. Insert a link in the current buffer to the selected node.
+
+This function essentially has the core functionality of
+`org-roam-node-insert', but it uses `org-roam-node-read' instead
+as only that can take a sort-function. Some files may be
+important to their topic, but not MOCs or POIs, so this function
+acts essentially as a complimentary function to
+`zetteldesk-node-insert-if-poi-or-moc' to check if that one
+missed something you want to include."
+  (interactive)
+  (let* ((node (org-roam-node-read nil #'zetteldesk-node-p #'org-roam-node-sort-by-backlinks))
+	 (id (org-roam-node-id node))
+	 (description (org-roam-node-formatted node)))
+    (insert (org-link-make-string
+	     (concat "id:" id)
+	     description))))
 
 (defun zetteldesk-info-goto-node ()
   "Zetteldesk filter function for `Info-goto-node'.

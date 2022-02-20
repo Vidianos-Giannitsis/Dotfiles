@@ -281,7 +281,7 @@
 		(:keywords "languages" "elixir")
 		(:commit . "1d94b525ddcc995b5a979de7b050c2309648ca6f"))])
  (elpher .
-	 [(3 3 1)
+	 [(3 3 2)
 	  ((emacs
 	    (27 1)))
 	  "A friendly gopher and gemini client" tar
@@ -290,7 +290,7 @@
 	   (:maintainer "Tim Vaughan" . "plugd@thelambdalab.xyz")
 	   (:authors
 	    ("Tim Vaughan" . "plugd@thelambdalab.xyz"))
-	   (:commit . "09f4d52c0f3ff9cdd4fbddbdc513c42f6650918a"))])
+	   (:commit . "6e3a8ef5af192eddcd834efac49866f84e2c73dd"))])
  (evil .
        [(1 14 0)
 	nil "extensible vi layer" tar
@@ -493,7 +493,7 @@
 		   (:authors
 		    ("Daniel Leslie")))])
  (geiser-gambit .
-		[(0 17)
+		[(0 18 1)
 		 ((emacs
 		   (26 1))
 		  (geiser
@@ -501,9 +501,10 @@
 		 "Gambit's implementation of the geiser protocols" tar
 		 ((:url . "https://gitlab.com/emacs-geiser/gambit")
 		  (:keywords "languages" "gambit" "scheme" "geiser")
-		  (:maintainer "Daniel Leslie, Jose A Ortega Ruiz" . "jao@gnu.org")
+		  (:maintainer "Jose A Ortega Ruiz" . "jao@gnu.org")
 		  (:authors
-		   ("Daniel Leslie")))])
+		   ("Daniel Leslie"))
+		  (:commit . "381d74ca5059b44fe3d8b5daf42214019c6d1a88"))])
  (geiser-gauche .
 		[(0 0 2)
 		 ((emacs
@@ -713,21 +714,29 @@
 		    ((:url . "https://gitlab.com/tseenshe/haskell-tng-mode")
 		     (:keywords "languages"))])
  (helm .
-       [(3 8 3)
-	nil "Emacs incremental and narrowing framework" tar
-	((:url . "https://github.com/emacs-helm/helm")
+       [(3 8 4)
+	((helm-core
+	  (3 8 4))
+	 (popup
+	  (0 5 3)))
+	"Helm is an Emacs incremental and narrowing framework" tar
+	((:url . "https://emacs-helm.github.io/helm/")
 	 (:maintainer "Thierry Volpiatto" . "thierry.volpiatto@gmail.com")
 	 (:authors
 	  ("Thierry Volpiatto" . "thierry.volpiatto@gmail.com"))
-	 (:commit . "129cf538a00b99913abc7fb258c474de3ec897ee"))])
+	 (:commit . "a7b9e898296142465c0857b2d201d8d828ba7b05"))])
  (helm-core .
-	    [(3 8 3)
-	     nil "Emacs incremental and narrowing framework" tar
-	     ((:url . "https://github.com/emacs-helm/helm")
+	    [(3 8 4)
+	     ((emacs
+	       (25 1))
+	      (async
+	       (1 9 4)))
+	     "Development files for Helm" tar
+	     ((:url . "https://emacs-helm.github.io/helm/")
 	      (:maintainer "Thierry Volpiatto" . "thierry.volpiatto@gmail.com")
 	      (:authors
 	       ("Thierry Volpiatto" . "thierry.volpiatto@gmail.com"))
-	      (:commit . "129cf538a00b99913abc7fb258c474de3ec897ee"))])
+	      (:commit . "a7b9e898296142465c0857b2d201d8d828ba7b05"))])
  (highlight-parentheses .
 			[(2 1 0)
 			 ((emacs
@@ -758,14 +767,14 @@
 	      ((:url . "https://github.com/idris-hackers/idris-mode")
 	       (:keywords "languages"))])
  (iedit .
-	[(0 9 9 9)
+	[(0 9 9 9 9)
 	 nil "Edit multiple regions in the same way simultaneously." tar
 	 ((:url . "https://github.com/victorhge/iedit")
 	  (:keywords "occurrence" "region" "simultaneous" "refactoring")
 	  (:maintainer "Victor Ren" . "victorhge@gmail.com")
 	  (:authors
 	   ("Victor Ren" . "victorhge@gmail.com"))
-	  (:commit . "abcc27a9f07a7f855b0a8314f18640fd5cd7a0b6"))])
+	  (:commit . "699e179dac18c78698cba1a2052bee6f0bbc6bf7"))])
  (inf-clojure .
 	      [(3 1 0)
 	       ((emacs
@@ -805,7 +814,7 @@
 	      ((:url . "https://github.com/JuliaEditorSupport/julia-emacs")
 	       (:keywords "languages"))])
  (keycast .
-	  [(1 1 3)
+	  [(1 2 0)
 	   ((emacs
 	     (25 3)))
 	   "Show current command and its key in the mode line" tar
@@ -813,7 +822,7 @@
 	    (:maintainer "Jonas Bernoulli" . "jonas@bernoul.li")
 	    (:authors
 	     ("Jonas Bernoulli" . "jonas@bernoul.li"))
-	    (:commit . "b4965ff5db0e913e58c906c228042921b22335a0"))])
+	    (:commit . "98c2dda1a2ca0fc95f7425847a36abad5b31a4c7"))])
  (kotlin-mode .
 	      [(1 0 0)
 	       ((emacs
@@ -888,15 +897,16 @@
 		  (:authors
 		   ("Jonas Bernoulli" . "jonas@bernoul.li")))])
  (markdown-mode .
-		[(2 4)
+		[(2 5)
 		 ((emacs
 		   (25 1)))
 		 "Major mode for Markdown-formatted text" tar
 		 ((:url . "https://jblevins.org/projects/markdown-mode/")
+		  (:keywords "markdown" "github flavored markdown" "itex")
 		  (:maintainer "Jason R. Blevins" . "jblevins@xbeta.org")
 		  (:authors
 		   ("Jason R. Blevins" . "jblevins@xbeta.org"))
-		  (:keywords "markdown" "github flavored markdown" "itex"))])
+		  (:commit . "eecf2f20b097f9e6a0eaf938af967122fbec35dd"))])
  (material-theme .
 		 [(2015)
 		  ((emacs
@@ -1079,7 +1089,7 @@
 		    ("Takaaki ISHIKAWA <takaxp at ieee dot org>"))
 		   (:commit . "1fb3ecb637d0baff40dff7965dcac63b9674377b"))])
  (orgit .
-	[(1 7 2)
+	[(1 8 0)
 	 ((emacs
 	   (25 1))
 	  (magit
@@ -1091,7 +1101,7 @@
 	  (:maintainer "Jonas Bernoulli" . "jonas@bernoul.li")
 	  (:authors
 	   ("Jonas Bernoulli" . "jonas@bernoul.li"))
-	  (:commit . "66367d6bfc5e00726fb74f7cd20c32175ab8521b"))])
+	  (:commit . "0b49d7a869b8fef3537a75df4db693ca3e3935a3"))])
  (pacmacs .
 	  [(0 1)
 	   ((emacs
@@ -1108,7 +1118,7 @@
 	    (:authors
 	     ("Codingteam" . "codingteam@conference.jabber.ru")))])
  (parseclj .
-	   [(1 0 6)
+	   [(1 1 0)
 	    ((emacs
 	      (25)))
 	    "Clojure/EDN parser" tar
@@ -1116,13 +1126,14 @@
 	     (:maintainer "Arne Brasseur" . "arne@arnebrasseur.net")
 	     (:authors
 	      ("Arne Brasseur" . "arne@arnebrasseur.net"))
-	     (:url . "https://elpa.nongnu.org/nongnu/parseclj.html"))])
+	     (:url . "https://elpa.nongnu.org/nongnu/parseclj.html")
+	     (:commit . "90595049634549e6d8872f719b13e9555897d17b"))])
  (parseedn .
-	   [(1 0 6)
+	   [(1 1 0)
 	    ((emacs
 	      (26))
 	     (parseclj
-	      (1 0 6))
+	      (1 1 0))
 	     (map
 	      (2)))
 	    "Clojure/EDN parser" tar
@@ -1130,7 +1141,8 @@
 	     (:maintainer "Arne Brasseur" . "arne@arnebrasseur.net")
 	     (:authors
 	      ("Arne Brasseur" . "arne@arnebrasseur.net"))
-	     (:url . "https://elpa.nongnu.org/nongnu/parseedn.html"))])
+	     (:url . "https://elpa.nongnu.org/nongnu/parseedn.html")
+	     (:commit . "ea7b5281ec80aca0bd1cc93a348aebb302497339"))])
  (pcmpl-args .
 	     [(0 1 3)
 	      ((emacs
@@ -1238,7 +1250,7 @@
 	     ("Bozhidar Batsov"))
 	    (:keywords "project" "convenience"))])
  (rust-mode .
-	    [(1 0 3)
+	    [(1 0 4)
 	     ((emacs
 	       (25 1)))
 	     "A major-mode for editing Rust source code" tar
@@ -1246,7 +1258,8 @@
 	      (:keywords "languages")
 	      (:maintainer "Mozilla")
 	      (:authors
-	       ("Mozilla")))])
+	       ("Mozilla"))
+	      (:commit . "e35a1800fc0f9ed178539d6fb82ed885c1014fb5"))])
  (sass-mode .
 	    [(3 0 16)
 	     ((haml-mode
@@ -1348,13 +1361,13 @@
 		     ("John Olsson" . "john@cryon.se"))
 		    (:commit . "2d5acd143a153e16372d59000e57d76291ab81dd"))])
  (subed .
-	[(1 0 2)
+	[(1 0 3)
 	 ((emacs
 	   (25 1)))
 	 "A major mode for editing subtitles" tar
 	 ((:url . "https://github.com/rndusr/subed")
 	  (:keywords "convenience" "files" "hypermedia" "multimedia")
-	  (:commit . "9a660ed88600e9aff741051c28a9e638cd5df5f5"))])
+	  (:commit . "3b265af572d7e9032d20213264f9fa635cefd8db"))])
  (swift-mode .
 	     [(8 4 2)
 	      ((emacs
@@ -1448,6 +1461,14 @@
 	    ("Sean McLaughlin" . "seanmcl@gmail.com")
 	    ("Stefan Monnier" . "monnier@iro.umontreal.ca"))
 	   (:keywords "ocaml" "languages"))])
+ (typescript-mode .
+		  [(0 4)
+		   ((emacs
+		     (24 3)))
+		   "Major mode for editing typescript" tar
+		   ((:url . "http://github.com/ananthakumaran/typescript.el")
+		    (:keywords "typescript" "languages")
+		    (:commit . "2a58631230fe2d176352af262a0efdecc21f90ac"))])
  (ujelly-theme .
 	       [(1 2 9)
 		nil "Ujelly theme for GNU Emacs 24 (deftheme)" tar
@@ -1504,7 +1525,7 @@
 	   ("Masahiro Hayashi" . "mhayashi1120@gmail.com"))
 	  (:keywords "grep" "edit" "extensions"))])
  (with-editor .
-	      [(3 1 1)
+	      [(3 2 0)
 	       ((emacs
 		 (24 4)))
 	       "Use the Emacsclient as $EDITOR" tar
@@ -1512,7 +1533,8 @@
 		(:keywords "tools")
 		(:maintainer "Jonas Bernoulli" . "jonas@bernoul.li")
 		(:authors
-		 ("Jonas Bernoulli" . "jonas@bernoul.li")))])
+		 ("Jonas Bernoulli" . "jonas@bernoul.li"))
+		(:commit . "a762199d9bb8ee60311eaabf791b3dd64140effd"))])
  (with-simulated-input .
 		       [(3 0)
 			((emacs

@@ -146,7 +146,7 @@ This file is a core part of my emacs configuration and is all about my Org-roam 
       nil but they can be added by running the
       `org-roam-backlink-files' function on a node.")
 
-    (defvar-local org-roam-backlink-pdfs nil
+    (defvar org-roam-backlink-pdfs nil
       "After running `org-roam-export-backlinks-to-latex-pdf', to
       export a node and all its backlinks to pdf, the value of this
       variable in the original node's buffer will become a list of
@@ -197,34 +197,30 @@ This file is a core part of my emacs configuration and is all about my Org-roam 
       exceptionally useful with index files as it allows you to do an
       action on all files linked to this index automatically."
 	(interactive)
-	(let ((backlinks (length (org-roam-backlink-query)))
-	      (org-roam-backlinks))
+	(let ((backlinks (length (org-roam-backlink-query))))
 	  (dotimes (number backlinks)
 	    (let* ((id (car (nth number (org-roam-backlink-query))))
 		   (node (org-roam-node-from-id id)))
 	      (setq-local org-roam-backlinks (cons (org-roam-node-file node) org-roam-backlinks))))
-	  (message "%s" org-roam-backlinks)))
+	  org-roam-backlinks))
 
     (defun org-roam-export-backlinks-to-latex-pdf ()
       "Export the current buffer and every buffer that mentions it to
-    a pdf through latex and pandoc. Makes use of the
+    a pdf through the org-latex export. Makes use of the
     `org-roam-backlink-files' function to find all the
     backlinks. Also saves all the pdf names in a variable called
     `org-roam-backlink-pdfs'. These names can then be passed to
     something like pdftk to merge them into one pdf"
       (interactive)
-      (org-roam-backlink-files)
-      (setq org-roam-backlink-pdfs nil)
       (save-current-buffer
 	(let ((backlinks (cons (buffer-file-name) org-roam-backlinks))
 	      (org-startup-with-latex-preview nil))
 	  (while backlinks
 	    (find-file (car backlinks))
-	    (org-pandoc-export-to-latex-pdf)
+	    (org-latex-export-to-pdf)
 	    (setq org-roam-backlink-pdfs
 		  (cons (concat (file-name-sans-extension (car backlinks)) ".pdf") org-roam-backlink-pdfs))
-	    (setq backlinks (cdr backlinks)))
-	  ))
+	    (setq backlinks (cdr backlinks)))))
       (message "%s" "Done!"))
 
   #+END_SRC
@@ -487,6 +483,16 @@ Lastly, for this system to work properly for fleeting notes I need a seamless wa
 		      :where (= dest $s1)
 		      :and (= type "id")]
 	     (org-roam-node-id NODE)))
+
+     (defun org-roam-node-sort-by-backlinks (completion-a completion-b)
+       "Sorting function for org-roam that sorts the list of nodes by
+     the number of backlinks. This is the sorting function in
+     `org-roam-node-find-by-backlinks' and `zetteldesk-node-insert-sort-backlinks'"
+       (let ((node-a (cdr completion-a))
+	     (node-b (cdr completion-b)))
+	 (>= (org-roam-node-backlinkscount-number node-a)
+	     (org-roam-node-backlinkscount-number node-b))))
+
    #+END_SRC
    
 ** Predicate Functions
@@ -589,7 +595,7 @@ I tried to follow a rather simple idea to do this and not overcomplicate things.
 	  (with-current-buffer (find-file-noselect file)
 	    (setq-local zetteldesk "foo")))))
 
-    (defun zetteldesk-add-moc-or-poi-backlink-to-desktop ()
+    (defun zetteldesk-add-poi-or-moc-backlink-to-desktop ()
       "Prompts the user to select an org-roam node that has the POI
     or MOC tag (filtering done with `org-roam-node-poi-or-moc-p') and
     collects its ID and backlinks. Then, prompt the user to select
@@ -676,7 +682,7 @@ I tried to follow a rather simple idea to do this and not overcomplicate things.
   #+END_SRC 
    
 ** Filter functions
-   Here I define the functions which give you a filtered view of switch-to-buffer and org-roam-node-find to the current zetteldesk. I also define a filtered view of org-roam-node-insert as its not rare to want to insert a link to a file from the zetteldesk.
+   Here I define the functions which give you a filtered view of switch-to-buffer and org-roam-node-find to the current zetteldesk. I also define a filtered view of org-roam-node-insert as its not rare to want to insert a link to a file from the zetteldesk and an iteration of that, that also sorts by backlinks.
 
    Lastly, trying to handle info buffers, I add a filtered view of Info-goto-node, using completing-read.
 
@@ -706,6 +712,26 @@ I tried to follow a rather simple idea to do this and not overcomplicate things.
      part of the current `zetteldesk'"
        (interactive)
        (org-roam-node-insert #'zetteldesk-node-p))
+
+     (defun zetteldesk-node-insert-sort-backlinks ()
+       "Select a node that is part of the zetteldesk through
+       `org-roam-node-read' in a UI sorted by the number of
+       backlinks. Insert a link in the current buffer to the selected node.
+
+     This function essentially has the core functionality of
+     `org-roam-node-insert', but it uses `org-roam-node-read' instead
+     as only that can take a sort-function. Some files may be
+     important to their topic, but not MOCs or POIs, so this function
+     acts essentially as a complimentary function to
+     `zetteldesk-node-insert-if-poi-or-moc' to check if that one
+     missed something you want to include."
+       (interactive)
+       (let* ((node (org-roam-node-read nil #'zetteldesk-node-p #'org-roam-node-sort-by-backlinks))
+	      (id (org-roam-node-id node))
+	      (description (org-roam-node-formatted node)))
+	 (insert (org-link-make-string
+		  (concat "id:" id)
+		  description))))
 
      (defun zetteldesk-info-goto-node ()
        "Zetteldesk filter function for `Info-goto-node'.

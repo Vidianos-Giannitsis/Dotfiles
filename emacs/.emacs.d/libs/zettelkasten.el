@@ -103,7 +103,7 @@ function."
   nil but they can be added by running the
   `org-roam-backlink-files' function on a node.")
 
-(defvar-local org-roam-backlink-pdfs nil
+(defvar org-roam-backlink-pdfs nil
   "After running `org-roam-export-backlinks-to-latex-pdf', to
   export a node and all its backlinks to pdf, the value of this
   variable in the original node's buffer will become a list of
@@ -154,34 +154,30 @@ instead of most recent nodes. Sorting is done with
   exceptionally useful with index files as it allows you to do an
   action on all files linked to this index automatically."
     (interactive)
-    (let ((backlinks (length (org-roam-backlink-query)))
-	  (org-roam-backlinks))
+    (let ((backlinks (length (org-roam-backlink-query))))
       (dotimes (number backlinks)
 	(let* ((id (car (nth number (org-roam-backlink-query))))
 	       (node (org-roam-node-from-id id)))
 	  (setq-local org-roam-backlinks (cons (org-roam-node-file node) org-roam-backlinks))))
-      (message "%s" org-roam-backlinks)))
+      org-roam-backlinks))
 
 (defun org-roam-export-backlinks-to-latex-pdf ()
   "Export the current buffer and every buffer that mentions it to
-a pdf through latex and pandoc. Makes use of the
+a pdf through the org-latex export. Makes use of the
 `org-roam-backlink-files' function to find all the
 backlinks. Also saves all the pdf names in a variable called
 `org-roam-backlink-pdfs'. These names can then be passed to
 something like pdftk to merge them into one pdf"
   (interactive)
-  (org-roam-backlink-files)
-  (setq org-roam-backlink-pdfs nil)
   (save-current-buffer
     (let ((backlinks (cons (buffer-file-name) org-roam-backlinks))
 	  (org-startup-with-latex-preview nil))
       (while backlinks
 	(find-file (car backlinks))
-	(org-pandoc-export-to-latex-pdf)
+	(org-latex-export-to-pdf)
 	(setq org-roam-backlink-pdfs
 	      (cons (concat (file-name-sans-extension (car backlinks)) ".pdf") org-roam-backlink-pdfs))
-	(setq backlinks (cdr backlinks)))
-      ))
+	(setq backlinks (cdr backlinks)))))
   (message "%s" "Done!"))
 
 (setq bibtex-completion-bibliography

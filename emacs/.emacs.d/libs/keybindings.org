@@ -65,7 +65,8 @@
    :prefix "SPC l"
    "o" 'org-open-at-point
    "n" 'org-next-link
-   "p" 'org-previous-link)
+   "p" 'org-previous-link
+   "t" 'org-toggle-link-display)
 
   (general-define-key
    :states 'normal
@@ -113,6 +114,7 @@
    "a b" 'zetteldesk-add-to-desktop
    "a n" 'zetteldesk-add-node-to-desktop
    "a i" 'zetteldesk-add-info-node-to-desktop
+   "a p" 'zetteldesk-add-poi-or-moc-backlink-to-desktop
    "r" '(:ignore t :which-key "Remove from Zetteldesk")
    "r b" 'zetteldesk-remove-from-desktop
    "r n" 'zetteldesk-remove-node-from-desktop
@@ -147,9 +149,9 @@
      "University"
      (("u" (lambda() (interactive)(dired "~/Documents/5o_εξάμηνο")) "University Documents folder")
       ("B" (lambda() (interactive)(find-file "~/Sync/My_Library.bib")) "Master Bibliography file")
-      ("e" (lambda() (interactive)(find-file "~/org_roam/erasmus-08-10-21.org")) "Erasmus index file")
       ("o" (lambda() (interactive)(dired "~/Documents/Octave")) "Octave scripts directory")
-      ("z" (lambda() (interactive)(dired "~/org_roam/outlines")) "Zetteldesk Outlines"))
+      ("z" (lambda() (interactive)(dired "~/Zetteldesk")) "Zetteldesk Directory")
+      ("O" (lambda() (interactive)(dired "~/org_roam/outlines")) "Outlines"))
 
      "General Computer Things"
      (("h" (lambda() (interactive)(dired "~")) "Home directory")
@@ -365,6 +367,7 @@
    "i" 'zetteldesk-node-insert
    "r" 'zetteldesk-remove-backlinks-from-desktop
    "b" 'zetteldesk-add-backlinks-to-desktop
+   "s" 'zetteldesk-node-insert-sort-backlinks
    "p" 'zetteldesk-node-insert-if-poi-or-moc)
 
   (general-define-key

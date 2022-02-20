@@ -132,7 +132,7 @@
 (add-to-list 'auto-mode-alist '("\\.m\\'" . octave-mode))
 (add-to-list 'auto-mode-alist '("\\.epub\\'" . nov-mode))
 
-(setq org-confirm-elisp-link-function nil)
+(setq org-link-elisp-confirm-function nil)
 
 (setq ivy-youtube-key "224520591375-p6v36u3r9k8qt2k7qthb12gnjarc8c7t")
 
@@ -297,6 +297,24 @@
 				 ("" "glossaries")
 				 ("" "newfloat")
 				 ("" "minted")))
+
+(defun latex-filter-greek-hrefs (link backend info)
+  "Change \\href to \\href{\detokenize} so that latex exports
+  don't break if they see a file with greek letters"
+  (when (org-export-derived-backend-p backend 'latex)
+    (let* ((bracket (search "\}" link))
+	   (size (length link))
+	   (name
+	    (concat (substring link 0 6)
+		    "\\detokenize\{"
+		    (substring link 6 bracket)
+		    "\}"
+		    (substring link bracket size))))
+      (format "%s" name))))
+
+(add-to-list 'org-export-filter-link-functions
+	     'latex-filter-greek-hrefs)
+
 
 (defun org-renumber-environment (orig-func &rest args)
   (let ((results '()) 
@@ -874,6 +892,12 @@ it."
 
 (add-hook 'emacs-lisp-mode-hook 'eldoc-mode)
 (add-hook 'ielm-mode-hook 'eldoc-mode)
+
+(advice-add 'common-lisp-hyperspec
+	    :around
+	    (lambda (orig-fun &rest args)
+	      (setq-local browse-url-browser-function 'eww-browse-url)
+	      (apply orig-fun args)))
 
 (setq deft-extensions '("org"))
 (setq deft-directory "~/org_roam")
