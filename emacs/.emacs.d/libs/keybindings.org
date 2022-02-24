@@ -2,19 +2,16 @@
 #+PROPERTY: header-args :tangle yes
 
 * About this file
-  In the same way Emacs is the heart of my dotfiles, this file right here is the "heart" of my Emacs config. It has been split from my full config (which can be found [[https://github.com/AuroraDragoon/Dotfiles/blob/master/emacs/.emacs.d/README.org][here]] but you probably knew that already and came to this section from that file) because it is large enough to fit in its own file and there is no need for it to be in the main file and make that unnecessarily larger. This file tangles to keybindings.el in my libs folder (which stores all the extrnal elisp "libraries" that I have manually installed without the use of MELPA) and this makes this essentially act as an external emacs package. I can require it inside my main config file, which tangles to init.el and everything set in this file will be loaded with Emacs. It consists of all the custom keybindings I have set for Emacs. And there are a lot of those as I personally am not a fun of the default Emacs keybindings as the control key is not in an ergonomic position to click (and personally I dont like the solution of making Caps-Lock act as control as I am then going to become an addict and will be unable to use a computer that doesnt have Caps Lock bound as Control) and I also just like using my keybindings cause they make more sense for me (as I thought of all of them). 
+  In the same way Emacs is the heart of my dotfiles, this file right here is the “heart” of my Emacs config. It has been split from my full config (which can be found here but you probably knew that already and came to this section from that file) because it is large enough to fit in its own file and there is no need for it to be in the main file and make that unnecessarily larger. This file tangles to keybindings.el in my libs folder (which stores all the extrnal elisp “libraries” that I have manually installed without the use of MELPA) and this makes this essentially act as an external emacs package. I can require it inside my main config file, which tangles to init.el and everything set in this file will be loaded with Emacs. It consists of all the custom keybindings I have set for Emacs. And there are a lot of those as I personally am not a fun of the default Emacs keybindings as the control key is not in an ergonomic position to click (and personally I dont like the solution of making Caps-Lock act as control as I am then going to become an addict and will be unable to use a computer that doesnt have Caps Lock bound as Control) and I also just like using my keybindings cause they make more sense for me (as I thought of all of them).
 
-  I use a setup, inspired to an extent by what Spacemacs (the first Emacs "distribution" I ever used), but in some ways they are different. The two most important modifier/leader keys in this config are Space (abbreviated as SPC in the rest of the file) and the comma key ",". Space is used for the more general keybindings which are active in every buffer if it is in normal mode. Comma is for buffer specific commands and since the only major mode I use a lot which has enough commands for me to be interested in setting this up is org, comma essentially stands for org mode commands. Its only active if the buffer's major mode is org and it is also in normal mode. I manage these with general.el, an excellent package for managing your custom keybindings. I also enable which-key mode globally so that I can see which keys I can press to follow a leader key and what action they will do (its probably one of the most useful emacs packages and I cannot comprehend why its not enabled by default in Emacs).
+I use a setup, inspired to an extent by what Spacemacs (the first Emacs “distribution” I ever used), but in some ways they are different. The two most important modifier/leader keys in this config are Space (abbreviated as SPC in the rest of the file) and the comma key “,”. Space is used for the more general keybindings which are active in every buffer if it is in normal mode. Comma is for buffer specific commands and since the only major mode I use a lot which has enough commands for me to be interested in setting this up is org, comma essentially stands for org mode commands. Its only active if the buffer’s major mode is org and it is also in normal mode. I manage these with general.el, an excellent package for managing your custom keybindings. I also enable which-key mode globally so that I can see which keys I can press to follow a leader key and what action they will do (its probably one of the most useful emacs packages and I cannot comprehend why its not enabled by default in Emacs).
 
-  General has integration with which-key, so for some functions whose names I find not so self descriptive, I have a which-key statement, which gives me a special message instead of the command name for those commands. I can also nest leader keys inside other leader keys creating some larger "key-chords" using general. Those are for a group of commands, which have similar functionalities but differ in something. For example SPC c is for calendar commands (using the calfw.el package) while SPC r is for Org-Roam commands and commands about reference material. If you add the nested leader key to the original leader key's list of actions and set it to :ignore t as I have done below, you can set a which-key statement which describes what that leader key is about.
+General has integration with which-key, so for some functions whose names I find not so self descriptive, I have a which-key statement, which gives me a special message instead of the command name for those commands. I can also nest leader keys inside other leader keys creating some larger “key-chords” using general. Those are for a group of commands, which have similar functionalities but differ in something. For example SPC c is for calendar commands (using the calfw.el package) while SPC r is for Org-Roam commands and commands about reference material. If you add the nested leader key to the original leader key’s list of actions and set it to :ignore t as I have done below, you can set a which-key statement which describes what that leader key is about.
   
-** Global keybindings, defined with the space leader key
-   These are my most important keybindings. They are on the override mode map meaning they take precedence over everything and can be used in normal mode. They are very general and not mode specific. All prefixed by the SPC key
-   
 #+BEGIN_SRC elisp
 
   (general-create-definer my-leader-def
-			  :prefix "SPC")
+			    :prefix "SPC")
 
   (my-leader-def
    :states 'normal
@@ -126,7 +123,8 @@
    "i N" 'zetteldesk-insert-node-contents-without-link
    "i o" 'zetteldesk-insert-org-file-contents
    "i p" 'zetteldesk-insert-link-to-pdf
-   "i i" 'zetteldesk-insert-info-contents)
+   "i i" 'zetteldesk-insert-info-contents
+   "I" 'zetteldesk-info-goto-node)
 
   (general-define-key
    :states 'normal
@@ -151,7 +149,8 @@
       ("B" (lambda() (interactive)(find-file "~/Sync/My_Library.bib")) "Master Bibliography file")
       ("o" (lambda() (interactive)(dired "~/Documents/Octave")) "Octave scripts directory")
       ("z" (lambda() (interactive)(dired "~/Zetteldesk")) "Zetteldesk Directory")
-      ("O" (lambda() (interactive)(dired "~/org_roam/outlines")) "Outlines"))
+      ("O" (lambda() (interactive)(dired "~/org_roam/outlines")) "Outlines")
+      ("C" (lambda() (interactive)(dired "~/Documents/Chemecar")) "Chemecar"))
 
      "General Computer Things"
      (("h" (lambda() (interactive)(dired "~")) "Home directory")
@@ -245,7 +244,6 @@
       ("D" org-pandoc-import-docx-as-org "Import DOCX")
       ("O" org-pandoc-import-odt-as-org "Import ODT")
       ("L" org-pandoc-import-latex-as-org "Import Latex"))))
-
  #+END_SRC
 
  #+RESULTS:

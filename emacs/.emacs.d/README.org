@@ -101,6 +101,8 @@ This includes:
 + Changing yes-no prompts to y-n, because its simply easier to type than yes-no.
 + Hide elements such as asterisks when writing a bold word by default. In the [[*Utilities][Utilities]] section of the config, I also define a function which toggles this behaviour
 + Set my font to Source Code Pro with the right font size for me. To use daemon mode properly, this needs a bit more code.
++ Remove dialog boxes completely as answering in the minibuffer is more efficient imo.
++ Activate global auto revert mode for file and non-file buffers, as it is really helpful imo.
 
 #+BEGIN_SRC elisp :tangle init.el
 
@@ -157,6 +159,12 @@ This includes:
     (set-font-faces))
 
   (setq default-input-method "greek")
+
+  (setq use-dialog-box nil)
+
+  (global-auto-revert-mode 1)
+  (setq global-auto-revert-non-file-buffers t)
+
 #+END_SRC
 
 
@@ -202,6 +210,7 @@ This enables:
 + Do not ask if an emacs lisp link should be used. I use these in some places and that part made them more obnoxious than they need to be.
 + Set up the ivy-youtube key to get integration between ivy and youtube
 + Set up my emacs run launcher, which I really enjoy using
++ Make the minibuffer store the last 20 inputs it had. Minibuffer history is pretty cool
 
 #+BEGIN_SRC elisp :tangle init.el
 
@@ -265,7 +274,8 @@ This enables:
 	  (counsel-linux-app)
 	(delete-frame))))
 
-
+  (setq history-length 20)
+  (savehist-mode 1)
 
 #+END_SRC
 

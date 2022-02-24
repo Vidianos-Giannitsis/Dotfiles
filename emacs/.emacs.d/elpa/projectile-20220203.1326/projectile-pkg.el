@@ -1,2 +1,0 @@
-;;; Generated package description from projectile.el  -*- no-byte-compile: t -*-
-(define-package "projectile" "20220203.1326" "Manage and navigate projects in Emacs easily" '((emacs "25.1")) :commit "df3d73e1f0ff625a09196ff3ba6f4be82a53fb3b" :authors '(("Bozhidar Batsov" . "bozhidar@batsov.dev")) :maintainer '("Bozhidar Batsov" . "bozhidar@batsov.dev") :keywords '("project" "convenience") :url "https://github.com/bbatsov/projectile")

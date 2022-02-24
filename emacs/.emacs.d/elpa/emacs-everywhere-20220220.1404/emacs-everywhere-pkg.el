@@ -1,0 +1,2 @@
+;;; Generated package description from emacs-everywhere.el  -*- no-byte-compile: t -*-
+(define-package "emacs-everywhere" "20220220.1404" "System-wide popup windows for quick edits" '((emacs "26.3")) :commit "f23230e67c45536501d651ef6b93546b4ac9fe4f" :authors '(("TEC <https://github.com/tecosaur>")) :maintainer '("TEC" . "tec@tecosaur.com") :keywords '("conenience" "frames") :url "https://github.com/tecosaur/emacs-everywhere")

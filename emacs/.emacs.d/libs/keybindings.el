@@ -1,5 +1,5 @@
 (general-create-definer my-leader-def
-			:prefix "SPC")
+			  :prefix "SPC")
 
 (my-leader-def
  :states 'normal
@@ -111,7 +111,8 @@
  "i N" 'zetteldesk-insert-node-contents-without-link
  "i o" 'zetteldesk-insert-org-file-contents
  "i p" 'zetteldesk-insert-link-to-pdf
- "i i" 'zetteldesk-insert-info-contents)
+ "i i" 'zetteldesk-insert-info-contents
+ "I" 'zetteldesk-info-goto-node)
 
 (general-define-key
  :states 'normal
@@ -136,7 +137,8 @@
     ("B" (lambda() (interactive)(find-file "~/Sync/My_Library.bib")) "Master Bibliography file")
     ("o" (lambda() (interactive)(dired "~/Documents/Octave")) "Octave scripts directory")
     ("z" (lambda() (interactive)(dired "~/Zetteldesk")) "Zetteldesk Directory")
-    ("O" (lambda() (interactive)(dired "~/org_roam/outlines")) "Outlines"))
+    ("O" (lambda() (interactive)(dired "~/org_roam/outlines")) "Outlines")
+    ("C" (lambda() (interactive)(dired "~/Documents/Chemecar")) "Chemecar"))
 
    "General Computer Things"
    (("h" (lambda() (interactive)(dired "~")) "Home directory")

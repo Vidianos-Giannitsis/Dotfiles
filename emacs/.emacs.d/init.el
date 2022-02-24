@@ -75,6 +75,11 @@
 
 (setq default-input-method "greek")
 
+(setq use-dialog-box nil)
+
+(global-auto-revert-mode 1)
+(setq global-auto-revert-non-file-buffers t)
+
 (setq evil-collection-setup-minibuffer t)
 (setq evil-want-keybinding nil)
 (require 'evil-collection)
@@ -148,6 +153,9 @@
     (unwind-protect
 	(counsel-linux-app)
       (delete-frame))))
+
+(setq history-length 20)
+(savehist-mode 1)
 
 (require 'keybindings)
 
