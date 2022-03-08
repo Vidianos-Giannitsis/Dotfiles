@@ -231,7 +231,7 @@ something like pdftk to merge them into one pdf"
 
 (setq org-journal-dir "~/org_roam/daily"
       org-journal-file-format "%d-%m-%Y.org"
-      org-journal-time-format "%a, %m/%d-%R")
+      org-journal-time-format "%a, %d/%m-%R")
 
 (add-hook 'org-agenda-mode-hook 'visual-line-mode)
 
@@ -287,7 +287,8 @@ out"
 	 :jump-to-captured t)
 
 	("o" "outline" plain "%?" :if-new
-	 (file+head "outlines/${slug}-%<%d-%m-%y>.org" "#+title: ${title}\n")
+	 (file+head "outlines/${slug}-%<%d-%m-%y>.org" "#+title: ${title}\n
+#+filetags: outline")
 	 :unarrowed t
 	 :jump-to-captured t)
 
@@ -318,6 +319,20 @@ out"
 [[elisp:(Info-goto-node \"(%:file)%:node\")][Link to Info page]]
 \n
 ")
+	 :unnarowed t)
+
+	("e" "elfeed" plain
+	 "%?"
+	 :if-new
+	 (file+head "ref/${slug}.org" "#+title: %:description\n
+#+filetags: %:type
+- keywords ::
+- tags :: \n
+
+This entry scored %:elfeed-entry-meta with the current elfeed-score config\n
+
+[[%:link][Link to Elfeed Buffer]]
+[[%:elfeed-entry-link][Link to Web Page]]")
 	 :unnarowed t)))
 
 (setq org-roam-capture-ref-templates 

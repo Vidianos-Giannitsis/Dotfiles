@@ -1,2 +1,0 @@
-;;; Generated package description from all-the-icons-ibuffer.el  -*- no-byte-compile: t -*-
-(define-package "all-the-icons-ibuffer" "20220122.2206" "Display icons for all buffers in ibuffer" '((emacs "24.4") (all-the-icons "2.2.0")) :commit "8a914b100348493a665f0d53de4e22bf5b30a2a5" :authors '(("Vincent Zhang" . "seagle0128@gmail.com")) :maintainer '("Vincent Zhang" . "seagle0128@gmail.com") :keywords '("convenience" "icons" "ibuffer") :url "https://github.com/seagle0128/all-the-icons-ibuffer")

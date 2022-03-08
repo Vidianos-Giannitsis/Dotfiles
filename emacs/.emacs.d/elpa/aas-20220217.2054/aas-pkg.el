@@ -1,2 +1,0 @@
-;;; Generated package description from aas.el  -*- no-byte-compile: t -*-
-(define-package "aas" "20220217.2054" "Snippet expansions mid-typing" '((emacs "26.3")) :commit "1cb08537e255c60a9439e3fea7c5d406e32f5e97" :authors '(("Yoav Marco" . "yoavm448@gmail.com")) :maintainer '("Yoav Marco" . "yoavm448@gmail.com") :keywords '("abbrev" "tools") :url "https://github.com/ymarco/auto-activating-snippets")

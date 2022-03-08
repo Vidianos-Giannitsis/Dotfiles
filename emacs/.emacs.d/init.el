@@ -141,6 +141,71 @@
 
 (setq ivy-youtube-key "224520591375-p6v36u3r9k8qt2k7qthb12gnjarc8c7t")
 
+(setq history-length 20)
+(savehist-mode 1)
+
+(defcustom web-page-alist '()
+  "Alist used by `emacs-web-page-selector' to associate web-links
+  with their names. Needs to be an alist, but initialised as an
+  empty list so that you can choose the links to be used."
+  :type 'alist)
+
+(setq web-page-alist
+      '(("Chemeng" . "https://www.chemeng.ntua.gr/")
+	("Uni Submissions" . "https://www.chemeng.ntua.gr/submission/")
+	("Wolfram Alpha" . "https://www.wolframalpha.com")
+	("Chemeng Forum" . "https://forum.chemeng.ntua.gr/")
+	("Science Direct" . "https://www.sciencedirect.com/")
+	("Research Rabbit" . "https://www.researchrabbitapp.com/home")
+	("Helios" . "https://helios.ntua.gr/my/")
+	("Messenger" . "https://www.messenger.com")
+	("Twitch" . "https://www.twitch.tv")
+	("Github" . "https://github.com/Vidianos-Giannitsis")
+	("Youtube" . "https://www.youtube.com/")
+	("Discord" . "https://discord.com/channels/@me")
+	("Instagram" . "https://instagram.com/")
+	("Org-Roam Discourse" . "https://org-roam.discourse.group/")
+	("Qtile Docs" . "http://docs.qtile.org/en/latest/")
+	("EXWM Docs" . "https://github.com/ch11ng/exwm/wiki")
+	("Reddit" . "https://www.reddit.com/")
+	("Emacs Subreddit" . "https://www.reddit.com/r/emacs/")
+	("r/unixporn" . "https://www.reddit.com/r/unixporn/")
+	("CompetitiveTFT Reddit" . "https://www.reddit.com/r/CompetitiveTFT/")
+	("TFT Subreddit" . "https://www.reddit.com/r/TeamfightTactics/")
+	("Smogon" . "https://smogon.com")
+	("Dod" . "https://www.dod.gr")
+	("LolChess Account" . "https://lolchess.gg/profile/eune/auroradraco")
+	("Proton" . "https://www.protondb.com/")
+	("DuelingBook" . "https://www.duelingbook.com/")
+	("MC Biome Finder" . "https://www.chunkbase.com/apps/biome-finder#-3038289977291799158")
+	("Pokemon Showdown" . "https://play.pokemonshowdown.com/")
+	("Pokemon Damage Calc" . "https://calc.pokemonshowdown.com/index.html")
+	("Master Duel Meta" . "https://www.masterduelmeta.com/")
+	("YGO Pack Opener" . "https://db.ygoprodeck.com/pack-open/")
+	("Pokemon Unbound Learnsets" . "https://github.com/Skeli789/Dynamic-Pokemon-Expansion/blob/Unbound/src/Learnsets.c")
+	("Pokemon Unbound Egg Moves" . "https://github.com/Skeli789/Dynamic-Pokemon-Expansion/blob/Unbound/src/Egg_Moves.c")
+	("Pokemon Unbound Evolutions" . "https://github.com/Skeli789/Dynamic-Pokemon-Expansion/blob/Unbound/src/Evolution%20Table.c")
+	("Pokemon Unbound Bosses (Insane Difficulty)" . "https://docs.google.com/spreadsheets/d/1pLTQKQkWTnSkev4_kcjHbY0AkBujbTUDybxXFNZ_aVY/edit#gid=707456878")
+	("Pokemon Unbound Damage Calcs" . "https://pastebin.com/raw/iyN9Ls90")
+	("Pokemon Unbound Locations" . "https://docs.google.com/spreadsheets/d/1LFSBZuPDtJrwAz7t6ZkJ-il4j8M3qCdaKLNe6EZdPmQ/edit#gid=309549967")
+	("EV Value Per Pokemon" . "https://bulbapedia.bulbagarden.net/wiki/List_of_Pok%C3%A9mon_by_effort_value_yield")
+	("Pokemon Unbound Wild Held Items" . "https://github.com/Skeli789/Dynamic-Pokemon-Expansion/blob/Unbound/src/Base_Stats.c")
+	("Darebee" . "https://darebee.com/")
+	("Raindrop" . "https://app.raindrop.io/my/0")
+	("Hex Color Codes" . "https://www.color-hex.com/")
+	("Detexify" . "https://detexify.kirelabs.org/classify.html")))
+
+(defun emacs-web-page-selector ()
+  (interactive)
+  (with-selected-frame (make-frame '((name . "emacs-web-page-selector")
+				     (minibuffer . only)
+				     (width . 50)
+				     (height . 11)))
+    (unwind-protect
+	(browse-url
+	 (cdr (assoc (completing-read "Web-Page: " web-page-alist) web-page-alist)))
+      (delete-frame))))
+
 (setq counsel-linux-app-format-function 'counsel-linux-app-format-function-name-pretty)
 
 (defun emacs-run-launcher ()
@@ -153,9 +218,6 @@
     (unwind-protect
 	(counsel-linux-app)
       (delete-frame))))
-
-(setq history-length 20)
-(savehist-mode 1)
 
 (require 'keybindings)
 
@@ -448,7 +510,7 @@
     ";m"  "\\mu"
     ";n"  "\\nabla"         ";;n" "\\vec{\\nabla}"     ";;;n" "\\ln"
     ";N"  "\\mathbb{N}"                                ";;;N" "\\exp"
-    ";o"  "\\omega"
+    ";o"  "\\overline"
     ";O"  "\\Omega"         ";;O" "\\mho"
     ";p"  "\\partial"            ";;p" "\\varpi"
     ";P"  "\\Pi"
@@ -596,12 +658,13 @@
   "A skeleton for quickly adding a list of this semester's lessons to a new note which I use for tracking what I need to do for each lesson"
   ""
   "*** ΜΦΔ\n\n"
-  "*** Φαινόμενα Μεταφοράς\n\n"
-  "*** ΗΕΔ (Υδραυλικό)\n\n"
-  "*** ΗΕΔ (Ηλεκτρικό)\n\n"
-  "*** Υλικά\n\n"
-  "*** Προηγμένα Κεραμικά\n\n"
-  "*** Βιολογία\n\n")
+  "*** ΜΧΔ\n\n"
+  "*** Πολυμερή\n\n"
+  "*** Τρόφιμα\n\n"
+  "*** Σχεδιασμός Προιόντων\n\n"
+  "*** Περιβάλλον\n\n"
+  "*** Οικονομικά\n\n"
+  "*** Other\n\n")
 
 (require 'zettelkasten)
 (require 'zetteldesk)
@@ -833,7 +896,7 @@ it."
 	  ;; 			      (delete-char -2)))))))
 	  ))))))
 
-(defun org-elfeed-store-link ()
+(defun scimax-elfeed-store-link ()
   "Store a link to an elfeed entry."
   (interactive)
   (cond
@@ -889,6 +952,7 @@ it."
     )
 
 (add-hook 'pdf-view-mode-hook 'pdf-view-midnight-minor-mode)
+(org-pdftools-setup-link)
 
 (require 'eperiodic)
 

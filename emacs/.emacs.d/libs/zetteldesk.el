@@ -8,6 +8,7 @@
 ;; Created: 6th February 2022
 ;; License: GPL-3.0
 ;; Keywords: org-roam, revision, zettelkasten
+;; Version: 0.1
 
 ;; This file is free software; you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
@@ -314,6 +315,21 @@ Prompts the user to select a node from the list
 ;; zetteldesk-scratch buffer is a special buffer defined here on which
 ;; you drop all your stuff. Its what molds the whole workflow together
 
+(defcustom zetteldesk-map (make-sparse-keymap)
+  "This variable is the keymap for `zetteldesk-mode'"
+  :type 'keymap
+  :group 'zetteldesk)
+
+(defcustom zetteldesk-insert-scratch-or-current-buffer t
+  "Customization variable which decides whether the
+  zetteldesk-insert functions will insert to the
+  *zetteldesk-scratch* buffer or the current buffer. Default
+  value is t which makes those functions insert to the
+  scratch. Setting it to nil will make those functions insert to
+  the current buffer, for whichever usecase you might want"
+  :type 'string
+  :group 'zetteldesk)
+
 (define-minor-mode zetteldesk-mode
   "Toggles the global zetteldesk-mode.
 
@@ -322,6 +338,7 @@ buffer, a useful part of the whole zetteldesk workflow."
   nil
   :global t
   :group 'zetteldesk
+  :keymap zetteldesk-map
   :lighter " zetteldesk")
 
 (defun zetteldesk--create-scratch-buffer ()
@@ -375,11 +392,14 @@ in a split."
   (interactive "P")
   (let* ((node (org-roam-node-read nil #'zetteldesk-node-p))
 	 (file (org-roam-node-file node))
-	 (description (org-roam-node-formatted node)))
+	 (description (org-roam-node-formatted node))
+	 (location (if zetteldesk-insert-scratch-or-current-buffer
+		       "*zetteldesk-scratch*"
+		     (current-buffer))))
     (insert (org-link-make-string
 	     (concat "id:" (org-roam-node-id node))
 	     description))
-    (with-current-buffer "*zetteldesk-scratch*"
+    (with-current-buffer location
       (goto-char (point-max))
       (newline)
       (insert-file-contents file nil 67)
@@ -404,8 +424,11 @@ buffer. But sometimes its not handy, and so, I just made this
 second iteration to fix that issue."
   (interactive)
   (let* ((node (org-roam-node-read nil #'zetteldesk-node-p))
+	 (location (if zetteldesk-insert-scratch-or-current-buffer
+		       "*zetteldesk-scratch*"
+		     (current-buffer)))
 	 (file (org-roam-node-file node)))
-    (with-current-buffer "*zetteldesk-scratch*"
+    (with-current-buffer location
       (goto-char (point-max))
       (newline)
       (insert-file-contents file nil 67)
@@ -423,8 +446,11 @@ If given a `\\[universal-argument]' also switch to the
 *zetteldesk-scratch* buffer in a split"
   (interactive "P")
   (let* ((buffer (set-buffer (read-buffer "Zetteldesk Buffers: " nil nil #'zetteldesk-org-buffer-p)))
+	 (location (if zetteldesk-insert-scratch-or-current-buffer
+		       "*zetteldesk-scratch*"
+		     (current-buffer)))
 	 (file (buffer-file-name buffer)))
-    (set-buffer "*zetteldesk-scratch*")
+    (set-buffer location)
     (goto-char (point-max))
     (save-excursion
       (newline)
@@ -448,7 +474,8 @@ file structure or the extension and then the string
 \"(PDF)\". Then, insert a newline, the string \"Link to PDF: \"
 and then a link to the chosen pdf, in the correct page, with the
 description being the pdfs name without the file structure or the
-extension.
+extension. Note that `org-pdftools-setup-link' needs to be run
+for pdf links to work (which this uses).
 
 Optionally, if given a `\\[universal-argument]' save the
 highlighted region in a variable and insert it after the heading
@@ -459,20 +486,23 @@ something specific you want to take from the pdf. Therefore, this
 optional addition, adds that to the scratch buffer so you
 remember why it was useful."
   (interactive "P")
-  (let* ((contents (buffer-substring (mark) (point)))
-	 (pdf-buffer (set-buffer (read-buffer "Zetteldesk Pdfs: " nil nil #'zetteldesk-pdf-p)))
+  (let* ((pdf-buffer (set-buffer (read-buffer "Zetteldesk Pdfs: " nil nil #'zetteldesk-pdf-p)))
 	 (file (buffer-file-name pdf-buffer))
+	 (location (if zetteldesk-insert-scratch-or-current-buffer
+		       "*zetteldesk-scratch*"
+		     (current-buffer)))
 	 (page (read-from-minibuffer "Page: " "1"))
 	 (description (file-name-nondirectory (file-name-sans-extension file))))
-    (with-current-buffer "*zetteldesk-scratch*"
+    (with-current-buffer location
       (goto-char (point-max))
       (newline)
       (org-insert-heading)
       (insert "Supportive Material - " description " (PDF)")
       (newline)
       (when (equal arg '(4))
-	(insert contents)
-	(newline))
+	(let ((contents (buffer-substring (mark) (point))))
+	  (insert contents)
+	  (newline)))
       (insert "Link to PDF: "
 	      (org-link-make-string
 	       (concat "pdf:" file "::" page)
@@ -508,9 +538,12 @@ Optionally, with a `\\[universal-argument]' switch to the
 zetteldesk-scratch buffer in a split."
   (interactive "P")
   (let ((info_node (completing-read "Nodes: " zetteldesk-info-nodes))
+	(location (if zetteldesk-insert-scratch-or-current-buffer
+		      "*zetteldesk-scratch*"
+		    (current-buffer)))
 	(buffer (current-buffer)))
     (Info-goto-node info_node)
-    (with-current-buffer "*zetteldesk-scratch*"
+    (with-current-buffer location
       (goto-char (point-max))
       (newline)
       (org-insert-heading)

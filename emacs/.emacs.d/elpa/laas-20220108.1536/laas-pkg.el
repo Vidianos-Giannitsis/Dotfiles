@@ -1,2 +1,0 @@
-;;; Generated package description from laas.el  -*- no-byte-compile: t -*-
-(define-package "laas" "20220108.1536" "A bundle of as-you-type LaTeX snippets" '((emacs "26.3") (auctex "11.88") (aas "0.2") (yasnippet "0.14")) :commit "14c6cc2ff8c0c6b20b83fb075b94a8661a985249" :maintainer '("Yoav Marco" . "yoavm448@gmail.com") :keywords '("tools" "tex") :url "https://github.com/tecosaur/LaTeX-auto-activating-snippets")

@@ -133,7 +133,7 @@
     ("S" (lambda() (interactive)(find-file "~/scratchpad.org")) "Emacs Scratchpad file"))
 
    "University"
-   (("u" (lambda() (interactive)(dired "~/Documents/5o_εξάμηνο")) "University Documents folder")
+   (("u" (lambda() (interactive)(dired "~/Documents/6o_εξάμηνο")) "University Documents folder")
     ("B" (lambda() (interactive)(find-file "~/Sync/My_Library.bib")) "Master Bibliography file")
     ("o" (lambda() (interactive)(dired "~/Documents/Octave")) "Octave scripts directory")
     ("z" (lambda() (interactive)(dired "~/Zetteldesk")) "Zetteldesk Directory")
