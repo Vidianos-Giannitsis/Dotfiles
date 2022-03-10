@@ -119,6 +119,7 @@ var favorites = [
 	  ["Darebee", "https://darebee.com/", "d"],
 	  ["Raindrop", "https://app.raindrop.io/my/0", "rd"],
 	  ["Hex Color Codes", "https://www.color-hex.com/", "ch"],
+	  ["Word Counter", "https://wordcounter.net/", "wc"],
 	  ["Detexify", "https://detexify.kirelabs.org/classify.html", "dt"]
       ]
     ],

@@ -146,8 +146,9 @@
 
 (defcustom web-page-alist '()
   "Alist used by `emacs-web-page-selector' to associate web-links
-  with their names. Needs to be an alist, but initialised as an
-  empty list so that you can choose the links to be used."
+  with their names. Needs to be an alist of the form (name
+  . link) with both properties being strings. Initialised as an
+  empty list as there is no point in predefining anything in it."
   :type 'alist)
 
 (setq web-page-alist
@@ -192,10 +193,18 @@
 	("Pokemon Unbound Wild Held Items" . "https://github.com/Skeli789/Dynamic-Pokemon-Expansion/blob/Unbound/src/Base_Stats.c")
 	("Darebee" . "https://darebee.com/")
 	("Raindrop" . "https://app.raindrop.io/my/0")
+	("Word Counter" . "https://wordcounter.net/")
 	("Hex Color Codes" . "https://www.color-hex.com/")
+	("Time Zone Converter" . "https://www.timeanddate.com/worldclock/converter.html")
 	("Detexify" . "https://detexify.kirelabs.org/classify.html")))
 
 (defun emacs-web-page-selector ()
+  "Create and select a frame called emacs-web-page-selector which
+consists of only a minibuffer and has specific dimensions. Inside
+that frame, run a `completing-read' prompting the user to select
+the name of a website in the `web-page-alist'. Upon selection,
+emacs will run `browse-url' opening the link associated to the
+selected name."
   (interactive)
   (with-selected-frame (make-frame '((name . "emacs-web-page-selector")
 				     (minibuffer . only)
@@ -209,7 +218,11 @@
 (setq counsel-linux-app-format-function 'counsel-linux-app-format-function-name-pretty)
 
 (defun emacs-run-launcher ()
-  "Create and select a frame called emacs-run-launcher which consists only of a minibuffer and has specific dimensions. Run counsel-linux-app on that frame, which is an emacs command that prompts you to select an app and open it in a dmenu like behaviour. Delete the frame after that command has exited"
+  "Create and select a frame called emacs-run-launcher which
+consists only of a minibuffer and has specific dimensions. Run
+counsel-linux-app on that frame, which is an emacs command that
+prompts you to select an app and open it in a dmenu like
+behaviour. Delete the frame after that command has exited"
   (interactive)
   (with-selected-frame (make-frame '((name . "emacs-run-launcher")
 				     (minibuffer . only)

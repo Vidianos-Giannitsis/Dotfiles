@@ -1,0 +1,6 @@
+(undo-tree-save-format-version . 1)
+"7acedf9aab24a0e81ee0d7200dc0a5a50c672c06"
+[nil nil nil nil (25138 2206 260578 794000) 0 nil]
+([nil current ((26797 . 26800) (26797 . 26888) (#("   | d | default | entry | * %? | :if-new | (file+head %<%Y-%m-%d>.org #+title: %<%Y-%m-%d> |
+" 0 94 (fontified nil)) . 26797) (t 25134 24477 120179 566000)) nil (25138 2222 805683 855000) 0 nil])
+nil
