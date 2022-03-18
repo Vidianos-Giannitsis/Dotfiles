@@ -54,6 +54,7 @@ var favorites = [
 	  ["Chemeng Forum" , "https://forum.chemeng.ntua.gr/", "cf"],
 	  ["Science Direct" , "https://www.sciencedirect.com/", "sc"],
 	  ["Research Rabbit" , "https://www.researchrabbitapp.com/home", "rr"],
+	  ["Minitab" , "https://app.minitab.com/", "mt"],
 	  ["Helios", "https://helios.ntua.gr/my/", "h"]
       ]
     ],

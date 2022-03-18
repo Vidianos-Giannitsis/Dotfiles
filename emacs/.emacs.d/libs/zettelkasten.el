@@ -327,9 +327,7 @@ out"
 	 (file+head "ref/${slug}.org" "#+title: %:description\n
 #+filetags: %:type
 - keywords ::
-- tags :: \n
-
-This entry scored %:elfeed-entry-meta with the current elfeed-score config\n
+- tags :: \n\n\n
 
 [[%:link][Link to Elfeed Buffer]]
 [[%:elfeed-entry-link][Link to Web Page]]")

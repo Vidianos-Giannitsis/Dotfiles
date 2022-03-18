@@ -263,6 +263,7 @@ This enables:
   (setq history-length 20)
   (savehist-mode 1)
 
+  (ace-link-setup-default)
 #+END_SRC
 
 * Emacs Launchers
@@ -1353,10 +1354,13 @@ Some other extensions inside my Emacs config that require some changes for their
    Elisp is the internal language of Emacs. I enable eldoc-mode in Elisp and ielm which is just awesome for writing elisp. 
    
    #+BEGIN_SRC elisp :tangle init.el
-     
-     (add-hook 'emacs-lisp-mode-hook 'eldoc-mode)
+
+     (add-hook 'emacs-lisp-mode-hook '(lambda ()
+					(eldoc-mode)
+					(lispy-mode)
+					(lispyville-mode)))
      (add-hook 'ielm-mode-hook 'eldoc-mode)
-     
+
    #+END_SRC
 
 ** Common Lisp
@@ -1369,6 +1373,10 @@ Some other extensions inside my Emacs config that require some changes for their
 	      (lambda (orig-fun &rest args)
 		(setq-local browse-url-browser-function 'eww-browse-url)
 		(apply orig-fun args)))
+
+  (add-hook 'lisp-mode-hook '(lambda ()
+			  (lispy-mode)
+			  (lispyville-mode)))
 
 #+END_SRC
 

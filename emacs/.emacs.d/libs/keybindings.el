@@ -26,13 +26,13 @@
   "j" '(:ignore t :which-key "Daily notes")
   "H" 'counsel-imenu
   "C" '(:ignore t :which-key "Calendar Commands")
-  "l" '(:ignore t :which-key "Org Links")
-  "L" '(linum-mode :which-key "Line numbers")
+  "l" 'ace-link
+  "L" '(:ignore t :which-key "Links")
   "S" '(:ignore t :which-key "Counsel-spotify")
   "e" '(:ignore t :which-key "Evaluate Emacs-Lisp")
   "f" '(ace-window :which-key "Switch focus")
   "φ" '(ace-window :which-key "Switch focus")
-  "w" '(:ignore t :which-key "Motion commands")
+  "w" '(:ignore t :which-key "Define Word")
   "W" 'wolfram-alpha
   "n" 'winner-redo
   "p" 'winner-undo
@@ -47,7 +47,7 @@
 (general-define-key
  :states 'normal
  :keymaps 'override
- :prefix "SPC l"
+ :prefix "SPC L"
  "o" 'org-open-at-point
  "n" 'org-next-link
  "p" 'org-previous-link
@@ -201,15 +201,8 @@
  :states 'normal
  :keymaps 'override
  :prefix "SPC w"
- "h" 'evil-window-left
- "j" 'evil-window-down
- "k" 'evil-window-up
- "l" 'evil-window-right
- "i" 'evil-window-increase-width
- "I" 'evil-window-increase-height
- "d" 'evil-window-decrease-width
- "D" 'evil-window-decrease-height
- "=" 'balance-windows)
+ "w" 'define-word
+ "p" 'define-word-at-point)
 
 (general-define-key
  :states 'normal

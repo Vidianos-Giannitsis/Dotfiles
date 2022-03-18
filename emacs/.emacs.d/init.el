@@ -144,6 +144,8 @@
 (setq history-length 20)
 (savehist-mode 1)
 
+(ace-link-setup-default)
+
 (defcustom web-page-alist '()
   "Alist used by `emacs-web-page-selector' to associate web-links
   with their names. Needs to be an alist of the form (name
@@ -975,7 +977,10 @@ it."
 
 (setq eaf-wm-focus-fix-wms '("qtile"))
 
-(add-hook 'emacs-lisp-mode-hook 'eldoc-mode)
+(add-hook 'emacs-lisp-mode-hook '(lambda ()
+				   (eldoc-mode)
+				   (lispy-mode)
+				   (lispyville-mode)))
 (add-hook 'ielm-mode-hook 'eldoc-mode)
 
 (advice-add 'common-lisp-hyperspec
@@ -983,6 +988,10 @@ it."
 	    (lambda (orig-fun &rest args)
 	      (setq-local browse-url-browser-function 'eww-browse-url)
 	      (apply orig-fun args)))
+
+(add-hook 'lisp-mode-hook '(lambda ()
+			(lispy-mode)
+			(lispyville-mode)))
 
 (setq deft-extensions '("org"))
 (setq deft-directory "~/org_roam")
