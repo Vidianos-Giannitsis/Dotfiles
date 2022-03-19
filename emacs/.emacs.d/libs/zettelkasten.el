@@ -213,6 +213,62 @@ something like pdftk to merge them into one pdf"
 (require 'websocket)
 (require 'org-roam-ui)
 
+(defun org-roam-node-sort-by-atime (NODE1 NODE2)
+  "Sorting function that sorts NODE1 and NODE2 by their file atime.
+
+This is a simplified version of
+`org-roam-node-read-sort-by-file-atime' which requires nodes as
+its input and not something else. The above function is what
+`org-roam-node-read's sorting uses and it has a special
+formatting."
+  (time-less-p (org-roam-node-file-atime NODE1)
+	       (org-roam-node-file-atime NODE2)))
+
+(defun org-roam-logseq-tag-function (TAG)
+  "An implementation of logseq's tagging system in org-roam.
+
+Prompt for TAG which is the name of a tag in your org-roam
+repository, filter it to only contain nodes with that tag and
+sort them so the most recently accessed one is the first item of
+the list. Sorting is done with the custom
+`org-roam-node-sort-by-atime' function. Then, check if a buffer
+exists with the name *TAG-nodes* and if it doesn't create it.
+
+In that new buffer, switch to org-mode and for every item in the
+sorted-nodes list, go to `point-max', insert a new line, insert
+the string #+transclude: make an org-mode id link with the node's
+id and insert another newline. Once done, run
+`org-transclusion-add-all' to activate the transclusion links and
+view editable versions of the selected nodes.
+
+Finally, restore the buffer from which this function was called
+and insert and org-mode elisp link that runs `switch-to-buffer'
+to switch to the newly-created buffer."
+  (interactive "MTag: ")
+  (let* ((init-list (org-roam-node-list))
+	 (tagged-nodes (cl-remove-if-not (lambda (NODE)
+					   (member TAG (org-roam-node-tags NODE)))
+					 init-list))
+	 (sorted-nodes (reverse (sort tagged-nodes #'org-roam-node-sort-by-atime)))
+	 (buffer-name (concat "*" TAG "-nodes*"))
+	 (buffer (get-buffer-create buffer-name)))
+    (save-excursion
+      (with-current-buffer buffer
+	(org-mode)
+	(dolist (node sorted-nodes)
+	  (goto-char (point-max))
+	  (newline)
+	  (insert
+	   "#+transclude: "
+	   (org-link-make-string
+	    (concat "id:" (org-roam-node-id node))))
+	   (newline))
+	(org-transclusion-add-all)))
+    (insert
+     (org-link-make-string
+      (concat "elisp:(switch-to-buffer \"" buffer-name "\")")
+      (concat "#" TAG)))))
+
 (setq org-todo-keywords
       '((sequence "INBOX(i)"
 		  "PROCESSING(p)"
