@@ -142,7 +142,6 @@
 (setq ivy-youtube-key "224520591375-p6v36u3r9k8qt2k7qthb12gnjarc8c7t")
 
 (setq history-length 20)
-(savehist-mode 1)
 
 (ace-link-setup-default)
 
@@ -161,6 +160,7 @@
 	("Science Direct" . "https://www.sciencedirect.com/")
 	("Research Rabbit" . "https://www.researchrabbitapp.com/home")
 	("Helios" . "https://helios.ntua.gr/my/")
+	("Scopus" . "https://www.scopus.com/search/form.uri?display=basic#basic")
 	("Messenger" . "https://www.messenger.com")
 	("Twitch" . "https://www.twitch.tv")
 	("Github" . "https://github.com/Vidianos-Giannitsis")
@@ -381,7 +381,9 @@ behaviour. Delete the frame after that command has exited"
 				 ("" "makeidx")
 				 ("" "glossaries")
 				 ("" "newfloat")
-				 ("" "minted")))
+				 ("" "minted")
+				 ("" "chemfig")
+				 ("a4paper, margin=3.5cm" "geometry")))
 
 (defun latex-filter-greek-hrefs (link backend info)
   "Change \\href to \\href{\detokenize} so that latex exports
@@ -933,6 +935,15 @@ it."
        :entry-id entry-id)
       org-link))
    (t nil)))
+
+;; Run SageMath by M-x run-sage instead of M-x sage-shell:run-sage
+(sage-shell:define-alias)
+
+;; Turn on eldoc-mode in Sage terminal and in Sage source files
+(add-hook 'sage-shell-mode-hook #'eldoc-mode)
+(add-hook 'sage-shell:sage-mode-hook #'eldoc-mode)
+
+(add-hook 'sage-shell-after-prompt-hook #'sage-shell-view-mode)
 
 (setq ebib-preload-bib-files '("~/Sync/My_Library.bib"))
 

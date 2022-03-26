@@ -112,7 +112,8 @@
  "i o" 'zetteldesk-insert-org-file-contents
  "i p" 'zetteldesk-insert-link-to-pdf
  "i i" 'zetteldesk-insert-info-contents
- "I" 'zetteldesk-info-goto-node)
+ "I" 'zetteldesk-info-goto-node
+ "m" 'zetteldesk-switch-to-margin-notes)
 
 (general-define-key
  :states 'normal
@@ -327,7 +328,8 @@
  "r" 'zetteldesk-remove-backlinks-from-desktop
  "b" 'zetteldesk-add-backlinks-to-desktop
  "s" 'zetteldesk-node-insert-sort-backlinks
- "p" 'zetteldesk-node-insert-if-poi-or-moc)
+ "p" 'zetteldesk-node-insert-if-poi-or-moc
+ "m" 'zetteldesk-remark-mark)
 
 (general-define-key
  :states 'normal

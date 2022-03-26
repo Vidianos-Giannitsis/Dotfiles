@@ -3,7 +3,7 @@
 
 (use-package org-roam
   :config
-  (setq org-roam-directory "~/org_roam"
+  (setq org-roam-directory "~/org_roam/"
 	org-roam-dailies-directory "~/org_roam/daily")
 
   (cl-defmethod org-roam-node-directories ((node org-roam-node))
@@ -181,7 +181,7 @@ something like pdftk to merge them into one pdf"
   (message "%s" "Done!"))
 
 (setq bibtex-completion-bibliography
-      '("~/Sync/My_Library.bib")
+      '("~/Sync/My_Library.bib" "~/Sync/My_Library2.bib")
       bibtex-completion-pdf-field "File"
       bibtex-completion-library-path '("~/Sync/Zotero_pdfs"))
 
@@ -338,7 +338,7 @@ out"
       '(("d" "default" plain "%?" :if-new
 	 (file+head "${slug}-%<%d-%m-%y>.org" "#+title: ${title}\n
 - index ::  
-- tags ::  ")
+- tags :: ")
 	 :unarrowed t
 	 :jump-to-captured t)
 

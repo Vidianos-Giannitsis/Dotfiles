@@ -40,6 +40,7 @@ I hope you will find something useful here that you can put to your emacs config
   - [[#exporting][Exporting]]
   - [[#abbreviations--spellchecking][Abbreviations & Spellchecking]]
   - [[#elfeed][Elfeed]]
+- [[#sage][Sage]]
 - [[#ebib][Ebib]]
 - [[#other-major-modes][Other Major Modes]]
   - [[#python][Python]]
@@ -264,7 +265,6 @@ This enables:
   (setq ivy-youtube-key "224520591375-p6v36u3r9k8qt2k7qthb12gnjarc8c7t")
 
   (setq history-length 20)
-  (savehist-mode 1)
 
   (ace-link-setup-default)
 #+END_SRC
@@ -289,6 +289,7 @@ This enables:
 	  ("Science Direct" . "https://www.sciencedirect.com/")
 	  ("Research Rabbit" . "https://www.researchrabbitapp.com/home")
 	  ("Helios" . "https://helios.ntua.gr/my/")
+	  ("Scopus" . "https://www.scopus.com/search/form.uri?display=basic#basic")
 	  ("Messenger" . "https://www.messenger.com")
 	  ("Twitch" . "https://www.twitch.tv")
 	  ("Github" . "https://github.com/Vidianos-Giannitsis")
@@ -405,6 +406,15 @@ This enables:
 
   This is how Dired ends up looking after these changes
   [[https://github.com/AuroraDragoon/Dotfiles/blob/master/screenshots/dired.png]]
+
+** COMMENT Dirvish  
+   Dirvish is a package for file management based on dired. I want to try using it for a while and see if I like it.
+   
+#+BEGIN_SRC elisp :tangle init.el
+
+  (require 'dirvish-extras)
+  (dirvish-override-dired-mode 1)
+#+END_SRC
 
 * Useful Minor Modes
   I enable a lot of minor modes on startup and I also set some up for use. This section documents these modes. Which-key and Ivy are omitted from this section as they fit more in the [[*Sensible Defaults][Sensible Defaults]] section because every sensible person would enable which key and a completion framework such as Ivy for better Emacs usage.
@@ -597,7 +607,9 @@ Some settings (now using the word some here might be an underestimation, as with
 				      ("" "makeidx")
 				      ("" "glossaries")
 				      ("" "newfloat")
-				      ("" "minted")))
+				      ("" "minted")
+				      ("" "chemfig")
+				      ("a4paper, margin=3.5cm" "geometry")))
 
      (defun latex-filter-greek-hrefs (link backend info)
        "Change \\href to \\href{\detokenize} so that latex exports
@@ -1263,6 +1275,21 @@ Elfeed is an RSS reader for Emacs. I have started looking into it and adding thi
      (t nil)))
 #+END_SRC
 
+* Sage
+  Sage is a FOSS mathematics software system based on Python that uses tools from a large variety of mathematics based tools. Sage-shell is an emacs package which ports Sage and its interface to the emacs environment, which seems really cool. This section is all about the configuration I have done to Sage
+
+#+BEGIN_SRC elisp :tangle init.el
+
+  ;; Run SageMath by M-x run-sage instead of M-x sage-shell:run-sage
+  (sage-shell:define-alias)
+
+  ;; Turn on eldoc-mode in Sage terminal and in Sage source files
+  (add-hook 'sage-shell-mode-hook #'eldoc-mode)
+  (add-hook 'sage-shell:sage-mode-hook #'eldoc-mode)
+
+  (add-hook 'sage-shell-after-prompt-hook #'sage-shell-view-mode)
+
+#+END_SRC
 
 * Ebib
 Ebib is an emacs bibliography manager program. My customisations for it live here
