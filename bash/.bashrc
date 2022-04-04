@@ -297,7 +297,6 @@ alias free='free -m'                      # show sizes in MB
 alias np='nano -w PKGBUILD'
 alias more=less
 alias tlmgr='/usr/share/texmf-dist/scripts/texlive/tlmgr.pl --usermode'
-alias zotero='cd Zotero_linux-x86_64/ && ./zotero && cd'
 alias dmenu='dmenu_run -fn "Source Code Pro Bold" -i -nb "#073642" -sb "#005858" -nf "#839496" -sf "#58002c"'
 alias comsol='comsol -3drend sw'
 alias bright='sudo brightnessctl s'

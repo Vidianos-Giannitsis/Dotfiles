@@ -32,6 +32,9 @@
 
 ;;; Code:
 
+(require 'zetteldesk)
+(require 'bibtex-completion)
+
 ;; -- Reference Nodes from Bibtex Entries --
 (defun zetteldesk-note-refs-p ()
   "Predicate function that finds all bibtex completion candidates with a note.

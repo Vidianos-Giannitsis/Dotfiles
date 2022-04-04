@@ -573,7 +573,6 @@ Some settings (now using the word some here might be an underestimation, as with
     + I activate org-cdlatex-mode which makes typing latex equations easier inside org and massively improves speed of typing equations together with snippets for org, org-fragtog mode which automatically creates previews for latex fragments when the cursor is not on them and laas mode which is a bunch of helpful latex snippets which autocomplete.
     + I tell latex to export my code blocks using the minted package so they look better
     + I add some packages I use in all my documents in org-latex-packages-alist.
-    + I define a filter function for the latex export, which wraps the file name in a link, in a detokenize environment so that greek letters don't error out when exporting.
     + The next few were taken by John Kitchin's [[https://kitchingroup.cheme.cmu.edu/blog/2016/11/07/Better-equation-numbering-in-LaTeX-fragments-in-org-mode/][website]]. Its about equations in org not being properly numbered as the org latex preview takes them as independent fragments and not as a whole. This code snippet, makes org number equations properly using an advice on org-create-formula-image. Its very neat and I am glad to have found it.
     + Lastly, I redefine the laas basic snippets as there are some useful symbols not included (such as laplace transformation) or some others which I dont like the letter they are bound to. A lot of the snippets included are for adding greek letters to text. I have a greek keyboard, so to me these are useless and I replaced some of them with these symbols. I left the rest of them the same, as I dont really care about them if I can't think of a better alternative.
 
@@ -611,22 +610,6 @@ Some settings (now using the word some here might be an underestimation, as with
 				      ("" "chemfig")
 				      ("a4paper, margin=3.5cm" "geometry")))
 
-     (defun latex-filter-greek-hrefs (link backend info)
-       "Change \\href to \\href{\detokenize} so that latex exports
-       don't break if they see a file with greek letters"
-       (when (org-export-derived-backend-p backend 'latex)
-	 (let* ((bracket (search "\}" link))
-		(size (length link))
-		(name
-		 (concat (substring link 0 6)
-			 "\\detokenize\{"
-			 (substring link 6 bracket)
-			 "\}"
-			 (substring link bracket size))))
-	   (format "%s" name))))
-
-     (add-to-list 'org-export-filter-link-functions
-		  'latex-filter-greek-hrefs)
 
 
      (defun org-renumber-environment (orig-func &rest args)
@@ -802,7 +785,28 @@ Some settings (now using the word some here might be an underestimation, as with
 	 ";."  "\\cdot"))
    #+END_SRC
 
-   
+*** COMMENT Using links with greek names in latex-export   
+    Essentially, I define a filter function for the latex export, which wraps the file name in a link, in a detokenize environment so that greek letters don't error out when exporting. However, this causes an unexpected error with figures so until I solve this this will be in a commented code block for use when I need it
+#+BEGIN_SRC elisp :tangle init.el
+  (defun latex-filter-greek-hrefs (link backend info)
+    "Change \\href to \\href{\detokenize} so that latex exports
+    don't break if they see a file with greek letters"
+    (when (org-export-derived-backend-p backend 'latex)
+      (let* ((bracket (search "\}" link))
+	     (size (length link))
+	     (name
+	      (concat (substring link 0 6)
+		      "\\detokenize\{"
+		      (substring link 6 bracket)
+		      "\}"
+		      (substring link bracket size))))
+	(format "%s" name))))
+
+  (add-to-list 'org-export-filter-link-functions
+	       'latex-filter-greek-hrefs)
+
+#+END_SRC
+  
 ** Org Noter
    
    Org-noter is an excellent program for annotating pdfs using org. Its main problem is that when you open it it creates its frame in a new emacs window which for me is inconvenient, so I change that behaviour to open the notes the current buffer. I also make another change. Because the typical file that includes a lot of org-noter annotations is crammed with :PROPERTIES: arguments I use a custom function to hide them. They can be useful so I dont hide them by default, but instead make the function interactive (can be called from M-x) and when given the 'all argument on the prompt hides all the :PROPERTIES: arguments. Below is the source code for these changes. Also, since I am not the one who wrote the function have a link to the stack-overflow page where this is answered [[https://stackoverflow.com/questions/17478260/completely-hide-the-properties-drawer-in-org-mode]]
@@ -855,7 +859,7 @@ Some settings (now using the word some here might be an underestimation, as with
 More languages to evaluate with org-babel (by default, only elisp is evaluated). I dont use this extensively but for those times that I need to evaluate code in org, its probably going to be in one of these so might as well add them.
 
 #+BEGIN_SRC elisp :tangle init.el
-  
+
   (org-babel-do-load-languages
      'org-babel-load-languages
      '(
@@ -864,9 +868,10 @@ More languages to evaluate with org-babel (by default, only elisp is evaluated).
        (octave . t)
        (latex . t)
        (gnuplot . t)
+       (maxima . t)
   )
      )
-  
+
 #+END_SRC
 
 
@@ -943,6 +948,7 @@ More languages to evaluate with org-babel (by default, only elisp is evaluated).
 
   (require 'zettelkasten)
   (require 'zetteldesk)
+  (require 'zetteldesk-ref)
 
   (zetteldesk-mode 1)
 
@@ -1321,6 +1327,17 @@ Some other extensions inside my Emacs config that require some changes for their
   (python-mls-setup))
 #+END_SRC
 
+** Maxima
+   Maxima is a computer algebra system (CAS) written in CL, which interfaces rather well with Emacs. This code sets up the imaxima package for usage inside emacs. Its very useful for having latex outputs from maxima
+
+   #+BEGIN_SRC elisp :tangle init.el
+     (push "/usr/local/share/emacs/site-lisp" load-path)
+     (autoload 'imaxima "imaxima" "Maxima frontend" t)
+     (autoload 'imath "imath" "Interactive Math mode" t)
+
+     (add-to-list 'auto-mode-alist '("\\.mc\\'" . maxima-mode))
+   #+END_SRC
+   
 ** Calc
    The M-x calc is a powerful calculator software built for Emacs. I set up some small utilities for it like making angles counted in radians and keeping symbols like sqrt(2) as sqrt(2) and not substituting it for a number. 
 

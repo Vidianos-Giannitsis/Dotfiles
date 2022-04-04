@@ -42,7 +42,8 @@
   "s" '(:ignore t :which-key "Sly Commands")
   "g" 'counsel-rg
   "E" 'eperiodic
-  "ζ ι" 'zetteldesk-insert-node-contents)
+  "ζ ι" 'zetteldesk-insert-node-contents
+  "M" 'imaxima)
 
 (general-define-key
  :states 'normal
@@ -61,14 +62,16 @@
  "p" '(run-python :which-key "Python")
  "j" '(ein:jupyter-server-start :which-key "Jupyter Notebook")
  "g" '(run-gnuplot :which-key "Gnuplot")
- "e" '(ielm :which-key "Emacs Lisp"))
+ "e" '(ielm :which-key "Emacs Lisp")
+ "m" '(maxima :which-key "Maxima"))
 
 (general-define-key
  :states 'normal
  :keymaps 'override
  :prefix "SPC s"
  "r" '(sly :which-key "Start the REPL")
- "h" '(sly-documentation-lookup :whick-key "describe-symbol")
+ "h" '(sly-documentation-lookup :which-key "describe-symbol")
+ "d" 'sly-hyperspec-lookup
  "l" 'sly-load-file
  "c" 'sly-compile-and-load-file
  "e" 'sly-interactive-eval)
@@ -112,8 +115,10 @@
  "i o" 'zetteldesk-insert-org-file-contents
  "i p" 'zetteldesk-insert-link-to-pdf
  "i i" 'zetteldesk-insert-info-contents
+ "i r" 'zetteldesk-insert-ref-node-contents
  "I" 'zetteldesk-info-goto-node
- "m" 'zetteldesk-switch-to-margin-notes)
+ "m" 'zetteldesk-switch-to-margin-notes
+ "R" 'zetteldesk-find-ref-node)
 
 (general-define-key
  :states 'normal
@@ -131,6 +136,7 @@
     ("k" (lambda() (interactive)(find-file "~/.emacs.d/libs/keybindings.org")) "Emacs keybindings")
     ("s" (lambda() (interactive)(dired "~/.emacs.d/snippets/org-mode")) "Org-mode snippets")
     ("r" (lambda() (interactive)(find-file "~/.emacs.d/libs/zettelkasten.org")) "Org-Roam and friends")
+    ("z" (lambda() (interactive)(find-file "~/.emacs.d/libs/zetteldesk.org")) "Zetteldesk literate config")
     ("S" (lambda() (interactive)(find-file "~/scratchpad.org")) "Emacs Scratchpad file"))
 
    "University"
