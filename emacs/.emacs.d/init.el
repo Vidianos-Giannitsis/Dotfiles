@@ -200,39 +200,57 @@
 	("Time Zone Converter" . "https://www.timeanddate.com/worldclock/converter.html")
 	("Detexify" . "https://detexify.kirelabs.org/classify.html")))
 
-(defun emacs-web-page-selector ()
-  "Create and select a frame called emacs-web-page-selector which
-consists of only a minibuffer and has specific dimensions. Inside
-that frame, run a `completing-read' prompting the user to select
-the name of a website in the `web-page-alist'. Upon selection,
-emacs will run `browse-url' opening the link associated to the
-selected name."
-  (interactive)
-  (with-selected-frame (make-frame '((name . "emacs-web-page-selector")
-				     (minibuffer . only)
-				     (width . 50)
-				     (height . 11)))
-    (unwind-protect
-	(browse-url
-	 (cdr (assoc (completing-read "Web-Page: " web-page-alist) web-page-alist)))
-      (delete-frame))))
+(defmacro deflauncher (NAME WIDTH HEIGHT FUNCTION)
+  "Define emacs launcher command.
 
-(setq counsel-linux-app-format-function 'counsel-linux-app-format-function-name-pretty)
+Emacs Launcher commands are a series of functions I use in my
+config, which consist of opening an emacs frame with only a
+minibuffer, with a specified NAME, WIDTH and HEIGHT and inside it
+calling FUNCTION and deleting the frame after the function
+completes or is canceled.
+
+As all of these launcher functions follow the same logic, its
+useful to have this macro to define various such launchers."
+  `(with-selected-frame (make-frame '((name . ,NAME)
+				      (minibuffer . only)
+				      (width . ,WIDTH)
+				      (height . ,HEIGHT)))
+     (unwind-protect
+	 (funcall ,FUNCTION)
+       (delete-frame))))
+
+(setq counsel-linux-app-format-function
+      'counsel-linux-app-format-function-name-pretty)
 
 (defun emacs-run-launcher ()
-  "Create and select a frame called emacs-run-launcher which
-consists only of a minibuffer and has specific dimensions. Run
-counsel-linux-app on that frame, which is an emacs command that
-prompts you to select an app and open it in a dmenu like
-behaviour. Delete the frame after that command has exited"
+  "Emacs run-launcher equivalent to dmenu.
+
+Create and select a frame called emacs-run-launcher which
+  consists only of a minibuffer and has specific dimensions.  Run
+  counsel-linux-app on that frame, which is an emacs command that
+  prompts you to select an app and open it in a dmenu like
+  behaviour.  Delete the frame after that command has exited."
   (interactive)
-  (with-selected-frame (make-frame '((name . "emacs-run-launcher")
-				     (minibuffer . only)
-				     (width . 120)
-				     (height . 11)))
-    (unwind-protect
-	(counsel-linux-app)
-      (delete-frame))))
+  (deflauncher "emacs-run-launcher" 120 11 'counsel-linux-app))
+
+(defun emacs-web-page-selector-function ()
+  "Browse a url from the list in `web-page-alist'.
+
+This function is used as the FUNCTION argument for the
+`deflauncher' macro to create the `emacs-web-page-selector'
+function."
+  (browse-url
+   (cdr (assoc (completing-read "Web-Page: " web-page-alist) web-page-alist))))
+
+(defun emacs-web-page-selector ()
+  "Create and select a frame called emacs-web-page-selector which
+  consists of only a minibuffer and has specific dimensions. Inside
+  that frame, run a `completing-read' prompting the user to select
+  the name of a website in the `web-page-alist'. Upon selection,
+  emacs will run `browse-url' opening the link associated to the
+  selected name."
+  (interactive)
+  (deflauncher "emacs-web-page-selector" 50 11 'emacs-web-page-selector-function))
 
 (require 'keybindings)
 
@@ -363,7 +381,7 @@ behaviour. Delete the frame after that command has exited"
 (require 'calctex)
 (add-hook 'calc-embedded-new-formula-hook 'calctex-mode)
 
-(add-hook 'org-mode-hook '(lambda ()
+(add-hook 'org-mode-hook #'(lambda ()
 			    (turn-on-org-cdlatex)
 			    (org-fragtog-mode)
 			    (laas-mode)))
@@ -382,17 +400,76 @@ behaviour. Delete the frame after that command has exited"
 				 ("" "glossaries")
 				 ("" "newfloat")
 				 ("" "minted")
-				 ("" "chemfig")
-				 ("a4paper, margin=3.5cm" "geometry")))
+				 ("" "chemfig")))
 
+(defun my-latex-title-page ()
+  "Template for my assignment title pages.
 
+I found a neat template for latex title pages online and decided
+to start using it for my assignments. This function inserts that
+template in an org document after prompting for the fields that
+change from one assignment to the next."
+  (interactive)
+  (let ((sector (read-string "Τομέας: "))
+	(lab (read-string "Εργαστήριο: "))
+	(title (read-string "Τίτλος: "))
+	(authors (read-string "Συγγραφείς: "))
+	(numbers (read-string "Αριθμοί Μητρώου: ")))
+    (insert
+     "#+options: toc:nil title:nil author:nil date:nil\n"
+     "#+LATEX_HEADER: \\newcommand{\\HRule}{\\rule{\\linewidth}{0.5mm}}\n"
+"#+BEGIN_SRC latex
+  \\renewcommand{\\contentsname}{Περιεχόμενα}
+  \\begin{titlepage}
+
+  \\begin{center}
+    \\begin{minipage}{0.15\\textwidth}
+      \\begin{flushleft}
+	\\includegraphics[width=1\\textwidth]{~/Pictures/ntua_logo.png}\\\\[0.4cm]    
+      \\end{flushleft}
+    \\end{minipage}
+    \\begin{minipage}{0.75\\textwidth}
+      \\textsc{\\bfseries \\large ΕΘΝΙΚΟ ΜΕΤΣΟΒΙΟ ΠΟΛΥΤΕΧΝΕΙΟ}\\\\[0.2cm]
+      \\textsc{\\bfseries \\large ΣΧΟΛΗ ΧΗΜΙΚΩΝ ΜΗΧΑΝΙΚΩΝ - ΤΟΜΕΑΣ " sector
+      "}\\\\[0.2cm]
+      \\textsc{\\bfseries \\normalsize ΕΡΓΑΣΤΗΡΙΟ " lab
+      "}\\\\[0.2cm]
+    \\end{minipage}
+    \\\\[1.5cm]
+
+    \\HRule \\\\[0.3cm]
+    \\LARGE " title "\\\\[0.3cm]
+    \\HRule \\\\[1cm]
+    \\begin{minipage}{0.4\\textwidth}
+      \\begin{flushleft} \\large
+	\\emph{Συγγραφείς:}\\\\
+	Βιδιάνος Γιαννίτσης\\\\
+	" authors "
+      \\end{flushleft}
+    \\end{minipage}
+    \\begin{minipage}{0.4\\textwidth}
+      \\begin{flushright} \\large
+	\\emph{Αριθμοί Μητρώου:}\\\\
+	ch19113\\\\
+	" numbers "
+      \\end{flushright}
+    \\end{minipage}\\\\[1cm]
+    \\HRule \\\\[2cm]
+  \\end{center}
+
+  \\begin{abstract}
+
+  \\end{abstract}
+
+  \\end{titlepage}
+#+END_SRC")))
 
 (defun org-renumber-environment (orig-func &rest args)
   (let ((results '()) 
 	(counter -1)
 	(numberp))
 
-    (setq results (loop for (begin .  env) in 
+    (setq results (cl-loop for (begin .  env) in 
 			(org-element-map (org-element-parse-buffer) 'latex-environment
 			  (lambda (env)
 			    (cons
@@ -402,20 +479,20 @@ behaviour. Delete the frame after that command has exited"
 			(cond
 			 ((and (string-match "\\\\begin{equation}" env)
 			       (not (string-match "\\\\tag{" env)))
-			  (incf counter)
+			  (cl-incf counter)
 			  (cons begin counter))
 			 ((string-match "\\\\begin{align}" env)
 			  (prog2
-			      (incf counter)
+			      (cl-incf counter)
 			      (cons begin counter)                          
 			    (with-temp-buffer
 			      (insert env)
 			      (goto-char (point-min))
 			      ;; \\ is used for a new line. Each one leads to a number
-			      (incf counter (count-matches "\\\\$"))
+			      (cl-incf counter (count-matches "\\\\$"))
 			      ;; unless there are nonumbers.
 			      (goto-char (point-min))
-			      (decf counter (count-matches "\\nonumber")))))
+			      (cl-decf counter (count-matches "\\nonumber")))))
 			 (t
 			  (cons begin nil)))))
 
@@ -670,19 +747,35 @@ behaviour. Delete the frame after that command has exited"
 
 (require 'zettelkasten)
 (require 'zetteldesk)
-(require 'zetteldesk-ref)
-
 (zetteldesk-mode 1)
+(setq zetteldesk-hydra-prefix (kbd "C-c z"))
+(require 'zetteldesk-kb)
+(require 'zetteldesk-ref)
+(require 'zetteldesk-info)
+(require 'zetteldesk-remark)
 
 (setq bookmark-version-control t
       delete-old-versions t)
 
+(defun emacs-scratchpad ()
+  "Create and select a frame called emacs-scratchpad with specific dimensions.
+
+In that file, open scratchpad.org"
+  (interactive)
+  (with-selected-frame (make-frame '((name . "emacs-scratchpad")
+				      (width . 100)
+				      (height . 15)))
+    (find-file "~/scratchpad.org")))
+
 (defun org-scratchpad ()
-  "Yank the entire document, delete it and save the buffer. This is very useful for my scratchpad setup"
+  "Yanks the entire document, deletes it and saves the buffer
+deleting the current frame. This is very useful for my scratchpad
+setup, to be used with `emacs-scratchpad'."
   (interactive)
   (evil-yank-characters (point-min) (point-max))
   (delete-region (point-min) (point-max))
-  (save-buffer))
+  (save-buffer)
+  (delete-frame))
 
 (add-to-list 'warning-suppress-types '(yasnippet backquote-change))
 
@@ -743,7 +836,7 @@ it."
 
 (add-hook 'after-init-hook 'global-company-mode)
 (require 'company-maxima)
-(add-hook 'company-mode-hook '(lambda ()
+(add-hook 'company-mode-hook #'(lambda ()
 				(add-to-list 'company-backends '(company-math-symbols-latex company-bibtex company-capf))
 				(add-to-list 'company-backends '(company-maxima-symbols company-maxima-libraries))
 				(setq company-math-allow-latex-symbols-in-faces t)
@@ -781,11 +874,15 @@ it."
 (require 'elfeed-score)
 (elfeed-score-enable)
 
+(setq org-re-reveal-root "file:///home/vidianos/reveal.js")
+(setq org-re-reveal-width 1800)
+(setq org-re-reveal-height 960)
+
 (require 'ox-word)
 (require 'org-show)
 
 (require 'scimax-autoformat-abbrev)
-(add-hook 'org-mode-hook '(lambda ()
+(add-hook 'org-mode-hook #'(lambda ()
 			    scimax-abbrev-mode
 			    scimax-autoformat-mode))
 
@@ -828,11 +925,11 @@ it."
 	 ((> (length dois) 1)
 	  (ivy-read "Select a DOI" (let ((dois '()))
 				     (with-current-buffer (url-retrieve-synchronously url)
-				       (loop for doi-pattern in org-ref-doi-regexps
+				       (cl-loop for doi-pattern in org-ref-doi-regexps
 					     do
 					     (goto-char (point-min))
 					     (while (re-search-forward doi-pattern nil t)
-					       (pushnew
+					       (cl-pushnew
 						;; Cut off the doi, sometimes
 						;; false matches are long.
 						(cons (format "%40s | %s"
@@ -974,13 +1071,7 @@ it."
 
 (require 'eperiodic)
 
-(require 'eaf)
-
-(require 'eaf-evil)
-
-(setq eaf-wm-focus-fix-wms '("qtile"))
-
-(add-hook 'emacs-lisp-mode-hook '(lambda ()
+(add-hook 'emacs-lisp-mode-hook #'(lambda ()
 				   (eldoc-mode)
 				   (lispy-mode)
 				   (lispyville-mode)))
@@ -992,7 +1083,7 @@ it."
 	      (setq-local browse-url-browser-function 'eww-browse-url)
 	      (apply orig-fun args)))
 
-(add-hook 'lisp-mode-hook '(lambda ()
+(add-hook 'lisp-mode-hook #'(lambda ()
 			(lispy-mode)
 			(lispyville-mode)))
 
@@ -1007,9 +1098,38 @@ it."
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(custom-safe-themes
-   '("0fffa9669425ff140ff2ae8568c7719705ef33b7a927a0ba7c5e2ffcfac09b75" default))
+   '("47db50ff66e35d3a440485357fb6acb767c100e135ccdf459060407f8baea7b2" "4f1d2476c290eaa5d9ab9d13b60f2c0f1c8fa7703596fa91b235db7f99a9441b" "0fffa9669425ff140ff2ae8568c7719705ef33b7a927a0ba7c5e2ffcfac09b75" default))
  '(package-selected-packages
-   '(magit evil-collection openwith sequences cl-lib-highlight helm-system-packages async-await popup-complete helm-fuzzy-find evil-space yapfify yaml-mode ws-butler winum which-key web-mode web-beautify vterm volatile-highlights vi-tilde-fringe uuidgen use-package toc-org tagedit spaceline solarized-theme slim-mode scss-mode sass-mode restart-emacs request rainbow-delimiters pyvenv pytest pyenv-mode py-isort pug-mode pspp-mode popwin pip-requirements persp-mode pcre2el paradox org-projectile-helm org-present org-pomodoro org-mime org-download org-bullets open-junk-file neotree move-text mmm-mode markdown-toc macrostep lorem-ipsum livid-mode live-py-mode linum-relative link-hint json-mode js2-refactor js-doc intero indent-guide hy-mode hungry-delete htmlize hlint-refactor hl-todo hindent highlight-parentheses highlight-numbers highlight-indentation helm-themes helm-swoop helm-pydoc helm-projectile helm-mode-manager helm-make helm-hoogle helm-flx helm-descbinds helm-css-scss helm-ag haskell-snippets gruvbox-theme google-translate golden-ratio gnuplot gh-md flx-ido fill-column-indicator fancy-battery eyebrowse expand-region exec-path-from-shell evil-visualstar evil-visual-mark-mode evil-unimpaired evil-tutor evil-surround evil-search-highlight-persist evil-numbers evil-nerd-commenter evil-mc evil-matchit evil-lisp-state evil-indent-plus evil-iedit-state evil-exchange evil-escape evil-ediff evil-args evil-anzu eval-sexp-fu emmet-mode elisp-slime-nav dumb-jump diminish define-word cython-mode csv-mode company-ghci company-ghc column-enforce-mode coffee-mode cmm-mode clean-aindent-mode auto-highlight-symbol auto-compile auctex-latexmk anaconda-mode aggressive-indent adaptive-wrap ace-window ace-link ace-jump-helm-line)))
+   '(evil-collection openwith sequences cl-lib-highlight helm-system-packages async-await popup-complete helm-fuzzy-find evil-space yapfify yaml-mode ws-butler winum which-key web-mode web-beautify vterm volatile-highlights vi-tilde-fringe uuidgen use-package toc-org tagedit spaceline solarized-theme slim-mode scss-mode sass-mode restart-emacs request rainbow-delimiters pyvenv pytest pyenv-mode py-isort pug-mode pspp-mode popwin pip-requirements persp-mode pcre2el paradox org-projectile-helm org-present org-pomodoro org-mime org-download org-bullets open-junk-file neotree move-text mmm-mode markdown-toc magit macrostep lorem-ipsum livid-mode live-py-mode linum-relative link-hint json-mode js2-refactor js-doc intero indent-guide hy-mode hungry-delete htmlize hlint-refactor hl-todo hindent highlight-parentheses highlight-numbers highlight-indentation helm-themes helm-swoop helm-pydoc helm-projectile helm-mode-manager helm-make helm-hoogle helm-flx helm-descbinds helm-css-scss helm-ag haskell-snippets gruvbox-theme google-translate golden-ratio gnuplot gh-md flx-ido fill-column-indicator fancy-battery eyebrowse expand-region exec-path-from-shell evil-visualstar evil-visual-mark-mode evil-unimpaired evil-tutor evil-surround evil-search-highlight-persist evil-numbers evil-nerd-commenter evil-mc evil-matchit evil-lisp-state evil-indent-plus evil-iedit-state evil-exchange evil-escape evil-ediff evil-args evil-anzu eval-sexp-fu emmet-mode elisp-slime-nav dumb-jump diminish define-word cython-mode csv-mode company-ghci company-ghc column-enforce-mode coffee-mode cmm-mode clean-aindent-mode auto-highlight-symbol auto-compile auctex-latexmk anaconda-mode aggressive-indent adaptive-wrap ace-window ace-link ace-jump-helm-line))
+ '(safe-local-variable-values
+   '((eval when
+	   (and
+	    (buffer-file-name)
+	    (not
+	     (file-directory-p
+	      (buffer-file-name)))
+	    (string-match-p "^[^.]"
+			    (buffer-file-name)))
+	   (unless
+	       (featurep 'package-build)
+	     (let
+		 ((load-path
+		   (cons "../package-build" load-path)))
+	       (require 'package-build)))
+	   (unless
+	       (derived-mode-p 'emacs-lisp-mode)
+	     (emacs-lisp-mode))
+	   (package-build-minor-mode)
+	   (setq-local flycheck-checkers nil)
+	   (set
+	    (make-local-variable 'package-build-working-dir)
+	    (expand-file-name "../working/"))
+	   (set
+	    (make-local-variable 'package-build-archive-dir)
+	    (expand-file-name "../packages/"))
+	   (set
+	    (make-local-variable 'package-build-recipes-dir)
+	    default-directory)))))
 
 (custom-set-faces
  ;; custom-set-faces was added by Custom.

@@ -1,0 +1,182 @@
+/**
+ * SPDX-FileCopyrightText: 2017-2019 Jens Lechtenbörger
+ *
+ * SPDX-License-Identifier: LicenseRef-MIT-JL
+ *
+ * Theme for ERCIS slides
+ */
+
+/*********************************************
+ * Logos and title on title slide
+ *********************************************/
+
+.reveal .wwu-logo {
+  position: fixed;
+  width: 296px;
+  height: 100px;
+  left: 0;
+  top: 0; }
+
+.reveal .ercis-logo {
+  position: fixed;
+  width: 250px;
+  height: 219px;
+  right: 0;
+  top: 0; }
+
+.reveal h1 {
+  font-size: 2em; }
+
+/**************************************************
+ * Logo for slide headers, but not on title slide.
+ * Reduce size as background image to avoid overlap with headline.
+ * Move to avoid overlap with folder icon.
+ **************************************************/
+
+.reveal h2:after, .reveal h3:after, .reveal h4:after {
+  content: "";
+  background-image: url(ERCIS-logo.png);
+  background-size: auto 70%;
+  background-repeat: no-repeat;
+  height: 12%;
+  width: 12%;
+  position: fixed;
+  right: 50px;
+  top: 0; }
+
+/* Different logo on questions slide. */
+#questions-ercis-slide:after {
+  content: url(ERCIS-white-logo.png);
+  background-image: none; }
+
+/* No folder icon on questions slide. */
+#slide-questions-ercis-slide aside.notes {
+  background: none; }
+
+/*********************************************
+ * OTHER
+ *********************************************/
+
+/* Make sure that content can overlay TOC footer (title slide). */
+.reveal .slides {
+  z-index: 30; }
+
+/* Create space for GitLab ribbon. */
+.reveal .slides > section,
+.reveal .slides > section > section {
+  margin: 5px 25px;
+  width: 95%; }
+
+/* Sizing of title slide with components */
+#sec-title-slide { height: 90vh; }
+#title-logos     { height: 25vh; }
+#title           { height: 40vh; }
+#title-license   { height: 20vh; }
+
+#title-license p {
+  margin: 0;
+  line-height: 20vh; }
+
+.reveal .talk-title {
+  margin: 0; }
+
+.reveal .talk-subtitle p {
+  font-size: .8em;
+  font-weight: bold;
+  line-height: 1.0; }
+
+.reveal .talk-subtitle .usage p {
+    font-size: 0.4em; }
+
+/* Sizing of ercisfooter copied from TOC-progress footer. */
+div.ercisfooter {
+  position: fixed;
+  height: 9.5vh;
+  width: 90%;
+  bottom: 3px;
+  padding-top: 0.5vh;
+  padding-bottom: 0.5vh;
+  background: #852339;
+  pointer-events: none;
+  z-index: 15; }
+
+.ercisfooter p {
+  pointer-events: auto;
+  color: #fff;
+  margin: 10px 10px;
+  font-size: .4em; }
+
+.reveal p.floatleft {
+  float: left; }
+
+.reveal p.floatright {
+  float: right;
+  text-align: right; }
+
+.reveal p.width33 {
+  width: 33%; }
+
+.reveal p.width15 {
+  width: 15%; }
+
+.reveal a.ercisurl {
+  font-size: .7em;
+  font-weight: bold;
+  color: #fff; }
+
+.reveal p.ercisisnetwork {
+  font-weight: bold; }
+
+/* Reduce figure size to stay away from ERCIS logo. */
+#slide-questions-ercis-slide div.figure {
+  max-width: 60%; }
+
+/*********************************************
+ * ERCIS colors
+ *********************************************/
+
+::selection {
+  color: #fff;
+  background: #852339;
+  text-shadow: none; }
+
+::-moz-selection {
+  color: #fff;
+  background: #852339;
+  text-shadow: none; }
+
+.reveal .slides section .fragment.highlight-red.visible {
+  color: #852339; }
+
+.reveal h1,
+.reveal h2,
+.reveal h3,
+.reveal h4,
+.reveal h5,
+.reveal h6 {
+  max-width: 80%;
+  color: #852339; }
+
+.reveal strong,
+.reveal b,
+.reveal .talk-subtitle p {
+  color: #852339; }
+
+.reveal a {
+  color: #435c8b; }
+
+.reveal .slide-number a, .reveal .erciscolor a[id],
+.reveal .talk-subtitle .usage p,
+#slide-questions-ercis-slide div.figure p:nth-child(3) {
+  color: rgb(195,148,146); }
+
+#qr-code-left {
+  float: none;
+  display: inline-block;
+  vertical-align: middle; }
+
+#toc-progress-footer a, #toc-progress-footer ul {
+  color: #fff; }
+
+div.ribbon-legalese, #forkmeongitlab a, #forkmeongitlab-right a {
+  background: rgb(195,148,146); }

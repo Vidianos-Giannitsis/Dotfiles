@@ -305,6 +305,7 @@ alias dl='youtube-dl -x --audio-format "mp3"'
 alias yt-dl='youtube-dl'
 alias sc='sc-im'
 alias tlmgr='/usr/share/texmf-dist/scripts/texlive/tlmgr.pl --usermode'
+alias gifski='gifski -W 1080 -H 608'
 
 # Vim editing mode for my shell
 set -o vi

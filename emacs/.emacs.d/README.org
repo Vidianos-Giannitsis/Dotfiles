@@ -329,39 +329,57 @@ This enables:
 	  ("Time Zone Converter" . "https://www.timeanddate.com/worldclock/converter.html")
 	  ("Detexify" . "https://detexify.kirelabs.org/classify.html")))
 
-  (defun emacs-web-page-selector ()
-    "Create and select a frame called emacs-web-page-selector which
-  consists of only a minibuffer and has specific dimensions. Inside
-  that frame, run a `completing-read' prompting the user to select
-  the name of a website in the `web-page-alist'. Upon selection,
-  emacs will run `browse-url' opening the link associated to the
-  selected name."
-    (interactive)
-    (with-selected-frame (make-frame '((name . "emacs-web-page-selector")
-				       (minibuffer . only)
-				       (width . 50)
-				       (height . 11)))
-      (unwind-protect
-	  (browse-url
-	   (cdr (assoc (completing-read "Web-Page: " web-page-alist) web-page-alist)))
-	(delete-frame))))
+  (defmacro deflauncher (NAME WIDTH HEIGHT FUNCTION)
+    "Define emacs launcher command.
 
-  (setq counsel-linux-app-format-function 'counsel-linux-app-format-function-name-pretty)
+  Emacs Launcher commands are a series of functions I use in my
+  config, which consist of opening an emacs frame with only a
+  minibuffer, with a specified NAME, WIDTH and HEIGHT and inside it
+  calling FUNCTION and deleting the frame after the function
+  completes or is canceled.
+
+  As all of these launcher functions follow the same logic, its
+  useful to have this macro to define various such launchers."
+    `(with-selected-frame (make-frame '((name . ,NAME)
+					(minibuffer . only)
+					(width . ,WIDTH)
+					(height . ,HEIGHT)))
+       (unwind-protect
+	   (funcall ,FUNCTION)
+	 (delete-frame))))
+
+  (setq counsel-linux-app-format-function
+	'counsel-linux-app-format-function-name-pretty)
 
   (defun emacs-run-launcher ()
-    "Create and select a frame called emacs-run-launcher which
-  consists only of a minibuffer and has specific dimensions. Run
-  counsel-linux-app on that frame, which is an emacs command that
-  prompts you to select an app and open it in a dmenu like
-  behaviour. Delete the frame after that command has exited"
+    "Emacs run-launcher equivalent to dmenu.
+
+  Create and select a frame called emacs-run-launcher which
+    consists only of a minibuffer and has specific dimensions.  Run
+    counsel-linux-app on that frame, which is an emacs command that
+    prompts you to select an app and open it in a dmenu like
+    behaviour.  Delete the frame after that command has exited."
     (interactive)
-    (with-selected-frame (make-frame '((name . "emacs-run-launcher")
-				       (minibuffer . only)
-				       (width . 120)
-				       (height . 11)))
-      (unwind-protect
-	  (counsel-linux-app)
-	(delete-frame))))
+    (deflauncher "emacs-run-launcher" 120 11 'counsel-linux-app))
+
+  (defun emacs-web-page-selector-function ()
+    "Browse a url from the list in `web-page-alist'.
+
+  This function is used as the FUNCTION argument for the
+  `deflauncher' macro to create the `emacs-web-page-selector'
+  function."
+    (browse-url
+     (cdr (assoc (completing-read "Web-Page: " web-page-alist) web-page-alist))))
+
+  (defun emacs-web-page-selector ()
+    "Create and select a frame called emacs-web-page-selector which
+    consists of only a minibuffer and has specific dimensions. Inside
+    that frame, run a `completing-read' prompting the user to select
+    the name of a website in the `web-page-alist'. Upon selection,
+    emacs will run `browse-url' opening the link associated to the
+    selected name."
+    (interactive)
+    (deflauncher "emacs-web-page-selector" 50 11 'emacs-web-page-selector-function))
 
 #+END_SRC
 
@@ -588,7 +606,7 @@ Some settings (now using the word some here might be an underestimation, as with
      (require 'calctex)
      (add-hook 'calc-embedded-new-formula-hook 'calctex-mode)
 
-     (add-hook 'org-mode-hook '(lambda ()
+     (add-hook 'org-mode-hook #'(lambda ()
 				 (turn-on-org-cdlatex)
 				 (org-fragtog-mode)
 				 (laas-mode)))
@@ -607,17 +625,76 @@ Some settings (now using the word some here might be an underestimation, as with
 				      ("" "glossaries")
 				      ("" "newfloat")
 				      ("" "minted")
-				      ("" "chemfig")
-				      ("a4paper, margin=3.5cm" "geometry")))
+				      ("" "chemfig")))
 
+     (defun my-latex-title-page ()
+       "Template for my assignment title pages.
 
+     I found a neat template for latex title pages online and decided
+     to start using it for my assignments. This function inserts that
+     template in an org document after prompting for the fields that
+     change from one assignment to the next."
+       (interactive)
+       (let ((sector (read-string "Τομέας: "))
+	     (lab (read-string "Εργαστήριο: "))
+	     (title (read-string "Τίτλος: "))
+	     (authors (read-string "Συγγραφείς: "))
+	     (numbers (read-string "Αριθμοί Μητρώου: ")))
+	 (insert
+	  "#+options: toc:nil title:nil author:nil date:nil\n"
+	  "#+LATEX_HEADER: \\newcommand{\\HRule}{\\rule{\\linewidth}{0.5mm}}\n"
+     "#+BEGIN_SRC latex
+       \\renewcommand{\\contentsname}{Περιεχόμενα}
+       \\begin{titlepage}
+
+       \\begin{center}
+	 \\begin{minipage}{0.15\\textwidth}
+	   \\begin{flushleft}
+	     \\includegraphics[width=1\\textwidth]{~/Pictures/ntua_logo.png}\\\\[0.4cm]    
+	   \\end{flushleft}
+	 \\end{minipage}
+	 \\begin{minipage}{0.75\\textwidth}
+	   \\textsc{\\bfseries \\large ΕΘΝΙΚΟ ΜΕΤΣΟΒΙΟ ΠΟΛΥΤΕΧΝΕΙΟ}\\\\[0.2cm]
+	   \\textsc{\\bfseries \\large ΣΧΟΛΗ ΧΗΜΙΚΩΝ ΜΗΧΑΝΙΚΩΝ - ΤΟΜΕΑΣ " sector
+	   "}\\\\[0.2cm]
+	   \\textsc{\\bfseries \\normalsize ΕΡΓΑΣΤΗΡΙΟ " lab
+	   "}\\\\[0.2cm]
+	 \\end{minipage}
+	 \\\\[1.5cm]
+
+	 \\HRule \\\\[0.3cm]
+	 \\LARGE " title "\\\\[0.3cm]
+	 \\HRule \\\\[1cm]
+	 \\begin{minipage}{0.4\\textwidth}
+	   \\begin{flushleft} \\large
+	     \\emph{Συγγραφείς:}\\\\
+	     Βιδιάνος Γιαννίτσης\\\\
+	     " authors "
+	   \\end{flushleft}
+	 \\end{minipage}
+	 \\begin{minipage}{0.4\\textwidth}
+	   \\begin{flushright} \\large
+	     \\emph{Αριθμοί Μητρώου:}\\\\
+	     ch19113\\\\
+	     " numbers "
+	   \\end{flushright}
+	 \\end{minipage}\\\\[1cm]
+	 \\HRule \\\\[2cm]
+       \\end{center}
+
+       \\begin{abstract}
+  
+       \\end{abstract}
+
+       \\end{titlepage}
+     ,#+END_SRC")))
 
      (defun org-renumber-environment (orig-func &rest args)
        (let ((results '()) 
 	     (counter -1)
 	     (numberp))
 
-	 (setq results (loop for (begin .  env) in 
+	 (setq results (cl-loop for (begin .  env) in 
 			     (org-element-map (org-element-parse-buffer) 'latex-environment
 			       (lambda (env)
 				 (cons
@@ -627,20 +704,20 @@ Some settings (now using the word some here might be an underestimation, as with
 			     (cond
 			      ((and (string-match "\\\\begin{equation}" env)
 				    (not (string-match "\\\\tag{" env)))
-			       (incf counter)
+			       (cl-incf counter)
 			       (cons begin counter))
 			      ((string-match "\\\\begin{align}" env)
 			       (prog2
-				   (incf counter)
+				   (cl-incf counter)
 				   (cons begin counter)                          
 				 (with-temp-buffer
 				   (insert env)
 				   (goto-char (point-min))
 				   ;; \\ is used for a new line. Each one leads to a number
-				   (incf counter (count-matches "\\\\$"))
+				   (cl-incf counter (count-matches "\\\\$"))
 				   ;; unless there are nonumbers.
 				   (goto-char (point-min))
-				   (decf counter (count-matches "\\nonumber")))))
+				   (cl-decf counter (count-matches "\\nonumber")))))
 			      (t
 			       (cons begin nil)))))
 
@@ -948,10 +1025,12 @@ More languages to evaluate with org-babel (by default, only elisp is evaluated).
 
   (require 'zettelkasten)
   (require 'zetteldesk)
-  (require 'zetteldesk-ref)
-
   (zetteldesk-mode 1)
-
+  (setq zetteldesk-hydra-prefix (kbd "C-c z"))
+  (require 'zetteldesk-kb)
+  (require 'zetteldesk-ref)
+  (require 'zetteldesk-info)
+  (require 'zetteldesk-remark)
 #+END_SRC
   
 * Bookmarks
@@ -972,12 +1051,25 @@ More languages to evaluate with org-babel (by default, only elisp is evaluated).
   
   #+BEGIN_SRC elisp :tangle init.el
 
+    (defun emacs-scratchpad ()
+      "Create and select a frame called emacs-scratchpad with specific dimensions.
+
+    In that file, open scratchpad.org"
+      (interactive)
+      (with-selected-frame (make-frame '((name . "emacs-scratchpad")
+					  (width . 100)
+					  (height . 15)))
+	(find-file "~/scratchpad.org")))
+
     (defun org-scratchpad ()
-      "Yank the entire document, delete it and save the buffer. This is very useful for my scratchpad setup"
+      "Yanks the entire document, deletes it and saves the buffer
+    deleting the current frame. This is very useful for my scratchpad
+    setup, to be used with `emacs-scratchpad'."
       (interactive)
       (evil-yank-characters (point-min) (point-max))
       (delete-region (point-min) (point-max))
-      (save-buffer))
+      (save-buffer)
+      (delete-frame))
 
     (add-to-list 'warning-suppress-types '(yasnippet backquote-change))
 
@@ -1059,7 +1151,7 @@ More languages to evaluate with org-babel (by default, only elisp is evaluated).
 
     (add-hook 'after-init-hook 'global-company-mode)
     (require 'company-maxima)
-    (add-hook 'company-mode-hook '(lambda ()
+    (add-hook 'company-mode-hook #'(lambda ()
 				    (add-to-list 'company-backends '(company-math-symbols-latex company-bibtex company-capf))
 				    (add-to-list 'company-backends '(company-maxima-symbols company-maxima-libraries))
 				    (setq company-math-allow-latex-symbols-in-faces t)
@@ -1107,6 +1199,16 @@ Elfeed is an RSS reader for Emacs. I have started looking into it and adding thi
 
 #+END_SRC
 
+* Org-Reveal
+Org reveal is a tool for making reveal.js presentations with org-mode. I am trying it for some presentations I want to make
+
+#+BEGIN_SRC elisp :tangle init.el
+
+  (setq org-re-reveal-root "file:///home/vidianos/reveal.js")
+  (setq org-re-reveal-width 1800)
+  (setq org-re-reveal-height 960)
+
+#+END_SRC
 
 * Scimax
   Scimax is an emacs configuration framework made by John Kitchin which is said to be an emacs starterkit for scientists and engineers. I really like some parts of scimax, and as every part of it is a seperate elisp library I can simply require the libraries I like and use them to my liking. This is what this section is for.
@@ -1135,7 +1237,7 @@ Elfeed is an RSS reader for Emacs. I have started looking into it and adding thi
 #+BEGIN_SRC elisp :tangle init.el
   
   (require 'scimax-autoformat-abbrev)
-  (add-hook 'org-mode-hook '(lambda ()
+  (add-hook 'org-mode-hook #'(lambda ()
 			      scimax-abbrev-mode
 			      scimax-autoformat-mode))
   
@@ -1186,11 +1288,11 @@ Elfeed is an RSS reader for Emacs. I have started looking into it and adding thi
 	   ((> (length dois) 1)
 	    (ivy-read "Select a DOI" (let ((dois '()))
 				       (with-current-buffer (url-retrieve-synchronously url)
-					 (loop for doi-pattern in org-ref-doi-regexps
+					 (cl-loop for doi-pattern in org-ref-doi-regexps
 					       do
 					       (goto-char (point-min))
 					       (while (re-search-forward doi-pattern nil t)
-						 (pushnew
+						 (cl-pushnew
 						  ;; Cut off the doi, sometimes
 						  ;; false matches are long.
 						  (cons (format "%40s | %s"
@@ -1385,7 +1487,7 @@ Some other extensions inside my Emacs config that require some changes for their
 
 #+END_SRC
 
-** Emacs Application Framework
+** COMMENT Emacs Application Framework
    EAF is a very promising package for Emacs giving it some useful gui apps that are not so easy to find in other packages (such as a browser) and in general a full suite of applications. Unfortunately its got a weird behaviour in tiling window managers such as i3 and qtile, which I use not allowing me to use Emacs commands inside its buffers. It seems that when the cursor is outside the Emacs buffer (in my bar) this fixes but its still annoying so its use is limited unfortunately.
 
    #+BEGIN_SRC elisp :tangle init.el
@@ -1402,7 +1504,7 @@ Some other extensions inside my Emacs config that require some changes for their
    
    #+BEGIN_SRC elisp :tangle init.el
 
-     (add-hook 'emacs-lisp-mode-hook '(lambda ()
+     (add-hook 'emacs-lisp-mode-hook #'(lambda ()
 					(eldoc-mode)
 					(lispy-mode)
 					(lispyville-mode)))
@@ -1421,7 +1523,7 @@ Some other extensions inside my Emacs config that require some changes for their
 		(setq-local browse-url-browser-function 'eww-browse-url)
 		(apply orig-fun args)))
 
-  (add-hook 'lisp-mode-hook '(lambda ()
+  (add-hook 'lisp-mode-hook #'(lambda ()
 			  (lispy-mode)
 			  (lispyville-mode)))
 

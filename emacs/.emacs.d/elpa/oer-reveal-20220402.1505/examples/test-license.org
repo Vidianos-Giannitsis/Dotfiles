@@ -1,0 +1,25 @@
+# Local IspellDict: en
+#+SPDX-FileCopyrightText: 2019 Jens Lechtenbörger <https://lechten.gitlab.io/#me>
+#+SPDX-License-Identifier: CC-BY-SA-4.0
+#+INCLUDE: "../org/config.org"
+
+#+AUTHOR: Jens Lechtenbörger
+#+TITLE: License Test
+
+* A slide
+
+Some text.
+
+* Backmatter
+** Summary
+   - This presentation does not contain relevant facts.
+   - However, the subsequent license information is generated from the
+     SPDX headers at the top of the source file.
+
+# For a set of presentations, you might want to place the following
+# lines into a separate Org file, which you include at the end of each
+# of your presentations.
+
+#+MACRO: licensepreamble This file is an example provided with the FLOSS software [[https://gitlab.com/oer/oer-reveal][oer-reveal]].
+#+INCLUDE: "../org/license-template.org"
+#+INCLUDE: "../org/license-disclaimer-cc-by-sa-4.0.org"

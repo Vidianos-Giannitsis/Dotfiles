@@ -43,7 +43,8 @@
   "g" 'counsel-rg
   "E" 'eperiodic
   "ζ ι" 'zetteldesk-insert-node-contents
-  "M" 'imaxima)
+  "M" 'imaxima
+  "β" 'counsel-switch-buffer)
 
 (general-define-key
  :states 'normal
@@ -136,7 +137,7 @@
     ("k" (lambda() (interactive)(find-file "~/.emacs.d/libs/keybindings.org")) "Emacs keybindings")
     ("s" (lambda() (interactive)(dired "~/.emacs.d/snippets/org-mode")) "Org-mode snippets")
     ("r" (lambda() (interactive)(find-file "~/.emacs.d/libs/zettelkasten.org")) "Org-Roam and friends")
-    ("z" (lambda() (interactive)(find-file "~/.emacs.d/libs/zetteldesk.org")) "Zetteldesk literate config")
+    ("Z" (lambda() (interactive)(find-file "~/.emacs.d/libs/zetteldesk.org")) "Zetteldesk literate config")
     ("S" (lambda() (interactive)(find-file "~/scratchpad.org")) "Emacs Scratchpad file"))
 
    "University"

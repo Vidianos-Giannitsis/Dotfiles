@@ -21,6 +21,7 @@ screenshots = "flameshot gui"
 run_launcher = 'dmenu_run -fn "Source Code Pro Bold" -i -nb "#292d3e" -sb "#5b76b2" -nf "#839496" -sf "#eeffff" -p "Launch program"'
 emacs_run_launcher = 'emacsclient -e "(emacs-run-launcher)"'
 emacs_web_selector = 'emacsclient -e "(emacs-web-page-selector)"'
+emacs_scratchpad = 'emacsclient -e "(emacs-scratchpad)"'
 
 @hook.subscribe.startup_once
 def autostart():
@@ -40,6 +41,11 @@ def floating_run_launcher(c):
 @hook.subscribe.client_new
 def floating_run_launcher(c):
     if c.name == "emacs-web-page-selector":
+        c.toggle_floating()
+
+@hook.subscribe.client_new
+def floating_run_launcher(c):
+    if c.name == "emacs-scratchpad":
         c.toggle_floating()
 
 keys = [
@@ -100,6 +106,7 @@ Key2("M-C-p", lazy.spawn("system-config-printer"), desc="Launch printer software
 Key2("M-t", lazy.spawn("rofi-theme-selector"), desc="Launch a theme selector using rofi"),
 Key2("M-C-r", lazy.spawn(emacs_run_launcher), desc="Launch an emacs based run launcher"),
 Key2("M-b", lazy.spawn(emacs_web_selector), desc="Launch an emacs based web page selector"),
+Key2("M-s", lazy.spawn(emacs_scratchpad), desc="Launch an emacs based scratchpad"),
 
 Key2("<XF86AudioRaiseVolume>", lazy.spawn("amixer -c 1 sset Master 5%+ unmute"), desc="Raise Volume and unmute if muted"),
 Key2("<XF86AudioLowerVolume>", lazy.spawn("amixer -c 1 sset Master 5%- unmute"), desc="Lower Volume and unmute if muted"),

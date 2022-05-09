@@ -1,0 +1,19 @@
+#+SPDX-FileCopyrightText: 2020 Jens Lechtenbörger <https://lechten.gitlab.io/#me>
+#+SPDX-License-Identifier: CC-BY-SA-4.0
+
+# An audio file for this note is available over there:
+# https://oer.gitlab.io/audio/learning-objectives.ogg
+
+#+begin_notes
+[[https://cft.vanderbilt.edu/guides-sub-pages/blooms-taxonomy/][Learning objectives]]
+specify what you should be able to do after having worked through a
+presentation.  Thus, they offer guidance for your learning.
+
+Each learning objective consists of two major components, namely an
+/action/ verb and a topic.  Action verbs specify what actions you
+should be able to perform concerning the topic, and they indicate the
+target level of skill (in Bloom’s Taxonomy or its revised version as
+sketched under the hyperlink above).
+
+You may want to think of learning objectives as sample exam tasks.
+#+end_notes

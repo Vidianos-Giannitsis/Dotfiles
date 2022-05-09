@@ -1,0 +1,7 @@
+# -*- mode: snippet -*-
+# name: remark-notes
+# key: notes
+# --
+#+BEGIN_NOTES
+$0
+#+END_NOTES

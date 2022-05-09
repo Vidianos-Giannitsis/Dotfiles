@@ -88,6 +88,11 @@ The second hook is my favourite calculator program "Qalculate". I really find it
   def floating_run_launcher(c):
       if c.name == "emacs-web-page-selector":
 	  c.toggle_floating()
+
+  @hook.subscribe.client_new
+  def floating_run_launcher(c):
+      if c.name == "emacs-scratchpad":
+	  c.toggle_floating()
 #+END_SRC
 
 * Keybindings

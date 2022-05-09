@@ -1,0 +1,2 @@
+;;; Generated package description from ox-pandoc.el  -*- no-byte-compile: t -*-
+(define-package "ox-pandoc" "20220419.750" "An Org-mode exporter using pandoc" '((org "8.2") (emacs "24.4") (dash "2.8") (ht "2.0")) :commit "0a35d0fbfa56bdd9ec5ba5bac2fe002b61c05c52" :authors '(("KAWABATA, Taichi" . "kawabata.taichi@gmail.com") ("FENTON, Alex" . "a-fent@github")) :maintainer '("FENTON, Alex" . "a-fent@github") :keywords '("tools") :url "https://github.com/a-fent/ox-pandoc")
