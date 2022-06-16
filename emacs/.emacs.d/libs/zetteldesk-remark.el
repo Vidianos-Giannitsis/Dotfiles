@@ -1,11 +1,12 @@
-;;; zetteldesk-remark.el --- Org-Remark integration for zetteldesk.el
+;;; zetteldesk-remark.el --- Org-Remark integration for zetteldesk.el   -*- lexical-binding: t; -*-
 
 ;; Author: Vidianos Giannitsis <vidianosgiannitsis@gmail.com>
 ;; Maintaner: Vidianos Giannitsis <vidianosgiannitsis@gmail.com>
 ;; URL: https://github.com/Vidianos-Giannitsis/zetteldesk-remark.el
-;; Package-Requires: ((zetteldesk "0.2") (org-remark "1.0") (zetteldesk-kb))
+;; Package-Requires: ((zetteldesk "1.0") (org-remark "1.0") (emacs "27.2"))
 ;; Created: 22nd March 2022
 ;; License: GPL-3.0
+;; Version: 0.2
 
 ;; This file is free software; you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
@@ -33,7 +34,6 @@
 ;;; Code:
 
 (require 'zetteldesk)
-(require 'zetteldesk-kb)
 (require 'org-remark)
 
 ;; -- Helper Functions/Variables --
@@ -42,20 +42,29 @@
   "Title to use in `zetteldesk-remark-highlight-get-title'.
 
 Initialised to nil and given a value when turning on
-`zetteldesk-remark-mode'."
+`zetteldesk-remark-mode' through `zetteldesk-remark-set-title'."
   :type 'string
   :group 'zetteldesk)
 
-(define-minor-mode zetteldesk-remark-mode
-  "Toggle the zetteldesk-remark-mode.
+(defcustom zetteldesk-remark-notes-file
+  (concat org-roam-directory "zetteldesk-margin-notes.org")
+  "Default value of `org-remark-notes-file-name' for zetteldesk functions.
 
-This mode initialises the value of `zetteldesk-remark-title', an
-important variable for using org-remark in buffers not associated
-to a file."
-  :init-value nil
-  :global t
-  :group 'zetteldesk
-  :lighter " zetteldesk-remark")
+When turning on `zetteldesk-remark-mode' this variable's value is
+set to the value of `org-remark-notes-file-name' through
+`zetteldesk-remark-set-notes-file'.  This is stored as a variable
+so you can customise it if you don't like its default value."
+  :type 'string
+  :group 'zetteldesk)
+
+(defconst zetteldesk-remark-default-notes "marginalia.org"
+  "Constant that stores the default value of `org-remark-notes-file-name'.
+
+Zetteldesk-remark, for its own purposes changes the value of that
+variable with `zetteldesk-remark-set-notes-file' to make it more
+sensible in its own workflow.  However, the original value needs
+to be restored after the package is done.  For this reason this
+constant stores that value.")
 
 (defun zetteldesk-remark-set-title ()
   "Set the value of `zetteldesk-remark-title' from a minibuffer prompt."
@@ -65,23 +74,34 @@ to a file."
   "Helper function to set `org-remark-notes-file-name''s value.
 
 This is the value the zetteldesk-remark functions expect and this
-function is run in the `zetteldesk-remark-mode-on-hook'."
-  (setq org-remark-notes-file-name
-	(concat org-roam-directory "zetteldesk-margin-notes.org")))
+function is run when `zetteldesk-remark-mode' is turned on."
+  (setq org-remark-notes-file-name zetteldesk-remark-notes-file))
 
 (defun zetteldesk-remark-reset-notes-file ()
   "Reset `org-remark-notes-file-name' to its default value.
 
 This is a helper function for zetteldesk-remark to reset the
 value of that variable after turning off
-`zetteldesk-remark-mode-off-hook'"
-  (custom-reevaluate-setting 'org-remark-notes-file-name))
+`zetteldesk-remark-mode'."
+  (setq org-remark-notes-file-name zetteldesk-remark-default-notes))
 
-(add-hook 'zetteldesk-remark-mode-on-hook 'zetteldesk-remark-set-notes-file)
-(add-hook 'zetteldesk-remark-mode-off-hook 'zetteldesk-remark-reset-notes-file)
-(add-hook 'zetteldesk-remark-mode-on-hook 'zetteldesk-remark-set-title)
+;;;###autoload
+(define-minor-mode zetteldesk-remark-mode
+  "Toggle the `zetteldesk-remark-mode'.
 
-(defun org-top-level-heading-title ()
+This mode initialises the value of `zetteldesk-remark-title', an
+important variable for using org-remark in buffers not associated
+to a file."
+  :init-value nil
+  :global t
+  :group 'zetteldesk
+  :lighter " zetteldesk-remark"
+  (if zetteldesk-remark-mode
+      (progn (zetteldesk-remark-set-notes-file)
+	     (zetteldesk-remark-set-title))
+    (zetteldesk-remark-reset-notes-file)))
+
+(defun zetteldesk-remark-top-level-heading-title ()
   "Get the title of the top-level org heading.
 
 This is a helper function for `zetteldesk-remark-highlight-mark'.
@@ -132,7 +152,6 @@ FILENAME, BEG, END, PROPS and TITLE are the same as in
 	 (line-num (org-current-line beg))
 	 (orgid (org-remark-highlight-get-org-id beg)))
     (with-current-buffer notes-buf
-      (when (featurep 'org-remark-convert-legacy) (org-remark-convert-legacy-data))
       ;;`org-with-wide-buffer is a macro that should work for non-Org file'
       (org-with-wide-buffer
        (let ((file-headline (or (org-find-property
@@ -215,6 +234,12 @@ current heading's title, the title is a `concat' of the string
 `zetteldesk-remark-highlight-save''s final argument which is the
 title of the node that is associated with this section.
 
+This function is meant to be run in the *zetteldesk-scratch*
+buffer so evalutating it elsewhere might lead to errors.  For
+regular buffers associated to a file you should just use the
+default `org-remark-highlight-mark' as this version relies
+heavlily on the structure of *zetteldesk-scratch*.
+
 Arguments BEG, END, ID, MODE, LABEL, FACE and PROPERTIES are all
 identical to those in `org-remark-highlight-mark'."
   ;; Ensure to turn on the local minor mode
@@ -242,7 +267,7 @@ identical to those in `org-remark-highlight-mark'."
      ;; for mode, nil and :change result in saving the highlight.  :load
      ;; bypasses save.
      (unless (eq mode :load)
-       (let* ((node-title (org-top-level-heading-title))
+       (let* ((node-title (zetteldesk-remark-top-level-heading-title))
 	      (node (org-roam-node-from-title-or-alias node-title))
 	      (filename (org-roam-node-file node)))
 	 (if filename
@@ -282,27 +307,7 @@ a specific file, which is meant to be used with all margin notes
 coming from zetteldesk-scratch.  This function switches to that
 file."
   (interactive)
-  (pop-to-buffer (find-file (concat org-roam-directory "zetteldesk-margin-notes.org"))))
-
-;; -- Keybindings --
-
-(pretty-hydra-define zetteldesk-remark-hydra (:color blue :title "Org-remark Integration")
-  ("Zetteldesk Remark Functions"
-   (("m" zetteldesk-remark-mark "Mark region and create margin note")
-    ("s" zetteldesk-remark-switch-to-margin-notes "Switch to the margin notes file"))
-
-   "Org Remark Functions"
-   (("o" org-remark-open "Open margin note")
-    ("n" org-remark-view-next "Open next margin note" :exit nil)
-    ("p" org-remark-view-prev "Open previous margin note" :exit nil)
-    ("v" org-remark-view "Open margin note without switching to it" :exit nil))
-
-   "Quit"
-   (("q" nil "quit"))))
-
-(pretty-hydra-define+ zetteldesk-main-hydra ()
-  ("Inserting Things and *zetteldesk-scratch*"
-   (("m" zetteldesk-remark-hydra/body "Run the Zetteldesk Remark Hydra"))))
+  (pop-to-buffer (find-file zetteldesk-remark-notes-file)))
 
 (provide 'zetteldesk-remark)
 ;;; zetteldesk-remark.el ends here

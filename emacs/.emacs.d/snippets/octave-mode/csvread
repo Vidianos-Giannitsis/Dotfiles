@@ -1,0 +1,5 @@
+# -*- mode: snippet -*-
+# name: csvread
+# key: csvread
+# --
+ph$1 = nonzeros(csvread("data-03-06-$2")(:,2));

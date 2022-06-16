@@ -1,4 +1,4 @@
-;;; org-pdftools-autoloads.el --- automatically extracted autoloads
+;;; org-pdftools-autoloads.el --- automatically extracted autoloads  -*- lexical-binding: t -*-
 ;;
 ;;; Code:
 
@@ -34,7 +34,7 @@ and append it. ARG is passed to `org-link-complete-file'.
 
 \(fn &optional ARG)" nil nil)
 
-(if (fboundp 'register-definition-prefixes) (register-definition-prefixes "org-pdftools" '("org-pdftools-")))
+(register-definition-prefixes "org-pdftools" '("org-pdftools-"))
 
 ;;;***
 

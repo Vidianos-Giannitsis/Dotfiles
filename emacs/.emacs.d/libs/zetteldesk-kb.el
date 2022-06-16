@@ -1,11 +1,12 @@
-;;; zetteldesk-kb.el --- Keybindings for zetteldesk.el
+;;; zetteldesk-kb.el --- Keybindings for zetteldesk.el  -*- lexical-binding: t; -*-
 
 ;; Author: Vidianos Giannitsis <vidianosgiannitsis@gmail.com>
 ;; Maintaner: Vidianos Giannitsis <vidianosgiannitsis@gmail.com>
 ;; URL: https://github.com/Vidianos-Giannitsis/zetteldesk-kb.el
-;; Package-Requires: ((zetteldesk "0.2") (hydra "0.15") (major-mode-hydra "0.2"))
+;; Package-Requires: ((zetteldesk "0.2") (hydra "0.15") (major-mode-hydra "0.2") (emacs "24.1"))
 ;; Created: 3rd March 2022
 ;; License: GPL-3.0
+;; Version: 0.2
 
 ;; This file is free software; you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
@@ -99,17 +100,17 @@
    (("s" zetteldesk-switch-to-scratch-buffer "Switch to *zetteldesk-scratch*")
     ("i" zetteldesk-insert-hydra/body "Run the Insert Hydra"))))
 
+
 ;; Set up the keybinding to call the hydra
 
-(defcustom zetteldesk-hydra-prefix nil
-  "Stores the value of the keybinding that calls the main zetteldesk hydra.
-By default it is set to nil, to
-  allow the user to set the prefix they want"
+(defcustom zetteldesk-kb-hydra-prefix (kbd "C-c .")
+  "Stores the value of the keybinding that calls the main zetteldesk hydra."
   :type 'string
   :group 'zetteldesk)
 
-(define-key zetteldesk-map zetteldesk-hydra-prefix 'zetteldesk-main-hydra/body)
+(defvar zetteldesk-kb-map
+  (let ((km (make-sparse-keymap)))
+    (define-key km zetteldesk-kb-hydra-prefix #'zetteldesk-main-hydra/body) km))
 
 (provide 'zetteldesk-kb)
-
 ;;; zetteldesk-kb.el ends here

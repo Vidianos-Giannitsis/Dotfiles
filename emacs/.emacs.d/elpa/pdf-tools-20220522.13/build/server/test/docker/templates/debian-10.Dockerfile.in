@@ -1,0 +1,4 @@
+# -*- dockerfile -*-
+# Debian 10 is known as buster
+FROM debian:10
+RUN apt-get update -y

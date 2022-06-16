@@ -1,12 +1,12 @@
-;;; zetteldesk-ref.el --- A zetteldesk extension for interfacing with
-;;; literature nodes.
+;;; zetteldesk-ref.el --- A zetteldesk extension for interfacing with literature nodes   -*- lexical-binding: t; -*-
 
 ;; Author: Vidianos Giannitsis <vidianosgiannitsis@gmail.com>
 ;; Maintaner: Vidianos Giannitsis <vidianosgiannitsis@gmail.com>
 ;; URL: https://github.com/Vidianos-Giannitsis/zetteldesk-ref.el
-;; Package-Requires: ((zetteldesk "0.3") (bibtex-completion) (zetteldesk-kb))
+;; Package-Requires: ((zetteldesk "1.0") (bibtex-completion "1.0") (emacs "26.1"))
 ;; Created: 27th March 2022
 ;; License: GPL-3.0
+;; Version: 0.2
 
 ;; This file is free software; you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
@@ -23,26 +23,19 @@
 
 ;;; Commentary:
 
-;; This package provides some optional improvements to
-;; zetteldesk.el.  Specifically it introduces mechanisms for handling
-;; nodes from the Info program built in to Emacs and literature notes
-;; associated to a bibtex entry which are mostly powered by
-;; org-noter.  This code makes these reference materials interface
-;; better with the zetteldesk.
-
-;; Despite not in the hard dependencies of the package, it is highly
-;; recommended you use org-roam-bibtex with this package. Its the main
-;; package for creating literature notes with org-roam and what this
-;; does is make zetteldesk interface better with such nodes.
+;; This package provides some optional improvements to zetteldesk.el.
+;; Specifically it introduces mechanisms for handling literature notes
+;; associated to a bibtex entry which are mostly powered by org-noter.
+;; This code makes these reference materials interface better with the
+;; zetteldesk
 
 ;;; Code:
 
 (require 'zetteldesk)
-(require 'zetteldesk-kb)
 (require 'bibtex-completion)
 
 ;; -- Reference Nodes from Bibtex Entries --
-(defun zetteldesk-note-refs-p ()
+(defun zetteldesk-ref-note-refs-p ()
   "Predicate function to find all bibtex completion candidates with a note.
 
 Checks if every candidate has the \"=has-note=\" tag using
@@ -51,16 +44,16 @@ Checks if every candidate has the \"=has-note=\" tag using
 	   if (assoc "=has-note=" ref)
 	   collect ref))
 
-(defun zetteldesk-citekey-from-refs ()
-  "Finds the \"=key=\" tag from a list of candidates.
+(defun zetteldesk-ref-citekey-from-refs ()
+  "Find the \"=key=\" tag from a list of candidates.
 
-The list is collected with `zetteldesk-note-refs-p' which is a
+The list is collected with `zetteldesk-ref-note-refs-p' which is a
 list of candidates that have notes. Collects it using `assoc'."
-  (cl-loop for ref in (zetteldesk-note-refs-p)
+  (cl-loop for ref in (zetteldesk-ref-note-refs-p)
 	   collect (assoc "=key=" ref)))
 
-(defun zetteldesk-citekey-from-node ()
-  "Collects the citekeys of org-roam-nodes in the `zetteldesk'.
+(defun zetteldesk-ref-citekey-from-node ()
+  "Collects the citekeys of org-roam-nodes in the `zetteldesk-desktop'.
 
 Ignores nodes for which `org-roam-node-refs' returns nil."
   (let* ((init-list (org-roam-node-list))
@@ -69,16 +62,16 @@ Ignores nodes for which `org-roam-node-refs' returns nil."
 	     if (org-roam-node-refs node)
 	     collect (car (org-roam-node-refs node)))))
 
-(defun zetteldesk-node-from-refs ()
+(defun zetteldesk-ref-node-from-refs ()
   "Collects a list of ref nodes.
 
 The nodes are collected from their citekey using
 `org-roam-node-from-ref', while the citekeys themselves are
-collected from `zetteldesk-citekey-from-refs'."
-  (cl-loop for ref in (zetteldesk-citekey-from-refs)
+collected from `zetteldesk-ref-citekey-from-refs'."
+  (cl-loop for ref in (zetteldesk-ref-citekey-from-refs)
 	   collect (org-roam-node-from-ref (concat "cite:" (cdr ref)))))
 
-(defun org-roam-node-read--completions* (node-list &optional filter-fn sort-fn)
+(defun zetteldesk-ref-roam-node-read--completions* (node-list &optional filter-fn sort-fn)
   "Run `org-roam-node-read--completions' with NODE-LIST being a list of nodes.
 
 Typically, the function takes `org-roam-node-list' as the initial
@@ -106,11 +99,11 @@ used with `org-roam-node-read*'."
 		  nodes)))
     nodes))
 
-(defun org-roam-node-read* (node-list &optional initial-input filter-fn sort-fn require-match prompt)
+(defun zetteldesk-ref-roam-node-read* (node-list &optional initial-input filter-fn sort-fn require-match prompt)
   "Run `org-roam-node-read' with the nodes supplied by NODE-LIST.
 
 NODE-LIST is a list of nodes passed to
-`org-roam-node-read--completions*', which creates an alist of
+`zetteldesk-ref-roam-node-read--completions*', which creates an alist of
 nodes with the proper formatting to be used in this
 function.  This is for those cases where it is helpful to use your
 own list of nodes, because a predicate function can not filter
@@ -118,7 +111,7 @@ them in the way you want easily.
 
 INITIAL-INPUT, SORT-FN, FILTER-FN, REQUIRE-MATCH, PROMPT are the
 same as in `org-roam-node-read'."
-  (let* ((nodes (org-roam-node-read--completions* node-list filter-fn sort-fn))
+  (let* ((nodes (zetteldesk-ref-roam-node-read--completions* node-list filter-fn sort-fn))
 	 (prompt (or prompt "Node: "))
 	 (node (completing-read
 		prompt
@@ -139,89 +132,89 @@ same as in `org-roam-node-read'."
     (or (cdr (assoc node nodes))
 	(org-roam-node-create :title node))))
 
-(defun zetteldesk-add-ref-node-to-desktop (NODE)
-  "Add NODE to the `zetteldesk'.
+(defun zetteldesk-ref-add-node-to-desktop (NODE)
+  "Add NODE to the `zetteldesk-desktop'.
 
 NODE is a literature note that is part of the org-roam
-repository. The list of such nodes is gathered with
-`zetteldesk-node-from-refs'."
-  (interactive (list (org-roam-node-read* (zetteldesk-node-from-refs))))
+repository.  The list of such nodes is gathered with
+`zetteldesk-ref-node-from-refs'."
+  (interactive (list (zetteldesk-ref-roam-node-read* (zetteldesk-ref-node-from-refs))))
   (let ((buffer (org-roam-node-buffer NODE))
 	(file (org-roam-node-file NODE))
 	(org-startup-with-latex-preview nil))
-    (if (not (eq buffer nil))
+    (if buffer
 	(zetteldesk--add-buffer buffer)
       (zetteldesk--add-buffer (find-file-noselect file)))))
 
-(defun zetteldesk-remove-ref-node-from-desktop (NODE)
-  "Remove NODE from the `zetteldesk'.
+(defun zetteldesk-ref-remove-node-from-desktop (NODE)
+  "Remove NODE from the `zetteldesk-desktop'.
 
 NODE is a literature note that is currently part of the
 zetteldesk, meaning its part of the list generated by
-`zetteldesk-node-from-refs'."
+`zetteldesk-ref-node-from-refs'."
   (interactive
-   (list (org-roam-node-read* (zetteldesk-node-from-refs) nil #'zetteldesk-node-p)))
+   (list (zetteldesk-ref-roam-node-read* (zetteldesk-ref-node-from-refs) nil #'zetteldesk-node-p)))
   (let ((buffer (org-roam-node-buffer NODE)))
     (zetteldesk--remove-buffer buffer)))
 
-(defun zetteldesk-find-ref-node ()
+(defun zetteldesk-ref-find-ref-node ()
   "Execute a filtered version of `ivy-bibtex-with-notes'.
 
 This does not exactly run `ivy-bibtex-with-notes' as that doesn't
 have a way to filter things.  It collects a list of nodes which
 are reference nodes linked to a bibtex entry through
-`zetteldesk-node-from-refs' and passes it to
-`org-roam-node-read*' which is a modified version of
+`zetteldesk-ref-node-from-refs' and passes it to
+`zetteldesk-ref-roam-node-read*' which is a modified version of
 `org-roam-node-read' which takes a list of nodes as an
 argument.  Since this required a rewrite of `org-roam-node-read',
 finding the file is done indirectly and not through
 `org-roam-node-file'."
   (interactive)
-  (find-file (org-roam-node-file (org-roam-node-read* (zetteldesk-node-from-refs) nil #'zetteldesk-node-p))))
+  (find-file (org-roam-node-file (zetteldesk-ref-roam-node-read* (zetteldesk-ref-node-from-refs) nil #'zetteldesk-node-p))))
 
-(defun zetteldesk-ivy-bibtex-with-notes (&optional arg)
-  "Search `zetteldesk' BibTeX entries with notes using `ivy-bibtex'.
+(defun zetteldesk-ref-ivy-bibtex-with-notes (&optional arg)
+  "Search `zetteldesk-desktop' BibTeX entries with notes using `ivy-bibtex'.
 
 This function builds on `ivy-bibtex-with-notes', meaning it shows
 a list of bibtex entries with notes, however its filtering
-includes only nodes in the `zetteldesk'.
+includes only nodes in the `zetteldesk-desktop'.
 
 With a prefix ARG the cache is invalidated and the bibliography
 reread."
   (interactive "P")
-  (cl-letf* ((candidates (zetteldesk-note-refs-p))
+  (cl-letf* ((candidates (zetteldesk-ref-note-refs-p))
 	     ((symbol-function 'bibtex-completion-candidates)
 	      (lambda ()
 		(cl-loop for ref in candidates
 			 if (member (concat "cite:" (cdr (assoc "=key=" ref)))
-				    (zetteldesk-citekey-from-node))
+				    (zetteldesk-ref-citekey-from-node))
 			 collect ref))))
     (ivy-bibtex arg)))
 
-(defun zetteldesk-helm-bibtex-with-notes (&optional arg)
-  "Search `zetteldesk' BibTeX entries with notes using `helm-bibtex'.
+(defun zetteldesk-ref-helm-bibtex-with-notes (&optional arg)
+  "Search `zetteldesk-desktop' BibTeX entries with notes using `helm-bibtex'.
 
 This function builds on `helm-bibtex-with-notes', meaning it shows
 a list of bibtex entries with notes, however its filtering
-includes only nodes in the `zetteldesk'.
+includes only nodes in the `zetteldesk-desktop'.
 
 With a prefix ARG the cache is invalidated and the bibliography
 reread."
   (interactive "P")
-  (cl-letf* ((candidates (zetteldesk-note-refs-p))
+  (cl-letf* ((candidates (zetteldesk-ref-note-refs-p))
 	     ((symbol-function 'bibtex-completion-candidates)
 	      (lambda ()
 		(cl-loop for ref in candidates
 			 if (member (concat "cite:" (cdr (assoc "=key=" ref)))
-				    (zetteldesk-citekey-from-node))
+				    (zetteldesk-ref-citekey-from-node))
 			 collect ref))))
-    (helm-bibtex)))
+    (helm-bibtex arg)))
 
-(defun zetteldesk-insert-ref-node-contents (&optional arg)
-  "Select a node that is part of the current `zetteldesk' and a ref node.
+(defun zetteldesk-ref-insert-ref-node-contents (&optional arg)
+  "Select a node that is part of the current `zetteldesk-desktop' and a ref node.
 Ref nodes are nodes that refer to reference material such as an
-article.  These are gathered with `zetteldesk-node-from-refs' and
-shown to the user through `org-roam-node-read*' filtered
+article.  These are gathered with `zetteldesk-ref-node-from-refs' and
+shown to the user through `zetteldesk-ref-roam-node-read*' filtered
 according to `zetteldesk-node-p'.
 
 After selection, in the location determined by
@@ -243,7 +236,7 @@ implemented for when you don't want that. In this version, it
 made more sense to order it this way in my opinion."
   (interactive "P")
   (let* ((node
-	  (org-roam-node-read* (zetteldesk-node-from-refs) nil #'zetteldesk-node-p))
+	  (zetteldesk-ref-roam-node-read* (zetteldesk-ref-node-from-refs) nil #'zetteldesk-node-p))
 	 (file (org-roam-node-file node))
 	 (location (zetteldesk-insert-location))
 	 (citekey (concat "cite:" (car (org-roam-node-refs node)))))
@@ -258,40 +251,12 @@ made more sense to order it this way in my opinion."
     (save-excursion
       (while (not (org-next-visible-heading 1))
 	(org-metaright)))
-    (replace-string "#+title: " "* ")
+    (zetteldesk--replace-title)
     (end-of-line 1)
     (newline)
     (insert "Bibtex entry for node: "
 	    citekey))
   (zetteldesk-insert-switch-to-scratch arg))
-
-;; Add keybindings for this package in the default hydra
-
-(pretty-hydra-define+ zetteldesk-insert-hydra ()
-  ("Org-Roam"
-   (("r" zetteldesk-insert-ref-node-contents "Link to citekey and Node Contents in *zetteldesk-scratch with special formatting"))))
-
-(pretty-hydra-define zetteldesk-literature-hydra (:color blue :title "Zetteldesk Literature Nodes")
-  ("Org-Roam UI"
-   (("r" zetteldesk-find-ref-node))
-
-   "Helm-Bibtex UI"
-    (("h" zetteldesk-helm-bibtex-with-notes))
-
-    "Ivy-Bibtex UI"
-    (("i" zetteldesk-ivy-bibtex-with-notes))))
-
-(pretty-hydra-define+ zetteldesk-add-hydra ()
-  ("Org-Roam"
-   (("l" zetteldesk-add-ref-node-to-desktop "Add Literature Node"))))
-
-(pretty-hydra-define+ zetteldesk-remove-hydra ()
-  ("Org-Roam"
-   (("l" zetteldesk-remove-ref-node-from-desktop "Remove Literature Node"))))
-
-(pretty-hydra-define+ zetteldesk-main-hydra ()
-  ("Filter Functions"
-   (("l" zetteldesk-literature-hydra/body "Go to Zetteldesk Literature Node"))))
 
 (provide 'zetteldesk-ref)
 ;;; zetteldesk-ref.el ends here

@@ -1,0 +1,3 @@
+# -*- dockerfile -*-
+FROM fedora:35
+RUN dnf update -y

@@ -14,13 +14,12 @@ This file was originally part of my emacs config in the org-roam section. Howeve
 - [[#org-remark-integration][Org-remark integration]]
   - [[#preamble][Preamble]]
   - [[#code][Code]]
-- [[#handling-notes-on-articles-better][Handling notes on articles better]]
+- [[#handling-notes-on-articles-better---literature-notes][Handling notes on articles better - Literature Notes]]
   - [[#preamble-1][Preamble]]
   - [[#reference-notes-from-bibtex-entries][Reference notes from Bibtex Entries]]
 - [[#info-nodes][Info Nodes]]
   - [[#preamble-2][Preamble]]
   - [[#the-rest-of-the-code][The rest of the code]]
-- [[#adding-keybindings-to-the-hydra][Adding keybindings to the hydra]]
 - [[#providing-the-packages-to-be-loaded-in-initel][Providing the packages to be loaded in init.el]]
 
 * Implementing the Zettelkasten "desktop" to org-roam 
@@ -33,17 +32,16 @@ This file was originally part of my emacs config in the org-roam section. Howeve
 
    #+BEGIN_SRC elisp :tangle zetteldesk.el
 
-     ;;; zetteldesk.el --- A revision and outlining tool for org-roam
+     ;;; zetteldesk.el --- A revision and outlining tool for org-roam  -*- lexical-binding: t; -*-
 
      ;; Author: Vidianos Giannitsis <vidianosgiannitsis@gmail.com>
      ;; Maintaner: Vidianos Giannitsis <vidianosgiannitsis@gmail.com>
      ;; URL: https://github.com/Vidianos-Giannitsis/zetteldesk.el
-     ;; Package-Requires: ((org-roam "2.0"))
+     ;; Package-Requires: ((emacs "27.1") (org-roam "2.0"))
      ;; Tested on Emacs 27.2 and org-roam v2.2
      ;; Created: 6th February 2022
      ;; License: GPL-3.0
-     ;; Keywords: org-roam, revision, zettelkasten
-     ;; Version: 0.4
+     ;; Version: 1.0
 
      ;; This file is free software; you can redistribute it and/or modify
      ;; it under the terms of the GNU General Public License as published by
@@ -93,7 +91,7 @@ This file was originally part of my emacs config in the org-roam section. Howeve
      This is identical to `org-roam-node-backlinkscount' with the
 	 difference that it returns a number instead of a fromatted
 	 string. This is to be used in
-	 `org-roam-node-sort-by-backlinks'. NODE is an org-roam-node."
+	 `zetteldesk-roam-node-sort-by-backlinks'. NODE is an org-roam-node."
 	 (let* ((count (caar (org-roam-db-query
 			      [:select (funcall count source)
 				       :from links
@@ -102,12 +100,12 @@ This file was originally part of my emacs config in the org-roam section. Howeve
 			      (org-roam-node-id node)))))
 	   count))
 
-     (defun org-roam-node-poi-or-moc-p (NODE)
+     (defun zetteldesk-roam-node-poi-or-moc-p (NODE)
        "Check if NODE has the tag POI or the tag MOC.  Return t if it does."
        (or (string-equal (car (org-roam-node-tags NODE)) "POI")
 	   (string-equal (car (org-roam-node-tags NODE)) "MOC")))
 
-     (defun org-roam-backlink-query ()
+     (defun zetteldesk-roam-backlink-query ()
        "Simple org-roam query function.
      Stores the IDs of all the files that link to the node at point.
      This is a modified part of the `org-roam-backlinks-get' function
@@ -120,8 +118,8 @@ This file was originally part of my emacs config in the org-roam section. Howeve
 		 :and (= type "id")]
 	(org-roam-node-id (org-roam-node-at-point))))
 
-     (defun org-roam-backlink-query* (NODE)
-       "Run `org-roam-backlink-query' with NODE instead of `org-roam-node-at-point'.
+     (defun zetteldesk-roam-backlink-query* (NODE)
+       "Run `zetteldesk-roam-backlink-query' with NODE.
 
      Instead of returning a list of the backlinks of
      `org-roam-node-at-point', find the backlinks of NODE.  This is
@@ -134,7 +132,7 @@ This file was originally part of my emacs config in the org-roam section. Howeve
 		      :and (= type "id")]
 	     (org-roam-node-id NODE)))
 
-     (defun org-roam-node-sort-by-backlinks (completion-a completion-b)
+     (defun zetteldesk-roam-node-sort-by-backlinks (completion-a completion-b)
        "Sorting function for org-roam that sort the list of nodes.
      Sorting is done accordint to the number of backlinks.  This is
      the sorting function in `org-roam-node-find-by-backlinks' and
@@ -159,23 +157,31 @@ I tried to follow a rather simple idea to do this and not overcomplicate things.
   ;; menus as chosen by the user, so obviously predicate functions are
   ;; core to the package
 
-  (defcustom zetteldesk
+  (defcustom zetteldesk-desktop
     "default"
     "Buffer local variable.
   Checks if the current buffer is part of the zetteldesk.  A buffer
   is part of the zetteldesk only if the value of this variable is
-  not its default value in that buffer.  Its default value is
-  default because I am not creative."
+  not its default value in that buffer."
     :type 'string
     :group 'zetteldesk
     :local t)
 
+  (defconst zetteldesk-desktop-default
+    "default"
+    "Default value of `zetteldesk-desktop'.
+
+  This stores the default value through a `defconst' so it can't be
+  modified to do a comparison between it and the current value of
+  `zetteldesk-desktop'.")
+
   (defun zetteldesk-p (BUFFER)
-    "Check if BUFFER is part of the current `zetteldesk'."
-    (not (eq (default-value 'zetteldesk) (buffer-local-value 'zetteldesk (cdr BUFFER)))))
+    "Check if BUFFER is part of the current `zetteldesk-desktop'."
+    (not (equal zetteldesk-desktop-default
+		(buffer-local-value 'zetteldesk-desktop (cdr BUFFER)))))
 
   (defun zetteldesk-buffer-p (BUFFER)
-    "Check if BUFFER is part of the current `zetteldesk'.
+    "Check if BUFFER is part of the current `zetteldesk-desktop'.
   Then check if BUFFER is not associated to an org-roam file.
 
   Org-roam file buffers are better viewed with `org-roam-node-file'
@@ -187,17 +193,18 @@ I tried to follow a rather simple idea to do this and not overcomplicate things.
   (defun zetteldesk-node-p (NODE)
     "Check if NODE is associated with an open buffer.
   If it is, check if that buffer is part of the current
-  `zetteldesk'.  If it isn't, return nil.
+  `zetteldesk-desktop'.  If it isn't, return nil.
 
   This function is used as a filter function to create
   `zetteldesk-node-find' which is a filtered view of
   `org-roam-node-find'"
     (if (org-roam-node-buffer NODE)
-	(not (eq (default-value 'zetteldesk) (buffer-local-value 'zetteldesk (org-roam-node-buffer NODE))))
+	(not (equal zetteldesk-desktop-default
+		    (buffer-local-value 'zetteldesk-desktop (org-roam-node-buffer NODE))))
       nil))
 
   (defmacro zetteldesk-mode-buffer-p (BUFFER MODE)
-    "Check if BUFFER is part of the `zetteldesk' and in `major-mode' MODE.
+    "Check if BUFFER is part of the `zetteldesk-desktop' and in `major-mode' MODE.
 
   This macro is meant to be used to write filter functions to be
   passed to `read-buffer' variants such as
@@ -206,10 +213,10 @@ I tried to follow a rather simple idea to do this and not overcomplicate things.
   required for `read-buffer' while MODE should be a symbol such as
   'org-mode."
     `(and (zetteldesk-buffer-p ,BUFFER)
-	  (eq (buffer-local-value 'major-mode (cdr ,BUFFER)) ,MODE)))
+	  (equal (buffer-local-value 'major-mode (cdr ,BUFFER)) ,MODE)))
 
   (defun zetteldesk-org-buffer-p (BUFFER)
-    "Check if BUFFER is part of the current `zetteldesk'.
+    "Check if BUFFER is part of the current `zetteldesk-desktop'.
   Then check if the file is an org file but not one that belongs to
   org-roam.
 
@@ -221,13 +228,13 @@ I tried to follow a rather simple idea to do this and not overcomplicate things.
     (zetteldesk-mode-buffer-p BUFFER 'org-mode))
 
   (defun zetteldesk-pdf-p (BUFFER)
-    "Check if BUFFER is part of the current `zetteldesk' and also a pdf file."
+    "Check if BUFFER is part of the current `zetteldesk-desktop' and also a pdf file."
     (zetteldesk-mode-buffer-p BUFFER 'pdf-view-mode))
 
 #+END_SRC
 
 #+RESULTS:
-: zetteldesk-node-insert
+: zetteldesk-pdf-p
 
 ** Adding and Removing things in the Zetteldesk
    I define a few adding mechanisms and the matching removing ones, as can seen below. The first is adding/removing a buffer, the second is for a node and then I have two ways of playing with a nodes backlinks. I can add a node and all its backlinks to the zetteldesk, or I can select a node and add one of its backlinks to the zetteldesk. Both have their use cases imo. For the last one, I believe there is no need for a matching removing one. 
@@ -242,7 +249,7 @@ I tried to follow a rather simple idea to do this and not overcomplicate things.
     ;; need ways to remove things, because people make mistakes.
 
     (defmacro zetteldesk--add-buffer (BUFFER)
-      "Add BUFFER to the current `zettelesk'.
+      "Add BUFFER to the current `zetteldesk-desktop'.
 
     This is a low-level macro used in all zetteldesk-add
     functions.  Given BUFFER it creates the code required to add the
@@ -251,35 +258,35 @@ I tried to follow a rather simple idea to do this and not overcomplicate things.
     macro.  Other functions need more stuff, but deep-down they all
     use this macro."
       `(with-current-buffer ,BUFFER
-	 (setq-local zetteldesk "foo")))
+	 (setq-local zetteldesk-desktop "foo")))
 
     (defun zetteldesk-add-to-desktop (BUFFER)
-      "Add BUFFER to the current `zetteldesk'."
+      "Add BUFFER to the current `zetteldesk-desktop'."
       (interactive "b")
       (zetteldesk--add-buffer BUFFER))
 
     (defun zetteldesk-add-node-to-desktop (NODE)
-      "Add NODE to the `zetteldesk'.
+      "Add NODE to the `zetteldesk-desktop'.
     If there isn't a buffer associated to it, create it.  NODE is an
     org-roam node read through `org-roam-node-read'"
       (interactive (list (org-roam-node-read)))
       (let ((buffer (org-roam-node-buffer NODE))
 	     (file (org-roam-node-file NODE))
 	     (org-startup-with-latex-preview nil))
-	(if (not (eq buffer nil))
+	(if buffer
 	    (zetteldesk--add-buffer buffer)
 	  (zetteldesk--add-buffer (find-file-noselect file)))))
 
     (defun zetteldesk-add-poi-or-moc-backlink-to-desktop ()
-      "Prompts the user to select an org-roam node that has a specific tag.
+      "Prompt the user to select an org-roam node that has a specific tag.
     Looks for the POI or MOC tag (filtering done with
-    `org-roam-node-poi-or-moc-p') and collects its ID and backlinks.
+    `zetteldesk-roam-node-poi-or-moc-p') and collects its ID and backlinks.
     Then, prompt the user to select one of its backlinks and add that
     to the zetteldesk."
       (interactive)
-      (let* ((source (org-roam-node-read nil #'org-roam-node-poi-or-moc-p))
+      (let* ((source (org-roam-node-read nil #'zetteldesk-roam-node-poi-or-moc-p))
 	     (source-id (org-roam-node-id source))
-	     (backlinks (org-roam-backlink-query* source)))
+	     (backlinks (zetteldesk-roam-backlink-query* source)))
 	(zetteldesk-add-node-to-desktop
 	 (org-roam-node-read nil (lambda (NODE)
 				   (let* ((id (org-roam-node-id NODE))
@@ -287,42 +294,42 @@ I tried to follow a rather simple idea to do this and not overcomplicate things.
 				     (member id-list backlinks)))))))
 
     (defun zetteldesk-add-backlinks-to-desktop ()
-      "Add the current buffer and all its backlinks to the `zetteldesk'.
+      "Add the current buffer and all its backlinks to the `zetteldesk-desktop'.
 
     This function queries the database for all the nodes that link to
-    the current node with the `org-roam-backlink-query' function and
+    the current node with the `zetteldesk-roam-backlink-query' function and
     then recursively checks if there is an open buffer associated
-    with them, and if so adds it to the `zetteldesk'"
+    with them, and if so adds it to the `zetteldesk-desktop'"
       (interactive)
-      (setq-local zetteldesk "foo")
-      (let ((backlinks (length (org-roam-backlink-query)))
+      (setq-local zetteldesk-desktop "foo")
+      (let ((backlinks (length (zetteldesk-roam-backlink-query)))
 	    (org-startup-with-latex-preview nil))
 	(dotimes (number backlinks)
-	  (let* ((id (car (nth number (org-roam-backlink-query))))
+	  (let* ((id (car (nth number (zetteldesk-roam-backlink-query))))
 		  (node (org-roam-node-from-id id))
 		  (buffer (org-roam-node-buffer node))
 		  (file (org-roam-node-file node)))
-	    (if (not (eq buffer nil))
+	    (if buffer
 		(zetteldesk--add-buffer buffer)
 	      (zetteldesk--add-buffer (find-file-noselect file)))))))
 
     (defmacro zetteldesk--remove-buffer (BUFFER)
-      "Remove BUFFER from the current `zetteldesk'.
+      "Remove BUFFER from the current `zetteldesk-desktop'.
 
     This is a low-level macro used in all zetteldesk-remove
     functions.  This function is identical in logic to
     `zetteldesk--add-buffer', however it is for removing thingss
     instead of adding."
       `(with-current-buffer ,BUFFER
-	 (kill-local-variable 'zetteldesk)))
+	 (kill-local-variable 'zetteldesk-desktop)))
 
     (defun zetteldesk-remove-from-desktop (BUFFER)
-      "Remove BUFFER from the current `zetteldesk'."
+      "Remove BUFFER from the current `zetteldesk-desktop'."
       (interactive "b")
       (zetteldesk--remove-buffer BUFFER))
 
     (defun zetteldesk-remove-node-from-desktop (NODE)
-      "Remove NODE from the `zetteldesk'.
+      "Remove NODE from the `zetteldesk-desktop'.
     NODE is an org-roam node
     and is read through `org-roam-node-read'"
       (interactive (list (org-roam-node-read nil #'zetteldesk-node-p)))
@@ -330,19 +337,19 @@ I tried to follow a rather simple idea to do this and not overcomplicate things.
 	(zetteldesk--remove-buffer buffer)))
 
     (defun zetteldesk-remove-backlinks-from-desktop ()
-      "Remove from the `zetteldesk', the current buffer and its backlinks.
+      "Remove from the `zetteldesk-desktop', the current buffer and its backlinks.
 
     This function is essentially a carbon copy of
     `zetteldesk-add-backlinks-to-desktop' but instead of adding the
     buffer to the desktop it removes it."
       (interactive)
-      (kill-local-variable 'zetteldesk)
-      (let ((backlinks (length (org-roam-backlink-query))))
+      (kill-local-variable 'zetteldesk-desktop)
+      (let ((backlinks (length (zetteldesk-roam-backlink-query))))
 	(dotimes (number backlinks)
-	  (let* ((id (car (nth number (org-roam-backlink-query))))
+	  (let* ((id (car (nth number (zetteldesk-roam-backlink-query))))
 		  (node (org-roam-node-from-id id))
 		  (buffer (org-roam-node-buffer node)))
-	    (unless (eq buffer nil)
+	    (when buffer
 	      (zetteldesk--remove-buffer buffer))))))
 
 
@@ -365,7 +372,7 @@ I tried to follow a rather simple idea to do this and not overcomplicate things.
      (defun zetteldesk-switch-to-buffer ()
        "Execute a filtered `switch-to-buffer'.
      The filter is done using `zetteldesk-buffer-p' to show only
-     buffers that are part of the current `zetteldesk' and not
+     buffers that are part of the current `zetteldesk-desktop' and not
      `org-roam-node's."
        (interactive)
        (switch-to-buffer (read-buffer "Zetteldesk Buffers: " nil nil #'zetteldesk-buffer-p)))
@@ -373,14 +380,14 @@ I tried to follow a rather simple idea to do this and not overcomplicate things.
      (defun zetteldesk-node-find ()
        "Execute a filtered `org-roam-node-find'.
      The filter is done using `zetteldesk-node-p' to show only nodes that are
-     part of the current `zetteldesk'"
+     part of the current `zetteldesk-desktop'"
        (interactive)
        (org-roam-node-find nil nil #'zetteldesk-node-p))
 
      (defun zetteldesk-node-insert ()
        "Execute a filtered `org-roam-node-insert'.
      The filter is done using `zetteldesk-node-p' to show only nodes that are
-     part of the current `zetteldesk'"
+     part of the current `zetteldesk-desktop'"
        (interactive)
        (org-roam-node-insert #'zetteldesk-node-p))
 
@@ -398,7 +405,7 @@ I tried to follow a rather simple idea to do this and not overcomplicate things.
      `zetteldesk-node-insert-if-poi-or-moc' to check if that one
      missed something you want to include."
        (interactive)
-       (let* ((node (org-roam-node-read nil #'zetteldesk-node-p #'org-roam-node-sort-by-backlinks))
+       (let* ((node (org-roam-node-read nil #'zetteldesk-node-p #'zetteldesk-roam-node-sort-by-backlinks))
 	      (id (org-roam-node-id node))
 	      (description (org-roam-node-formatted node)))
 	 (insert (org-link-make-string
@@ -430,7 +437,7 @@ I tried to follow a rather simple idea to do this and not overcomplicate things.
      ;; zetteldesk-scratch buffer is a special buffer defined here on which
      ;; you drop all your stuff. Its what molds the whole workflow together
 
-     (defcustom zetteldesk-map (make-sparse-keymap)
+     (defcustom zetteldesk-kb-map (make-sparse-keymap)
        "This variable is the keymap for `zetteldesk-mode'."
        :type 'keymap
        :group 'zetteldesk)
@@ -445,17 +452,6 @@ I tried to follow a rather simple idea to do this and not overcomplicate things.
        :type 'string
        :group 'zetteldesk)
 
-     (define-minor-mode zetteldesk-mode
-       "Toggles the global zetteldesk-mode.
-
-     When turned on, this mode initialises the *zetteldesk-scratch*
-     buffer, a useful part of the whole zetteldesk workflow."
-       :init-value nil
-       :global t
-       :group 'zetteldesk
-       :keymap zetteldesk-map
-       :lighter " zetteldesk")
-
      (defun zetteldesk--create-scratch-buffer ()
        "Create the zetteldesk-scratch buffer and put it in `org-mode'."
        (let ((buffer (generate-new-buffer "*zetteldesk-scratch*"))
@@ -463,7 +459,19 @@ I tried to follow a rather simple idea to do this and not overcomplicate things.
 	 (with-current-buffer buffer
 	   (org-mode))))
 
-     (add-hook 'zetteldesk-mode-on-hook 'zetteldesk--create-scratch-buffer)
+     ;;;###autoload
+     (define-minor-mode zetteldesk-mode
+       "Toggles the global `zetteldesk-mode'.
+
+     When turned on, this mode initialises the *zetteldesk-scratch*
+     buffer, a useful part of the whole zetteldesk workflow."
+       :init-value nil
+       :global t
+       :group 'zetteldesk
+       :keymap zetteldesk-kb-map
+       :lighter " zetteldesk"
+       (when zetteldesk-mode
+	 (zetteldesk--create-scratch-buffer)))
 
      (defmacro zetteldesk-insert-location ()
        "Find the location the zetteldesk-insert functions should insert to.
@@ -487,6 +495,14 @@ I tried to follow a rather simple idea to do this and not overcomplicate things.
        `(when (equal ,arg '(4))
 	  (switch-to-buffer-other-window "*zetteldesk-scratch*")))
 
+     (defmacro zetteldesk--replace-title ()
+       "Replace \"#+title: \" with \"* \".
+
+     A lot of the zetteldesk-insert functions need this functionality
+     so I implemented it as a simple macro."
+       `(while (search-forward "#+title: " nil t)
+	  (replace-match "* " nil t)))
+
      (defun zetteldesk-switch-to-scratch-buffer (&optional arg)
        "Open the zetteldesk-scratch buffer in a split with the current buffer.
 
@@ -501,24 +517,24 @@ I tried to follow a rather simple idea to do this and not overcomplicate things.
      (defun zetteldesk-node-insert-if-poi-or-moc ()
        "Filter `org-roam-node-list' to show zetteldesk-nodes only.
      Then filter that to only those that have the POI or MOC tag with
-     `zetteldesk-node-p' and `org-roam-node-poi-or-moc-p'.  Then
+     `zetteldesk-node-p' and `zetteldesk-roam-node-poi-or-moc-p'.  Then
      insert a link to every one of those nodes and seperate them with
      commas"
        (interactive)
        (let* ((init_list (org-roam-node-list))
 	      (zetteldesk_nodes (cl-remove-if-not #'zetteldesk-node-p init_list))
-	      (nodes_poi (cl-remove-if-not #'org-roam-node-poi-or-moc-p zetteldesk_nodes)))
+	      (nodes_poi (cl-remove-if-not #'zetteldesk-roam-node-poi-or-moc-p zetteldesk_nodes)))
 	 (while nodes_poi
 	   (let* ((node (car nodes_poi))
-		  (description (org-roam-node-formatted (car nodes_poi))))
+		  (description (org-roam-node-formatted node)))
 	     (insert (org-link-make-string
-		      (concat "id:" (org-roam-node-id (car nodes_poi)))
+		      (concat "id:" (org-roam-node-id node))
 		      description))
 	     (insert ", "))
 	   (setq nodes_poi (cdr nodes_poi)))))
 
      (defun zetteldesk-insert-node-contents (&optional arg)
-       "Select a node that is part of the current `zetteldesk'.
+       "Select a node that is part of the current `zetteldesk-desktop'.
      Add a link to it at point and then insert its contents to the
      bottom of the *zetteldesk-scratch* buffer after inserting a
      newline there.  Remove the first 67 characters which is the
@@ -541,12 +557,12 @@ I tried to follow a rather simple idea to do this and not overcomplicate things.
 	   (goto-char (point-max))
 	   (newline)
 	   (insert-file-contents file nil 67)
-	   (replace-string "#+title: " "* ")))
+	   (zetteldesk--replace-title)))
        (zetteldesk-insert-switch-to-scratch arg))
 
      (defun zetteldesk-insert-node-contents-without-link ()
        "\"Sister function\" of `zetteldesk-insert-node-contents'.
-     Finds a node that is part of the `zetteldesk' and inserts its
+     Finds a node that is part of the `zetteldesk-desktop' and inserts its
      contents to the bottom of the zetteldesk-scratch buffer. This
      function differentiates itself, by the fact that it doesn't
      insert an ID link to the node in the current buffer and by the
@@ -565,11 +581,11 @@ I tried to follow a rather simple idea to do this and not overcomplicate things.
 	   (goto-char (point-max))
 	   (newline)
 	   (insert-file-contents file nil 67)
-	   (replace-string "#+title: " "* ")))
+	   (zetteldesk--replace-title)))
        (switch-to-buffer-other-window "*zetteldesk-scratch*"))
 
      (defun zetteldesk-insert-org-file-contents (&optional arg)
-       "Select an org buffer that is in the `zetteldesk'.
+       "Select an org buffer that is in the `zetteldesk-desktop'.
      Insert its contents to the *zetteldesk-scratch* buffer, make its
       title a top level heading and demote all of its headings by one
       level (since the title now acts as a top level heading).  Note
@@ -590,11 +606,11 @@ I tried to follow a rather simple idea to do this and not overcomplicate things.
 	 (save-excursion
 	   (while (not (org-next-visible-heading 1))
 	     (org-metaright)))
-	 (replace-string "#+title: " "* "))
+	 (zetteldesk--replace-title))
        (zetteldesk-insert-switch-to-scratch arg))
 
      (defun zetteldesk-insert-link-to-pdf (&optional arg)
-       "Select a pdf file that is part of the `zetteldesk'.
+       "Select a pdf file that is part of the `zetteldesk-desktop'.
      Prompt for a page in that pdf (defaults to page 1 if you don't
      care about the page).
 
@@ -642,21 +658,22 @@ I tried to follow a rather simple idea to do this and not overcomplicate things.
    #+END_SRC
 
    #+RESULTS:
-   : zetteldesk-insert-info-contents
+   : zetteldesk-insert-link-to-pdf
 
 * Keybindings
 This section is for the default keybindings of zetteldesk.el, implemented in a seperate file zetteldesk-kb.el. I personally don't use these but they are very useful to have
 
 #+BEGIN_SRC elisp :tangle zetteldesk-kb.el
 
-  ;;; zetteldesk-kb.el --- Keybindings for zetteldesk.el
+  ;;; zetteldesk-kb.el --- Keybindings for zetteldesk.el  -*- lexical-binding: t; -*-
 
   ;; Author: Vidianos Giannitsis <vidianosgiannitsis@gmail.com>
   ;; Maintaner: Vidianos Giannitsis <vidianosgiannitsis@gmail.com>
   ;; URL: https://github.com/Vidianos-Giannitsis/zetteldesk-kb.el
-  ;; Package-Requires: ((zetteldesk "0.2") (hydra "0.15") (major-mode-hydra "0.2"))
+  ;; Package-Requires: ((zetteldesk "0.2") (hydra "0.15") (major-mode-hydra "0.2") (emacs "24.1"))
   ;; Created: 3rd March 2022
   ;; License: GPL-3.0
+  ;; Version: 0.2
 
   ;; This file is free software; you can redistribute it and/or modify
   ;; it under the terms of the GNU General Public License as published by
@@ -750,20 +767,17 @@ This section is for the default keybindings of zetteldesk.el, implemented in a s
      (("s" zetteldesk-switch-to-scratch-buffer "Switch to *zetteldesk-scratch*")
       ("i" zetteldesk-insert-hydra/body "Run the Insert Hydra"))))
 
+
   ;; Set up the keybinding to call the hydra
 
-  (defcustom zetteldesk-hydra-prefix nil
-    "Stores the value of the keybinding that calls the main zetteldesk hydra.
-  By default it is set to nil, to
-    allow the user to set the prefix they want"
+  (defcustom zetteldesk-kb-hydra-prefix (kbd "C-c .")
+    "Stores the value of the keybinding that calls the main zetteldesk hydra."
     :type 'string
     :group 'zetteldesk)
 
-  (define-key zetteldesk-map zetteldesk-hydra-prefix 'zetteldesk-main-hydra/body)
-
-  (provide 'zetteldesk-kb)
-
-  ;;; zetteldesk-kb.el ends here
+  (defvar zetteldesk-kb-map
+    (let ((km (make-sparse-keymap)))
+      (define-key km zetteldesk-kb-hydra-prefix #'zetteldesk-main-hydra/body) km))
 
 #+END_SRC
 
@@ -771,14 +785,15 @@ This section is for the default keybindings of zetteldesk.el, implemented in a s
 * Org-remark integration
 ** Preamble
 #+BEGIN_SRC elisp :tangle zetteldesk-remark.el
-  ;;; zetteldesk-remark.el --- Org-Remark integration for zetteldesk.el
+  ;;; zetteldesk-remark.el --- Org-Remark integration for zetteldesk.el   -*- lexical-binding: t; -*-
 
   ;; Author: Vidianos Giannitsis <vidianosgiannitsis@gmail.com>
   ;; Maintaner: Vidianos Giannitsis <vidianosgiannitsis@gmail.com>
   ;; URL: https://github.com/Vidianos-Giannitsis/zetteldesk-remark.el
-  ;; Package-Requires: ((zetteldesk "0.2") (org-remark "1.0") (zetteldesk-kb))
+  ;; Package-Requires: ((zetteldesk "1.0") (org-remark "1.0") (emacs "27.2"))
   ;; Created: 22nd March 2022
   ;; License: GPL-3.0
+  ;; Version: 0.2
 
   ;; This file is free software; you can redistribute it and/or modify
   ;; it under the terms of the GNU General Public License as published by
@@ -806,7 +821,6 @@ This section is for the default keybindings of zetteldesk.el, implemented in a s
   ;;; Code:
 
   (require 'zetteldesk)
-  (require 'zetteldesk-kb)
   (require 'org-remark)
 
 #+END_SRC
@@ -826,20 +840,29 @@ This section is for the default keybindings of zetteldesk.el, implemented in a s
        "Title to use in `zetteldesk-remark-highlight-get-title'.
 
      Initialised to nil and given a value when turning on
-     `zetteldesk-remark-mode'."
+     `zetteldesk-remark-mode' through `zetteldesk-remark-set-title'."
        :type 'string
        :group 'zetteldesk)
 
-     (define-minor-mode zetteldesk-remark-mode
-       "Toggle the zetteldesk-remark-mode.
+     (defcustom zetteldesk-remark-notes-file
+       (concat org-roam-directory "zetteldesk-margin-notes.org")
+       "Default value of `org-remark-notes-file-name' for zetteldesk functions.
 
-     This mode initialises the value of `zetteldesk-remark-title', an
-     important variable for using org-remark in buffers not associated
-     to a file."
-       :init-value nil
-       :global t
-       :group 'zetteldesk
-       :lighter " zetteldesk-remark")
+     When turning on `zetteldesk-remark-mode' this variable's value is
+     set to the value of `org-remark-notes-file-name' through
+     `zetteldesk-remark-set-notes-file'.  This is stored as a variable
+     so you can customise it if you don't like its default value."
+       :type 'string
+       :group 'zetteldesk)
+
+     (defconst zetteldesk-remark-default-notes "marginalia.org"
+       "Constant that stores the default value of `org-remark-notes-file-name'.
+
+     Zetteldesk-remark, for its own purposes changes the value of that
+     variable with `zetteldesk-remark-set-notes-file' to make it more
+     sensible in its own workflow.  However, the original value needs
+     to be restored after the package is done.  For this reason this
+     constant stores that value.")
 
      (defun zetteldesk-remark-set-title ()
        "Set the value of `zetteldesk-remark-title' from a minibuffer prompt."
@@ -849,23 +872,34 @@ This section is for the default keybindings of zetteldesk.el, implemented in a s
        "Helper function to set `org-remark-notes-file-name''s value.
 
      This is the value the zetteldesk-remark functions expect and this
-     function is run in the `zetteldesk-remark-mode-on-hook'."
-       (setq org-remark-notes-file-name
-	     (concat org-roam-directory "zetteldesk-margin-notes.org")))
+     function is run when `zetteldesk-remark-mode' is turned on."
+       (setq org-remark-notes-file-name zetteldesk-remark-notes-file))
 
      (defun zetteldesk-remark-reset-notes-file ()
        "Reset `org-remark-notes-file-name' to its default value.
 
      This is a helper function for zetteldesk-remark to reset the
      value of that variable after turning off
-     `zetteldesk-remark-mode-off-hook'"
-       (custom-reevaluate-setting 'org-remark-notes-file-name))
+     `zetteldesk-remark-mode'."
+       (setq org-remark-notes-file-name zetteldesk-remark-default-notes))
 
-     (add-hook 'zetteldesk-remark-mode-on-hook 'zetteldesk-remark-set-notes-file)
-     (add-hook 'zetteldesk-remark-mode-off-hook 'zetteldesk-remark-reset-notes-file)
-     (add-hook 'zetteldesk-remark-mode-on-hook 'zetteldesk-remark-set-title)
+     ;;;###autoload
+     (define-minor-mode zetteldesk-remark-mode
+       "Toggle the `zetteldesk-remark-mode'.
 
-     (defun org-top-level-heading-title ()
+     This mode initialises the value of `zetteldesk-remark-title', an
+     important variable for using org-remark in buffers not associated
+     to a file."
+       :init-value nil
+       :global t
+       :group 'zetteldesk
+       :lighter " zetteldesk-remark"
+       (if zetteldesk-remark-mode
+	   (progn (zetteldesk-remark-set-notes-file)
+		  (zetteldesk-remark-set-title))
+	 (zetteldesk-remark-reset-notes-file)))
+
+     (defun zetteldesk-remark-top-level-heading-title ()
        "Get the title of the top-level org heading.
 
      This is a helper function for `zetteldesk-remark-highlight-mark'.
@@ -916,7 +950,6 @@ This section is for the default keybindings of zetteldesk.el, implemented in a s
 	      (line-num (org-current-line beg))
 	      (orgid (org-remark-highlight-get-org-id beg)))
 	 (with-current-buffer notes-buf
-	   (when (featurep 'org-remark-convert-legacy) (org-remark-convert-legacy-data))
 	   ;;`org-with-wide-buffer is a macro that should work for non-Org file'
 	   (org-with-wide-buffer
 	    (let ((file-headline (or (org-find-property
@@ -999,6 +1032,12 @@ This section is for the default keybindings of zetteldesk.el, implemented in a s
      `zetteldesk-remark-highlight-save''s final argument which is the
      title of the node that is associated with this section.
 
+     This function is meant to be run in the *zetteldesk-scratch*
+     buffer so evalutating it elsewhere might lead to errors.  For
+     regular buffers associated to a file you should just use the
+     default `org-remark-highlight-mark' as this version relies
+     heavlily on the structure of *zetteldesk-scratch*.
+
      Arguments BEG, END, ID, MODE, LABEL, FACE and PROPERTIES are all
      identical to those in `org-remark-highlight-mark'."
        ;; Ensure to turn on the local minor mode
@@ -1026,7 +1065,7 @@ This section is for the default keybindings of zetteldesk.el, implemented in a s
 	  ;; for mode, nil and :change result in saving the highlight.  :load
 	  ;; bypasses save.
 	  (unless (eq mode :load)
-	    (let* ((node-title (org-top-level-heading-title))
+	    (let* ((node-title (zetteldesk-remark-top-level-heading-title))
 		   (node (org-roam-node-from-title-or-alias node-title))
 		   (filename (org-roam-node-file node)))
 	      (if filename
@@ -1066,29 +1105,11 @@ This section is for the default keybindings of zetteldesk.el, implemented in a s
      coming from zetteldesk-scratch.  This function switches to that
      file."
        (interactive)
-       (pop-to-buffer (find-file (concat org-roam-directory "zetteldesk-margin-notes.org"))))
-
-     ;; -- Keybindings --
-
-     (pretty-hydra-define zetteldesk-remark-hydra (:color blue :title "Org-remark Integration")
-       ("Zetteldesk Remark Functions"
-	(("m" zetteldesk-remark-mark "Mark region and create margin note")
-	 ("s" zetteldesk-remark-switch-to-margin-notes "Switch to the margin notes file"))
-
-	"Org Remark Functions"
-	(("o" org-remark-open "Open margin note")
-	 ("n" org-remark-view-next "Open next margin note" :exit nil)
-	 ("p" org-remark-view-prev "Open previous margin note" :exit nil)
-	 ("v" org-remark-view "Open margin note without switching to it" :exit nil))
-
-	"Quit"
-	(("q" nil "quit"))))
-
-     (pretty-hydra-define+ zetteldesk-main-hydra ()
-       ("Inserting Things and *zetteldesk-scratch*"
-	(("m" zetteldesk-remark-hydra/body "Run the Zetteldesk Remark Hydra"))))
-
+       (pop-to-buffer (find-file zetteldesk-remark-notes-file)))
    #+END_SRC
+
+   #+RESULTS:
+   : zetteldesk-remark-switch-to-margin-notes
      
 * Handling notes on articles better - Literature Notes
    This section is about zetteldesk-ref, an optional extension of zetteldesk.el. It includes integratio nof the zetteldesk with various reference sources such as bibtex entry nodes, which are org-roam nodes, however they need a different behaviour than your typical org-roam node.
@@ -1097,15 +1118,15 @@ This section is for the default keybindings of zetteldesk.el, implemented in a s
     This is just the intro text that needs to be in the start of the file
 
     #+BEGIN_SRC elisp :tangle zetteldesk-ref.el
-      ;;; zetteldesk-ref.el --- A zetteldesk extension for interfacing with
-      ;;; literature nodes.
+      ;;; zetteldesk-ref.el --- A zetteldesk extension for interfacing with literature nodes   -*- lexical-binding: t; -*-
 
       ;; Author: Vidianos Giannitsis <vidianosgiannitsis@gmail.com>
       ;; Maintaner: Vidianos Giannitsis <vidianosgiannitsis@gmail.com>
       ;; URL: https://github.com/Vidianos-Giannitsis/zetteldesk-ref.el
-      ;; Package-Requires: ((zetteldesk "0.3") (bibtex-completion) (zetteldesk-kb))
+      ;; Package-Requires: ((zetteldesk "1.0") (bibtex-completion "1.0") (emacs "26.1"))
       ;; Created: 27th March 2022
       ;; License: GPL-3.0
+      ;; Version: 0.2
 
       ;; This file is free software; you can redistribute it and/or modify
       ;; it under the terms of the GNU General Public License as published by
@@ -1122,22 +1143,15 @@ This section is for the default keybindings of zetteldesk.el, implemented in a s
 
       ;;; Commentary:
 
-      ;; This package provides some optional improvements to
-      ;; zetteldesk.el.  Specifically it introduces mechanisms for handling
-      ;; nodes from the Info program built in to Emacs and literature notes
-      ;; associated to a bibtex entry which are mostly powered by
-      ;; org-noter.  This code makes these reference materials interface
-      ;; better with the zetteldesk.
-
-      ;; Despite not in the hard dependencies of the package, it is highly
-      ;; recommended you use org-roam-bibtex with this package. Its the main
-      ;; package for creating literature notes with org-roam and what this
-      ;; does is make zetteldesk interface better with such nodes.
+      ;; This package provides some optional improvements to zetteldesk.el.
+      ;; Specifically it introduces mechanisms for handling literature notes
+      ;; associated to a bibtex entry which are mostly powered by org-noter.
+      ;; This code makes these reference materials interface better with the
+      ;; zetteldesk
 
       ;;; Code:
 
       (require 'zetteldesk)
-      (require 'zetteldesk-kb)
       (require 'bibtex-completion)
 
     #+END_SRC
@@ -1148,7 +1162,7 @@ This section is for the default keybindings of zetteldesk.el, implemented in a s
    #+BEGIN_SRC elisp :tangle zetteldesk-ref.el
 
      ;; -- Reference Nodes from Bibtex Entries --
-     (defun zetteldesk-note-refs-p ()
+     (defun zetteldesk-ref-note-refs-p ()
        "Predicate function to find all bibtex completion candidates with a note.
 
      Checks if every candidate has the \"=has-note=\" tag using
@@ -1157,16 +1171,16 @@ This section is for the default keybindings of zetteldesk.el, implemented in a s
 		if (assoc "=has-note=" ref)
 		collect ref))
 
-     (defun zetteldesk-citekey-from-refs ()
-       "Finds the \"=key=\" tag from a list of candidates.
+     (defun zetteldesk-ref-citekey-from-refs ()
+       "Find the \"=key=\" tag from a list of candidates.
 
-     The list is collected with `zetteldesk-note-refs-p' which is a
+     The list is collected with `zetteldesk-ref-note-refs-p' which is a
      list of candidates that have notes. Collects it using `assoc'."
-       (cl-loop for ref in (zetteldesk-note-refs-p)
+       (cl-loop for ref in (zetteldesk-ref-note-refs-p)
 		collect (assoc "=key=" ref)))
 
-     (defun zetteldesk-citekey-from-node ()
-       "Collects the citekeys of org-roam-nodes in the `zetteldesk'.
+     (defun zetteldesk-ref-citekey-from-node ()
+       "Collects the citekeys of org-roam-nodes in the `zetteldesk-desktop'.
 
      Ignores nodes for which `org-roam-node-refs' returns nil."
        (let* ((init-list (org-roam-node-list))
@@ -1175,16 +1189,16 @@ This section is for the default keybindings of zetteldesk.el, implemented in a s
 		  if (org-roam-node-refs node)
 		  collect (car (org-roam-node-refs node)))))
 
-     (defun zetteldesk-node-from-refs ()
+     (defun zetteldesk-ref-node-from-refs ()
        "Collects a list of ref nodes.
 
      The nodes are collected from their citekey using
      `org-roam-node-from-ref', while the citekeys themselves are
-     collected from `zetteldesk-citekey-from-refs'."
-       (cl-loop for ref in (zetteldesk-citekey-from-refs)
+     collected from `zetteldesk-ref-citekey-from-refs'."
+       (cl-loop for ref in (zetteldesk-ref-citekey-from-refs)
 		collect (org-roam-node-from-ref (concat "cite:" (cdr ref)))))
 
-     (defun org-roam-node-read--completions* (node-list &optional filter-fn sort-fn)
+     (defun zetteldesk-ref-roam-node-read--completions* (node-list &optional filter-fn sort-fn)
        "Run `org-roam-node-read--completions' with NODE-LIST being a list of nodes.
 
      Typically, the function takes `org-roam-node-list' as the initial
@@ -1212,11 +1226,11 @@ This section is for the default keybindings of zetteldesk.el, implemented in a s
 		       nodes)))
 	 nodes))
 
-     (defun org-roam-node-read* (node-list &optional initial-input filter-fn sort-fn require-match prompt)
+     (defun zetteldesk-ref-roam-node-read* (node-list &optional initial-input filter-fn sort-fn require-match prompt)
        "Run `org-roam-node-read' with the nodes supplied by NODE-LIST.
 
      NODE-LIST is a list of nodes passed to
-     `org-roam-node-read--completions*', which creates an alist of
+     `zetteldesk-ref-roam-node-read--completions*', which creates an alist of
      nodes with the proper formatting to be used in this
      function.  This is for those cases where it is helpful to use your
      own list of nodes, because a predicate function can not filter
@@ -1224,7 +1238,7 @@ This section is for the default keybindings of zetteldesk.el, implemented in a s
 
      INITIAL-INPUT, SORT-FN, FILTER-FN, REQUIRE-MATCH, PROMPT are the
      same as in `org-roam-node-read'."
-       (let* ((nodes (org-roam-node-read--completions* node-list filter-fn sort-fn))
+       (let* ((nodes (zetteldesk-ref-roam-node-read--completions* node-list filter-fn sort-fn))
 	      (prompt (or prompt "Node: "))
 	      (node (completing-read
 		     prompt
@@ -1245,89 +1259,89 @@ This section is for the default keybindings of zetteldesk.el, implemented in a s
 	 (or (cdr (assoc node nodes))
 	     (org-roam-node-create :title node))))
 
-     (defun zetteldesk-add-ref-node-to-desktop (NODE)
-       "Add NODE to the `zetteldesk'.
+     (defun zetteldesk-ref-add-node-to-desktop (NODE)
+       "Add NODE to the `zetteldesk-desktop'.
 
      NODE is a literature note that is part of the org-roam
-     repository. The list of such nodes is gathered with
-     `zetteldesk-node-from-refs'."
-       (interactive (list (org-roam-node-read* (zetteldesk-node-from-refs))))
+     repository.  The list of such nodes is gathered with
+     `zetteldesk-ref-node-from-refs'."
+       (interactive (list (zetteldesk-ref-roam-node-read* (zetteldesk-ref-node-from-refs))))
        (let ((buffer (org-roam-node-buffer NODE))
 	     (file (org-roam-node-file NODE))
 	     (org-startup-with-latex-preview nil))
-	 (if (not (eq buffer nil))
+	 (if buffer
 	     (zetteldesk--add-buffer buffer)
 	   (zetteldesk--add-buffer (find-file-noselect file)))))
 
-     (defun zetteldesk-remove-ref-node-from-desktop (NODE)
-       "Remove NODE from the `zetteldesk'.
+     (defun zetteldesk-ref-remove-node-from-desktop (NODE)
+       "Remove NODE from the `zetteldesk-desktop'.
 
      NODE is a literature note that is currently part of the
      zetteldesk, meaning its part of the list generated by
-     `zetteldesk-node-from-refs'."
+     `zetteldesk-ref-node-from-refs'."
        (interactive
-	(list (org-roam-node-read* (zetteldesk-node-from-refs) nil #'zetteldesk-node-p)))
+	(list (zetteldesk-ref-roam-node-read* (zetteldesk-ref-node-from-refs) nil #'zetteldesk-node-p)))
        (let ((buffer (org-roam-node-buffer NODE)))
 	 (zetteldesk--remove-buffer buffer)))
 
-     (defun zetteldesk-find-ref-node ()
+     (defun zetteldesk-ref-find-ref-node ()
        "Execute a filtered version of `ivy-bibtex-with-notes'.
 
      This does not exactly run `ivy-bibtex-with-notes' as that doesn't
      have a way to filter things.  It collects a list of nodes which
      are reference nodes linked to a bibtex entry through
-     `zetteldesk-node-from-refs' and passes it to
-     `org-roam-node-read*' which is a modified version of
+     `zetteldesk-ref-node-from-refs' and passes it to
+     `zetteldesk-ref-roam-node-read*' which is a modified version of
      `org-roam-node-read' which takes a list of nodes as an
      argument.  Since this required a rewrite of `org-roam-node-read',
      finding the file is done indirectly and not through
      `org-roam-node-file'."
        (interactive)
-       (find-file (org-roam-node-file (org-roam-node-read* (zetteldesk-node-from-refs) nil #'zetteldesk-node-p))))
+       (find-file (org-roam-node-file (zetteldesk-ref-roam-node-read* (zetteldesk-ref-node-from-refs) nil #'zetteldesk-node-p))))
 
-     (defun zetteldesk-ivy-bibtex-with-notes (&optional arg)
-       "Search `zetteldesk' BibTeX entries with notes using `ivy-bibtex'.
+     (defun zetteldesk-ref-ivy-bibtex-with-notes (&optional arg)
+       "Search `zetteldesk-desktop' BibTeX entries with notes using `ivy-bibtex'.
 
      This function builds on `ivy-bibtex-with-notes', meaning it shows
      a list of bibtex entries with notes, however its filtering
-     includes only nodes in the `zetteldesk'.
+     includes only nodes in the `zetteldesk-desktop'.
 
      With a prefix ARG the cache is invalidated and the bibliography
      reread."
        (interactive "P")
-       (cl-letf* ((candidates (zetteldesk-note-refs-p))
+       (cl-letf* ((candidates (zetteldesk-ref-note-refs-p))
 		  ((symbol-function 'bibtex-completion-candidates)
 		   (lambda ()
 		     (cl-loop for ref in candidates
 			      if (member (concat "cite:" (cdr (assoc "=key=" ref)))
-					 (zetteldesk-citekey-from-node))
+					 (zetteldesk-ref-citekey-from-node))
 			      collect ref))))
 	 (ivy-bibtex arg)))
 
-     (defun zetteldesk-helm-bibtex-with-notes (&optional arg)
-       "Search `zetteldesk' BibTeX entries with notes using `helm-bibtex'.
+     (defun zetteldesk-ref-helm-bibtex-with-notes (&optional arg)
+       "Search `zetteldesk-desktop' BibTeX entries with notes using `helm-bibtex'.
 
      This function builds on `helm-bibtex-with-notes', meaning it shows
      a list of bibtex entries with notes, however its filtering
-     includes only nodes in the `zetteldesk'.
+     includes only nodes in the `zetteldesk-desktop'.
 
      With a prefix ARG the cache is invalidated and the bibliography
      reread."
        (interactive "P")
-       (cl-letf* ((candidates (zetteldesk-note-refs-p))
+       (cl-letf* ((candidates (zetteldesk-ref-note-refs-p))
 		  ((symbol-function 'bibtex-completion-candidates)
 		   (lambda ()
 		     (cl-loop for ref in candidates
 			      if (member (concat "cite:" (cdr (assoc "=key=" ref)))
-					 (zetteldesk-citekey-from-node))
+					 (zetteldesk-ref-citekey-from-node))
 			      collect ref))))
-	 (helm-bibtex)))
+	 (helm-bibtex arg)))
 
-     (defun zetteldesk-insert-ref-node-contents (&optional arg)
-       "Select a node that is part of the current `zetteldesk' and a ref node.
+     (defun zetteldesk-ref-insert-ref-node-contents (&optional arg)
+       "Select a node that is part of the current `zetteldesk-desktop' and a ref node.
      Ref nodes are nodes that refer to reference material such as an
-     article.  These are gathered with `zetteldesk-node-from-refs' and
-     shown to the user through `org-roam-node-read*' filtered
+     article.  These are gathered with `zetteldesk-ref-node-from-refs' and
+     shown to the user through `zetteldesk-ref-roam-node-read*' filtered
      according to `zetteldesk-node-p'.
 
      After selection, in the location determined by
@@ -1349,7 +1363,7 @@ This section is for the default keybindings of zetteldesk.el, implemented in a s
      made more sense to order it this way in my opinion."
        (interactive "P")
        (let* ((node
-	       (org-roam-node-read* (zetteldesk-node-from-refs) nil #'zetteldesk-node-p))
+	       (zetteldesk-ref-roam-node-read* (zetteldesk-ref-node-from-refs) nil #'zetteldesk-node-p))
 	      (file (org-roam-node-file node))
 	      (location (zetteldesk-insert-location))
 	      (citekey (concat "cite:" (car (org-roam-node-refs node)))))
@@ -1364,7 +1378,7 @@ This section is for the default keybindings of zetteldesk.el, implemented in a s
 	 (save-excursion
 	   (while (not (org-next-visible-heading 1))
 	     (org-metaright)))
-	 (replace-string "#+title: " "* ")
+	 (zetteldesk--replace-title)
 	 (end-of-line 1)
 	 (newline)
 	 (insert "Bibtex entry for node: "
@@ -1374,7 +1388,7 @@ This section is for the default keybindings of zetteldesk.el, implemented in a s
    #+END_SRC
 
    #+RESULTS:
-   : zetteldesk-insert-ref-node-contents
+   : zetteldesk-ref-insert-ref-node-contents
 
 * Info Nodes
     The info buffer is a single persistent buffer. Therefore, the typical things done in the zetteldesk don't work here. This section is an attempt to fix this and use info nodes together with zetteldesk. There is a function that gives the nodes name in a format that all other Info functions accept. I use that function and add the nodes selected to a variable. The rest of the functions, choose something from that list with completing-read and that is how this system works. For example, the removing mechanisms works by using remove with its argument being the output of the completing-read. The insertion function is a function that prompts the user to select an info buffer that is part of the zetteldesk and inserts its contents to the zetteldesk-scratch buffer under a similarly to above formatted heading. Furthermore, it inserts a link to the info node so you can see it in its context. 
@@ -1383,16 +1397,15 @@ This section is for the default keybindings of zetteldesk.el, implemented in a s
     This is just the intro text that needs to be in the start of the file
 
     #+BEGIN_SRC elisp :tangle zetteldesk-info.el
-      ;;; zetteldesk-info.el --- A zetteldesk extension for interacting with
-      ;;; the info program
+      ;;; zetteldesk-info.el --- A zetteldesk extension for interacting with the info program   -*- lexical-binding: t; -*-
 
       ;; Author: Vidianos Giannitsis <vidianosgiannitsis@gmail.com>
       ;; Maintaner: Vidianos Giannitsis <vidianosgiannitsis@gmail.com>
       ;; URL: https://github.com/Vidianos-Giannitsis/zetteldesk-info.el
-      ;; Package-Requires: ((zetteldesk "0.2") (zetteldesk-kb))
-      ;; Created: 6th April 2022 (as an independent file, existed since the
-      ;; start)
+      ;; Package-Requires: ((zetteldesk "0.4") (emacs "27.1"))
+      ;; Created: 6th April 2022
       ;; License: GPL-3.0
+      ;; Version: 0.2
 
       ;; This file is free software; you can redistribute it and/or modify
       ;; it under the terms of the GNU General Public License as published by
@@ -1433,15 +1446,15 @@ This section is for the default keybindings of zetteldesk.el, implemented in a s
 	:type 'list
 	:group 'zetteldesk)
 
-      (defun zetteldesk-add-info-node-to-desktop ()
+      (defun zetteldesk-info-add-info-node-to-desktop ()
 	"Find the current info-node.
       Then add its name to the list of the variable
       `zetteldesk-info-nodes'"
 	(interactive)
 	(add-to-list 'zetteldesk-info-nodes (Info-copy-current-node-name)))
 
-      (defun zetteldesk-remove-info-node-from-desktop ()
-	"Remove an info-node from the `zetteldesk'.
+      (defun zetteldesk-info-remove-info-node-from-desktop ()
+	"Remove an info-node from the `zetteldesk-desktop'.
       The node is selected through a `completing-read' menu of
       `zetteldesk-info-nodes'"
 	(interactive)
@@ -1457,8 +1470,8 @@ This section is for the default keybindings of zetteldesk.el, implemented in a s
 	(interactive)
 	(Info-goto-node (completing-read "Nodes: " zetteldesk-info-nodes)))
 
-      (defun zetteldesk-insert-info-contents (&optional arg)
-	"Select an info node that is part of the current `zetteldesk'.
+      (defun zetteldesk-info-insert-contents (&optional arg)
+	"Select an info node that is part of the current `zetteldesk-desktop'.
       Uses a `completing-read' prompt for the selection.
 
       Then, in the *zetteldesk-scratch* buffer, go to the end of the
@@ -1510,63 +1523,72 @@ This section is for the default keybindings of zetteldesk.el, implemented in a s
     #+RESULTS:
     : zetteldesk-insert-info-contents
 
-* Adding keybindings to the hydra
+* COMMENT Adding keybindings to the hydra
 For my package zetteldesk.el, I define some keybindings in the file zetteldesk-kb.el. As I do not use these keybindings myself (I prefer the evil-styled ones that suit my config better tbh) that file is never loaded in my config, therefore this should also not be loaded. However, as I often play around with the code here and not in the zetteldesk directory I want to have this here for copy-paste-ability.
 
-#+BEGIN_SRC elisp :tangle zetteldesk-ref.el
+#+BEGIN_SRC elisp :tangle zetteldesk-kb.el
 
-  ;; Add keybindings for this package in the default hydra
+  ;; -- Zetteldesk-ref.el --
 
-  (pretty-hydra-define+ zetteldesk-insert-hydra ()
-    ("Org-Roam"
-     (("r" zetteldesk-insert-ref-node-contents "Link to citekey and Node Contents in *zetteldesk-scratch with special formatting"))))
+  (with-eval-after-load 'zetteldesk-ref
+    (pretty-hydra-define+ zetteldesk-insert-hydra ()
+      ("Org-Roam"
+       (("r" zetteldesk-ref-insert-ref-node-contents "Link to citekey and Node Contents in *zetteldesk-scratch with special formatting")))))
 
-  (pretty-hydra-define zetteldesk-literature-hydra (:color blue :title "Zetteldesk Literature Nodes")
-    ("Org-Roam UI"
-     (("r" zetteldesk-find-ref-node))
+  (with-eval-after-load 'zetteldesk-ref
+    (pretty-hydra-define zetteldesk-literature-hydra (:color blue :title "Zetteldesk Literature Nodes")
+      ("Org-Roam UI"
+       (("r" zetteldesk-ref-find-ref-node))
 
-     "Helm-Bibtex UI"
-      (("h" zetteldesk-helm-bibtex-with-notes))
+       "Helm-Bibtex UI"
+       (("h" zetteldesk-ref-helm-bibtex-with-notes))
 
-      "Ivy-Bibtex UI"
-      (("i" zetteldesk-ivy-bibtex-with-notes))))
+       "Ivy-Bibtex UI"
+       (("i" zetteldesk-ref-ivy-bibtex-with-notes)))))
 
-  (pretty-hydra-define+ zetteldesk-add-hydra ()
-    ("Org-Roam"
-     (("l" zetteldesk-add-ref-node-to-desktop "Add Literature Node"))))
+  (with-eval-after-load 'zetteldesk-ref
+    (pretty-hydra-define+ zetteldesk-add-hydra ()
+      ("Org-Roam"
+       (("l" zetteldesk-ref-add-node-to-desktop "Add Literature Node")))))
 
-  (pretty-hydra-define+ zetteldesk-remove-hydra ()
-    ("Org-Roam"
-     (("l" zetteldesk-remove-ref-node-from-desktop "Remove Literature Node"))))
+  (with-eval-after-load 'zetteldesk-ref
+    (pretty-hydra-define+ zetteldesk-remove-hydra ()
+      ("Org-Roam"
+       (("l" zetteldesk-ref-remove-node-from-desktop "Remove Literature Node")))))
 
-  (pretty-hydra-define+ zetteldesk-main-hydra ()
-    ("Filter Functions"
-     (("l" zetteldesk-literature-hydra/body "Go to Zetteldesk Literature Node"))))
+  (with-eval-after-load 'zetteldesk-ref
+    (pretty-hydra-define+ zetteldesk-main-hydra ()
+      ("Filter Functions"
+       (("l" zetteldesk-literature-hydra/body "Go to Zetteldesk Literature Node")))))
 
 #+END_SRC
 
 #+RESULTS:
 : zetteldesk-main-hydra/body
 
-#+BEGIN_SRC elisp :tangle zetteldesk-info.el
+#+BEGIN_SRC elisp :tangle zetteldesk-kb.el
 
-  ;; Add keybindings for this package in the default hydra
+  ;; -- Zetteldesk-info.el --
 
-  (pretty-hydra-define+ zetteldesk-add-hydra ()
-    ("Other"
-     (("i" zetteldesk-add-info-node-to-desktop "Add Info Node"))))
+  (with-eval-after-load 'zetteldesk-info
+    (pretty-hydra-define+ zetteldesk-add-hydra ()
+      ("Other"
+       (("i" zetteldesk-info-add-info-node-to-desktop "Add Info Node")))))
 
-  (pretty-hydra-define+ zetteldesk-remove-hydra ()
-    ("Other"
-     (("i" zetteldesk-remove-info-node-from-desktop "Remove Info Node"))))
+  (with-eval-after-load 'zetteldesk-info
+    (pretty-hydra-define+ zetteldesk-remove-hydra ()
+      ("Other"
+       (("i" zetteldesk-info-remove-info-node-from-desktop "Remove Info Node")))))
 
-  (pretty-hydra-define+ zetteldesk-main-hydra ()
-    ("Filter Functions"
-     (("I" zetteldesk-info-goto-node "Go to Zetteldesk Info Node"))))
+  (with-eval-after-load 'zetteldesk-info
+    (pretty-hydra-define+ zetteldesk-main-hydra ()
+      ("Filter Functions"
+       (("I" zetteldesk-info-goto-node "Go to Zetteldesk Info Node")))))
 
-  (pretty-hydra-define+ zetteldesk-insert-hydra ()
-    ("Supplementary Material to *zetteldesk-scratch*"
-     (("I" zetteldesk-insert-info-contents "Info Node Contents + Link to context"))))
+  (with-eval-after-load 'zetteldesk-info
+    (pretty-hydra-define+ zetteldesk-insert-hydra ()
+      ("Supplementary Material to *zetteldesk-scratch*"
+       (("I" zetteldesk-info-insert-contents "Info Node Contents + Link to context")))))
 #+END_SRC
 
 * Providing the packages to be loaded in init.el
@@ -1594,4 +1616,11 @@ For my package zetteldesk.el, I define some keybindings in the file zetteldesk-k
 
   (provide 'zetteldesk-remark)
   ;;; zetteldesk-remark.el ends here
+#+END_SRC
+
+#+BEGIN_SRC elisp :tangle zetteldesk-kb.el
+
+  (provide 'zetteldesk-kb)
+  ;;; zetteldesk-kb.el ends here
+
 #+END_SRC

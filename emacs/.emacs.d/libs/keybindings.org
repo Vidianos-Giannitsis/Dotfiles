@@ -50,13 +50,14 @@ General has integration with which-key, so for some functions whose names I find
     "p" 'winner-undo
     "i" '(my/org-pandoc-hydra/body :which-key "Org Pandoc Import")
     "y" 'ivy-yasnippet
-    "z" '(:ignore t :which-key "Zetteldesk")
+    "z" '(zetteldesk-main-hydra/body :which-key "Zetteldesk")
     "s" '(:ignore t :which-key "Sly Commands")
     "g" 'counsel-rg
     "E" 'eperiodic
     "ζ ι" 'zetteldesk-insert-node-contents
     "M" 'imaxima
-    "β" 'counsel-switch-buffer)
+    "β" 'counsel-switch-buffer
+    "F" '(my/flyspell-hydra/body :which-key "Flyspell Commands"))
 
   (general-define-key
    :states 'normal
@@ -97,6 +98,15 @@ General has integration with which-key, so for some functions whose names I find
    "o" '(cfw:open-org-calendar :which-key "Open calendar with scheduled to-dos")
    "g" '(cfw:git-open-calendar :which-key "Open calendar with git commit history"))
 
+  (pretty-hydra-define my/flyspell-hydra (:color blue :title "Flyspell Commands")
+    ("Toggles"
+     (("m" flyspell-mode "Toggle the Flyspell mode")
+      ("b" flyspell-buffer "Spellcheck the current buffer"))
+
+     "Correct word"
+     (("n" flyspell-correct-next "Correct next word" :exit nil)
+      ("p" flyspell-correct-previous "Correct-previous word" :exit nil))))
+
   (general-define-key
    :states 'normal
    :keymaps 'override
@@ -106,32 +116,32 @@ General has integration with which-key, so for some functions whose names I find
    "f" 'eval-defun
    "s" 'eval-last-sexp)
 
-  (general-define-key
-   :states 'normal
-   :keymaps 'override
-   :prefix "SPC z"
-   "b" 'zetteldesk-switch-to-buffer
-   "a" '(:ignore t :which-key "Add to Zetteldesk")
-   "a b" 'zetteldesk-add-to-desktop
-   "a n" 'zetteldesk-add-node-to-desktop
-   "a i" 'zetteldesk-add-info-node-to-desktop
-   "a p" 'zetteldesk-add-poi-or-moc-backlink-to-desktop
-   "r" '(:ignore t :which-key "Remove from Zetteldesk")
-   "r b" 'zetteldesk-remove-from-desktop
-   "r n" 'zetteldesk-remove-node-from-desktop
-   "r i" 'zetteldesk-remove-info-node-from-desktop
-   "n" 'zetteldesk-node-find
-   "s" 'zetteldesk-switch-to-scratch-buffer
-   "i" '(:ignore t :which-key "Insert to Scratch Buffer")
-   "i n" 'zetteldesk-insert-node-contents
-   "i N" 'zetteldesk-insert-node-contents-without-link
-   "i o" 'zetteldesk-insert-org-file-contents
-   "i p" 'zetteldesk-insert-link-to-pdf
-   "i i" 'zetteldesk-insert-info-contents
-   "i r" 'zetteldesk-insert-ref-node-contents
-   "I" 'zetteldesk-info-goto-node
-   "m" 'zetteldesk-switch-to-margin-notes
-   "R" 'zetteldesk-find-ref-node)
+  ;; (general-define-key
+  ;;  :states 'normal
+  ;;  :keymaps 'override
+  ;;  :prefix "SPC z"
+  ;;  "b" 'zetteldesk-switch-to-buffer
+  ;;  "a" '(:ignore t :which-key "Add to Zetteldesk")
+  ;;  "a b" 'zetteldesk-add-to-desktop
+  ;;  "a n" 'zetteldesk-add-node-to-desktop
+  ;;  "a i" 'zetteldesk-add-info-node-to-desktop
+  ;;  "a p" 'zetteldesk-add-poi-or-moc-backlink-to-desktop
+  ;;  "r" '(:ignore t :which-key "Remove from Zetteldesk")
+  ;;  "r b" 'zetteldesk-remove-from-desktop
+  ;;  "r n" 'zetteldesk-remove-node-from-desktop
+  ;;  "r i" 'zetteldesk-remove-info-node-from-desktop
+  ;;  "n" 'zetteldesk-node-find
+  ;;  "s" 'zetteldesk-switch-to-scratch-buffer
+  ;;  "i" '(:ignore t :which-key "Insert to Scratch Buffer")
+  ;;  "i n" 'zetteldesk-insert-node-contents
+  ;;  "i N" 'zetteldesk-insert-node-contents-without-link
+  ;;  "i o" 'zetteldesk-insert-org-file-contents
+  ;;  "i p" 'zetteldesk-insert-link-to-pdf
+  ;;  "i i" 'zetteldesk-insert-info-contents
+  ;;  "i r" 'zetteldesk-insert-ref-node-contents
+  ;;  "I" 'zetteldesk-info-goto-node
+  ;;  "m" 'zetteldesk-switch-to-margin-notes
+  ;;  "R" 'zetteldesk-find-ref-node)
 
   (general-define-key
    :states 'normal

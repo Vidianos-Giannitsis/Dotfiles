@@ -1,29 +1,14 @@
 (undo-tree-save-format-version . 1)
-"d0b22e157c7406adf474e39ffa4f8cd046dfe74f"
-[nil nil nil nil (25202 45156 719815 564000) 0 nil]
-([nil nil ((39318 . 39557) (#("(custom-set-faces
+"0b017c06d074388a2540993e5e9e0d0a5239d122"
+[nil nil nil nil (25248 48543 717367 867000) 0 nil]
+([nil nil ((39519 . 39758) (#("(custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- )" 0 239 (fontified nil)) . -39318) (39314 . 39316) (39291 . 39294) (39237 . 39240) (39227 . 39230) (39188 . 39191) (39134 . 39137) (39124 . 39127) (39086 . 39089) (39032 . 39035) (39022 . 39025) (38983 . 38986) (38952 . 38955) (38929 . 38932) (38889 . 38892) (38873 . 38876) (38842 . 38845) (38796 . 38799) (38780 . 38782) (#("      " 0 6 (fontified nil)) . 38780) (38771 . 38774) (38739 . 38742) (38723 . 38726) (38698 . 38701) (38667 . 38670) (38641 . 38644) (38616 . 38619) (38605 . 38608) (38581 . 38584) (38571 . 38574) (#("
-" 0 1 (fontified nil)) . -39240) (39218 . 39220) (39167 . 39169) (39161 . 39162) (39124 . 39126) (39073 . 39075) (39067 . 39068) (39031 . 39033) (38980 . 38982) (38974 . 38975) (38938 . 38939) (38910 . 38911) (38888 . 38891) (38849 . 38854) (38840 . 38841) (38808 . 38813) (38768 . 38770) (38749 . 38756) (38741 . 38744) (38710 . 38715) (38701 . 38702) (38676 . 38680) (38650 . 38652) (38625 . 38629) (38604 . 38607) (38597 . 38599) (38576 . 38578) (38570 . 38571) (39173 . 39174) (39152 . 39153) (#(" " 0 1 (fontified nil)) . -39152) (39103 . 39104) (#(" " 0 1 (fontified nil)) . 39103) (39098 . 39099) (#("
-" 0 1 (fontified nil)) . 39098) (39098 . 39099) (#(" " 0 1 (fontified nil)) . -39098) (39063 . 39064) (#("
-" 0 1 (fontified nil)) . 39063) (39063 . 39064) (#(" " 0 1 (fontified nil)) . -39063) (39014 . 39015) (#(" " 0 1 (fontified nil)) . 39014) (39009 . 39010) (#("
-" 0 1 (fontified nil)) . 39009) (39009 . 39010) (#(" " 0 1 (fontified nil)) . -39009) (38975 . 38976) (#("
-" 0 1 (fontified nil)) . 38975) (38975 . 38976) (#(" " 0 1 (fontified nil)) . -38975) (38926 . 38927) (#(" " 0 1 (fontified nil)) . 38926) (38921 . 38922) (#("
-" 0 1 (fontified nil)) . 38921) (38921 . 38922) (#(" " 0 1 (fontified nil)) . -38921) (38886 . 38887) (#("
-" 0 1 (fontified nil)) . 38886) (38886 . 38887) (#(" " 0 1 (fontified nil)) . -38886) (38859 . 38860) (#("
-" 0 1 (fontified nil)) . 38859) (38859 . 38860) (#(" " 0 1 (fontified nil)) . -38859) (38840 . 38841) (#("
-" 0 1 (fontified nil)) . 38840) (38840 . 38841) (#(" " 0 1 (fontified nil)) . -38840) (38806 . 38807) (#(" " 0 1 (fontified nil)) . 38806) (38798 . 38799) (#("
-" 0 1 (fontified nil)) . 38798) (38798 . 38799) (#(" " 0 1 (fontified nil)) . -38798) (38771 . 38772) (#("
-" 0 1 (fontified nil)) . 38771) (38771 . 38772) (#(" " 0 1 (fontified nil)) . -38771) (38733 . 38734) (#(" " 0 1 (fontified nil)) . 38733) (38721 . 38722) (#(" " 0 1 (fontified nil)) . 38721) (38716 . 38717) (#("
-" 0 1 (fontified nil)) . 38716) (38716 . 38717) (#(" " 0 1 (fontified nil)) . -38716) (38690 . 38691) (#(" " 0 1 (fontified nil)) . 38690) (38682 . 38683) (#("
-" 0 1 (fontified nil)) . 38682) (38682 . 38683) (#(" " 0 1 (fontified nil)) . -38682) (38661 . 38662) (#(" " 0 1 (fontified nil)) . 38661) (38637 . 38638) (#("
-" 0 1 (fontified nil)) . 38637) (38637 . 38638) (#(" " 0 1 (fontified nil)) . -38637) (38616 . 38617) (#(" " 0 1 (fontified nil)) . 38616) (38598 . 38599) (#(" " 0 1 (fontified nil)) . 38598) (38593 . 38594) (#("
-" 0 1 (fontified nil)) . 38593) (38593 . 38594) (#(" " 0 1 (fontified nil)) . -38593) (38574 . 38575) (#(" " 0 1 (fontified nil)) . 38574) (38569 . 38570) (#(" " 0 1 (fontified nil)) . 38569) (38553 . 39173) (#(" " 0 1 (fontified nil)) . 38553) (38522 . 38554) (#("
-" 0 1 (fontified nil)) . -38522) (36778 . 38523) (#(" " 0 1 (fontified nil)) . 36778) (36748 . 36779) (#("
-" 0 1 (fontified nil)) . -36748) (36667 . 36749) (#(" " 0 1 (fontified nil)) . 36667) (36401 . 36668) (#("(custom-set-variables
+ )" 0 239 (fontified nil)) . -39519) (39515 . 39517) (#("
+" 0 1 (fontified nil)) . -39515) (37771 . 39516) (#(" " 0 1 (fontified nil)) . 37771) (37741 . 37772) (#("
+" 0 1 (fontified nil)) . -37741) (37593 . 37742) (#(" " 0 1 (fontified nil)) . 37593) (37327 . 37594) (#("(custom-set-variables
  ;; custom-set-variables was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
@@ -31,125 +16,133 @@
  '(custom-safe-themes
    '(\"0fffa9669425ff140ff2ae8568c7719705ef33b7a927a0ba7c5e2ffcfac09b75\" default))
  '(package-selected-packages
-   '(evil-collection openwith sequences cl-lib-highlight helm-system-packages async-await popup-complete helm-fuzzy-find evil-space yapfify yaml-mode ws-butler winum which-key web-mode web-beautify vterm volatile-highlights vi-tilde-fringe uuidgen use-package toc-org tagedit spaceline solarized-theme slim-mode scss-mode sass-mode restart-emacs request rainbow-delimiters pyvenv pytest pyenv-mode py-isort pug-mode pspp-mode popwin pip-requirements persp-mode pcre2el paradox org-projectile-helm org-present org-pomodoro org-mime org-download org-bullets open-junk-file neotree move-text mmm-mode markdown-toc magit macrostep lorem-ipsum livid-mode live-py-mode linum-relative link-hint json-mode js2-refactor js-doc intero indent-guide hy-mode hungry-delete htmlize hlint-refactor hl-todo hindent highlight-parentheses highlight-numbers highlight-indentation helm-themes helm-swoop helm-pydoc helm-projectile helm-mode-manager helm-make helm-hoogle helm-flx helm-descbinds helm-css-scss helm-ag haskell-snippets gruvbox-theme google-translate golden-ratio gnuplot gh-md flx-ido fill-column-indicator fancy-battery eyebrowse expand-region exec-path-from-shell evil-visualstar evil-visual-mark-mode evil-unimpaired evil-tutor evil-surround evil-search-highlight-persist evil-numbers evil-nerd-commenter evil-mc evil-matchit evil-lisp-state evil-indent-plus evil-iedit-state evil-exchange evil-escape evil-ediff evil-args evil-anzu eval-sexp-fu emmet-mode elisp-slime-nav dumb-jump diminish define-word cython-mode csv-mode company-ghci company-ghc column-enforce-mode coffee-mode cmm-mode clean-aindent-mode auto-highlight-symbol auto-compile auctex-latexmk anaconda-mode aggressive-indent adaptive-wrap ace-window ace-link ace-jump-helm-line)))" 0 2123 (fontified nil)) . -36401) (t 25199 53909 833430 313000)) nil (25202 45156 719792 306000) 0 nil])
-([nil nil ((39385 . 39624) (#("(custom-set-faces
+   '(evil-collection openwith sequences cl-lib-highlight helm-system-packages async-await popup-complete helm-fuzzy-find evil-space yapfify yaml-mode ws-butler winum which-key web-mode web-beautify vterm volatile-highlights vi-tilde-fringe uuidgen use-package toc-org tagedit spaceline solarized-theme slim-mode scss-mode sass-mode restart-emacs request rainbow-delimiters pyvenv pytest pyenv-mode py-isort pug-mode pspp-mode popwin pip-requirements persp-mode pcre2el paradox org-projectile-helm org-present org-pomodoro org-mime org-download org-bullets open-junk-file neotree move-text mmm-mode markdown-toc magit macrostep lorem-ipsum livid-mode live-py-mode linum-relative link-hint json-mode js2-refactor js-doc intero indent-guide hy-mode hungry-delete htmlize hlint-refactor hl-todo hindent highlight-parentheses highlight-numbers highlight-indentation helm-themes helm-swoop helm-pydoc helm-projectile helm-mode-manager helm-make helm-hoogle helm-flx helm-descbinds helm-css-scss helm-ag haskell-snippets gruvbox-theme google-translate golden-ratio gnuplot gh-md flx-ido fill-column-indicator fancy-battery eyebrowse expand-region exec-path-from-shell evil-visualstar evil-visual-mark-mode evil-unimpaired evil-tutor evil-surround evil-search-highlight-persist evil-numbers evil-nerd-commenter evil-mc evil-matchit evil-lisp-state evil-indent-plus evil-iedit-state evil-exchange evil-escape evil-ediff evil-args evil-anzu eval-sexp-fu emmet-mode elisp-slime-nav dumb-jump diminish define-word cython-mode csv-mode company-ghci company-ghc column-enforce-mode coffee-mode cmm-mode clean-aindent-mode auto-highlight-symbol auto-compile auctex-latexmk anaconda-mode aggressive-indent adaptive-wrap ace-window ace-link ace-jump-helm-line)))" 0 2123 (fontified nil)) . -37327) (t 25231 49704 527357 480000)) nil (25248 48543 717354 108000) 0 nil])
+([nil nil ((39586 . 39825) (#("(custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- )" 0 239 (fontified nil)) . -39385) (39381 . 39383) (39358 . 39361) (39304 . 39307) (39294 . 39297) (39255 . 39258) (39201 . 39204) (39191 . 39194) (39153 . 39156) (39099 . 39102) (39089 . 39092) (39050 . 39053) (39019 . 39022) (38996 . 38999) (38956 . 38959) (38940 . 38943) (38909 . 38912) (38863 . 38866) (38847 . 38849) (#("      " 0 6 (fontified nil)) . 38847) (38838 . 38841) (38806 . 38809) (38790 . 38793) (38765 . 38768) (38734 . 38737) (38708 . 38711) (38683 . 38686) (38672 . 38675) (38648 . 38651) (38638 . 38641) (#("
-" 0 1 (fontified nil)) . -39307) (39285 . 39287) (39234 . 39236) (39228 . 39229) (39191 . 39193) (39140 . 39142) (39134 . 39135) (39098 . 39100) (39047 . 39049) (39041 . 39042) (39005 . 39006) (38977 . 38978) (38955 . 38958) (38916 . 38921) (38907 . 38908) (38875 . 38880) (38835 . 38837) (38816 . 38823) (38808 . 38811) (38777 . 38782) (38768 . 38769) (38743 . 38747) (38717 . 38719) (38692 . 38696) (38671 . 38674) (38664 . 38666) (38643 . 38645) (38637 . 38638) (39240 . 39241) (39219 . 39220) (#(" " 0 1 (fontified nil)) . -39219) (39170 . 39171) (#(" " 0 1 (fontified nil)) . 39170) (39165 . 39166) (#("
-" 0 1 (fontified nil)) . 39165) (39165 . 39166) (#(" " 0 1 (fontified nil)) . -39165) (39130 . 39131) (#("
-" 0 1 (fontified nil)) . 39130) (39130 . 39131) (#(" " 0 1 (fontified nil)) . -39130) (39081 . 39082) (#(" " 0 1 (fontified nil)) . 39081) (39076 . 39077) (#("
-" 0 1 (fontified nil)) . 39076) (39076 . 39077) (#(" " 0 1 (fontified nil)) . -39076) (39042 . 39043) (#("
-" 0 1 (fontified nil)) . 39042) (39042 . 39043) (#(" " 0 1 (fontified nil)) . -39042) (38993 . 38994) (#(" " 0 1 (fontified nil)) . 38993) (38988 . 38989) (#("
-" 0 1 (fontified nil)) . 38988) (38988 . 38989) (#(" " 0 1 (fontified nil)) . -38988) (38953 . 38954) (#("
-" 0 1 (fontified nil)) . 38953) (38953 . 38954) (#(" " 0 1 (fontified nil)) . -38953) (38926 . 38927) (#("
-" 0 1 (fontified nil)) . 38926) (38926 . 38927) (#(" " 0 1 (fontified nil)) . -38926) (38907 . 38908) (#("
-" 0 1 (fontified nil)) . 38907) (38907 . 38908) (#(" " 0 1 (fontified nil)) . -38907) (38873 . 38874) (#(" " 0 1 (fontified nil)) . 38873) (38865 . 38866) (#("
-" 0 1 (fontified nil)) . 38865) (38865 . 38866) (#(" " 0 1 (fontified nil)) . -38865) (38838 . 38839) (#("
-" 0 1 (fontified nil)) . 38838) (38838 . 38839) (#(" " 0 1 (fontified nil)) . -38838) (38800 . 38801) (#(" " 0 1 (fontified nil)) . 38800) (38788 . 38789) (#(" " 0 1 (fontified nil)) . 38788) (38783 . 38784) (#("
-" 0 1 (fontified nil)) . 38783) (38783 . 38784) (#(" " 0 1 (fontified nil)) . -38783) (38757 . 38758) (#(" " 0 1 (fontified nil)) . 38757) (38749 . 38750) (#("
-" 0 1 (fontified nil)) . 38749) (38749 . 38750) (#(" " 0 1 (fontified nil)) . -38749) (38728 . 38729) (#(" " 0 1 (fontified nil)) . 38728) (38704 . 38705) (#("
-" 0 1 (fontified nil)) . 38704) (38704 . 38705) (#(" " 0 1 (fontified nil)) . -38704) (38683 . 38684) (#(" " 0 1 (fontified nil)) . 38683) (38665 . 38666) (#(" " 0 1 (fontified nil)) . 38665) (38660 . 38661) (#("
-" 0 1 (fontified nil)) . 38660) (38660 . 38661) (#(" " 0 1 (fontified nil)) . -38660) (38641 . 38642) (#(" " 0 1 (fontified nil)) . 38641) (38636 . 38637) (#(" " 0 1 (fontified nil)) . 38636) (38620 . 39240) (#(" " 0 1 (fontified nil)) . 38620) (38589 . 38621) (#("
-" 0 1 (fontified nil)) . -38589) (36845 . 38590) (#(" " 0 1 (fontified nil)) . 36845) (36815 . 36846) (#("
-" 0 1 (fontified nil)) . -36815) (36667 . 36816) (#(" " 0 1 (fontified nil)) . 36667) (36401 . 36668) (#("(custom-set-variables
+ )" 0 239 (fontified nil)) . -39586) (39582 . 39584) (#("
+" 0 1 (fontified nil)) . -39582) (37838 . 39583) (#(" " 0 1 (fontified nil)) . 37838) (37808 . 37839) (#("
+" 0 1 (fontified nil)) . -37808) (37593 . 37809) (#(" " 0 1 (fontified nil)) . 37593) (37327 . 37594) (#("(custom-set-variables
  ;; custom-set-variables was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(custom-safe-themes
-   '(\"0fffa9669425ff140ff2ae8568c7719705ef33b7a927a0ba7c5e2ffcfac09b75\" default))
+   '(\"66bdbe1c7016edfa0db7efd03bb09f9ded573ed392722fb099f6ac6c6aefce32\" \"0fffa9669425ff140ff2ae8568c7719705ef33b7a927a0ba7c5e2ffcfac09b75\" default))
  '(package-selected-packages
-   '(evil-collection openwith sequences cl-lib-highlight helm-system-packages async-await popup-complete helm-fuzzy-find evil-space yapfify yaml-mode ws-butler winum which-key web-mode web-beautify vterm volatile-highlights vi-tilde-fringe uuidgen use-package toc-org tagedit spaceline solarized-theme slim-mode scss-mode sass-mode restart-emacs request rainbow-delimiters pyvenv pytest pyenv-mode py-isort pug-mode pspp-mode popwin pip-requirements persp-mode pcre2el paradox org-projectile-helm org-present org-pomodoro org-mime org-download org-bullets open-junk-file neotree move-text mmm-mode markdown-toc magit macrostep lorem-ipsum livid-mode live-py-mode linum-relative link-hint json-mode js2-refactor js-doc intero indent-guide hy-mode hungry-delete htmlize hlint-refactor hl-todo hindent highlight-parentheses highlight-numbers highlight-indentation helm-themes helm-swoop helm-pydoc helm-projectile helm-mode-manager helm-make helm-hoogle helm-flx helm-descbinds helm-css-scss helm-ag haskell-snippets gruvbox-theme google-translate golden-ratio gnuplot gh-md flx-ido fill-column-indicator fancy-battery eyebrowse expand-region exec-path-from-shell evil-visualstar evil-visual-mark-mode evil-unimpaired evil-tutor evil-surround evil-search-highlight-persist evil-numbers evil-nerd-commenter evil-mc evil-matchit evil-lisp-state evil-indent-plus evil-iedit-state evil-exchange evil-escape evil-ediff evil-args evil-anzu eval-sexp-fu emmet-mode elisp-slime-nav dumb-jump diminish define-word cython-mode csv-mode company-ghci company-ghc column-enforce-mode coffee-mode cmm-mode clean-aindent-mode auto-highlight-symbol auto-compile auctex-latexmk anaconda-mode aggressive-indent adaptive-wrap ace-window ace-link ace-jump-helm-line))
- '(safe-local-variable-values
-   '((eval when
-	   (and
-	    (buffer-file-name)
-	    (not
-	     (file-directory-p
-	      (buffer-file-name)))
-	    (string-match-p \"^[^.]\"
-			    (buffer-file-name)))
-	   (unless
-	       (featurep 'package-build)
-	     (let
-		 ((load-path
-		   (cons \"../package-build\" load-path)))
-	       (require 'package-build)))
-	   (unless
-	       (derived-mode-p 'emacs-lisp-mode)
-	     (emacs-lisp-mode))
-	   (package-build-minor-mode)
-	   (setq-local flycheck-checkers nil)
-	   (set
-	    (make-local-variable 'package-build-working-dir)
-	    (expand-file-name \"../working/\"))
-	   (set
-	    (make-local-variable 'package-build-archive-dir)
-	    (expand-file-name \"../packages/\"))
-	   (set
-	    (make-local-variable 'package-build-recipes-dir)
-	    default-directory)))))" 0 2915 (fontified nil)) . -36401) (t 25202 45156 731980 931000)) nil (25207 47832 320296 928000) 0 nil])
-([nil current ((39452 . 39691) (#("(custom-set-faces
+   '(evil-collection openwith sequences cl-lib-highlight helm-system-packages async-await popup-complete helm-fuzzy-find evil-space yapfify yaml-mode ws-butler winum which-key web-mode web-beautify vterm volatile-highlights vi-tilde-fringe uuidgen use-package toc-org tagedit spaceline solarized-theme slim-mode scss-mode sass-mode restart-emacs request rainbow-delimiters pyvenv pytest pyenv-mode py-isort pug-mode pspp-mode popwin pip-requirements persp-mode pcre2el paradox org-projectile-helm org-present org-pomodoro org-mime org-download org-bullets open-junk-file neotree move-text mmm-mode markdown-toc magit macrostep lorem-ipsum livid-mode live-py-mode linum-relative link-hint json-mode js2-refactor js-doc intero indent-guide hy-mode hungry-delete htmlize hlint-refactor hl-todo hindent highlight-parentheses highlight-numbers highlight-indentation helm-themes helm-swoop helm-pydoc helm-projectile helm-mode-manager helm-make helm-hoogle helm-flx helm-descbinds helm-css-scss helm-ag haskell-snippets gruvbox-theme google-translate golden-ratio gnuplot gh-md flx-ido fill-column-indicator fancy-battery eyebrowse expand-region exec-path-from-shell evil-visualstar evil-visual-mark-mode evil-unimpaired evil-tutor evil-surround evil-search-highlight-persist evil-numbers evil-nerd-commenter evil-mc evil-matchit evil-lisp-state evil-indent-plus evil-iedit-state evil-exchange evil-escape evil-ediff evil-args evil-anzu eval-sexp-fu emmet-mode elisp-slime-nav dumb-jump diminish define-word cython-mode csv-mode company-ghci company-ghc column-enforce-mode coffee-mode cmm-mode clean-aindent-mode auto-highlight-symbol auto-compile auctex-latexmk anaconda-mode aggressive-indent adaptive-wrap ace-window ace-link ace-jump-helm-line)))" 0 2190 (fontified nil)) . -37327) (t 25248 48543 725908 81000)) nil (25248 48570 325979 897000) 0 nil])
+([nil nil ((39653 . 39892) (#("(custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- )" 0 239 (fontified nil)) . -39452) (39448 . 39450) (39425 . 39428) (39371 . 39374) (39361 . 39364) (39322 . 39325) (39268 . 39271) (39258 . 39261) (39220 . 39223) (39166 . 39169) (39156 . 39159) (39117 . 39120) (39086 . 39089) (39063 . 39066) (39023 . 39026) (39007 . 39010) (38976 . 38979) (38930 . 38933) (38914 . 38916) (#("      " 0 6 (fontified nil)) . 38914) (38905 . 38908) (38873 . 38876) (38857 . 38860) (38832 . 38835) (38801 . 38804) (38775 . 38778) (38750 . 38753) (38739 . 38742) (38715 . 38718) (38705 . 38708) (#("
-" 0 1 (fontified nil)) . -39374) (39352 . 39354) (39301 . 39303) (39295 . 39296) (39258 . 39260) (39207 . 39209) (39201 . 39202) (39165 . 39167) (39114 . 39116) (39108 . 39109) (39072 . 39073) (39044 . 39045) (39022 . 39025) (38983 . 38988) (38974 . 38975) (38942 . 38947) (38902 . 38904) (38883 . 38890) (38875 . 38878) (38844 . 38849) (38835 . 38836) (38810 . 38814) (38784 . 38786) (38759 . 38763) (38738 . 38741) (38731 . 38733) (38710 . 38712) (38704 . 38705) (39307 . 39308) (39286 . 39287) (#(" " 0 1 (fontified nil)) . -39286) (39237 . 39238) (#(" " 0 1 (fontified nil)) . 39237) (39232 . 39233) (#("
-" 0 1 (fontified nil)) . 39232) (39232 . 39233) (#(" " 0 1 (fontified nil)) . -39232) (39197 . 39198) (#("
-" 0 1 (fontified nil)) . 39197) (39197 . 39198) (#(" " 0 1 (fontified nil)) . -39197) (39148 . 39149) (#(" " 0 1 (fontified nil)) . 39148) (39143 . 39144) (#("
-" 0 1 (fontified nil)) . 39143) (39143 . 39144) (#(" " 0 1 (fontified nil)) . -39143) (39109 . 39110) (#("
-" 0 1 (fontified nil)) . 39109) (39109 . 39110) (#(" " 0 1 (fontified nil)) . -39109) (39060 . 39061) (#(" " 0 1 (fontified nil)) . 39060) (39055 . 39056) (#("
-" 0 1 (fontified nil)) . 39055) (39055 . 39056) (#(" " 0 1 (fontified nil)) . -39055) (39020 . 39021) (#("
-" 0 1 (fontified nil)) . 39020) (39020 . 39021) (#(" " 0 1 (fontified nil)) . -39020) (38993 . 38994) (#("
-" 0 1 (fontified nil)) . 38993) (38993 . 38994) (#(" " 0 1 (fontified nil)) . -38993) (38974 . 38975) (#("
-" 0 1 (fontified nil)) . 38974) (38974 . 38975) (#(" " 0 1 (fontified nil)) . -38974) (38940 . 38941) (#(" " 0 1 (fontified nil)) . 38940) (38932 . 38933) (#("
-" 0 1 (fontified nil)) . 38932) (38932 . 38933) (#(" " 0 1 (fontified nil)) . -38932) (38905 . 38906) (#("
-" 0 1 (fontified nil)) . 38905) (38905 . 38906) (#(" " 0 1 (fontified nil)) . -38905) (38867 . 38868) (#(" " 0 1 (fontified nil)) . 38867) (38855 . 38856) (#(" " 0 1 (fontified nil)) . 38855) (38850 . 38851) (#("
-" 0 1 (fontified nil)) . 38850) (38850 . 38851) (#(" " 0 1 (fontified nil)) . -38850) (38824 . 38825) (#(" " 0 1 (fontified nil)) . 38824) (38816 . 38817) (#("
-" 0 1 (fontified nil)) . 38816) (38816 . 38817) (#(" " 0 1 (fontified nil)) . -38816) (38795 . 38796) (#(" " 0 1 (fontified nil)) . 38795) (38771 . 38772) (#("
-" 0 1 (fontified nil)) . 38771) (38771 . 38772) (#(" " 0 1 (fontified nil)) . -38771) (38750 . 38751) (#(" " 0 1 (fontified nil)) . 38750) (38732 . 38733) (#(" " 0 1 (fontified nil)) . 38732) (38727 . 38728) (#("
-" 0 1 (fontified nil)) . 38727) (38727 . 38728) (#(" " 0 1 (fontified nil)) . -38727) (38708 . 38709) (#(" " 0 1 (fontified nil)) . 38708) (38703 . 38704) (#(" " 0 1 (fontified nil)) . 38703) (38687 . 39307) (#(" " 0 1 (fontified nil)) . 38687) (38656 . 38688) (#("
-" 0 1 (fontified nil)) . -38656) (36912 . 38657) (#(" " 0 1 (fontified nil)) . 36912) (36882 . 36913) (#("
-" 0 1 (fontified nil)) . -36882) (36667 . 36883) (#(" " 0 1 (fontified nil)) . 36667) (36401 . 36668) (#("(custom-set-variables
+ )" 0 239 (fontified nil)) . -39653) (39649 . 39651) (#("
+" 0 1 (fontified nil)) . -39649) (37905 . 39650) (#(" " 0 1 (fontified nil)) . 37905) (37875 . 37906) (#("
+" 0 1 (fontified nil)) . -37875) (37593 . 37876) (#(" " 0 1 (fontified nil)) . 37593) (37327 . 37594) (#("(custom-set-variables
  ;; custom-set-variables was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(custom-safe-themes
-   '(\"4f1d2476c290eaa5d9ab9d13b60f2c0f1c8fa7703596fa91b235db7f99a9441b\" \"0fffa9669425ff140ff2ae8568c7719705ef33b7a927a0ba7c5e2ffcfac09b75\" default))
+   '(\"d268b67e0935b9ebc427cad88ded41e875abfcc27abd409726a92e55459e0d01\" \"66bdbe1c7016edfa0db7efd03bb09f9ded573ed392722fb099f6ac6c6aefce32\" \"0fffa9669425ff140ff2ae8568c7719705ef33b7a927a0ba7c5e2ffcfac09b75\" default))
  '(package-selected-packages
-   '(evil-collection openwith sequences cl-lib-highlight helm-system-packages async-await popup-complete helm-fuzzy-find evil-space yapfify yaml-mode ws-butler winum which-key web-mode web-beautify vterm volatile-highlights vi-tilde-fringe uuidgen use-package toc-org tagedit spaceline solarized-theme slim-mode scss-mode sass-mode restart-emacs request rainbow-delimiters pyvenv pytest pyenv-mode py-isort pug-mode pspp-mode popwin pip-requirements persp-mode pcre2el paradox org-projectile-helm org-present org-pomodoro org-mime org-download org-bullets open-junk-file neotree move-text mmm-mode markdown-toc magit macrostep lorem-ipsum livid-mode live-py-mode linum-relative link-hint json-mode js2-refactor js-doc intero indent-guide hy-mode hungry-delete htmlize hlint-refactor hl-todo hindent highlight-parentheses highlight-numbers highlight-indentation helm-themes helm-swoop helm-pydoc helm-projectile helm-mode-manager helm-make helm-hoogle helm-flx helm-descbinds helm-css-scss helm-ag haskell-snippets gruvbox-theme google-translate golden-ratio gnuplot gh-md flx-ido fill-column-indicator fancy-battery eyebrowse expand-region exec-path-from-shell evil-visualstar evil-visual-mark-mode evil-unimpaired evil-tutor evil-surround evil-search-highlight-persist evil-numbers evil-nerd-commenter evil-mc evil-matchit evil-lisp-state evil-indent-plus evil-iedit-state evil-exchange evil-escape evil-ediff evil-args evil-anzu eval-sexp-fu emmet-mode elisp-slime-nav dumb-jump diminish define-word cython-mode csv-mode company-ghci company-ghc column-enforce-mode coffee-mode cmm-mode clean-aindent-mode auto-highlight-symbol auto-compile auctex-latexmk anaconda-mode aggressive-indent adaptive-wrap ace-window ace-link ace-jump-helm-line))
- '(safe-local-variable-values
-   '((eval when
-	   (and
-	    (buffer-file-name)
-	    (not
-	     (file-directory-p
-	      (buffer-file-name)))
-	    (string-match-p \"^[^.]\"
-			    (buffer-file-name)))
-	   (unless
-	       (featurep 'package-build)
-	     (let
-		 ((load-path
-		   (cons \"../package-build\" load-path)))
-	       (require 'package-build)))
-	   (unless
-	       (derived-mode-p 'emacs-lisp-mode)
-	     (emacs-lisp-mode))
-	   (package-build-minor-mode)
-	   (setq-local flycheck-checkers nil)
-	   (set
-	    (make-local-variable 'package-build-working-dir)
-	    (expand-file-name \"../working/\"))
-	   (set
-	    (make-local-variable 'package-build-archive-dir)
-	    (expand-file-name \"../packages/\"))
-	   (set
-	    (make-local-variable 'package-build-recipes-dir)
-	    default-directory)))))" 0 2982 (fontified nil)) . -36401) (t 25207 47832 335682 620000)) nil (25207 54874 828645 61000) 0 nil])
+   '(evil-collection openwith sequences cl-lib-highlight helm-system-packages async-await popup-complete helm-fuzzy-find evil-space yapfify yaml-mode ws-butler winum which-key web-mode web-beautify vterm volatile-highlights vi-tilde-fringe uuidgen use-package toc-org tagedit spaceline solarized-theme slim-mode scss-mode sass-mode restart-emacs request rainbow-delimiters pyvenv pytest pyenv-mode py-isort pug-mode pspp-mode popwin pip-requirements persp-mode pcre2el paradox org-projectile-helm org-present org-pomodoro org-mime org-download org-bullets open-junk-file neotree move-text mmm-mode markdown-toc magit macrostep lorem-ipsum livid-mode live-py-mode linum-relative link-hint json-mode js2-refactor js-doc intero indent-guide hy-mode hungry-delete htmlize hlint-refactor hl-todo hindent highlight-parentheses highlight-numbers highlight-indentation helm-themes helm-swoop helm-pydoc helm-projectile helm-mode-manager helm-make helm-hoogle helm-flx helm-descbinds helm-css-scss helm-ag haskell-snippets gruvbox-theme google-translate golden-ratio gnuplot gh-md flx-ido fill-column-indicator fancy-battery eyebrowse expand-region exec-path-from-shell evil-visualstar evil-visual-mark-mode evil-unimpaired evil-tutor evil-surround evil-search-highlight-persist evil-numbers evil-nerd-commenter evil-mc evil-matchit evil-lisp-state evil-indent-plus evil-iedit-state evil-exchange evil-escape evil-ediff evil-args evil-anzu eval-sexp-fu emmet-mode elisp-slime-nav dumb-jump diminish define-word cython-mode csv-mode company-ghci company-ghc column-enforce-mode coffee-mode cmm-mode clean-aindent-mode auto-highlight-symbol auto-compile auctex-latexmk anaconda-mode aggressive-indent adaptive-wrap ace-window ace-link ace-jump-helm-line)))" 0 2257 (fontified nil)) . -37327) (t 25248 48570 336265 198000)) nil (25248 48602 431303 648000) 0 nil])
+([nil nil ((39720 . 39959) (#("(custom-set-faces
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ )" 0 239 (fontified nil)) . -39720) (39716 . 39718) (#("
+" 0 1 (fontified nil)) . -39716) (37972 . 39717) (#(" " 0 1 (fontified nil)) . 37972) (37942 . 37973) (#("
+" 0 1 (fontified nil)) . -37942) (37593 . 37943) (#(" " 0 1 (fontified nil)) . 37593) (37327 . 37594) (#("(custom-set-variables
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(custom-safe-themes
+   '(\"566c61d0e40a728d5b631ac276017ace6866574ee58a4b6fbc770e436e481d57\" \"d268b67e0935b9ebc427cad88ded41e875abfcc27abd409726a92e55459e0d01\" \"66bdbe1c7016edfa0db7efd03bb09f9ded573ed392722fb099f6ac6c6aefce32\" \"0fffa9669425ff140ff2ae8568c7719705ef33b7a927a0ba7c5e2ffcfac09b75\" default))
+ '(package-selected-packages
+   '(evil-collection openwith sequences cl-lib-highlight helm-system-packages async-await popup-complete helm-fuzzy-find evil-space yapfify yaml-mode ws-butler winum which-key web-mode web-beautify vterm volatile-highlights vi-tilde-fringe uuidgen use-package toc-org tagedit spaceline solarized-theme slim-mode scss-mode sass-mode restart-emacs request rainbow-delimiters pyvenv pytest pyenv-mode py-isort pug-mode pspp-mode popwin pip-requirements persp-mode pcre2el paradox org-projectile-helm org-present org-pomodoro org-mime org-download org-bullets open-junk-file neotree move-text mmm-mode markdown-toc magit macrostep lorem-ipsum livid-mode live-py-mode linum-relative link-hint json-mode js2-refactor js-doc intero indent-guide hy-mode hungry-delete htmlize hlint-refactor hl-todo hindent highlight-parentheses highlight-numbers highlight-indentation helm-themes helm-swoop helm-pydoc helm-projectile helm-mode-manager helm-make helm-hoogle helm-flx helm-descbinds helm-css-scss helm-ag haskell-snippets gruvbox-theme google-translate golden-ratio gnuplot gh-md flx-ido fill-column-indicator fancy-battery eyebrowse expand-region exec-path-from-shell evil-visualstar evil-visual-mark-mode evil-unimpaired evil-tutor evil-surround evil-search-highlight-persist evil-numbers evil-nerd-commenter evil-mc evil-matchit evil-lisp-state evil-indent-plus evil-iedit-state evil-exchange evil-escape evil-ediff evil-args evil-anzu eval-sexp-fu emmet-mode elisp-slime-nav dumb-jump diminish define-word cython-mode csv-mode company-ghci company-ghc column-enforce-mode coffee-mode cmm-mode clean-aindent-mode auto-highlight-symbol auto-compile auctex-latexmk anaconda-mode aggressive-indent adaptive-wrap ace-window ace-link ace-jump-helm-line)))" 0 2324 (fontified nil)) . -37327) (t 25248 48602 443362 812000)) nil (25248 48623 659921 500000) 0 nil])
+([nil nil ((39787 . 40026) (#("(custom-set-faces
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ )" 0 239 (fontified nil)) . -39787) (39783 . 39785) (#("
+" 0 1 (fontified nil)) . -39783) (38039 . 39784) (#(" " 0 1 (fontified nil)) . 38039) (38009 . 38040) (#("
+" 0 1 (fontified nil)) . -38009) (37593 . 38010) (#(" " 0 1 (fontified nil)) . 37593) (37327 . 37594) (#("(custom-set-variables
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(custom-safe-themes
+   '(\"fa2b58bb98b62c3b8cf3b6f02f058ef7827a8e497125de0254f56e373abee088\" \"566c61d0e40a728d5b631ac276017ace6866574ee58a4b6fbc770e436e481d57\" \"d268b67e0935b9ebc427cad88ded41e875abfcc27abd409726a92e55459e0d01\" \"66bdbe1c7016edfa0db7efd03bb09f9ded573ed392722fb099f6ac6c6aefce32\" \"0fffa9669425ff140ff2ae8568c7719705ef33b7a927a0ba7c5e2ffcfac09b75\" default))
+ '(package-selected-packages
+   '(evil-collection openwith sequences cl-lib-highlight helm-system-packages async-await popup-complete helm-fuzzy-find evil-space yapfify yaml-mode ws-butler winum which-key web-mode web-beautify vterm volatile-highlights vi-tilde-fringe uuidgen use-package toc-org tagedit spaceline solarized-theme slim-mode scss-mode sass-mode restart-emacs request rainbow-delimiters pyvenv pytest pyenv-mode py-isort pug-mode pspp-mode popwin pip-requirements persp-mode pcre2el paradox org-projectile-helm org-present org-pomodoro org-mime org-download org-bullets open-junk-file neotree move-text mmm-mode markdown-toc magit macrostep lorem-ipsum livid-mode live-py-mode linum-relative link-hint json-mode js2-refactor js-doc intero indent-guide hy-mode hungry-delete htmlize hlint-refactor hl-todo hindent highlight-parentheses highlight-numbers highlight-indentation helm-themes helm-swoop helm-pydoc helm-projectile helm-mode-manager helm-make helm-hoogle helm-flx helm-descbinds helm-css-scss helm-ag haskell-snippets gruvbox-theme google-translate golden-ratio gnuplot gh-md flx-ido fill-column-indicator fancy-battery eyebrowse expand-region exec-path-from-shell evil-visualstar evil-visual-mark-mode evil-unimpaired evil-tutor evil-surround evil-search-highlight-persist evil-numbers evil-nerd-commenter evil-mc evil-matchit evil-lisp-state evil-indent-plus evil-iedit-state evil-exchange evil-escape evil-ediff evil-args evil-anzu eval-sexp-fu emmet-mode elisp-slime-nav dumb-jump diminish define-word cython-mode csv-mode company-ghci company-ghc column-enforce-mode coffee-mode cmm-mode clean-aindent-mode auto-highlight-symbol auto-compile auctex-latexmk anaconda-mode aggressive-indent adaptive-wrap ace-window ace-link ace-jump-helm-line)))" 0 2391 (fontified nil)) . -37327) (t 25248 48623 666981 51000)) nil (25248 48659 642226 412000) 0 nil])
+([nil nil ((39854 . 40093) (#("(custom-set-faces
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ )" 0 239 (fontified nil)) . -39854) (39850 . 39852) (#("
+" 0 1 (fontified nil)) . -39850) (38106 . 39851) (#(" " 0 1 (fontified nil)) . 38106) (38076 . 38107) (#("
+" 0 1 (fontified nil)) . -38076) (37593 . 38077) (#(" " 0 1 (fontified nil)) . 37593) (37327 . 37594) (#("(custom-set-variables
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(custom-safe-themes
+   '(\"f91395598d4cb3e2ae6a2db8527ceb83fed79dbaf007f435de3e91e5bda485fb\" \"fa2b58bb98b62c3b8cf3b6f02f058ef7827a8e497125de0254f56e373abee088\" \"566c61d0e40a728d5b631ac276017ace6866574ee58a4b6fbc770e436e481d57\" \"d268b67e0935b9ebc427cad88ded41e875abfcc27abd409726a92e55459e0d01\" \"66bdbe1c7016edfa0db7efd03bb09f9ded573ed392722fb099f6ac6c6aefce32\" \"0fffa9669425ff140ff2ae8568c7719705ef33b7a927a0ba7c5e2ffcfac09b75\" default))
+ '(package-selected-packages
+   '(evil-collection openwith sequences cl-lib-highlight helm-system-packages async-await popup-complete helm-fuzzy-find evil-space yapfify yaml-mode ws-butler winum which-key web-mode web-beautify vterm volatile-highlights vi-tilde-fringe uuidgen use-package toc-org tagedit spaceline solarized-theme slim-mode scss-mode sass-mode restart-emacs request rainbow-delimiters pyvenv pytest pyenv-mode py-isort pug-mode pspp-mode popwin pip-requirements persp-mode pcre2el paradox org-projectile-helm org-present org-pomodoro org-mime org-download org-bullets open-junk-file neotree move-text mmm-mode markdown-toc magit macrostep lorem-ipsum livid-mode live-py-mode linum-relative link-hint json-mode js2-refactor js-doc intero indent-guide hy-mode hungry-delete htmlize hlint-refactor hl-todo hindent highlight-parentheses highlight-numbers highlight-indentation helm-themes helm-swoop helm-pydoc helm-projectile helm-mode-manager helm-make helm-hoogle helm-flx helm-descbinds helm-css-scss helm-ag haskell-snippets gruvbox-theme google-translate golden-ratio gnuplot gh-md flx-ido fill-column-indicator fancy-battery eyebrowse expand-region exec-path-from-shell evil-visualstar evil-visual-mark-mode evil-unimpaired evil-tutor evil-surround evil-search-highlight-persist evil-numbers evil-nerd-commenter evil-mc evil-matchit evil-lisp-state evil-indent-plus evil-iedit-state evil-exchange evil-escape evil-ediff evil-args evil-anzu eval-sexp-fu emmet-mode elisp-slime-nav dumb-jump diminish define-word cython-mode csv-mode company-ghci company-ghc column-enforce-mode coffee-mode cmm-mode clean-aindent-mode auto-highlight-symbol auto-compile auctex-latexmk anaconda-mode aggressive-indent adaptive-wrap ace-window ace-link ace-jump-helm-line)))" 0 2458 (fontified nil)) . -37327) (t 25248 48659 650797 497000)) nil (25248 48668 869723 917000) 0 nil])
+([nil nil ((39921 . 40160) (#("(custom-set-faces
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ )" 0 239 (fontified nil)) . -39921) (39917 . 39919) (#("
+" 0 1 (fontified nil)) . -39917) (38173 . 39918) (#(" " 0 1 (fontified nil)) . 38173) (38143 . 38174) (#("
+" 0 1 (fontified nil)) . -38143) (37593 . 38144) (#(" " 0 1 (fontified nil)) . 37593) (37327 . 37594) (#("(custom-set-variables
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(custom-safe-themes
+   '(\"a7b20039f50e839626f8d6aa96df62afebb56a5bbd1192f557cb2efb5fcfb662\" \"f91395598d4cb3e2ae6a2db8527ceb83fed79dbaf007f435de3e91e5bda485fb\" \"fa2b58bb98b62c3b8cf3b6f02f058ef7827a8e497125de0254f56e373abee088\" \"566c61d0e40a728d5b631ac276017ace6866574ee58a4b6fbc770e436e481d57\" \"d268b67e0935b9ebc427cad88ded41e875abfcc27abd409726a92e55459e0d01\" \"66bdbe1c7016edfa0db7efd03bb09f9ded573ed392722fb099f6ac6c6aefce32\" \"0fffa9669425ff140ff2ae8568c7719705ef33b7a927a0ba7c5e2ffcfac09b75\" default))
+ '(package-selected-packages
+   '(evil-collection openwith sequences cl-lib-highlight helm-system-packages async-await popup-complete helm-fuzzy-find evil-space yapfify yaml-mode ws-butler winum which-key web-mode web-beautify vterm volatile-highlights vi-tilde-fringe uuidgen use-package toc-org tagedit spaceline solarized-theme slim-mode scss-mode sass-mode restart-emacs request rainbow-delimiters pyvenv pytest pyenv-mode py-isort pug-mode pspp-mode popwin pip-requirements persp-mode pcre2el paradox org-projectile-helm org-present org-pomodoro org-mime org-download org-bullets open-junk-file neotree move-text mmm-mode markdown-toc magit macrostep lorem-ipsum livid-mode live-py-mode linum-relative link-hint json-mode js2-refactor js-doc intero indent-guide hy-mode hungry-delete htmlize hlint-refactor hl-todo hindent highlight-parentheses highlight-numbers highlight-indentation helm-themes helm-swoop helm-pydoc helm-projectile helm-mode-manager helm-make helm-hoogle helm-flx helm-descbinds helm-css-scss helm-ag haskell-snippets gruvbox-theme google-translate golden-ratio gnuplot gh-md flx-ido fill-column-indicator fancy-battery eyebrowse expand-region exec-path-from-shell evil-visualstar evil-visual-mark-mode evil-unimpaired evil-tutor evil-surround evil-search-highlight-persist evil-numbers evil-nerd-commenter evil-mc evil-matchit evil-lisp-state evil-indent-plus evil-iedit-state evil-exchange evil-escape evil-ediff evil-args evil-anzu eval-sexp-fu emmet-mode elisp-slime-nav dumb-jump diminish define-word cython-mode csv-mode company-ghci company-ghc column-enforce-mode coffee-mode cmm-mode clean-aindent-mode auto-highlight-symbol auto-compile auctex-latexmk anaconda-mode aggressive-indent adaptive-wrap ace-window ace-link ace-jump-helm-line)))" 0 2525 (fontified nil)) . -37327) (t 25248 48668 877588 55000)) nil (25248 48817 373222 86000) 0 nil])
+([nil nil ((39988 . 40227) (#("(custom-set-faces
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ )" 0 239 (fontified nil)) . -39988) (39984 . 39986) (#("
+" 0 1 (fontified nil)) . -39984) (38240 . 39985) (#(" " 0 1 (fontified nil)) . 38240) (38210 . 38241) (#("
+" 0 1 (fontified nil)) . -38210) (37593 . 38211) (#(" " 0 1 (fontified nil)) . 37593) (37327 . 37594) (#("(custom-set-variables
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(custom-safe-themes
+   '(\"1704976a1797342a1b4ea7a75bdbb3be1569f4619134341bd5a4c1cfb16abad4\" \"a7b20039f50e839626f8d6aa96df62afebb56a5bbd1192f557cb2efb5fcfb662\" \"f91395598d4cb3e2ae6a2db8527ceb83fed79dbaf007f435de3e91e5bda485fb\" \"fa2b58bb98b62c3b8cf3b6f02f058ef7827a8e497125de0254f56e373abee088\" \"566c61d0e40a728d5b631ac276017ace6866574ee58a4b6fbc770e436e481d57\" \"d268b67e0935b9ebc427cad88ded41e875abfcc27abd409726a92e55459e0d01\" \"66bdbe1c7016edfa0db7efd03bb09f9ded573ed392722fb099f6ac6c6aefce32\" \"0fffa9669425ff140ff2ae8568c7719705ef33b7a927a0ba7c5e2ffcfac09b75\" default))
+ '(package-selected-packages
+   '(evil-collection openwith sequences cl-lib-highlight helm-system-packages async-await popup-complete helm-fuzzy-find evil-space yapfify yaml-mode ws-butler winum which-key web-mode web-beautify vterm volatile-highlights vi-tilde-fringe uuidgen use-package toc-org tagedit spaceline solarized-theme slim-mode scss-mode sass-mode restart-emacs request rainbow-delimiters pyvenv pytest pyenv-mode py-isort pug-mode pspp-mode popwin pip-requirements persp-mode pcre2el paradox org-projectile-helm org-present org-pomodoro org-mime org-download org-bullets open-junk-file neotree move-text mmm-mode markdown-toc magit macrostep lorem-ipsum livid-mode live-py-mode linum-relative link-hint json-mode js2-refactor js-doc intero indent-guide hy-mode hungry-delete htmlize hlint-refactor hl-todo hindent highlight-parentheses highlight-numbers highlight-indentation helm-themes helm-swoop helm-pydoc helm-projectile helm-mode-manager helm-make helm-hoogle helm-flx helm-descbinds helm-css-scss helm-ag haskell-snippets gruvbox-theme google-translate golden-ratio gnuplot gh-md flx-ido fill-column-indicator fancy-battery eyebrowse expand-region exec-path-from-shell evil-visualstar evil-visual-mark-mode evil-unimpaired evil-tutor evil-surround evil-search-highlight-persist evil-numbers evil-nerd-commenter evil-mc evil-matchit evil-lisp-state evil-indent-plus evil-iedit-state evil-exchange evil-escape evil-ediff evil-args evil-anzu eval-sexp-fu emmet-mode elisp-slime-nav dumb-jump diminish define-word cython-mode csv-mode company-ghci company-ghc column-enforce-mode coffee-mode cmm-mode clean-aindent-mode auto-highlight-symbol auto-compile auctex-latexmk anaconda-mode aggressive-indent adaptive-wrap ace-window ace-link ace-jump-helm-line)))" 0 2592 (fontified nil)) . -37327) (t 25248 48817 382916 170000)) nil (25248 48867 99818 925000) 0 nil])
+([nil current ((39994 . 40233) (#("(custom-set-faces
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ )" 0 239 (fontified nil)) . -39994) (39990 . 39992) (#("
+" 0 1 (fontified nil)) . -39990) (38240 . 39991) (#(" " 0 1 (fontified nil)) . 38240) (38210 . 38241) (#("
+" 0 1 (fontified nil)) . -38210) (37593 . 38211) (#(" " 0 1 (fontified nil)) . 37593) (37327 . 37594) (#("(custom-set-variables
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(custom-safe-themes
+   '(\"333958c446e920f5c350c4b4016908c130c3b46d590af91e1e7e2a0611f1e8c5\" \"1704976a1797342a1b4ea7a75bdbb3be1569f4619134341bd5a4c1cfb16abad4\" \"a7b20039f50e839626f8d6aa96df62afebb56a5bbd1192f557cb2efb5fcfb662\" \"f91395598d4cb3e2ae6a2db8527ceb83fed79dbaf007f435de3e91e5bda485fb\" \"fa2b58bb98b62c3b8cf3b6f02f058ef7827a8e497125de0254f56e373abee088\" \"566c61d0e40a728d5b631ac276017ace6866574ee58a4b6fbc770e436e481d57\" \"d268b67e0935b9ebc427cad88ded41e875abfcc27abd409726a92e55459e0d01\" \"66bdbe1c7016edfa0db7efd03bb09f9ded573ed392722fb099f6ac6c6aefce32\" \"0fffa9669425ff140ff2ae8568c7719705ef33b7a927a0ba7c5e2ffcfac09b75\" default))
+ '(package-selected-packages
+   '(evil-collection openwith sequences cl-lib-highlight helm-system-packages async-await popup-complete helm-fuzzy-find evil-space yapfify yaml-mode ws-butler winum which-key web-mode web-beautify vterm volatile-highlights vi-tilde-fringe uuidgen use-package toc-org tagedit spaceline solarized-theme slim-mode scss-mode sass-mode restart-emacs request rainbow-delimiters pyvenv pytest pyenv-mode py-isort pug-mode pspp-mode popwin pip-requirements persp-mode pcre2el paradox org-projectile-helm org-present org-pomodoro org-mime org-download org-bullets open-junk-file neotree move-text mmm-mode markdown-toc magit macrostep lorem-ipsum livid-mode live-py-mode linum-relative link-hint json-mode js2-refactor js-doc intero indent-guide hy-mode hungry-delete htmlize hlint-refactor hl-todo hindent highlight-parentheses highlight-numbers highlight-indentation helm-themes helm-swoop helm-pydoc helm-projectile helm-mode-manager helm-make helm-hoogle helm-flx helm-descbinds helm-css-scss helm-ag haskell-snippets gruvbox-theme google-translate golden-ratio gnuplot gh-md flx-ido fill-column-indicator fancy-battery eyebrowse expand-region exec-path-from-shell evil-visualstar evil-visual-mark-mode evil-unimpaired evil-tutor evil-surround evil-search-highlight-persist evil-numbers evil-nerd-commenter evil-mc evil-matchit evil-lisp-state evil-indent-plus evil-iedit-state evil-exchange evil-escape evil-ediff evil-args evil-anzu eval-sexp-fu emmet-mode elisp-slime-nav dumb-jump diminish define-word cython-mode csv-mode company-ghci company-ghc column-enforce-mode coffee-mode cmm-mode clean-aindent-mode auto-highlight-symbol auto-compile auctex-latexmk anaconda-mode aggressive-indent adaptive-wrap ace-window ace-link ace-jump-helm-line)))" 0 2659 (fontified nil)) . -37327) (t 25248 48867 110251 106000)) nil (25255 26017 247618 994000) 0 nil])
 nil

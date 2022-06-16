@@ -1,0 +1,2 @@
+;;; Generated package description from lispyville.el  -*- no-byte-compile: t -*-
+(define-package "lispyville" "20220519.2339" "A minor mode for integrating evil with lispy." '((lispy "0") (evil "1.2.12") (cl-lib "0.5") (emacs "24.4")) :commit "32d6b1f4b3f5bc792a0610c7e91123a70b582a91" :authors '(("Fox Kiester" . "noct@posteo.net")) :maintainer '("Fox Kiester" . "noct@posteo.net") :keywords '("vim" "evil" "lispy" "lisp" "parentheses") :url "https://github.com/noctuid/lispyville")

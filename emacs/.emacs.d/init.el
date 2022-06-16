@@ -145,14 +145,15 @@
 
 (ace-link-setup-default)
 
-(defcustom web-page-alist '()
-  "Alist used by `emacs-web-page-selector' to associate web-links
-  with their names. Needs to be an alist of the form (name
-  . link) with both properties being strings. Initialised as an
-  empty list as there is no point in predefining anything in it."
+(defcustom bookmark-selector-web-page-alist '()
+  "Alist used by `bookmark-selector-browse-bookmark' to associate
+  web-links with their names. Needs to be an alist of the
+  form (name . link) with both properties being
+  strings. Initialised as an empty list as there is no point in
+  predefining anything in it."
   :type 'alist)
 
-(setq web-page-alist
+(setq bookmark-selector-web-page-alist
       '(("Chemeng" . "https://www.chemeng.ntua.gr/")
 	("Uni Submissions" . "https://www.chemeng.ntua.gr/submission/")
 	("Wolfram Alpha" . "https://www.wolframalpha.com")
@@ -200,17 +201,15 @@
 	("Time Zone Converter" . "https://www.timeanddate.com/worldclock/converter.html")
 	("Detexify" . "https://detexify.kirelabs.org/classify.html")))
 
-(defmacro deflauncher (NAME WIDTH HEIGHT FUNCTION)
-  "Define emacs launcher command.
+(defmacro bookmark-selector-launcher (NAME WIDTH HEIGHT FUNCTION)
+  "Define a launcher command.
 
-Emacs Launcher commands are a series of functions I use in my
-config, which consist of opening an emacs frame with only a
+Bookmark-selector is a package revolving around using emacs
+outside of emacs to browse your bookmarks. Most of the commands
+defined, consist of opening an emacs frame with only a
 minibuffer, with a specified NAME, WIDTH and HEIGHT and inside it
 calling FUNCTION and deleting the frame after the function
-completes or is canceled.
-
-As all of these launcher functions follow the same logic, its
-useful to have this macro to define various such launchers."
+completes or is canceled."
   `(with-selected-frame (make-frame '((name . ,NAME)
 				      (minibuffer . only)
 				      (width . ,WIDTH)
@@ -231,26 +230,47 @@ Create and select a frame called emacs-run-launcher which
   prompts you to select an app and open it in a dmenu like
   behaviour.  Delete the frame after that command has exited."
   (interactive)
-  (deflauncher "emacs-run-launcher" 120 11 'counsel-linux-app))
+  (bookmark-selector-launcher "emacs-run-launcher" 120 11 'counsel-linux-app))
 
-(defun emacs-web-page-selector-function ()
-  "Browse a url from the list in `web-page-alist'.
+(defun bookmark-selector-browse-bookmark-function ()
+  "Browse a url from the list in `bookmark-selector-web-page-alist'.
 
 This function is used as the FUNCTION argument for the
-`deflauncher' macro to create the `emacs-web-page-selector'
-function."
+`bookmark-selector-launcher' macro to create the
+`bookmark-selector-browse-bookmark' function."
   (browse-url
-   (cdr (assoc (completing-read "Web-Page: " web-page-alist) web-page-alist))))
+   (cdr (assoc (completing-read "Web-Page: " bookmark-selector-web-page-alist)
+	       bookmark-selector-web-page-alist))))
 
-(defun emacs-web-page-selector ()
+(defun bookmark-selector-browse-bookmark ()
   "Create and select a frame called emacs-web-page-selector which
   consists of only a minibuffer and has specific dimensions. Inside
   that frame, run a `completing-read' prompting the user to select
-  the name of a website in the `web-page-alist'. Upon selection,
+  the name of a website in the `bookmark-selector-web-page-alist'. Upon selection,
   emacs will run `browse-url' opening the link associated to the
   selected name."
   (interactive)
-  (deflauncher "emacs-web-page-selector" 50 11 'emacs-web-page-selector-function))
+  (bookmark-selector-launcher "emacs-web-page-selector"
+			      50 11 'bookmark-selector-browse-bookmark-function))
+
+(defun bookmark-selector-add-bookmark-function ()
+  "Add a web page to the `bookmark-selector-web-page-alist'.
+
+This is the FUNCTION argument in `bookmark-selector-launcher' to
+create `bookmark-selector-add-bookmark'."
+  (let ((url (read-string "URL of page: "))
+	(description (read-string "Description of page: ")))
+    (cl-pushnew (cons description url) bookmark-selector-web-page-alist)))
+
+(defun bookmark-selector-add-bookmark ()
+  "Create and select a new frame prompting for a new bookmark.
+
+The bookmarks name and url are read through
+`bookmark-selector-add-bookmark-function' while this function is
+implemented with the `bookmark-selector-launcher' macro."
+  (interactive)
+  (bookmark-selector-launcher "emacs-add-bookmark"
+			      130 5 'bookmark-selector-add-bookmark-function))
 
 (require 'keybindings)
 
@@ -330,9 +350,6 @@ function."
 (require 'ox-beamer)
 (require 'ox-hugo)
 (require 'ox-pandoc)
-
-(require 'org-marginalia-global-tracking)
-(require 'org-marginalia)
 
 (require 'org-pandoc-import)
 
@@ -748,8 +765,7 @@ change from one assignment to the next."
 (require 'zettelkasten)
 (require 'zetteldesk)
 (zetteldesk-mode 1)
-(setq zetteldesk-hydra-prefix (kbd "C-c z"))
-(require 'zetteldesk-kb)
+(require 'zetteldesk-kb-complete)
 (require 'zetteldesk-ref)
 (require 'zetteldesk-info)
 (require 'zetteldesk-remark)
@@ -1098,38 +1114,9 @@ it."
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(custom-safe-themes
-   '("47db50ff66e35d3a440485357fb6acb767c100e135ccdf459060407f8baea7b2" "4f1d2476c290eaa5d9ab9d13b60f2c0f1c8fa7703596fa91b235db7f99a9441b" "0fffa9669425ff140ff2ae8568c7719705ef33b7a927a0ba7c5e2ffcfac09b75" default))
+   '("0fffa9669425ff140ff2ae8568c7719705ef33b7a927a0ba7c5e2ffcfac09b75" default))
  '(package-selected-packages
-   '(evil-collection openwith sequences cl-lib-highlight helm-system-packages async-await popup-complete helm-fuzzy-find evil-space yapfify yaml-mode ws-butler winum which-key web-mode web-beautify vterm volatile-highlights vi-tilde-fringe uuidgen use-package toc-org tagedit spaceline solarized-theme slim-mode scss-mode sass-mode restart-emacs request rainbow-delimiters pyvenv pytest pyenv-mode py-isort pug-mode pspp-mode popwin pip-requirements persp-mode pcre2el paradox org-projectile-helm org-present org-pomodoro org-mime org-download org-bullets open-junk-file neotree move-text mmm-mode markdown-toc magit macrostep lorem-ipsum livid-mode live-py-mode linum-relative link-hint json-mode js2-refactor js-doc intero indent-guide hy-mode hungry-delete htmlize hlint-refactor hl-todo hindent highlight-parentheses highlight-numbers highlight-indentation helm-themes helm-swoop helm-pydoc helm-projectile helm-mode-manager helm-make helm-hoogle helm-flx helm-descbinds helm-css-scss helm-ag haskell-snippets gruvbox-theme google-translate golden-ratio gnuplot gh-md flx-ido fill-column-indicator fancy-battery eyebrowse expand-region exec-path-from-shell evil-visualstar evil-visual-mark-mode evil-unimpaired evil-tutor evil-surround evil-search-highlight-persist evil-numbers evil-nerd-commenter evil-mc evil-matchit evil-lisp-state evil-indent-plus evil-iedit-state evil-exchange evil-escape evil-ediff evil-args evil-anzu eval-sexp-fu emmet-mode elisp-slime-nav dumb-jump diminish define-word cython-mode csv-mode company-ghci company-ghc column-enforce-mode coffee-mode cmm-mode clean-aindent-mode auto-highlight-symbol auto-compile auctex-latexmk anaconda-mode aggressive-indent adaptive-wrap ace-window ace-link ace-jump-helm-line))
- '(safe-local-variable-values
-   '((eval when
-	   (and
-	    (buffer-file-name)
-	    (not
-	     (file-directory-p
-	      (buffer-file-name)))
-	    (string-match-p "^[^.]"
-			    (buffer-file-name)))
-	   (unless
-	       (featurep 'package-build)
-	     (let
-		 ((load-path
-		   (cons "../package-build" load-path)))
-	       (require 'package-build)))
-	   (unless
-	       (derived-mode-p 'emacs-lisp-mode)
-	     (emacs-lisp-mode))
-	   (package-build-minor-mode)
-	   (setq-local flycheck-checkers nil)
-	   (set
-	    (make-local-variable 'package-build-working-dir)
-	    (expand-file-name "../working/"))
-	   (set
-	    (make-local-variable 'package-build-archive-dir)
-	    (expand-file-name "../packages/"))
-	   (set
-	    (make-local-variable 'package-build-recipes-dir)
-	    default-directory)))))
+   '(evil-collection openwith sequences cl-lib-highlight helm-system-packages async-await popup-complete helm-fuzzy-find evil-space yapfify yaml-mode ws-butler winum which-key web-mode web-beautify vterm volatile-highlights vi-tilde-fringe uuidgen use-package toc-org tagedit spaceline solarized-theme slim-mode scss-mode sass-mode restart-emacs request rainbow-delimiters pyvenv pytest pyenv-mode py-isort pug-mode pspp-mode popwin pip-requirements persp-mode pcre2el paradox org-projectile-helm org-present org-pomodoro org-mime org-download org-bullets open-junk-file neotree move-text mmm-mode markdown-toc magit macrostep lorem-ipsum livid-mode live-py-mode linum-relative link-hint json-mode js2-refactor js-doc intero indent-guide hy-mode hungry-delete htmlize hlint-refactor hl-todo hindent highlight-parentheses highlight-numbers highlight-indentation helm-themes helm-swoop helm-pydoc helm-projectile helm-mode-manager helm-make helm-hoogle helm-flx helm-descbinds helm-css-scss helm-ag haskell-snippets gruvbox-theme google-translate golden-ratio gnuplot gh-md flx-ido fill-column-indicator fancy-battery eyebrowse expand-region exec-path-from-shell evil-visualstar evil-visual-mark-mode evil-unimpaired evil-tutor evil-surround evil-search-highlight-persist evil-numbers evil-nerd-commenter evil-mc evil-matchit evil-lisp-state evil-indent-plus evil-iedit-state evil-exchange evil-escape evil-ediff evil-args evil-anzu eval-sexp-fu emmet-mode elisp-slime-nav dumb-jump diminish define-word cython-mode csv-mode company-ghci company-ghc column-enforce-mode coffee-mode cmm-mode clean-aindent-mode auto-highlight-symbol auto-compile auctex-latexmk anaconda-mode aggressive-indent adaptive-wrap ace-window ace-link ace-jump-helm-line)))
 
 (custom-set-faces
  ;; custom-set-faces was added by Custom.

@@ -336,7 +336,7 @@ out"
 
 (setq org-roam-capture-templates
       '(("d" "default" plain "%?" :if-new
-	 (file+head "${slug}-%<%d-%m-%y>.org" "#+title: ${title}\n
+	 (file+head "${slug}-%<%d-%m-%y>.org" "#+title: ${title}
 - index ::  
 - tags :: ")
 	 :unarrowed t

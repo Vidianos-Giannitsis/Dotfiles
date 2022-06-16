@@ -106,7 +106,7 @@ This includes:
 + Hide elements such as asterisks when writing a bold word by default. In the [[*Utilities][Utilities]] section of the config, I also define a function which toggles this behaviour
 + Set my font to Source Code Pro with the right font size for me. To use daemon mode properly, this needs a bit more code.
 + Remove dialog boxes completely as answering in the minibuffer is more efficient imo.
-+ Activate global auto revert mode for file and non-file buffers, as it is really helpful imo.
++ Activate global auto revert mode for file and non-file buffers, as it is really helpful imo (this is currently commented as its laggy sometimes)
 
 #+BEGIN_SRC elisp :tangle init.el
 
@@ -274,14 +274,15 @@ This enables:
 
 #+BEGIN_SRC elisp :tangle init.el
 
-  (defcustom web-page-alist '()
-    "Alist used by `emacs-web-page-selector' to associate web-links
-    with their names. Needs to be an alist of the form (name
-    . link) with both properties being strings. Initialised as an
-    empty list as there is no point in predefining anything in it."
+  (defcustom bookmark-selector-web-page-alist '()
+    "Alist used by `bookmark-selector-browse-bookmark' to associate
+    web-links with their names. Needs to be an alist of the
+    form (name . link) with both properties being
+    strings. Initialised as an empty list as there is no point in
+    predefining anything in it."
     :type 'alist)
 
-  (setq web-page-alist
+  (setq bookmark-selector-web-page-alist
 	'(("Chemeng" . "https://www.chemeng.ntua.gr/")
 	  ("Uni Submissions" . "https://www.chemeng.ntua.gr/submission/")
 	  ("Wolfram Alpha" . "https://www.wolframalpha.com")
@@ -329,17 +330,15 @@ This enables:
 	  ("Time Zone Converter" . "https://www.timeanddate.com/worldclock/converter.html")
 	  ("Detexify" . "https://detexify.kirelabs.org/classify.html")))
 
-  (defmacro deflauncher (NAME WIDTH HEIGHT FUNCTION)
-    "Define emacs launcher command.
+  (defmacro bookmark-selector-launcher (NAME WIDTH HEIGHT FUNCTION)
+    "Define a launcher command.
 
-  Emacs Launcher commands are a series of functions I use in my
-  config, which consist of opening an emacs frame with only a
+  Bookmark-selector is a package revolving around using emacs
+  outside of emacs to browse your bookmarks. Most of the commands
+  defined, consist of opening an emacs frame with only a
   minibuffer, with a specified NAME, WIDTH and HEIGHT and inside it
   calling FUNCTION and deleting the frame after the function
-  completes or is canceled.
-
-  As all of these launcher functions follow the same logic, its
-  useful to have this macro to define various such launchers."
+  completes or is canceled."
     `(with-selected-frame (make-frame '((name . ,NAME)
 					(minibuffer . only)
 					(width . ,WIDTH)
@@ -360,27 +359,47 @@ This enables:
     prompts you to select an app and open it in a dmenu like
     behaviour.  Delete the frame after that command has exited."
     (interactive)
-    (deflauncher "emacs-run-launcher" 120 11 'counsel-linux-app))
+    (bookmark-selector-launcher "emacs-run-launcher" 120 11 'counsel-linux-app))
 
-  (defun emacs-web-page-selector-function ()
-    "Browse a url from the list in `web-page-alist'.
+  (defun bookmark-selector-browse-bookmark-function ()
+    "Browse a url from the list in `bookmark-selector-web-page-alist'.
 
   This function is used as the FUNCTION argument for the
-  `deflauncher' macro to create the `emacs-web-page-selector'
-  function."
+  `bookmark-selector-launcher' macro to create the
+  `bookmark-selector-browse-bookmark' function."
     (browse-url
-     (cdr (assoc (completing-read "Web-Page: " web-page-alist) web-page-alist))))
+     (cdr (assoc (completing-read "Web-Page: " bookmark-selector-web-page-alist)
+		 bookmark-selector-web-page-alist))))
 
-  (defun emacs-web-page-selector ()
+  (defun bookmark-selector-browse-bookmark ()
     "Create and select a frame called emacs-web-page-selector which
     consists of only a minibuffer and has specific dimensions. Inside
     that frame, run a `completing-read' prompting the user to select
-    the name of a website in the `web-page-alist'. Upon selection,
+    the name of a website in the `bookmark-selector-web-page-alist'. Upon selection,
     emacs will run `browse-url' opening the link associated to the
     selected name."
     (interactive)
-    (deflauncher "emacs-web-page-selector" 50 11 'emacs-web-page-selector-function))
+    (bookmark-selector-launcher "emacs-web-page-selector"
+				50 11 'bookmark-selector-browse-bookmark-function))
 
+  (defun bookmark-selector-add-bookmark-function ()
+    "Add a web page to the `bookmark-selector-web-page-alist'.
+
+  This is the FUNCTION argument in `bookmark-selector-launcher' to
+  create `bookmark-selector-add-bookmark'."
+    (let ((url (read-string "URL of page: "))
+	  (description (read-string "Description of page: ")))
+      (cl-pushnew (cons description url) bookmark-selector-web-page-alist)))
+
+  (defun bookmark-selector-add-bookmark ()
+    "Create and select a new frame prompting for a new bookmark.
+
+  The bookmarks name and url are read through
+  `bookmark-selector-add-bookmark-function' while this function is
+  implemented with the `bookmark-selector-launcher' macro."
+    (interactive)
+    (bookmark-selector-launcher "emacs-add-bookmark"
+				130 5 'bookmark-selector-add-bookmark-function))
 #+END_SRC
 
 * Keybindings
@@ -392,9 +411,6 @@ This enables:
 
   #+END_SRC
   
-** COMMENT For my own convenience, a link to the keybindings.org file
-   The link above points to keybindings.org in git. For my convenience, while editing this file I want a clickable link to my keybindings file, outside of the command I have for it. [[~/.emacs.d/libs/keybindings.org]]
-   
 * Dired
   Dired is Emacs's built in file manager. As dired is my Emacs startup screen as mentioned before, I have some customisations for it to make it look neat.
   I have configured it to include:
@@ -510,25 +526,22 @@ Some settings (now using the word some here might be an underestimation, as with
    + Require org-marginalia
      
 #+BEGIN_SRC elisp :tangle init.el
-  
+
     (add-hook 'org-mode-hook #'(lambda ()
 				 (org-superstar-mode)
 				 (org-superstar-configure-like-org-bullets)))
-  
+
   (use-package org-download
     :after org)
-  
+
   (require 'org-tree-slide)
-  
+
   (require 'ox-beamer)
   (require 'ox-hugo)
   (require 'ox-pandoc)
-  
-  (require 'org-marginalia-global-tracking)
-  (require 'org-marginalia)
-  
+
   (require 'org-pandoc-import)
-  
+
 #+END_SRC
 
 
@@ -1026,8 +1039,7 @@ More languages to evaluate with org-babel (by default, only elisp is evaluated).
   (require 'zettelkasten)
   (require 'zetteldesk)
   (zetteldesk-mode 1)
-  (setq zetteldesk-hydra-prefix (kbd "C-c z"))
-  (require 'zetteldesk-kb)
+  (require 'zetteldesk-kb-complete)
   (require 'zetteldesk-ref)
   (require 'zetteldesk-info)
   (require 'zetteldesk-remark)

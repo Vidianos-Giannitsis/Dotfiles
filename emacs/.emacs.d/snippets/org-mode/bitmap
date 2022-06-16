@@ -1,0 +1,5 @@
+# -*- mode: snippet -*-
+# name: bitmap
+# key: bm
+# --
+bitmap$1.pdf $2

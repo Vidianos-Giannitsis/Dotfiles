@@ -153,7 +153,7 @@ Fairly simple section for making a window floating (a window also becomes floati
   Key2("M-S-f", lazy.window.toggle_floating, desc="Toggle Floating"),
   Key2("M-q", lazy.window.kill(), desc="Kill focused window"),
   Key2("M-S-r", lazy.restart(), desc="Restart qtile"),
-  Key2("M-S-e", lazy.spawn("arcolinux-logout"), desc="Log out of qtile"),
+  Key2("M-S-e", lazy.shutdown, desc="Log out of qtile"),
 #+END_SRC
 
 ** My favourite programs

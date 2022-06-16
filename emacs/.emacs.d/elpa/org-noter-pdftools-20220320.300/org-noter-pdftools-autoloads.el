@@ -1,4 +1,4 @@
-;;; org-noter-pdftools-autoloads.el --- automatically extracted autoloads
+;;; org-noter-pdftools-autoloads.el --- automatically extracted autoloads  -*- lexical-binding: t -*-
 ;;
 ;;; Code:
 
@@ -10,7 +10,7 @@
 ;;;;;;  (0 0 0 0))
 ;;; Generated autoloads from org-noter-pdftools.el
 
-(if (fboundp 'register-definition-prefixes) (register-definition-prefixes "org-noter-pdftools" '("org-noter-pdftools-")))
+(register-definition-prefixes "org-noter-pdftools" '("org-noter-pdftools-"))
 
 ;;;***
 

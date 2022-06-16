@@ -1,7 +1,7 @@
 from libqtile.command import lazy
 from typing import List  # noqa: F401
 from libqtile import bar, layout, widget, hook
-from libqtile.config import Click, Drag, Group, Screen, Key, Match, Rule, ScratchPad, DropDown
+from libqtile.config import Click, Drag, Group, Screen, Key, Match, Rule, ScratchPad, DropDown, KeyChord
 from libqtile.config import EzKey as Key2
 from libqtile.lazy import lazy
 from libqtile.utils import guess_terminal
@@ -20,8 +20,8 @@ calculator = "qalculate-gtk"
 screenshots = "flameshot gui"
 run_launcher = 'dmenu_run -fn "Source Code Pro Bold" -i -nb "#292d3e" -sb "#5b76b2" -nf "#839496" -sf "#eeffff" -p "Launch program"'
 emacs_run_launcher = 'emacsclient -e "(emacs-run-launcher)"'
-emacs_web_selector = 'emacsclient -e "(emacs-web-page-selector)"'
-emacs_scratchpad = 'emacsclient -e "(emacs-scratchpad)"'
+emacs_web_selector = 'emacsclient -e "(bookmark-selector-browse-bookmark)"'
+emacs_add_bookmark = 'emacsclient -e "(bookmark-selector-add-bookmark)"'
 
 @hook.subscribe.startup_once
 def autostart():
@@ -39,14 +39,20 @@ def floating_run_launcher(c):
         c.toggle_floating()
 
 @hook.subscribe.client_new
-def floating_run_launcher(c):
+def floating_bookmark_selector(c):
     if c.name == "emacs-web-page-selector":
         c.toggle_floating()
 
 @hook.subscribe.client_new
-def floating_run_launcher(c):
+def floating_scratchpad(c):
     if c.name == "emacs-scratchpad":
         c.toggle_floating()
+
+@hook.subscribe.client_new
+def floating_bookmark_adder(c):
+    if c.name == "emacs-add-bookmark":
+        c.toggle_floating()
+
 
 keys = [
     Key2("M-k", lazy.layout.down(),
@@ -83,7 +89,7 @@ keys = [
 Key2("M-S-f", lazy.window.toggle_floating, desc="Toggle Floating"),
 Key2("M-q", lazy.window.kill(), desc="Kill focused window"),
 Key2("M-S-r", lazy.restart(), desc="Restart qtile"),
-Key2("M-S-e", lazy.spawn("arcolinux-logout"), desc="Log out of qtile"),
+Key2("M-S-e", lazy.spawn("archlinux-logout"), desc="Log out of qtile"),
 
 Key2("M-<Return>", lazy.spawn(terminal), desc="Launch terminal"),
 Key2("M-r", lazy.spawn(run_launcher),
@@ -106,7 +112,7 @@ Key2("M-C-p", lazy.spawn("system-config-printer"), desc="Launch printer software
 Key2("M-t", lazy.spawn("rofi-theme-selector"), desc="Launch a theme selector using rofi"),
 Key2("M-C-r", lazy.spawn(emacs_run_launcher), desc="Launch an emacs based run launcher"),
 Key2("M-b", lazy.spawn(emacs_web_selector), desc="Launch an emacs based web page selector"),
-Key2("M-s", lazy.spawn(emacs_scratchpad), desc="Launch an emacs based scratchpad"),
+    Key2("M-a", lazy.spawn(emacs_add_bookmark), desc="Add a bookmark from an emacs based menu"),
 
 Key2("<XF86AudioRaiseVolume>", lazy.spawn("amixer -c 1 sset Master 5%+ unmute"), desc="Raise Volume and unmute if muted"),
 Key2("<XF86AudioLowerVolume>", lazy.spawn("amixer -c 1 sset Master 5%- unmute"), desc="Lower Volume and unmute if muted"),
@@ -146,7 +152,7 @@ for i in "123456789":
 keys.extend([Key2("M-C-s", lazy.group['scratchpad'].dropdown_toggle('music')),
 	     Key2("M-S-<Return>", lazy.group['scratchpad'].dropdown_toggle('term')),
 	     Key2("M-C-c", lazy.group['scratchpad'].dropdown_toggle('calc')),
-	     Key2("M-e", lazy.group['scratchpad'].dropdown_toggle('emacs')),
+	#     Key2("M-e", lazy.group['scratchpad'].dropdown_toggle('emacs')),
 	     ])
 
 # Layouts
