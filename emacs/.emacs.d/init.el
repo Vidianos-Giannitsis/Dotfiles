@@ -77,8 +77,8 @@
 
 (setq use-dialog-box nil)
 
-(global-auto-revert-mode 1)
-(setq global-auto-revert-non-file-buffers t)
+;; (global-auto-revert-mode 1)
+;; (setq global-auto-revert-non-file-buffers t)
 
 (setq evil-collection-setup-minibuffer t)
 (setq evil-want-keybinding nil)
@@ -417,7 +417,8 @@ implemented with the `bookmark-selector-launcher' macro."
 				 ("" "glossaries")
 				 ("" "newfloat")
 				 ("" "minted")
-				 ("" "chemfig")))
+				 ("" "chemfig")
+				 ("" "svg")))
 
 (defun my-latex-title-page ()
   "Template for my assignment title pages.
@@ -767,6 +768,7 @@ change from one assignment to the next."
 (zetteldesk-mode 1)
 (require 'zetteldesk-kb-complete)
 (require 'zetteldesk-ref)
+(require 'zetteldesk-ref-citar)
 (require 'zetteldesk-info)
 (require 'zetteldesk-remark)
 

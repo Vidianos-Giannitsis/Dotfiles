@@ -200,6 +200,9 @@ something like pdftk to merge them into one pdf"
 	(rst-mode . bibtex-completion-format-citation-sphinxcontrib-bibtex)
 	(default . bibtex-completion-format-citation-default)))
 
+(setq citar-bibliography '("~/Sync/My_Library.bib" "~/Sync/My_Library2.bib"))
+(setq citar-notes-paths '("~/org_roam/ref"))
+
 (require 'org-roam-bibtex)
 (org-roam-bibtex-mode 1)
 

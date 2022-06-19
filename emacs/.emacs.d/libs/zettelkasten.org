@@ -251,6 +251,16 @@ This file is a core part of my emacs configuration and is all about my Org-roam 
 	       (default . bibtex-completion-format-citation-default)))
     #+END_SRC
 
+** Citar
+The bibliography backend I currently use is ivy-bibtex (hence the above config). However, I have experimented with Citar for porting my package ~zetteldesk-ref~ to use it as a backend besides ivy-bibtex and honestly its a pretty neat package. I am considering moving to it as its a very nice and definitely super active project. This section holds my basic configurations for it which are for now at least only defining the paths to the bibliography and notes.
+
+#+BEGIN_SRC elisp :tangle yes
+
+  (setq citar-bibliography '("~/Sync/My_Library.bib" "~/Sync/My_Library2.bib"))
+  (setq citar-notes-paths '("~/org_roam/ref"))
+
+#+END_SRC
+  
 * Org Roam Bibtex, Protocols (Reference notes) and UI (graphing capabilities)
    I require a bunch of packages so ORB, org roam ui and the roam protocols work as intended. I also make orb use ivy for completions.
 

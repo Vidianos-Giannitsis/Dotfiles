@@ -466,8 +466,8 @@ See also `eperiodic-display-lists'.")
       ;; Work number of electrons for each orbital
       (setq degeneracy (cdr (assoc (substring (symbol-name (car order)) 1 2)
                                    eperiodic-orbital-degeneracies)))
-      ;; Loop over z
-      (loop for i from z to (+ z degeneracy -1) by 1
+      ;; Cl-Loop over z
+      (cl-loop for i from z to (+ z degeneracy -1) by 1
             do
             (setq label (concat so-far orbital (format "-%d" (1+ (- i z))) " "))
             (setq result
@@ -4199,7 +4199,7 @@ Any previous buffer contents are deleted."
       (dolist (elt list)
         (setq start (nth 1 (assoc (symbol-name elt) eperiodic-group-ranges))
               end (nth 2 (assoc (symbol-name elt) eperiodic-group-ranges)))
-        (loop for i from start to end
+        (cl-loop for i from start to end
               do
               (if (equal elt 'f)
                   (insert (make-string display-width ?\ ))
@@ -4209,7 +4209,7 @@ Any previous buffer contents are deleted."
                                    '(face eperiodic-group-number-face))
               (insert (make-string separation ?\ ))))
       (insert "\n\n"))
-    ;; Loop over display order
+    ;; Cl-Loop over display order
     (while order
       (insert (make-string indentation ?\ ))
       (let ((orbital-list (car order))
@@ -4231,7 +4231,7 @@ Any previous buffer contents are deleted."
           ;; Print the range of Z for this orbital
           (cond
            (min-z
-            (loop for z from min-z to max-z by 1
+            (cl-loop for z from min-z to max-z by 1
                   do
                   (let ((help (if eperiodic-use-popup-help
                                   (eperiodic-get-help-string z)
@@ -4253,7 +4253,7 @@ Any previous buffer contents are deleted."
               (add-text-properties 0 display-width
                                    '(face eperiodic-padding-face)
                                    string)
-              (loop for z from 1 to
+              (cl-loop for z from 1 to
                     (cdr (assoc (substring (symbol-name orbital) 1 2)
                                 eperiodic-orbital-degeneracies)) by 1
                     do
@@ -4292,7 +4292,7 @@ Any previous buffer contents are deleted."
           (add-text-properties 0 display-width
                                '(face eperiodic-padding-face)
                                string)
-          (loop for i from 1 to (/ (- ne-posn (current-column))
+          (cl-loop for i from 1 to (/ (- ne-posn (current-column))
                                    (+ display-width separation))
                 do
 		;; Need the following in XEmacs to avoid some
@@ -4386,7 +4386,7 @@ current buffer."
   (insert "\n\n")
   ;; Data
   (let ((data (cdr (assoc z eperiodic-isotope-data))))
-    ;; Loop over isotopes
+    ;; Cl-Loop over isotopes
     (while data
       (let ((isotope-data (car data)))
         (while isotope-data
@@ -5006,7 +5006,7 @@ also `eperiodic-colour-element-functions'."
                                    "eperiodic-colour-element-by-" ""
                                    (symbol-name elt))))
                     (setq list nil)
-                    (loop for z from 1 to 118
+                    (cl-loop for z from 1 to 118
                           do
                           (setq value
                                 (eperiodic-extract-number-from-string

@@ -2672,7 +2672,7 @@ This toggles between nil and the last non-nil setting (or t if none)."
           (inhibit-read-only  t))
       (Info-fontify-node)))
   (when msgp (message "`Info-fontify-glossary-words' is now %s"
-                      (case Info-fontify-glossary-words
+                      (cl-case Info-fontify-glossary-words
                         ((nil)                           "OFF - no glossary links")
                         (show-link-and-def-till-visited  "Show link and DEFINITION, until visited")
                         (show-link                       "Show link only (NOT definition)")
@@ -2686,7 +2686,7 @@ This toggles between nil and the last non-nil setting (or t if none)."
   "Cycle option `Info-fontify-glossary-words' through its possible values."
   (interactive "p")
   (when Info-fontify-glossary-words (setq info-last-non-nil-fontify-glossary-words  Info-fontify-glossary-words))
-  (setq Info-fontify-glossary-words  (case Info-fontify-glossary-words
+  (setq Info-fontify-glossary-words  (cl-case Info-fontify-glossary-words
                                        ((nil)                           'show-link-and-def-till-visited)
                                        (show-link-and-def-till-visited  'show-link-till-visited)
                                        (show-link-till-visited          'show-link)
@@ -2698,7 +2698,7 @@ This toggles between nil and the last non-nil setting (or t if none)."
           (inhibit-read-only  t))
       (Info-fontify-node)))
   (when msgp (message "`Info-fontify-glossary-words' is now %s"
-                      (case Info-fontify-glossary-words
+                      (cl-case Info-fontify-glossary-words
                         ((nil)                           "OFF - no glossary links")
                         (show-link-and-def-till-visited  "Show link and DEFINITION, until visited")
                         (show-link                       "Show link only (NOT definition)")
@@ -2836,7 +2836,7 @@ highlighting.  (`$-' is a regexp that cannot match anything.)"
 The three states are off (nil), multiline (symbol `multiline'), and
 same line (other non-nil value)."
   (interactive "p")
-  (setq Info-fontify-quotations  (case Info-fontify-quotations
+  (setq Info-fontify-quotations  (cl-case Info-fontify-quotations
                                    ((nil)  t)
                                    ((t)    'multiline)
                                    (t      nil)))
@@ -2845,7 +2845,7 @@ same line (other non-nil value)."
     (let ((modp               (buffer-modified-p))
           (inhibit-read-only  t))
       (Info-fontify-node)))
-  (when msgp (message "`Info-fontify-quotations' is now %s" (case Info-fontify-quotations
+  (when msgp (message "`Info-fontify-quotations' is now %s" (cl-case Info-fontify-quotations
                                                               ((nil)      'OFF)
                                                               (multiline  "on (MULTILINE too)")
                                                               (t          "on (SAME LINE only)")))))
@@ -6100,7 +6100,7 @@ Syntax class:\\|User Option:\\|Variable:\\)\\(.*\\)\\(\n          \\(.*\\)\\)*"
                             nil t)
     (let ((symb  (intern (match-string 1))))
       (put-text-property (match-beginning 1) (match-end 1)
-                         'font-lock-face (case symb
+                         'font-lock-face (cl-case symb
                                            ('Constant:       'info-constant-ref-item)
                                            ('Command:        'info-command-ref-item)
                                            ('Function:       'info-function-ref-item)

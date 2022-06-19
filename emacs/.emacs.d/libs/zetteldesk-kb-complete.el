@@ -35,6 +35,7 @@
 (require 'zetteldesk)
 (require 'zetteldesk-info)
 (require 'zetteldesk-ref)
+(require 'zetteldesk-ref-citar)
 (require 'zetteldesk-remark)
 (require 'hydra)
 (require 'pretty-hydra)
@@ -89,14 +90,15 @@
 
 ;; Set up the keybinding to call the hydra
 
-(defcustom zetteldesk-kb-hydra-prefix nil
-  "Stores the value of the keybinding that calls the main zetteldesk hydra.
-By default it is set to nil, to
-  allow the user to set the prefix they want"
+(defcustom zetteldesk-kb-hydra-prefix (kbd "C-c z")
+  "Stores the value of the keybinding that calls the main zetteldesk hydra."
   :type 'string
   :group 'zetteldesk)
 
-(define-key zetteldesk-kb-map zetteldesk-kb-hydra-prefix 'zetteldesk-main-hydra/body)
+(defvar zetteldesk-map
+  (let ((km (make-sparse-keymap)))
+    (define-key km zetteldesk-kb-hydra-prefix #'zetteldesk-main-hydra/body) km)
+  "Keymap for zetteldesk.el")
 
 ;; zetteldesk-ref.el additions
 (pretty-hydra-define+ zetteldesk-insert-hydra ()
@@ -111,7 +113,10 @@ By default it is set to nil, to
    (("h" zetteldesk-ref-helm-bibtex-with-notes))
 
    "Ivy-Bibtex UI"
-   (("i" zetteldesk-ref-ivy-bibtex-with-notes))))
+   (("i" zetteldesk-ref-ivy-bibtex-with-notes))
+
+   "Citar UI"
+   (("c" zetteldesk-ref-citar-open-notes))))
 
 (pretty-hydra-define+ zetteldesk-add-hydra ()
   ("Org-Roam"

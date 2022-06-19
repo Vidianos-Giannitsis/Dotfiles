@@ -166,8 +166,8 @@ This includes:
 
   (setq use-dialog-box nil)
 
-  (global-auto-revert-mode 1)
-  (setq global-auto-revert-non-file-buffers t)
+  ;; (global-auto-revert-mode 1)
+  ;; (setq global-auto-revert-non-file-buffers t)
 
 #+END_SRC
 
@@ -638,7 +638,8 @@ Some settings (now using the word some here might be an underestimation, as with
 				      ("" "glossaries")
 				      ("" "newfloat")
 				      ("" "minted")
-				      ("" "chemfig")))
+				      ("" "chemfig")
+				      ("" "svg")))
 
      (defun my-latex-title-page ()
        "Template for my assignment title pages.
@@ -696,7 +697,7 @@ Some settings (now using the word some here might be an underestimation, as with
        \\end{center}
 
        \\begin{abstract}
-  
+
        \\end{abstract}
 
        \\end{titlepage}
@@ -1041,6 +1042,7 @@ More languages to evaluate with org-babel (by default, only elisp is evaluated).
   (zetteldesk-mode 1)
   (require 'zetteldesk-kb-complete)
   (require 'zetteldesk-ref)
+  (require 'zetteldesk-ref-citar)
   (require 'zetteldesk-info)
   (require 'zetteldesk-remark)
 #+END_SRC
