@@ -1,7 +1,7 @@
 ;;; zetteldesk-remark.el --- Org-Remark integration for zetteldesk.el   -*- lexical-binding: t; -*-
 
 ;; Author: Vidianos Giannitsis <vidianosgiannitsis@gmail.com>
-;; Maintaner: Vidianos Giannitsis <vidianosgiannitsis@gmail.com>
+;; Maintainer: Vidianos Giannitsis <vidianosgiannitsis@gmail.com>
 ;; URL: https://github.com/Vidianos-Giannitsis/zetteldesk-remark.el
 ;; Package-Requires: ((zetteldesk "1.0") (org-remark "1.0") (emacs "27.2"))
 ;; Created: 22nd March 2022
@@ -163,7 +163,7 @@ FILENAME, BEG, END, PROPS and TITLE are the same as in
 				  ;; Ensure to be in the beginning of
 				  ;; line to add a new headline
 				  (when (eolp) (open-line 1) (forward-line 1) (beginning-of-line))
-				  (insert (concat "* " title "\n"))
+				  (insert "* " title "\n")
 				  (org-set-property org-remark-prop-source-file filename)
 				  (org-up-heading-safe) (point))))
 	     (id-headline (org-find-property org-remark-prop-id id)))
@@ -191,11 +191,11 @@ FILENAME, BEG, END, PROPS and TITLE are the same as in
 	   (when (eolp) (open-line 1) (forward-line 1) (beginning-of-line))
 	   ;; Create a headline
 	   ;; Add a properties
-	   (insert (concat "** " node-title "\n"))
+	   (insert "** " node-title "\n")
 	   (insert "#+begin_quote\n" text "\n" "#+end_quote\n")
 	   (org-remark-notes-set-properties beg end props)
 	   (when (and orgid org-remark-use-org-id)
-	       (insert (concat "[[id:" orgid "]" "[" title "]]"))))))
+	       (insert "[[id:" orgid "]" "[" title "]]")))))
       (cond
        ;; fix GH issue #19
        ;; Temporarily remove `org-remark-save' from the `after-save-hook'
@@ -287,7 +287,7 @@ identical to those in `org-remark-highlight-mark'."
 
 The only difference is that `zetteldesk-remark-highlight-mark' is
 run instead of `org-remark-highlight-mark'.  For details on what
-the differences are, refer to its doctstring, while for details
+the differences are, refer to its docstring, while for details
 on the arguments BEG, END, ID and MODE refer to
 `org-remark-mark'."
   (interactive (org-remark-region-or-word))

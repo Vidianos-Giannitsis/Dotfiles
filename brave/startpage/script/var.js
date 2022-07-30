@@ -101,7 +101,8 @@ var favorites = [
 	  ["Showdown", "https://play.pokemonshowdown.com/", "ps"],
 	  ["Damage Calc", "https://calc.pokemonshowdown.com/index.html", "calc"],
 	  ["Master Duel Meta", "https://www.masterduelmeta.com/", "mdm"],
-	  ["Pack Opener", "https://db.ygoprodeck.com/pack-open/", "po"]
+	  ["Pack Opener", "https://db.ygoprodeck.com/pack-open/", "po"],
+	  ["Type Chart", "https://www.smogon.com/dex/sm/types/", "tc"]
       ]
     ],
     [ "Pokemon Unbound Docs",

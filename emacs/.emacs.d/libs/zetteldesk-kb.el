@@ -1,12 +1,12 @@
 ;;; zetteldesk-kb.el --- Keybindings for zetteldesk.el  -*- lexical-binding: t; -*-
 
 ;; Author: Vidianos Giannitsis <vidianosgiannitsis@gmail.com>
-;; Maintaner: Vidianos Giannitsis <vidianosgiannitsis@gmail.com>
+;; Maintainer: Vidianos Giannitsis <vidianosgiannitsis@gmail.com>
 ;; URL: https://github.com/Vidianos-Giannitsis/zetteldesk-kb.el
-;; Package-Requires: ((zetteldesk "0.2") (hydra "0.15") (major-mode-hydra "0.2") (emacs "24.1"))
+;; Package-Requires: ((zetteldesk "1.0.1") (hydra "0.15") (major-mode-hydra "0.2") (emacs "24.1"))
 ;; Created: 3rd March 2022
 ;; License: GPL-3.0
-;; Version: 0.2
+;; Version: 0.3
 
 ;; This file is free software; you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
@@ -111,6 +111,10 @@
 (defvar zetteldesk-kb-map
   (let ((km (make-sparse-keymap)))
     (define-key km zetteldesk-kb-hydra-prefix #'zetteldesk-main-hydra/body) km))
+
+;; Local variables:
+;; byte-compile-docstring-max-column: 100
+;; end:
 
 (provide 'zetteldesk-kb)
 ;;; zetteldesk-kb.el ends here

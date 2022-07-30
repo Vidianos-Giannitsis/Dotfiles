@@ -1,0 +1,2 @@
+;;; Generated package description from ox-reveal.el  -*- no-byte-compile: t -*-
+(define-package "ox-reveal" "20220627.1539" "reveal.js Presentation Back-End for Org Export Engine" '((org "8.3")) :commit "8567d2b1118bde343980b878af9a38f14d85ffcd" :authors '(("Yujie Wen <yjwen.ty at gmail dot com>")) :maintainer '("Yujie Wen <yjwen.ty at gmail dot com>") :keywords '("outlines" "hypermedia" "slideshow" "presentation"))

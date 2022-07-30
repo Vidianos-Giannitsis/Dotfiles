@@ -1,0 +1,205 @@
+# -*- eval: (visual-line-mode) -*-
+
+# SPDX-FileCopyrightText: 2017-2022 Jens Lechtenbörger
+# SPDX-License-Identifier: CC-BY-SA-4.0
+
+# Neither generate table of contents nor section numbers
+#+OPTIONS: toc:nil num:nil
+
+# Enable: browser history, fragment IDs in URLs, mouse wheel, links between presentations
+# Note that option "history" implies option "hash", which makes sure that
+# reload leads to the same slide: https://revealjs.com/config/
+#+OPTIONS: reveal_history:t reveal_fragmentinurl:t
+#+OPTIONS: reveal_mousewheel:t reveal_inter_presentation_links:t
+
+# Disable separate PDF pages for each fragment.  Just use one per slide.
+#+OPTIONS: reveal_pdfseparatefragments:nil
+
+# Display notes on separate page for PDF export.
+#+REVEAL_EXPORT_NOTES_TO_PDF: separate-page
+
+# Enable smart quotes
+#+OPTIONS: ':t
+
+# Transition styles: none/fade/slide/convex/concave/zoom/cube
+#+REVEAL_TRANS: fade
+#+REVEAL_THEME: oer-reveal
+
+#+REVEAL_PLUGINS: (notes search zoom)
+
+# The following variables are non-standard.
+# Do not display TOC-progress on title slide.
+#+REVEAL_TITLE_SLIDE_STATE: no-toc-progress
+# Do not display TOC-progress on TOC slide.
+#+REVEAL_TOC_SLIDE_STATE: no-toc-progress
+# Do not include TOC slide in TOC-progress.
+#+REVEAL_TOC_SLIDE_CLASS: no-toc-progress
+# Use different heading for TOC.
+#+REVEAL_TOC_SLIDE_TITLE: Agenda
+
+#+REVEAL_EXTRA_CSS: ./reveal.js/plugin/accessibility/helper.css
+#+REVEAL_EXTRA_CSS: ./reveal.js/plugin/toc-progress/toc-progress.css
+#+REVEAL_EXTRA_CSS: ./reveal.js/dist/theme/toc-style.css
+#+REVEAL_EXTRA_CSS: ./reveal.js/dist/theme/fonts/source-sans-pro/source-sans-pro.css
+
+# Allow to selectively hide links.
+#+REVEAL_EXTRA_SCRIPTS: ("./reveal.js/dist/theme/hidelinks.js")
+
+# The following creates an empty footer, for which the css style defines
+# a height that agrees with the TOC-progress footer’s height.
+# In this way, the footer’s height is taken into account by reveal.js’s
+# size calculations.
+#+REVEAL_SLIDE_FOOTER: <br>
+#+OPTIONS: reveal_toc_footer:t
+
+# Set a default bib file.
+#+MACRO: bibliographyfile bibliography:references.bib
+
+# Macros to display square brackets (in texts of hyperlinks).
+# Based on: https://emacs.stackexchange.com/questions/7792/can-i-make-links-in-org-mode-that-contain-brackets-or
+# Square Bracket Open [
+#+MACRO: BO @@latex:\char91{}@@@@html:&#91;@@
+# Square Bracket Close ]
+#+MACRO: BC @@latex:\char93{}@@@@html:&#93;@@
+
+# Macro for forced line break/newline, e.g., in titles.
+#+MACRO: BR @@latex:\\@@@@html:<br />@@
+
+# Macro to generate abbr element in HTML.  If a second argument is given, it
+# defines the title attribute.  For LaTeX, output first attribute as is and
+# ignore second one.
+#+MACRO: abbr (eval (concat "@@latex:" $1 "@@@@html:<abbr" (if (< 0 (length $2)) (concat " title=\"" $2 "\"") "") ">" $1 "</abbr>@@"))
+
+# Setup for PDF generation via LaTeX export.
+#+LATEX_CLASS_OPTIONS: [a4paper]
+#+LATEX_HEADER: \usepackage[backend=biber,style=alphabetic]{biblatex}
+#+LATEX_HEADER: \addbibresource{references.bib}
+#+LATEX_HEADER: \newenvironment{notes}{\par\footnotesize}{\par}
+#+LATEX_HEADER: \newenvironment{NOTES}{\par\footnotesize}{\par}
+#+LATEX_HEADER: \newenvironment{leftcol}{\begin{minipage}{.49\textwidth}}{\end{minipage}}
+#+LATEX_HEADER: \newenvironment{rightcol}{\begin{minipage}{.49\textwidth}}{\end{minipage}}
+#+LATEX_HEADER: \newenvironment{leftcol30}{\begin{minipage}{.29\textwidth}}{\end{minipage}}
+#+LATEX_HEADER: \newenvironment{leftcol40}{\begin{minipage}{.39\textwidth}}{\end{minipage}}
+#+LATEX_HEADER: \newenvironment{leftcol60}{\begin{minipage}{.59\textwidth}}{\end{minipage}}
+#+LATEX_HEADER: \newenvironment{leftcol70}{\begin{minipage}{.69\textwidth}}{\end{minipage}}
+#+LATEX_HEADER: \newenvironment{rightcol30}{\begin{minipage}{.29\textwidth}}{\end{minipage}}
+#+LATEX_HEADER: \newenvironment{rightcol40}{\begin{minipage}{.39\textwidth}}{\end{minipage}}
+#+LATEX_HEADER: \newenvironment{rightcol60}{\begin{minipage}{.59\textwidth}}{\end{minipage}}
+#+LATEX_HEADER: \newenvironment{rightcol70}{\begin{minipage}{.69\textwidth}}{\end{minipage}}
+#+LATEX_HEADER: \usepackage{textcomp} % For € in Unicode
+#+LATEX_HEADER: \usepackage{newunicodechar}
+#+LATEX_HEADER: \newunicodechar{≈}{$\approx$}
+#+LATEX_HEADER: \newunicodechar{⋮}{\vdots}
+#+LATEX_HEADER: \newunicodechar{→}{$\to$}
+#+LATEX_HEADER: \newunicodechar{ }{~}
+#+LATEX_HEADER: \usepackage{xcolor}
+#+LATEX_HEADER: \definecolor{darkred}{rgb}{0.3, 0.0, 0.0}
+#+LATEX_HEADER: \definecolor{darkgreen}{rgb}{0.0, 0.3, 0.1}
+#+LATEX_HEADER: \definecolor{darkblue}{rgb}{0.0, 0.1, 0.3}
+#+LATEX_HEADER: \definecolor{darkorange}{rgb}{1.0, 0.55, 0.0}
+#+LATEX_HEADER: \definecolor{sienna}{rgb}{0.53, 0.18, 0.09}
+#+LATEX_HEADER: \hypersetup{colorlinks,linkcolor=darkblue,citecolor=darkblue,urlcolor=darkgreen}
+#+LATEX_HEADER: \usepackage{newverbs}
+#+LATEX_HEADER: \newverbcommand{\rverb}{\color{darkred}}{}
+#+LATEX_HEADER: \newverbcommand{\gverb}{\color{darkgreen}}{}
+#+LATEX_HEADER: \newverbcommand{\bverb}{\color{darkblue}}{}
+
+# Macros to display code in different colors.
+#+MACRO: blackcode (eval (format "@@html:<code><span style=\"color:black; font-size:smaller;\">%s</span></code>@@ @@latex:\\verb|%s|@@" (org-html-encode-plain-text $1) $1))
+#+MACRO: redcode (eval (format "@@html:<code><span style=\"color:darkred; font-size:smaller;\">%s</span></code>@@ @@latex:\\rverb|%s|@@" (org-html-encode-plain-text $1) $1))
+#+MACRO: greencode (eval (format "@@html:<code><span style=\"color:darkgreen; font-size:smaller;\">%s</span></code>@@ @@latex:\\gverb|%s|@@" (org-html-encode-plain-text $1) $1))
+#+MACRO: bluecode (eval (format "@@html:<code><span style=\"color:darkblue; font-size:smaller;\">%s</span></code>@@ @@latex:\\bverb|%s|@@" (org-html-encode-plain-text $1) $1))
+
+# Function to insert an agenda at position of choice.  Insert the
+# following line where your agenda should appear: #+CALL: insert-agenda()
+#+name: insert-agenda
+#+begin_src emacs-lisp :var agenda-heading="Agenda" :var agenda-heading-depth=1 :var include-depth=1 :results value raw :exports none
+    (concat (make-string agenda-heading-depth ?*)
+            " " agenda-heading "\n"
+            ":PROPERTIES:
+  :UNNUMBERED: notoc
+  :reveal_data_state: no-toc-progress
+  :HTML_HEADLINE_CLASS: no-toc-progress
+  :END:
+  ,#+REVEAL_TOC: headlines "
+            (format "%s\n" include-depth)
+            "#+LATEX: \\renewcommand{\\printtoctitle}[1]{}\n"
+            "#+LATEX: \\tableofcontents\n\n")
+#+end_src
+
+# To display images with license information, some macros are
+# available.
+# See emacs-reveal-howto for sample use:
+# https://gitlab.com/oer/emacs-reveal-howto
+#
+# First, revealimg() for horizontally centered images, caption
+# underneath, license text rotated to the right.
+# Macro revealimg() expects up to six arguments, a filename for a
+# file with meta-data about an image and up to five optional
+# arguments: a caption, the maximum height of image in HTML, e.g.,
+# 50rh, a list of CSS classes (space separated, containing "figure"),
+# an attribute specifying whether
+# - a long (default/nil),
+# - a short (t; in this case `oer-reveal--short-license-template' is
+#   used, which by default just produces "Figure under <license>",
+#   where "Figure" is hyperlinked to its source and "<license>" should
+#   typically be a  permissive license that does not require further
+#   attribution such as CC0 or Public Domain), or
+# - no license (none)
+# should be used (arguments are documented for function
+# oer-reveal--export-attribution-helper), and a list of space
+# separated additional attributes to assign to the figure’s div
+# element.
+# Note the above unit "rv" for an image’s max-height, added in version
+# 3.10.0 of oer-reveal.  Previously, "vh" was recommended here, but
+# that does not work properly with scaling of reveal.js when the
+# screen’s resolution is larger than the slide height with reveal.js
+# (previously leading to images that might overflow).  Just use rh
+# where you would otherwise use vh.  With rv, oer-reveal replaces your
+# unit with a pixel value that is computed from your slides’ height.
+# E.g., if you use 10rh with a slide height of 700, then your image’s
+# style includes a max-height of 70px, which is scaled properly by
+# reveal.js.
+#
+# Second, reveallicense() displays an image inline in the surrouding
+# paragraph or list, aligned to the right.  Again, license information
+# is rotated to the right of the image.
+# Macro reveallicense() expects up to six arguments, the filename
+# for meta-data and optionally the maximum height, CSS classes (space
+# separated, containing "figure"), an indicator for short license (as
+# described above for revealimg()), an indicator whether the image
+# is an SVG to be embedded as XML code into the HTML document, and a
+# list of space separated additional attributes to assign to the
+# figure’s div element.
+# Embedding SVG directly is useful for single-file export with
+# :reveal-single-file and for animated SVGs.
+# Note that SVG images can also be used with revealimg().  In that case,
+# they are just used in img elements, which is not possible if option
+# :reveal-single-file is used.
+#
+# Concerning LaTeX export, the file extension is stripped for
+# includegraphics commands, so a compatible format must be available.
+# GIF images cannot be exported to LaTeX; variable
+# oer-reveal--unsupported-tex-figure-formats contains a list of such
+# formats.
+# Finally, external images (those with a URL starting with "http[s]")
+# are not exported to LaTeX.
+
+#+MACRO: revealimg (eval (oer-reveal-export-attribution $1 $2 $3 $4 $5 $6))
+#+MACRO: reveallicense (eval (oer-reveal-export-attribution $1 nil $2 $3 $4 $5 $6))
+
+# Finally, revealgrid creates an image grid.
+# Its six or seven arguments are as follows:
+# 1. Unique grid number (e.g., starting from one)
+# 2. File with names of images to position on the grid
+# 3. Height of the grid as percentage of the height of the slide
+#    (without unit)
+# 4/5. Numbers of (a) columns and (b) rows of the grid
+# 6. Grid-template-areas to specify what image to position on what
+#    grid cell(s); see, e.g.:
+#    https://developer.mozilla.org/en-US/docs/Web/CSS/grid-template-areas
+#    With this macro, the grid areas *must* be named ga1, ga2, ...
+# 7. Optional indicator whether the grid as a whole (value grid) or individual
+#    grid images (value t) should be fragmented (appear one after the other).
+# This macro uses oer-reveal-export-image-grid in oer-reveal.el.
+#+MACRO: revealgrid (eval (oer-reveal-export-image-grid $1 $2 $3 $4 $5 $6 $7))
