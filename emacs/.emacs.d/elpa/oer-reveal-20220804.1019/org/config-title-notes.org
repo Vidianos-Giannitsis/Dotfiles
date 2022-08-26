@@ -1,0 +1,41 @@
+# SPDX-FileCopyrightText: 2019-2020 Jens Lechtenbörger
+# SPDX-License-Identifier: GPL-3.0-or-later
+
+# This file is deprecated.  Version 3.3.0 of org-re-reveal includes
+# support for notes on the title slide via variable
+# org-re-reveal-title-slide-notes.
+
+# Functions to (mis-) use the subtitle to display usage notes and to
+# embed speaker notes for the title slide.  For example, first
+# add notes like this to your presentation:
+
+# #+name: title-notes
+# #+begin_src org :exports none
+# ,#+begin_notes
+#   - Thought experiment
+#     - Proud of own research?
+#       - Disseminate widely?
+#     - What about teaching resources?
+#       - Pride, publication?
+#     - Locked away, tell story about new master students
+# ,#+end_notes
+# #+end_src
+
+# Then, use this: #+CALL: title-notes-subtitle(org-input=title-notes())
+
+#+name: default-usage-notes
+#+begin_src emacs-lisp :results value raw :exports none
+  (concat "<div class=\"keyboard-usage\"><p>"
+          (oer-reveal--export-no-newline "(Press ~?~ for help, ~n~ and ~p~ for next and previous slide)" 'html)
+          "</p></div>")
+#+end_src
+
+#+name: title-notes-subtitle
+#+begin_src emacs-lisp :var prefix=default-usage-notes() :var org-input="" :results value raw :exports none
+  (concat "#+SUBTITLE: @@html:"
+          prefix
+          (if (> (length org-input) 0)
+              (oer-reveal--export-no-newline org-input 're-reveal)
+            "")
+          "@@")
+#+end_src

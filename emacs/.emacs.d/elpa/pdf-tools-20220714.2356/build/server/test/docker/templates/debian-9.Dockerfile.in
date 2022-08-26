@@ -1,4 +1,0 @@
-# -*- dockerfile -*-
-# Debian 9 is known as stretch
-FROM debian:9
-RUN apt-get update -y

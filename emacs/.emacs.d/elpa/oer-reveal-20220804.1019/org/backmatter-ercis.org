@@ -1,0 +1,5 @@
+# SPDX-FileCopyrightText: 2018-2019 Jens Lechtenbörger
+# SPDX-License-Identifier: CC0-1.0
+
+#+INCLUDE: "finalslide-ercis.org"
+#+INCLUDE: "backmatter.org"

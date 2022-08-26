@@ -1,0 +1,14 @@
+/**
+ * SPDX-FileCopyrightText: 2018-2019 Jens Lechtenbörger
+ * SPDX-License-Identifier: LicenseRef-MIT-JL
+ *
+ * Theme for ERCIS presentation with quote with reduced font size
+ * as subtitle on title page
+ *
+ * Released under the MIT License: https://opensource.org/licenses/MIT
+ */
+
+.reveal h1 { font-size: 1.8em; }
+.reveal blockquote { width: 100%; margin: 2ex 0 1ex 0; }
+.reveal .talk-subtitle p { margin: 0; line-height: 1.1; font-size: 0.7em; color: rgba(0,0,0,0.8); }
+.reveal .talk-subtitle .slide-source { font-size: 0.5em; }

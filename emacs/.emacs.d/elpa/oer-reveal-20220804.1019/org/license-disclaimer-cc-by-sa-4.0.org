@@ -1,0 +1,11 @@
+# SPDX-FileCopyrightText: 2019-2020 Jens Lechtenbörger
+# SPDX-License-Identifier: CC0-1.0
+
+#+BEGIN_QUOTE
+[[https://creativecommons.org/licenses/by-sa/4.0/#deed-understanding][No warranties are given.  The license may not give you all of the permissions necessary for your intended use.]]
+#+END_QUOTE
+
+In particular, trademark rights are /not/ licensed under this license.
+Thus, rights concerning third party logos (e.g., on the title slide)
+and other (trade-) marks (e.g., “Creative Commons” itself) remain with
+their respective holders.

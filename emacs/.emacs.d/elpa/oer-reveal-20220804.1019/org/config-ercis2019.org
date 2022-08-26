@@ -1,0 +1,27 @@
+# -*- eval: (visual-line-mode) -*-
+
+# SPDX-FileCopyrightText: 2019-2021 Jens Lechtenbörger
+# SPDX-License-Identifier: CC0-1.0
+
+#+INCLUDE: "config.org"
+
+# ERCIS slide master is not centered.
+#+OPTIONS: reveal_center:nil
+
+# Enter TOC at chosen position.
+#+OPTIONS: toc:nil
+
+# ERCIS theme as of 2019.
+#+REVEAL_EXTRA_CSS: ./reveal.js/dist/theme/ercis2019.css
+#+REVEAL_EXTRA_SCRIPTS: ("./reveal.js/plugin/quiz/js/jquery.min.js" "<script>// Inspired by https://github.com/hakimel/reveal.js/issues/806\nvar preamble = $('#preamble').html();\nif ( window.location.search.match( /print-pdf/gi ) ) {\n    Reveal.addEventListener( 'ready', function( event ) {\n        $('.slide-background').append(preamble);\n    });\n}\nelse $('div.reveal').append(preamble);\n</script>")
+
+# Do not apply a color to the TOC progress footer as presentations here make
+# use of the ERCIS theme.
+#+OER_REVEAL_TOC_PROGRESS_DEPENDENCY: { src: '%splugin/toc-progress/toc-progress.js', async: true, callback: function() { toc_progress.initialize('reduce', 'none', 'body'); toc_progress.create(); } }
+
+# Legalese and footer.
+#+REVEAL_PREAMBLE: <div style="display:none;"><div id="preamble"><div id="preamble-header"><p><a href="/imprint.html">Imprint</a> | <a href="/privacy.html">Privacy Policy</a> | <a href="#slide-license">License</a> | <a href="https://oer.gitlab.io/hints.html">Usage/Help</a></p></div><div id="preamble-footer"><hr /><p class="leftcol"><b>%a</b></p><p class="rightcol org-right">%d</p></div></div></div>
+
+# Macros for contact data.
+#+MACRO: contactpreamble
+#+MACRO: contactinfo {{{contactpreamble}}}@@html:</p><div id="contactbox"><div class="top-logos"><a class="nooutlink" href="https://www.uni-muenster.de/en/"><img class="wwu-logo-contact" src="title-slide/WWUMuenster_Logo_2017_rgb.svg" alt="Logo of University of Muenster, Germany (WWU Münster)" /></a><a class="nooutlink" href="https://www.ercis.org/"><img class="ercis-logo-contact" src="title-slide/ercis2.png" alt="Logo of European Research Center for Information Systems (ERCIS)" /></a></div><div id="contactinfo"><p id="presentername">@@{{{keyword(REVEAL_ACADEMIC_TITLE)}}} {{{AUTHOR}}}@@latex: (\href{@@@@html:</p><p class="erciscolor"><a id="presenteremail" class="nooutlink" href=mailto:"@@{{{EMAIL}}}@@latex:}{@@@@html:">@@{{{EMAIL}}}@@latex:})\\@@@@html:</a></p><p id="ercisdetails">@@{{{keyword(ERCIS_POSITION)}}}@@latex:\\@@@@html:<br />@@{{{keyword(ERCIS_STREET)}}}@@latex:\\@@@@html:<br />@@{{{keyword(ERCIS_CITY)}}}@@latex:\\@@@@html:<br />@@{{{keyword(ERCIS_COUNTRY)}}}@@latex:\\@@@@html:</p></div></div><p>@@

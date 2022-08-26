@@ -1,0 +1,7 @@
+# SPDX-FileCopyrightText: 2020 Jens Lechtenbörger
+# SPDX-License-Identifier: CC0-1.0
+
+#+INCLUDE: "config-ercis2019.org"
+
+# German license information
+#+REVEAL_PREAMBLE: <div style="display:none;"><div id="preamble"><div id="preamble-header"><p><a href="/imprint.html">Impressum</a> | <a href="/privacy-de.html">Datenschutzbedingungen</a></p></div><div id="preamble-footer"><hr /><p class="leftcol"><b>%a</b></p><p class="rightcol org-right">%d</p></div></div></div>

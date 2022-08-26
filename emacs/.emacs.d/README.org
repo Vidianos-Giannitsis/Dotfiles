@@ -960,8 +960,13 @@ More languages to evaluate with org-babel (by default, only elisp is evaluated).
        (latex . t)
        (gnuplot . t)
        (maxima . t)
+       (lisp . t)
+       (clojure . t)
   )
      )
+
+  (setq org-babel-lisp-eval-fn 'sly-eval)
+  (setq org-babel-clojure-backend 'cider)
 
 #+END_SRC
 
@@ -1528,8 +1533,10 @@ Some other extensions inside my Emacs config that require some changes for their
 
    #+END_SRC
 
-** Common Lisp
+** Common Lisp & Clojure
    I started learning CL recently, both out of interest and so that I can give software such as Nyxt and StumpWM a real try. But the sly-documentation-lookup function uses a browser to open Hyperspec in and by default that is your default browser (which makes sense). But for CL documentation, its really not handy to have to use an actual browser (I am also addicted to how ELisp docs are always inside emacs). Something like eww does the work very well. So I add an advice to the common-lisp-hyperspec function (which is what sly-documentation-lookup uses as a backend) to temporarily make eww the default browser when using it. Essentially this makes these documentation pages open in eww, while not disrupting the default behaviour of browse-url (which is to open a link with my default browser).
+
+   Clojure is another interesting lisp language that I am getting into, so I want lispy active on its modes as well.
 
 #+BEGIN_SRC elisp :tangle init.el
 
@@ -1542,6 +1549,15 @@ Some other extensions inside my Emacs config that require some changes for their
   (add-hook 'lisp-mode-hook #'(lambda ()
 			  (lispy-mode)
 			  (lispyville-mode)))
+
+  (add-hook 'clojure-mode-hook #'(lambda ()
+			  (lispy-mode)
+			  (lispyville-mode)))
+
+  (add-hook 'cider-repl-mode-hook #'(lambda ()
+			  (lispy-mode)
+			  (lispyville-mode)))
+
 
 #+END_SRC
 

@@ -1,0 +1,30 @@
+# Local IspellDict: en
+# SPDX-License-Identifier: GPL-3.0-or-later
+# SPDX-FileCopyrightText: 2019 Jens Lechtenbörger
+
+#+Title: Default (almost) presentation
+#+Author: Jens Lechtenbörger
+
+* What’s this?
+  - A [[https://revealjs.com/][reveal.js]] presentation
+    - With default settings of [[https://gitlab.com/oer/oer-reveal/][oer-reveal]]
+  - Generated from [[https://orgmode.org][Org mode]] source file
+
+* Reveal.js plugins
+  - Reveal.js has lots of plugins
+  - Some can be installed and activated with oer-reveal, e.g.:
+    - TOC progress: At bottom, hyperlinked
+    - Jump: Enter slide number, then press enter
+    - Coursemod: Press ~v~ to see speaker notes
+    - Embed audio or quizzes, animate SVG graphics
+  #+begin_notes
+  Here, speaker notes for this slide might be shown.
+  - With lists
+  - If you want to
+  #+end_notes
+
+** More settings
+   - Avoid TOC progress footer on title and TOC slides?
+   - Exclude title slide and TOC from TOC progress footer?
+
+   Use settings in [[https://gitlab.com/oer/oer-reveal/blob/master/org/config.org][org/config.org]]

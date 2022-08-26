@@ -1,0 +1,11 @@
+# SPDX-FileCopyrightText: 2019-2020 Jens Lechtenbörger
+# SPDX-License-Identifier: CC0-1.0
+
+#+BEGIN_QUOTE
+[[https://creativecommons.org/licenses/by-sa/4.0/#deed-understanding][No warranties are given.  The license may not give you all of the permissions necessary for your intended use.]]
+#+END_QUOTE
+
+Insbesondere sind Markenrechte /nicht/ Bestandteil dieser Lizenz.
+Daher verbleiben beispielsweise die Rechte an Logos (wenn vorhanden)
+und andere Markenrechte (z.\nbsp{}B. „Creative Commons“) bei ihren
+Inhabern.

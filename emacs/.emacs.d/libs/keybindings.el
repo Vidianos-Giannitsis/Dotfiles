@@ -15,7 +15,7 @@
   "RET" 'vterm-toggle
   "<C-return>" 'named-vterm 
   "b" 'counsel-switch-buffer
-  "a" 'org-agenda
+  "A" 'org-agenda
   "h" 'split-window-horizontally
   "v" 'split-window-vertically
   "c" '(calc-dispatch :which-key "Open the calc dispatcher")
@@ -45,7 +45,8 @@
   "ζ ι" 'zetteldesk-insert-node-contents
   "M" 'imaxima
   "β" 'counsel-switch-buffer
-  "F" '(my/flyspell-hydra/body :which-key "Flyspell Commands"))
+  "F" '(my/flyspell-hydra/body :which-key "Flyspell Commands")
+  "a" '(:ignore t :which-key "Avy Commands"))
 
 (general-define-key
  :states 'normal
@@ -55,6 +56,17 @@
  "n" 'org-next-link
  "p" 'org-previous-link
  "t" 'org-toggle-link-display)
+
+(general-define-key
+ :states 'normal
+ :keymaps 'override
+ :prefix "SPC a"
+ "c" 'avy-goto-char
+ "C" 'avy-goto-char-2
+ "t" 'avy-goto-char-timer
+ "l" 'avy-goto-line
+ "w" 'avy-goto-word-1
+ "W" 'avy-goto-word-0)
 
 (general-define-key
  :states 'normal
@@ -296,10 +308,10 @@
  "M-C-r" 'restart-emacs
  "M-m" 'man)
 
-(general-create-definer org-leader-def
+(general-create-definer minor-leader-def
       :prefix ",")
 
-    (org-leader-def
+    (minor-leader-def
      :states 'normal
      :keymaps 'org-mode-map
      "l" 'org-latex-preview
@@ -394,6 +406,37 @@
 
 (general-define-key
  :states 'normal
+ :keymaps 'lisp-mode-map
+ ", f" 'sly-compile-defun
+ ", h" '(sly-documentation :which-key "Documentation at point"))
+
+(minor-leader-def
+  :states 'normal
+  :keymaps 'clojure-mode-map
+  "r" '(cider-jack-in-clj :which-key "Create REPL")
+  "e" '(:ignore t :which-key "Evaluate Lisp")
+  "l" 'cider-load-buffer
+  "d" 'cider-doc
+  "a" 'cider-apropos
+  "s" 'xref-find-definitions
+  "S" 'cider-pop-back)
+
+(general-define-key
+ :states 'normal
+ :keymaps 'clojure-mode-map
+ :prefix ", e"
+ "s" 'cider-eval-last-sexp)
+
+(general-define-key
+ :states 'normal
+ :keymaps 'cider-repl-mode-map
+ ", d" 'cider-doc
+ ", a" 'cider-apropos
+ ", s" 'xref-find-definitions
+ ", S" 'cider-pop-back)
+
+(general-define-key
+ :states 'normal
  :keymaps 'pdf-view-mode-map
  "i" 'org-noter-insert-note
  "c" 'kill-current-buffer
@@ -438,11 +481,5 @@
  :states 'normal
  :keymaps 'ebib-index-mode-map
  "/" 'ebib-jump-to-entry)
-
-(general-define-key
- :states 'normal
- :keymaps 'lisp-mode-map
- ", f" 'sly-compile-defun
- ", h" '(sly-documentation :which-key "Documentation at point"))
 
 (provide 'keybindings)

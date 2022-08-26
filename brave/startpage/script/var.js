@@ -77,6 +77,7 @@ var favorites = [
 	  ["Org-Roam-Bibtex" , "https://github.com/org-roam/org-roam-bibtex", "orb"],
 	  ["Org-Roam Discourse", "https://org-roam.discourse.group/", "ord"],
 	  ["Qtile", "http://docs.qtile.org/en/latest/", "qt"],
+	  ["Clojure", "https://www.braveclojure.com/clojure-for-the-brave-and-true/", "clj"],
 	  ["EXWM", "https://github.com/ch11ng/exwm/wiki", "ex"]
       ]
     ],
