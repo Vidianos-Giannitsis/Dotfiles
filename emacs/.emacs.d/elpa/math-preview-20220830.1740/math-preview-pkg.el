@@ -1,0 +1,2 @@
+;;; Generated package description from math-preview.el  -*- no-byte-compile: t -*-
+(define-package "math-preview" "20220830.1740" "Preview TeX math equations inline" '((emacs "26.1") (json "1.4") (dash "2.18.0") (s "1.12.0")) :commit "dd41b03c64eca324558e6139699cacccfdd0efd2" :authors '(("Matsievskiy S.V.")) :maintainer '("Matsievskiy S.V.") :keywords '("convenience") :url "https://gitlab.com/matsievskiysv/math-preview")

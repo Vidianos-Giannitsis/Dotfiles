@@ -183,7 +183,7 @@
     ("i" (lambda () (interactive)(find-file "~/org_roam/index.org")) "Master index file for org_roam")
     ("n" ivy-bibtex-with-notes "Find Bibliography Note")
     ("p" org-roam-find-permanent-node "Find Permanent Note")
-    ("B" org-roam-node-find-by-backlinks "Sort by Backlink Count")
+    ("b" org-roam-node-find-by-backlinks "Sort by Backlink Count")
     ("t" org-roam-node-find-todos "Find Fleeting Note"))
 
    "References"
@@ -192,7 +192,7 @@
     ("r" org-roam-ref-find "Find Reference")
     ("c" org-ref-insert-cite-link "Insert Citation")
     ("h" org-ref-insert-link-hydra/body "Org Ref Insert-Link Hydra")
-    ("b" org-ref-bibtex-hydra/body "Org Ref Bibtex Hydra"))
+    ("B" org-ref-bibtex-hydra/body "Org Ref Bibtex Hydra"))
 
    "General Org Roam Commands"
    (("G" org-roam-ui-mode "Open the Org Roam UI")

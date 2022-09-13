@@ -32,17 +32,17 @@ var images = [
   "1450074394745.jpg"
 ];
 var searchs = [
-  ["!g", "https://www.google.com/search?q="],
-  ["!y", "https://www.youtube.com/results?search_query="],
-  ["!a", "https://wiki.archlinux.org/index.php?search="],
-  ["!r", "https://www.reddit.com/search/?q="],
-  ["!l", "https://lutris.net/games?q="],
-  ["!p", "https://www.protondb.com/search?q="],
-  ["!c", "https://lolchess.gg/search?region=EUNE&name="],
-  ["!w", "https://www.wolframalpha.com/input/?i="],
-  ["!s", "https://www.sciencedirect.com/search?qs="],
-  ["!t", "https://translate.google.com/?sl=auto&tl=en&text="],
-  ["!b", "https://bulbapedia.bulbagarden.net/w/index.php?title="]
+    ["!g", "https://www.google.com/search?q="],
+    ["!y", "https://www.youtube.com/results?search_query="],
+    ["!a", "https://wiki.archlinux.org/index.php?search="],
+    ["!r", "https://www.reddit.com/search/?q="],
+    ["!l", "https://lutris.net/games?q="],
+    ["!p", "https://www.protondb.com/search?q="],
+    ["!c", "https://lolchess.gg/search?region=EUNE&name="],
+    ["!w", "https://www.wolframalpha.com/input/?i="],
+    ["!s", "https://www.sciencedirect.com/search?qs="],
+    ["!t", "https://translate.google.com/?sl=auto&tl=en&text="],
+    ["!b", "https://bulbapedia.bulbagarden.net/w/index.php?title="]
 ];
 var favorites = [
     [ "University",
@@ -66,6 +66,7 @@ var favorites = [
 	  ["Personal Github" , "https://github.com/Vidianos-Giannitsis", "gh"],
 	  ["Youtube" , "https://www.youtube.com/", "yt"],
 	  ["Discord" , "https://discord.com/channels/@me", "dc"],
+	  ["Reddit", "https://www.reddit.com/", "rd"],
 	  ["Instagram" , "https://instagram.com/", "in"]
       ]
     ],
@@ -79,16 +80,6 @@ var favorites = [
 	  ["Qtile", "http://docs.qtile.org/en/latest/", "qt"],
 	  ["Clojure", "https://www.braveclojure.com/clojure-for-the-brave-and-true/", "clj"],
 	  ["EXWM", "https://github.com/ch11ng/exwm/wiki", "ex"]
-      ]
-    ],
-    [ "Reddit",
-      [
-	  ["Main Page", "https://www.reddit.com/", "rm"],
-	  ["Emacs Subreddit", "https://www.reddit.com/r/emacs/", "er"],
-	  ["r/unixporn", "https://www.reddit.com/r/unixporn/", "up"],
-	  ["CompetitiveTFT", "https://www.reddit.com/r/CompetitiveTFT/", "ct"],
-	  ["TFT Subreddit", "https://www.reddit.com/r/TeamfightTactics/", "tft"],
-	  ["Bodyweightfitness' RR", "https://www.reddit.com/r/bodyweightfitness/wiki/kb/recommended_routine", "brr"]
       ]
     ],
     [ "Games",
@@ -106,6 +97,15 @@ var favorites = [
 	  ["Type Chart", "https://www.smogon.com/dex/sm/types/", "tc"]
       ]
     ],
+    [ "Other",
+      [
+	  ["Darebee", "https://darebee.com/", "d"],
+	  ["Raindrop", "https://app.raindrop.io/my/0", "rd"],
+	  ["Hex Color Codes", "https://www.color-hex.com/", "ch"],
+	  ["Word Counter", "https://wordcounter.net/", "wc"],
+	  ["Detexify", "https://detexify.kirelabs.org/classify.html", "dt"]
+      ]
+    ],
     [ "Pokemon Unbound Docs",
       [
 	  ["Learnsets", "https://github.com/Skeli789/Dynamic-Pokemon-Expansion/blob/Unbound/src/Learnsets.c", "lr"],
@@ -116,15 +116,6 @@ var favorites = [
 	  ["Locations", "https://docs.google.com/spreadsheets/d/1LFSBZuPDtJrwAz7t6ZkJ-il4j8M3qCdaKLNe6EZdPmQ/edit#gid=309549967", "lc"],
 	  ["EV training guide", "https://bulbapedia.bulbagarden.net/wiki/List_of_Pok%C3%A9mon_by_effort_value_yield", "ev"],
 	  ["Wild Held Items", "https://github.com/Skeli789/Dynamic-Pokemon-Expansion/blob/Unbound/src/Base_Stats.c", "whi"]
-      ]
-    ],
-    [ "Other",
-      [
-	  ["Darebee", "https://darebee.com/", "d"],
-	  ["Raindrop", "https://app.raindrop.io/my/0", "rd"],
-	  ["Hex Color Codes", "https://www.color-hex.com/", "ch"],
-	  ["Word Counter", "https://wordcounter.net/", "wc"],
-	  ["Detexify", "https://detexify.kirelabs.org/classify.html", "dt"]
       ]
     ],
 ];

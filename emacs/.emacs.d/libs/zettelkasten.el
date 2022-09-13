@@ -131,7 +131,7 @@ instead of most recent nodes. Sorting is done with
   (interactive)
   (find-file (org-roam-node-file (org-roam-node-read nil nil #'org-roam-node-sort-by-backlinks))))
 
-(defun org-roam-backlink-query ()
+(defun org-roam-backlinks-query ()
   "Simple org-roam query function that stores the IDs of all the
   files that link to the node at point. This is a modified part
   of the `org-roam-backlinks-get' function keeping only the part
@@ -179,6 +179,90 @@ something like pdftk to merge them into one pdf"
 	      (cons (concat (file-name-sans-extension (car backlinks)) ".pdf") org-roam-backlink-pdfs))
 	(setq backlinks (cdr backlinks)))))
   (message "%s" "Done!"))
+
+(defcustom org-roam-backlinks-choices '("View Backlinks" "Go to Node" "Quit")
+  "List of choices for `org-roam-backlinks-node-read'.")
+
+(defun org-roam-backlinks-query* (NODE)
+  "Gets the backlinks of NODE with `org-roam-db-query'."
+  (org-roam-db-query
+	[:select [source dest]
+		 :from links
+		 :where (= dest $s1)
+		 :and (= type "id")]
+	(org-roam-node-id NODE)))
+
+(defun org-roam-backlinks-p (SOURCE NODE)
+  "Predicate function that checks if NODE is a backlink of SOURCE."
+  (let* ((source-id (org-roam-node-id SOURCE))
+	 (backlinks (org-roam-backlinks-query* SOURCE))
+	 (id (org-roam-node-id NODE))
+	 (id-list (list id source-id)))
+    (member id-list backlinks)))
+
+(defun org-roam-backlinks-poi-or-moc-p (NODE)
+  "Check if NODE has the tag POI or the tag MOC.  Return t if it does."
+  (or (string-equal (car (org-roam-node-tags NODE)) "POI")
+      (string-equal (car (org-roam-node-tags NODE)) "MOC")))
+
+(defun org-roam-backlinks--read-node-backlinks (source)
+  "Runs `org-roam-node-read' on the backlinks of SOURCE.
+The predicate used as `org-roam-node-read''s filter-fn is
+`org-roam-backlinks-p'."
+  (org-roam-node-read nil (apply-partially #'org-roam-backlinks-p source)))
+
+(defun org-roam-backlinks-node-read (node)
+  "Read a NODE and run `org-roam-backlinks--read-node-backlinks'.
+Upon selecting a backlink, prompt the user for what to do with
+the backlink. The prompt is created with `completing-read' with
+valid options being everything in the list
+`org-roam-backlinks-choices'.
+
+If the user decides to view the selected node's backlinks, the
+function recursively runs itself with the selection as its
+argument. If they decide they want to go to the selected node,
+the function runs `find-file' and the file associated to that
+node. Lastly, if they choose to quit, the function exits
+silently."
+  (let* ((backlink (org-roam-backlinks--read-node-backlinks node))
+	 (choice (completing-read "What to do with NODE: "
+				  org-roam-backlinks-choices)))
+    (cond
+     ((string-equal
+       choice
+       (car org-roam-backlinks-choices))
+      (org-roam-backlinks-node-read backlink))
+     ((string-equal
+       choice
+       (cadr org-roam-backlinks-choices))
+      (find-file (org-roam-node-file backlink)))
+     ((string-equal
+       choice
+       (caddr org-roam-backlinks-choices))))))
+
+(defun org-roam-backlinks-search ()
+  "Select an `org-roam-node' and recursively search its backlinks.
+
+This function is a starter function for
+`org-roam-backlinks-node-read' which gets the initial node
+selection from `org-roam-node-list'. For more information about
+this function, check `org-roam-backlinks-node-read'."
+  (interactive)
+  (let ((node (org-roam-node-read)))
+    (org-roam-backlinks-node-read node)))
+
+(defun org-roam-backlinks-search-from-moc-or-poi ()
+  "`org-roam-backlinks-search' with an initial selection filter.
+
+Since nodes tagged as \"MOC\" or \"POI\" are the entry points to
+my personal zettelkasten, I have this helper function which is
+identical to `org-roam-backlinks-search' but filters initial
+selection to only those notes. That way, they initial selection
+has a point as it will be on a node that has a decent amount of
+backlinks."
+  (interactive)
+  (let ((node (org-roam-node-read nil #'org-roam-backlinks-poi-or-moc-p)))
+    (org-roam-backlinks-node-read node)))
 
 (setq bibtex-completion-bibliography
       '("~/Sync/My_Library.bib" "~/Sync/My_Library2.bib")
