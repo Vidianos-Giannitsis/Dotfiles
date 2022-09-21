@@ -180,8 +180,9 @@ something like pdftk to merge them into one pdf"
 	(setq backlinks (cdr backlinks)))))
   (message "%s" "Done!"))
 
-(defcustom org-roam-backlinks-choices '("View Backlinks" "Go to Node" "Quit")
-  "List of choices for `org-roam-backlinks-node-read'.")
+(defcustom org-roam-backlinks-choices '("View Backlinks" "Go to Node" "Add to Zetteldesk" "Quit")
+  "List of choices for `org-roam-backlinks-node-read'.
+Check that function's docstring for more info about these.")
 
 (defun org-roam-backlinks-query* (NODE)
   "Gets the backlinks of NODE with `org-roam-db-query'."
@@ -223,7 +224,12 @@ function recursively runs itself with the selection as its
 argument. If they decide they want to go to the selected node,
 the function runs `find-file' and the file associated to that
 node. Lastly, if they choose to quit, the function exits
-silently."
+silently.
+
+There is however also the option to add the node to the current
+`zetteldesk-desktop'. `zetteldesk.el' is a package I have written
+to extend org-roam and naturally I wanted to include some
+interaction with it in this function."
   (let* ((backlink (org-roam-backlinks--read-node-backlinks node))
 	 (choice (completing-read "What to do with NODE: "
 				  org-roam-backlinks-choices)))
@@ -238,7 +244,11 @@ silently."
       (find-file (org-roam-node-file backlink)))
      ((string-equal
        choice
-       (caddr org-roam-backlinks-choices))))))
+       (caddr org-roam-backlinks-choices))
+      (zetteldesk-add-node-to-desktop backlink))
+     ((string-equal
+       choice
+       (cadddr org-roam-backlinks-choices))))))
 
 (defun org-roam-backlinks-search ()
   "Select an `org-roam-node' and recursively search its backlinks.

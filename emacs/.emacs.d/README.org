@@ -214,6 +214,7 @@ This enables:
 + Do not ask if an emacs lisp link should be used. I use these in some places and that part made them more obnoxious than they need to be.
 + Set up the ivy-youtube key to get integration between ivy and youtube
 + Make the minibuffer store the last 20 inputs it had. Minibuffer history is pretty cool
++ Require sdcv-mode, a mode for using Webster's dictionary in Emacs
 
 #+BEGIN_SRC elisp :tangle init.el
 
@@ -267,6 +268,8 @@ This enables:
   (setq history-length 20)
 
   (ace-link-setup-default)
+
+  (require 'sdcv-mode)
 #+END_SRC
 
 * Emacs Launchers

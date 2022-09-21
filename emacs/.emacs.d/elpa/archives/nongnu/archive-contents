@@ -28,13 +28,13 @@
 		(:authors
 		 ("Jordon Biondo" . "jordonbiondo@gmail.com")))])
  (annotate .
-	   [(1 7 1)
+	   [(1 7 2)
 	    nil "annotate files without changing them" tar
 	    ((:url . "https://github.com/bastibe/annotate.el")
 	     (:maintainer "Bastian Bechtold <bastibe.dev@mailbox.org>, cage" . "cage-dev@twistfold.it")
 	     (:authors
 	      ("Bastian Bechtold"))
-	     (:commit . "7aadf4b9838ad83da9f4e6128aa9a450c66220ad"))])
+	     (:commit . "145719fe7b31ede66d656261103d829a0ed695af"))])
  (anti-zenburn-theme .
 		     [(2 5 1)
 		      nil "Low-contrast Zenburn-inverted theme" tar
@@ -116,7 +116,7 @@
 	       (:keywords "bison-mode" "yacc-mode")
 	       (:url . "https://elpa.nongnu.org/nongnu/bison-mode.html"))])
  (boxquote .
-	   [(2 2)
+	   [(2 3)
 	    ((cl-lib
 	      (0 5)))
 	    "Quote text with a semi-box." tar
@@ -124,7 +124,8 @@
 	     (:keywords "quoting")
 	     (:maintainer "Dave Pearson" . "davep@davep.org")
 	     (:authors
-	      ("Dave Pearson" . "davep@davep.org")))])
+	      ("Dave Pearson" . "davep@davep.org"))
+	     (:commit . "fe676396fa7e4372e01bf2c3d9a62e8d53615d46"))])
  (buttercup .
 	    [(1 26)
 	     ((emacs
@@ -1617,7 +1618,7 @@
 		     ("John Olsson" . "john@cryon.se"))
 		    (:commit . "2d5acd143a153e16372d59000e57d76291ab81dd"))])
  (subed .
-	[(1 0 8)
+	[(1 0 9)
 	 ((emacs
 	   (25 1)))
 	 "A major mode for editing subtitles" tar
@@ -1626,7 +1627,7 @@
 	  (:maintainer "Sacha Chua" . "sacha@sachachua.com")
 	  (:authors
 	   ("Random User"))
-	  (:commit . "6591e1d49126dde225ae14b6dffefa905c98cc8d"))])
+	  (:commit . "82e3f57f954091ef3d23e0072da9f70819ab3dec"))])
  (swift-mode .
 	     [(8 6 0)
 	      ((emacs
@@ -1729,7 +1730,7 @@
 	    (:authors
 	     ("Sergei Nosov <sergei.nosov [at] gmail.com>")))])
  (treeview .
-	   [(1 1 0)
+	   [(1 1 1)
 	    ((emacs
 	      (24 4)))
 	    "A generic tree navigation library" tar
@@ -1738,7 +1739,7 @@
 	     (:maintainer "Tilman Rassy" . "tilman.rassy@googlemail.com")
 	     (:authors
 	      ("Tilman Rassy" . "tilman.rassy@googlemail.com"))
-	     (:commit . "ad9c094d89feae3300ac6c9fa49a62f08d0ff0ef"))])
+	     (:commit . "b68f77bf102b289e7b0e97f767bb7ffff9a5835b"))])
  (tuareg .
 	 [(2 3 0)
 	  ((caml
@@ -1885,7 +1886,7 @@
 	      (:authors
 	       ("Le Wang")))])
  (xah-fly-keys .
-	       [(18 0 20220911124616)
+	       [(18 0 20220918232928)
 		((emacs
 		  (24 1)))
 		"ergonomic modal keybinding minor mode." tar
@@ -1894,7 +1895,7 @@
 		 (:maintainer "Xah Lee" . "xah@xahlee.org")
 		 (:authors
 		  ("Xah Lee ( http://xahlee.info/ )"))
-		 (:commit . "845dd0636ef52bc76cf5fe2b7a238558d45f2849"))])
+		 (:commit . "e83b1d4f94ec1fd4294285a3c38743b0d2d6fd5b"))])
  (xml-rpc .
 	  [(1 6 15)
 	   nil "An elisp implementation of clientside XML-RPC" tar

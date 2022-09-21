@@ -1,2 +1,0 @@
-;;; Generated package description from git-timemachine.el  -*- no-byte-compile: t -*-
-(define-package "git-timemachine" "20220324.1057" "Walk through git revisions of a file" '((emacs "24.3") (transient "0.1.0")) :commit "ca09684e94767cc0b2339b77b778b4de4f9d104f" :authors '(("Peter Stiernström" . "peter@stiernstrom.se")) :maintainer '("Peter Stiernström" . "peter@stiernstrom.se") :keywords '("vc") :url "https://gitlab.com/pidu/git-timemachine")

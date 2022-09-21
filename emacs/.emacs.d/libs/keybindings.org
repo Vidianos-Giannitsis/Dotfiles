@@ -189,13 +189,19 @@ General has integration with which-key, so for some functions whose names I find
       ("b" (lambda() (interactive)(dired "~/Books")) "Books Directory"))
      ))
 
+  (pretty-hydra-define my/roam-backlinks-hydra (:color blue :title "Backlink Commands")
+    ("Backlinks"
+     (("f" org-roam-node-find-by-backlinks "Find node, Sorted by Backlink Count")
+      ("s" org-roam-backlinks-search-from-moc-or-poi "Search for Backlinks by MOCs and POIs")
+      ("S" org-roam-backlinks-search "Search for Backlinks"))))
+
   (pretty-hydra-define my/roam-ref-hydra (:color blue :title "Org Roam and Org Ref")
     ("Note Specific Commands"
      (("f" org-roam-node-find "org-roam-node-find")
       ("i" (lambda () (interactive)(find-file "~/org_roam/index.org")) "Master index file for org_roam")
       ("n" ivy-bibtex-with-notes "Find Bibliography Note")
       ("p" org-roam-find-permanent-node "Find Permanent Note")
-      ("b" org-roam-node-find-by-backlinks "Sort by Backlink Count")
+      ("b" my/roam-backlinks-hydra/body "Backlinks Hydra")
       ("t" org-roam-node-find-todos "Find Fleeting Note"))
 
      "References"

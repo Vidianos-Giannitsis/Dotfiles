@@ -1,12 +1,14 @@
 #+TITLE: Org-Roam, References and the Zettelkasten Workflow
 
-This file is a core part of my emacs configuration and is all about my Org-roam setup and my reference management inside org. Its based on the Zettelkasten method and the Roam Research website. Notes are linked with one another. Bibtex completion (and the existence of .bib files in general) as well as Org-ref help manage bibliographic references inside org. I also use Zotero as it easily allows me to gather my bibliographies. It exports a .bib file which these two use. Org Roam Bibtex (ORB) is a package that combines all of these to help you add citation links from org-ref inside an org-roam buffer. This section includes all the customisations and settings of these packages. This is a very large section of my config (hence why it has its own file) as I have really customised this workflow a lot. 
+This file is a core part of my emacs configuration and is all about my Org-roam setup and my reference management inside org. Its based on the Zettelkasten method and the Roam Research website. Notes are linked with one another. Bibtex completion (and the existence of .bib files in general) as well as Org-ref help manage bibliographic references inside org. I also use Zotero as it easily allows me to gather my bibliographies. It exports a .bib file which these two use. Org Roam Bibtex (ORB) is a package that combines all of these to help you add citation links from org-ref inside an org-roam buffer. This section includes all the customisations and settings of these packages. This is a very large section of my config (hence why it has its own file) as I have really customised this workflow a lot.
 
 * Table of Contents                                                     :TOC:
 - [[#org-roam-general-setup][Org-Roam general setup]]
 - [[#useful-functions][Useful Functions]]
 - [[#acting-on-backlinks][Acting on backlinks]]
+  - [[#org-roam-backlinks-search][Org-roam-backlinks-search]]
 - [[#bibtex-completion-ivy-and-org-ref][Bibtex completion (Ivy) and Org-Ref]]
+  - [[#citar][Citar]]
 - [[#org-roam-bibtex-protocols-reference-notes-and-ui-graphing-capabilities][Org Roam Bibtex, Protocols (Reference notes) and UI (graphing capabilities)]]
 - [[#logseq-like-tagging-functionality][Logseq-like tagging functionality]]
 - [[#fleeting-notes][Fleeting notes]]
@@ -16,7 +18,7 @@ This file is a core part of my emacs configuration and is all about my Org-roam 
 * Org-Roam general setup
   This part is the general setup of org-roam. It contains the setup, removing the warning message for the migration to v2, and the use-package declaration for org-roam. There I put the org roam directory, the various defmethods I use, my display template and a resize to the org-roam buffer as taking half the screen isn't something I like. I much prefer it to be a bit smaller than the main window.
 
-  A lot of the defmethods defined here are for my display template as I think its useful to see directories, backlink count and todo state of nodes in the org-roam-node-find UI. Then there is the oddball org-roam-node-backlinkscount-number which is identical almosy to org-roam-node-backlinkscount, but its different output is useful for a function I define later and the org-roam-node-buffer defmethod which is a very helpful defmethod that imo should have been defined in org-roam. It returns the buffer associated to a node, and nil if there is none. I use this in various parts of my config and I consider it an important defmethod. 
+  A lot of the defmethods defined here are for my display template as I think its useful to see directories, backlink count and todo state of nodes in the org-roam-node-find UI. Then there is the oddball org-roam-node-backlinkscount-number which is identical almost to org-roam-node-backlinkscount, but its different output is useful for a function I define later and the org-roam-node-buffer defmethod which is a very helpful defmethod that imo should have been defined in org-roam. It returns the buffer associated to a node, and nil if there is none. I use this in various parts of my config and I consider it an important defmethod. 
    
  #+BEGIN_SRC elisp :tangle yes
 
@@ -224,8 +226,9 @@ This section is about a small "package" I recently wrote. Its a backlink selecto
 
 #+BEGIN_SRC elisp :tangle yes
 
-  (defcustom org-roam-backlinks-choices '("View Backlinks" "Go to Node" "Quit")
-    "List of choices for `org-roam-backlinks-node-read'.")
+  (defcustom org-roam-backlinks-choices '("View Backlinks" "Go to Node" "Add to Zetteldesk" "Quit")
+    "List of choices for `org-roam-backlinks-node-read'.
+  Check that function's docstring for more info about these.")
 
   (defun org-roam-backlinks-query* (NODE)
     "Gets the backlinks of NODE with `org-roam-db-query'."
@@ -267,7 +270,12 @@ This section is about a small "package" I recently wrote. Its a backlink selecto
   argument. If they decide they want to go to the selected node,
   the function runs `find-file' and the file associated to that
   node. Lastly, if they choose to quit, the function exits
-  silently."
+  silently.
+
+  There is however also the option to add the node to the current
+  `zetteldesk-desktop'. `zetteldesk.el' is a package I have written
+  to extend org-roam and naturally I wanted to include some
+  interaction with it in this function."
     (let* ((backlink (org-roam-backlinks--read-node-backlinks node))
 	   (choice (completing-read "What to do with NODE: "
 				    org-roam-backlinks-choices)))
@@ -282,7 +290,11 @@ This section is about a small "package" I recently wrote. Its a backlink selecto
 	(find-file (org-roam-node-file backlink)))
        ((string-equal
 	 choice
-	 (caddr org-roam-backlinks-choices))))))
+	 (caddr org-roam-backlinks-choices))
+	(zetteldesk-add-node-to-desktop backlink))
+       ((string-equal
+	 choice
+	 (cadddr org-roam-backlinks-choices))))))
 
   (defun org-roam-backlinks-search ()
     "Select an `org-roam-node' and recursively search its backlinks.
@@ -309,6 +321,9 @@ This section is about a small "package" I recently wrote. Its a backlink selecto
       (org-roam-backlinks-node-read node)))
 
 #+END_SRC
+
+#+RESULTS:
+: org-roam-backlinks-search-from-moc-or-poi
   
 * Bibtex completion (Ivy) and Org-Ref
   Ivy Bibtex and Org ref are two excellent packages for managing bibliography. The main thing I need to configure is the location of my master .bib file and pdfs (which are exported with Zotero). I also change some other variables where I see fit.
