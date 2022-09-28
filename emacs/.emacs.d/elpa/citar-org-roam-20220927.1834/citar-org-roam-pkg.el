@@ -1,0 +1,2 @@
+;;; Generated package description from citar-org-roam.el  -*- no-byte-compile: t -*-
+(define-package "citar-org-roam" "20220927.1834" "Citar/org-roam integration" '((emacs "27.1") (org-roam "2.2") (citar "1.0")) :commit "27105d0a9578279560cd79cfad5871e7e603bc58" :authors '(("Bruce D'Arcus" . "bdarcus@gmail.com")) :maintainer '("Bruce D'Arcus" . "bdarcus@gmail.com") :url "https://github.com/emacs-citar/citar-org-roam")

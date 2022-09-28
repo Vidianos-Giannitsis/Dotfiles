@@ -145,7 +145,7 @@
 
 (ace-link-setup-default)
 
-(require 'sdcv-mode)
+(setq dictionary-server "dict.org")
 
 (defcustom bookmark-selector-web-page-alist '()
   "Alist used by `bookmark-selector-browse-bookmark' to associate
@@ -877,15 +877,7 @@ it."
 	("https://www.reddit.com/r/orgmode.rss" emacs org reddit)
 	("https://www.reddit.com/r/git.rss" linux reddit)
 	("https://www.reddit.com/r/OrgRoam.rss" emacs org zettelkasten reddit)
-	("https://www.reddit.com/r/planetemacs.rss" emacs reddit)
-	("https://www.reddit.com/r/ChemicalEngineering.rss" chemeng reddit)
 	("https://www.reddit.com/r/Nyxt.rss" lisp reddit)
-	("https://www.youtube.com/feeds/videos.xml?channel_id=UCQp2VLAOlvq142YN3JO3y8w" emacs org python youtube) ; John Kitchin's YT
-	("https://www.youtube.com/feeds/videos.xml?channel_id=UCVls1GmFKf6WlTraIb_IaJg" linux youtube) ; DistroTube's YT
-	("https://www.youtube.com/feeds/videos.xml?channel_id=UCld68syR8Wi-GY_n4CaoJGA" linux youtube) ; Brodie Robertson's YT
-	("https://www.youtube.com/feeds/videos.xml?channel_id=UCAiiOTio8Yu69c3XnR7nQBQ" emacs org lisp youtube) ; SystemCrafters YT
-	("https://www.youtube.com/feeds/videos.xml?channel_id=UC0uTPqBCFIpZxlz_Lv1tk_g" emacs youtube) ; Protesilaos Stavrou's YT
-	("https://www.youtube.com/feeds/videos.xml?channel_id=UCJetJ7nDNLlEzDLXv7KIo0w" lisp youtube) ; Gavin Freeborn's YT
 	("https://org-roam.discourse.group/c/how-to/6.rss" emacs org zettelkasten)
 	("https://org-roam.discourse.group/c/dev/5.rss" emacs org zettelkasten)
 	("https://org-roam.discourse.group/c/meta/11.rss" emacs org zettelkasten)
@@ -895,6 +887,8 @@ it."
 	("https://www.emacswiki.org/emacs?action=rss;match=%5E%5Cd%5Cd%5Cd%5Cd-%5Cd%5Cd-%5Cd%5Cd" emacs)
 	("https://ag91.github.io/rss.xml" emacs)
 	("https://takeonrules.com/index.xml" emacs org)
+	("https://andreyorst.gitlab.io/feed.xml" emacs lisp)
+	("https://magnus.therning.org/feed.xml" emacs)
 	))
 
 (require 'elfeed-score)

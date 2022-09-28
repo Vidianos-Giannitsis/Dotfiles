@@ -10,13 +10,14 @@
 		("Oleh Krehel" . "ohwoeowho@gmail.com"))
 	       (:keywords "window" "location"))])
  (ack .
-      [(1 10)
+      [(1 11)
        nil "interface to ack-like tools" tar
        ((:url . "https://github.com/leoliu/ack-el")
+	(:keywords "tools" "processes" "convenience")
 	(:maintainer "João Távora" . "joaotavora@gmail.com")
 	(:authors
 	 ("Leo Liu" . "sdl.web@gmail.com"))
-	(:keywords "tools" "processes" "convenience"))])
+	(:commit . "90c90a80322aa9f26ce88f2f24a224afc4c994b8"))])
  (ada-mode .
 	   [(7 2 1)
 	    ((uniquify-files
@@ -140,7 +141,7 @@
 			 (:maintainer "Thien-Thi Nguyen" . "ttn@gnu.org")
 			 (:url . "http://www.gnuvola.org/software/aa2u/"))])
  (async .
-	[(1 9 6)
+	[(1 9 7)
 	 ((emacs
 	   (24 4)))
 	 "Asynchronous processing in Emacs" tar
@@ -149,7 +150,7 @@
 	  (:maintainer "Thierry Volpiatto" . "thievol@posteo.net")
 	  (:authors
 	   ("John Wiegley" . "jwiegley@gmail.com"))
-	  (:commit . "370ead445f5d0fc21b7338e05a64830c410368a3"))])
+	  (:commit . "53addd02fbad33765f508f8e6254ebd44e1f81e5"))])
  (auctex .
 	 [(13 1 4)
 	  ((emacs
@@ -724,7 +725,7 @@
 	    ("Protesilaos Stavrou" . "info@protesilaos.com"))
 	   (:commit . "a143347053d1b91cbbaae602d6a109157d0e2ed7"))])
  (detached .
-	   [(0 9 0)
+	   [(0 9 1)
 	    ((emacs
 	      (27 1)))
 	    "A package to launch, and manage, detached processes" tar
@@ -733,7 +734,7 @@
 	     (:maintainer "detached.el Development" . "~niklaseklund/detached.el@lists.sr.ht")
 	     (:authors
 	      ("Niklas Eklund" . "niklas.eklund@posteo.net"))
-	     (:commit . "21a8cb01bb6714dcab99c49fc6a92c31540358fa"))])
+	     (:commit . "b7d4375e25a47fd4b2da4835f306262d9766e3e5"))])
  (devdocs .
 	  [(0 5)
 	   ((emacs
@@ -844,6 +845,17 @@
 	  ("Roland Winkler" . "winkler@gnu.org"))
 	 (:url . "https://elpa.gnu.org/packages/djvu.html")
 	 (:commit . "071c8ab168588897475899c46eaa16e70141db8c"))])
+ (doc-toc .
+	  [(1 0)
+	   ((emacs
+	     (26 1)))
+	   "Manage outlines/table of contents of pdf and djvu documents" tar
+	   ((:url . "https://github.com/dalanicolai/doc-tools-toc")
+	    (:keywords "tools" "outlines" "convenience")
+	    (:maintainer "Daniel Laurens Nicolai" . "dalanicolai@gmail.com")
+	    (:authors
+	     ("Daniel Laurens Nicolai" . "dalanicolai@gmail.com"))
+	    (:commit . "b4bb748aa303517cef1e1ce4c08047664704dbd5"))])
  (docbook .
 	  [(0 1)
 	   nil "Info-like viewer for DocBook" single
@@ -941,7 +953,7 @@
 	      (:maintainer "Markus Triska" . "triska@metalevel.at")
 	      (:url . "https://www.metalevel.at/ediprolog/"))])
  (eev .
-      [(20220828)
+      [(20220926)
        ((emacs
 	 (24 4)))
        "Support for e-scripts (eepitch blocks, elisp hyperlinks, etc)" tar
@@ -950,9 +962,9 @@
 	(:maintainer "Eduardo Ochs" . "eduardoochs@gmail.com")
 	(:authors
 	 ("Eduardo Ochs" . "eduardoochs@gmail.com"))
-	(:commit . "db182293dbbef6f6611be4d8930da37481b6857a"))])
+	(:commit . "ed23e0f2920df09ced0889627879567fd2a097ac"))])
  (ef-themes .
-	    [(0 5 0)
+	    [(0 6 0)
 	     ((emacs
 	       (27 1)))
 	     "Colorful and legible themes" tar
@@ -961,7 +973,7 @@
 	      (:maintainer "Ef-Themes Development" . "~protesilaos/ef-themes@lists.sr.ht")
 	      (:authors
 	       ("Protesilaos Stavrou" . "info@protesilaos.com"))
-	      (:commit . "cf4ae83a54ca87457f5d24701ccacfe7c6309930"))])
+	      (:commit . "fe8fcf23a326b4b7ccf1870a1919de6347a1191e"))])
  (eglot .
 	[(1 8)
 	 ((emacs
@@ -1059,7 +1071,7 @@
 		    ("Omar Antolín Camarena" . "omar@matem.unam.mx"))
 		   (:commit . "bd603d8f3b1bcff34aee2dc4b7b36dc7912b9b26"))])
  (ement .
-	[(0 1 4)
+	[(0 2 1)
 	 ((emacs
 	   (27 1))
 	  (map
@@ -1080,7 +1092,7 @@
 	  (:maintainer "Adam Porter" . "adam@alphapapa.net")
 	  (:authors
 	   ("Adam Porter" . "adam@alphapapa.net"))
-	  (:commit . "19d8d086217281991d2a206a406514d3cf6ec734"))])
+	  (:commit . "26bb6b8172007bddc878d822791ddc03a59b0188"))])
  (emms .
        [(11)
 	((cl-lib
@@ -2111,6 +2123,17 @@
 	       (:authors
 		(nil . "<johnh@isi.edu>."))
 	       (:url . "http://elpa.gnu.org/packages/notes-mode.html"))])
+ (notmuch-indicator .
+		    [(0 1 1)
+		     ((emacs
+		       (27 1)))
+		     "Display mode line indicator with notmuch-count(1) output" tar
+		     ((:url . "https://git.sr.ht/~protesilaos/notmuch-indicator")
+		      (:keywords "convenience" "mail")
+		      (:maintainer "notmuch-indicator Development" . "~protesilaos/notmuch-indicator@lists.sr.ht")
+		      (:authors
+		       ("Protesilaos Stavrou" . "info@protesilaos.com"))
+		      (:commit . "f2e153a22c8f626f303f55933e622194fab89f90"))])
  (ntlm .
        [(2 1 0)
 	nil "NTLM (NT LanManager) authentication support" single
@@ -2400,7 +2423,7 @@
 	 ("Helmut Eller" . "eller.helmut@gmail.com"))
 	(:url . "http://elpa.gnu.org/packages/peg.html"))])
  (perl-doc .
-	   [(0 2)
+	   [(0 4)
 	    ((emacs
 	      (27)))
 	    "Read Perl documentation" tar
@@ -2409,7 +2432,7 @@
 	     (:maintainer "Harald Jörg" . "haj@posteo.de")
 	     (:authors
 	      ("Harald Jörg" . "haj@posteo.de"))
-	     (:commit . "bc968d37dcc29db4cae65e6d1c3ddc80e31ffbb3"))])
+	     (:commit . "ad005b228af43ca0cc15be52e5e45137f7599216"))])
  (persist .
 	  [(0 5)
 	   nil "Persist Variables between Emacs Sessions" tar
@@ -2438,7 +2461,7 @@
 	      ("Daiki Ueno" . "ueno@gnu.org"))
 	     (:maintainer "Daiki Ueno" . "ueno@gnu.org"))])
  (plz .
-      [(0 2)
+      [(0 2 1)
        ((emacs
 	 (26 3)))
        "HTTP library" tar
@@ -2447,7 +2470,7 @@
 	(:maintainer "Adam Porter" . "adam@alphapapa.net")
 	(:authors
 	 ("Adam Porter" . "adam@alphapapa.net"))
-	(:commit . "9e9a370830a879592a4c6c9e66a5e9ec9f27d698"))])
+	(:commit . "80aeae0d201b06088d4b7543a603d97bdbccb948"))])
  (poker .
 	[(0 2)
 	 nil "Texas hold 'em poker" single
@@ -2505,7 +2528,7 @@
 	    ("Protesilaos Stavrou" . "info@protesilaos.com"))
 	   (:commit . "e01a8f7e80c5c83dfcfb87b10e0213d4963e4d15"))])
  (pyim .
-       [(5 2 4)
+       [(5 2 5)
 	((emacs
 	  (25 1))
 	 (async
@@ -2519,7 +2542,7 @@
 	 (:authors
 	  ("Ye Wenbin" . "wenbinye@163.com")
 	  ("Feng Shu" . "tumashu@163.com"))
-	 (:commit . "6b4329a25f0ec61f8fd404d926315064b966fa0b"))])
+	 (:commit . "2d9e9c5b9703dc4f3a400ab353ee99556c892c00"))])
  (pyim-basedict .
 		[(0 5 4)
 		 nil "The default pinyin dict of pyim" tar
@@ -2961,17 +2984,18 @@
 		 ("Alexandru Harsanyi" . "AlexHarsanyi@gmail.com"))
 		(:commit . "37eef19fd608ca81acb40f974b8d7bbe7fc27127"))])
  (sokoban .
-	  [(1 4 8)
+	  [(1 4 9)
 	   ((emacs
 	     (23 1))
 	    (cl-lib
 	     (0 5)))
 	   "Implementation of Sokoban for Emacs." tar
-	   ((:maintainer "Dieter Deyke" . "dieter.deyke@gmail.com")
+	   ((:keywords "games")
+	    (:maintainer "Dieter Deyke" . "dieter.deyke@gmail.com")
 	    (:authors
 	     ("Glynn Clements" . "glynn.clements@xemacs.org"))
-	    (:keywords "games")
-	    (:url . "http://elpa.gnu.org/packages/sokoban.html"))])
+	    (:url . "https://elpa.gnu.org/packages/sokoban.html")
+	    (:commit . "3043723a7c2557443aa28d871137c8d9c3b46edc"))])
  (sotlisp .
 	  [(1 6 2)
 	   ((emacs
@@ -3256,7 +3280,7 @@
 	   ("Kai Großjohann" . "kai.grossjohann@gmx.net"))
 	  (:commit . "c1fcc6bfc3a343d15a3cb757039b17af647617e3"))])
  (tramp-nspawn .
-	       [(1 0)
+	       [(1 0 1)
 		((emacs
 		  (23)))
 		"Tramp integration for systemd-nspawn containers" tar
@@ -3265,7 +3289,7 @@
 		 (:maintainer "Brian Cully" . "bjc@kublai.com")
 		 (:authors
 		  ("Brian Cully" . "bjc@kublai.com"))
-		 (:commit . "b8380ee8a7c15ad4b96963d224969fc1a0337180"))])
+		 (:commit . "c35ade49754e051c84eaa2733447b4307968f200"))])
  (tramp-theme .
 	      [(0 2)
 	       ((emacs

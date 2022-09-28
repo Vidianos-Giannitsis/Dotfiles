@@ -238,7 +238,8 @@
  :keymaps 'override
  :prefix "SPC w"
  "w" 'define-word
- "p" 'define-word-at-point)
+ "p" 'define-word-at-point
+ "d" 'dictionary-search)
 
 (general-define-key
  :states 'normal

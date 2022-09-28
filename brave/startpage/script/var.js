@@ -97,6 +97,18 @@ var favorites = [
 	  ["Type Chart", "https://www.smogon.com/dex/sm/types/", "tc"]
       ]
     ],
+    [ "Pokemon Unbound Docs",
+      [
+	  ["Learnsets", "https://github.com/Skeli789/Dynamic-Pokemon-Expansion/blob/Unbound/src/Learnsets.c", "lr"],
+	  ["Egg Moves", "https://github.com/Skeli789/Dynamic-Pokemon-Expansion/blob/Unbound/src/Egg_Moves.c", "em"],
+	  ["Evolutions", "https://github.com/Skeli789/Dynamic-Pokemon-Expansion/blob/Unbound/src/Evolution%20Table.c", "evo"],
+	  ["Bosses (Insane)", "https://docs.google.com/spreadsheets/d/1pLTQKQkWTnSkev4_kcjHbY0AkBujbTUDybxXFNZ_aVY/edit#gid=707456878", "bs"],
+	  ["Damage Calcs", "https://pastebin.com/raw/iyN9Ls90", "calcs"],
+	  ["Locations", "https://docs.google.com/spreadsheets/d/1LFSBZuPDtJrwAz7t6ZkJ-il4j8M3qCdaKLNe6EZdPmQ/edit#gid=309549967", "lc"],
+	  ["EV training guide", "https://bulbapedia.bulbagarden.net/wiki/List_of_Pok%C3%A9mon_by_effort_value_yield", "ev"],
+	  ["Wild Held Items", "https://github.com/Skeli789/Dynamic-Pokemon-Expansion/blob/Unbound/src/Base_Stats.c", "whi"]
+      ]
+    ],
     [ "Other",
       [
 	  ["Darebee", "https://darebee.com/", "d"],
@@ -104,18 +116,6 @@ var favorites = [
 	  ["Hex Color Codes", "https://www.color-hex.com/", "ch"],
 	  ["Word Counter", "https://wordcounter.net/", "wc"],
 	  ["Detexify", "https://detexify.kirelabs.org/classify.html", "dt"]
-      ]
-    ],
-    [ "Pokemon Unbound Docs",
-      [
-	  ["Learnsets", "https://github.com/Skeli789/Dynamic-Pokemon-Expansion/blob/Unbound/src/Learnsets.c", "lr"],
-	  ["Egg Moves", "https://github.com/Skeli789/Dynamic-Pokemon-Expansion/blob/Unbound/src/Egg_Moves.c", "em"],
-	  ["Evolutions", "https://github.com/Skeli789/Dynamic-Pokemon-Expansion/blob/Unbound/src/Evolution%20Table.c", "evo"],
-	  ["Bosses (Insane Difficulty)", "https://docs.google.com/spreadsheets/d/1pLTQKQkWTnSkev4_kcjHbY0AkBujbTUDybxXFNZ_aVY/edit#gid=707456878", "bs"],
-	  ["Damage Calcs", "https://pastebin.com/raw/iyN9Ls90", "calcs"],
-	  ["Locations", "https://docs.google.com/spreadsheets/d/1LFSBZuPDtJrwAz7t6ZkJ-il4j8M3qCdaKLNe6EZdPmQ/edit#gid=309549967", "lc"],
-	  ["EV training guide", "https://bulbapedia.bulbagarden.net/wiki/List_of_Pok%C3%A9mon_by_effort_value_yield", "ev"],
-	  ["Wild Held Items", "https://github.com/Skeli789/Dynamic-Pokemon-Expansion/blob/Unbound/src/Base_Stats.c", "whi"]
       ]
     ],
 ];
