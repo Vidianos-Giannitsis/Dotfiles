@@ -193,9 +193,9 @@ This file is a core part of my emacs configuration and is all about my Org-roam 
       exceptionally useful with index files as it allows you to do an
       action on all files linked to this index automatically."
 	(interactive)
-	(let ((backlinks (length (org-roam-backlink-query))))
+	(let ((backlinks (length (org-roam-backlinks-query))))
 	  (dotimes (number backlinks)
-	    (let* ((id (car (nth number (org-roam-backlink-query))))
+	    (let* ((id (car (nth number (org-roam-backlinks-query))))
 		   (node (org-roam-node-from-id id)))
 	      (setq-local org-roam-backlinks (cons (org-roam-node-file node) org-roam-backlinks))))
 	  org-roam-backlinks))
@@ -340,14 +340,14 @@ This section is about a small "package" I recently wrote. Its a backlink selecto
 	     '("~/Sync/My_Library.bib" "~/Sync/My_Library2.bib")
 	     bibtex-completion-pdf-field "File"
 	     bibtex-completion-library-path '("~/Sync/Zotero_pdfs"))
-	
+
        (setq bibtex-completion-additional-search-fields '(keywords abstract))
-	
+
        (setq ivy-bibtex-default-action 'ivy-bibtex-edit-notes)
        (ivy-add-actions
 	'ivy-bibtex
 	'(("p" ivy-bibtex-open-any "Open pdf, url or DOI")))
-	
+
        (setq bibtex-completion-format-citation-functions
 	     '((org-mode . bibtex-completion-format-citation-org-title-link-to-PDF)
 	       (latex-mode . bibtex-completion-format-citation-cite)
@@ -373,20 +373,20 @@ The bibliography backend I currently use is ivy-bibtex (hence the above config).
    For a brief description of each ones use case, org-roam-bibtex (aka ORB) is an excellent package for bibliography management inside org-roam. Since other packages help out with this, the big thing this one does is that it hooks bibtex-completion to use the org-roam ecosystem for its notes. Org-protocol is for capturing info from a web page and adding it to an org file. The org-roam-protocol is basically integrating that to the org-roam ecosystem. Org-roam-ui is the new graphing package designed for org-roam-v2. We used to use org-roam-server for this, but with the migration to v2, this package was created (which is honestly better than org-roam-server) for an excellent visual graph of your org roam directory. There are many advantages to viewing your knowledge repository with a graph so this is a must have package. 
 
 #+BEGIN_SRC elisp :tangle yes
-  
+
   (require 'org-roam-bibtex)
   (org-roam-bibtex-mode 1)
-  
+
   (setq orb-insert-interface 'ivy-bibtex
 	orb-note-actions-interface 'ivy)
   (setq orb-preformat-keywords '("citekey" "author" "date" "entry-type" "keywords" "url" "file"))
-  
+
   (require 'org-protocol)
   (require 'org-roam-protocol)
-  
+
   (require 'websocket)
   (require 'org-roam-ui)
-  
+
 #+END_SRC
 
 * Logseq-like tagging functionality

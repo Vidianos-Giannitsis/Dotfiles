@@ -105,11 +105,6 @@
 (setq large-file-warning-threshold nil)
 (setq vc-follow-symlinks t)
 
-(setq counsel-spotify-client-id "0df2796a793b41dc91711eb9f85c0e77")
-(setq counsel-spotify-client-secret "bcdbb823795640248ff2c29eedadb800")
-(setq espotify-client-id "0df2796a793b41dc91711eb9f85c0e77")
-(setq espotify-client-secret "bcdbb823795640248ff2c29eedadb800")
-
 (require 'math-at-point)
 (require 'molar-mass)
 
@@ -138,8 +133,6 @@
 (add-to-list 'auto-mode-alist '("\\.epub\\'" . nov-mode))
 
 (setq org-link-elisp-confirm-function nil)
-
-(setq ivy-youtube-key "224520591375-p6v36u3r9k8qt2k7qthb12gnjarc8c7t")
 
 (setq history-length 20)
 
@@ -291,6 +284,12 @@ implemented with the `bookmark-selector-launcher' macro."
   :hook (dired-mode . dired-collapse-mode))
 
 (require 'helm-dired-open)
+
+(use-package dired-subtree :ensure t
+  :after dired
+  :config
+  (bind-key "<tab>" #'dired-subtree-toggle dired-mode-map)
+  (bind-key "<backtab>" #'dired-subtree-cycle dired-mode-map))
 
 (show-paren-mode 1)
 (electric-pair-mode 1)
@@ -656,6 +655,30 @@ change from one assignment to the next."
     ";'"  "\\prime"
     ";."  "\\cdot"))
 
+(with-eval-after-load "org-tree-slide"
+  (defvar my-hide-org-meta-line-p nil)
+  (defun my-hide-org-meta-line ()
+    (interactive)
+    (setq my-hide-org-meta-line-p t)
+    (set-face-attribute 'org-meta-line nil
+					  :foreground (face-attribute 'default :background)))
+  (defun my-show-org-meta-line ()
+    (interactive)
+    (setq my-hide-org-meta-line-p nil)
+    (set-face-attribute 'org-meta-line nil :foreground nil))
+
+  (defun my-toggle-org-meta-line ()
+    (interactive)
+    (if my-hide-org-meta-line-p
+	      (my-show-org-meta-line) (my-hide-org-meta-line)))
+
+  (add-hook 'org-tree-slide-play-hook #'my-hide-org-meta-line)
+  (add-hook 'org-tree-slide-stop-hook #'my-show-org-meta-line)
+
+  (setq org-tree-slide-modeline-display 'lighter)
+  (setq org-tree-slide-activate-message "Entering Presentation")
+  (setq org-tree-slide-deactivate-message "Exiting Presentation"))
+
 (setq org-noter-always-create-frame nil)
 
 (defun org-cycle-hide-drawers (state)
@@ -761,13 +784,14 @@ change from one assignment to the next."
 (define-skeleton hw-skeleton
   "A skeleton for quickly adding a list of this semester's lessons to a new note which I use for tracking what I need to do for each lesson"
   ""
-  "*** ΜΦΔ\n\n"
+  "*** Ενέργεια\n\n"
   "*** ΜΧΔ\n\n"
-  "*** Πολυμερή\n\n"
-  "*** Τρόφιμα\n\n"
-  "*** Σχεδιασμός Προιόντων\n\n"
-  "*** Περιβάλλον\n\n"
-  "*** Οικονομικά\n\n"
+  "*** Βιοχημική Μηχανική\n"
+  "**** Ένζυμα\n\n"
+  "**** Μαμούνια\n\n"
+  "*** Ρύθμιση Διεργασιών\n\n"
+  "*** Σχεδιασμός\n\n"
+  "**** Εργασία\n\n"
   "*** Other\n\n")
 
 (require 'zettelkasten)
@@ -881,15 +905,19 @@ it."
 	("https://org-roam.discourse.group/c/how-to/6.rss" emacs org zettelkasten)
 	("https://org-roam.discourse.group/c/dev/5.rss" emacs org zettelkasten)
 	("https://org-roam.discourse.group/c/meta/11.rss" emacs org zettelkasten)
-	("https://planet.emacslife.com/atom.xml" emacs)
+	("https://planet.emacslife.com/atom.xml" emacs news)
 	("https://irreal.org/blog/?feed=rss2" emacs linux org)
-	("https://sachachua.com/blog/category/emacs-news/feed/" emacs)
-	("https://www.emacswiki.org/emacs?action=rss;match=%5E%5Cd%5Cd%5Cd%5Cd-%5Cd%5Cd-%5Cd%5Cd" emacs)
+	("https://sachachua.com/blog/category/emacs-news/feed/" emacs news)
 	("https://ag91.github.io/rss.xml" emacs)
 	("https://takeonrules.com/index.xml" emacs org)
 	("https://andreyorst.gitlab.io/feed.xml" emacs lisp)
 	("https://magnus.therning.org/feed.xml" emacs)
+	("https://protesilaos.com/codelog.xml" emacs lisp)
+	("https://protesilaos.com/news.xml" news)
+	("https://karl-voit.at/feeds/lazyblorg-all.atom_1.0.links-only.xml" emacs org)
 	))
+
+(setq elfeed-search-filter "@1-months-ago +unread")
 
 (require 'elfeed-score)
 (elfeed-score-enable)

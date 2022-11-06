@@ -163,7 +163,7 @@
     ("S" (lambda() (interactive)(find-file "~/scratchpad.org")) "Emacs Scratchpad file"))
 
    "University"
-   (("u" (lambda() (interactive)(dired "~/Documents/6o_εξάμηνο")) "University Documents folder")
+   (("u" (lambda() (interactive)(dired "~/Documents/7o_εξάμηνο")) "University Documents folder")
     ("B" (lambda() (interactive)(find-file "~/Sync/My_Library.bib")) "Master Bibliography file")
     ("o" (lambda() (interactive)(dired "~/Documents/Octave")) "Octave scripts directory")
     ("z" (lambda() (interactive)(dired "~/Zetteldesk")) "Zetteldesk Directory")
@@ -187,7 +187,7 @@
   ("Note Specific Commands"
    (("f" org-roam-node-find "org-roam-node-find")
     ("i" (lambda () (interactive)(find-file "~/org_roam/index.org")) "Master index file for org_roam")
-    ("n" ivy-bibtex-with-notes "Find Bibliography Note")
+    ("l" ivy-bibtex-with-notes "Find Literature Note")
     ("p" org-roam-find-permanent-node "Find Permanent Note")
     ("b" my/roam-backlinks-hydra/body "Backlinks Hydra")
     ("t" org-roam-node-find-todos "Find Fleeting Note"))

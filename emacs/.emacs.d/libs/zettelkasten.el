@@ -154,9 +154,9 @@ instead of most recent nodes. Sorting is done with
   exceptionally useful with index files as it allows you to do an
   action on all files linked to this index automatically."
     (interactive)
-    (let ((backlinks (length (org-roam-backlink-query))))
+    (let ((backlinks (length (org-roam-backlinks-query))))
       (dotimes (number backlinks)
-	(let* ((id (car (nth number (org-roam-backlink-query))))
+	(let* ((id (car (nth number (org-roam-backlinks-query))))
 	       (node (org-roam-node-from-id id)))
 	  (setq-local org-roam-backlinks (cons (org-roam-node-file node) org-roam-backlinks))))
       org-roam-backlinks))
