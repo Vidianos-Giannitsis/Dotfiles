@@ -388,6 +388,8 @@ implemented with the `bookmark-selector-launcher' macro."
 
 (setq org-export-with-broken-links t)
 
+(setq org-lowest-priority '69)
+
 (setq org-format-latex-options '(:foreground default :background default :scale 1.8 :html-foreground "Black" :html-background "Transparent" :html-scale 1.0 :matchers))
 
 (setq org-latex-pdf-process (list "latexmk -shell-escape -bibtex -f -pdf %f"))
@@ -405,6 +407,8 @@ implemented with the `bookmark-selector-launcher' macro."
 			    (laas-mode)))
 
 (setq org-latex-listings 'minted)
+
+(require 'tochemfig)
 
 (setq org-latex-packages-alist '(("" "booktabs")
 				 ("" "import")
@@ -892,6 +896,22 @@ it."
 				(setq company-math-allow-latex-symbols-in-faces t)
 				(setq company-bibtex-bibliography '("~/org_roam/Zotero_library.bib"))))
 
+(defengine google "https://www.google.com/search?q=%s")
+(defengine youtube "https://www.youtube.com/results?search_query=%s")
+(defengine archwiki "https://wiki.archlinux.org/index.php?search=%s")
+(defengine reddit "https://www.reddit.com/search/?q=%s")
+(defengine lutris "https://lutris.net/games?q=%s")
+(defengine protondb "https://www.protondb.com/search?q=%s")
+(defengine lolchess "https://lolchess.gg/search?region=EUNE&name=%s")
+(defengine wolfram "https://www.wolframalpha.com/input/?i=%s")
+(defengine sciencedirect "https://www.sciencedirect.com/search?qs=%s")
+(defengine translate "https://translate.google.com/?sl=auto&tl=en&text=%s")
+(defengine bulbapedia "https://bulbapedia.bulbagarden.net/w/index.php?title=%s")
+(defengine github "https://github.com/search?ref=simplesearch&q=%s")
+
+(setq mastodon-active-user "@vidianosgiannitsis")
+(setq mastodon-instance-url "https://emacs.ch")
+
 (setq elfeed-feeds
       '(("https://www.reddit.com/r/emacs.rss" emacs lisp reddit)
 	("https://www.reddit.com/r/LaTeX.rss" latex reddit)
@@ -906,7 +926,7 @@ it."
 	("https://org-roam.discourse.group/c/dev/5.rss" emacs org zettelkasten)
 	("https://org-roam.discourse.group/c/meta/11.rss" emacs org zettelkasten)
 	("https://planet.emacslife.com/atom.xml" emacs news)
-	("https://irreal.org/blog/?feed=rss2" emacs linux org)
+	("https://irreal.org/blog/?feed=rss2" emacs linux news)
 	("https://sachachua.com/blog/category/emacs-news/feed/" emacs news)
 	("https://ag91.github.io/rss.xml" emacs)
 	("https://takeonrules.com/index.xml" emacs org)
@@ -914,6 +934,8 @@ it."
 	("https://magnus.therning.org/feed.xml" emacs)
 	("https://protesilaos.com/codelog.xml" emacs lisp)
 	("https://protesilaos.com/news.xml" news)
+	("https://emacs.ch/@melpa.rss" emacs news melpa mastodon)
+	("https://cestlaz.github.io/rss.xml" emacs news)
 	("https://karl-voit.at/feeds/lazyblorg-all.atom_1.0.links-only.xml" emacs org)
 	))
 

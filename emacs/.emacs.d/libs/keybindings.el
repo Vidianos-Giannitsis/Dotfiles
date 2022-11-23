@@ -46,6 +46,7 @@
   "M" 'imaxima
   "β" 'counsel-switch-buffer
   "F" '(my/flyspell-hydra/body :which-key "Flyspell Commands")
+  "/" '(:ignore t :which-key "Search Engines")
   "a" '(:ignore t :which-key "Avy Commands"))
 
 (general-define-key
@@ -56,6 +57,23 @@
  "n" 'org-next-link
  "p" 'org-previous-link
  "t" 'org-toggle-link-display)
+
+(general-define-key
+ :states 'normal
+ :keymaps 'override
+ :prefix "SPC /"
+ "g" 'engine/search-google
+ "y" 'engine/search-youtube
+ "a" 'engine/search-archwiki
+ "r" 'engine/search-reddit
+ "l" 'engine/search-lutris
+ "p" 'engine/search-protondb
+ "L" 'engine/search-lolchess
+ "w" 'engine/search-wolfram
+ "s" 'engine/search-sciencedirect
+ "t" 'engine/search-translate
+ "b" 'engine/search-bulbapedia
+ "G" 'engine/search-github)
 
 (general-define-key
  :states 'normal

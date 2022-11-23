@@ -557,23 +557,24 @@ Some settings (now using the word some here might be an underestimation, as with
    + Changing the heading and title font to match my global font and resizing them so 1st tier headings and titles actually stand out like they should.
    + A function to toggle the behaviour of markup elements such as visible asterisks when writing a message in bold. I dont like seeing them usually, but its good to have a function which toggle this behaviour
    + When exporting, I want the export to work regardless of if the links work or not. If I am exporting a link heavy file (such as something from my Zettelkasten) I want it to export even if the links will not work.
+   + Set the lowest priority to '69 (E), so I have 5 priority levels
 
  
 #+BEGIN_SRC elisp :tangle init.el
   (add-to-list 'org-file-apps '("\\.pdf\\'" . emacs))
-  
+
   (setq org-odt-preferred-output-format "docx")
-  
+
   (add-hook 'org-mode-hook (lambda () (add-hook 'after-save-hook #'(lambda ()
 								     (let ((org-confirm-babel-evaluate nil))
 								       (org-babel-tangle))))
 						'run-at-end 'only-in-org-mode))
-  
+
   (setq org-startup-with-inline-images t)
   (setq org-image-actual-width nil)
-  
+
   (add-hook 'org-mode-hook 'visual-line-mode)
-  
+
   (set-face-attribute 'org-document-title nil :font "Source Code Pro" :weight 'bold :height 1.3)
   (dolist (face '((org-level-1 . 1.2)
 		  (org-level-2 . 1.1)
@@ -584,16 +585,17 @@ Some settings (now using the word some here might be an underestimation, as with
 		  (org-level-7 . 1.1)
 		  (org-level-8 . 1.1)))
     (set-face-attribute (car face) nil :font "Source Code Pro" :weight 'regular :height (cdr face)))
-  
+
   (defun org-toggle-emphasis ()
     "Toggle hiding/showing of org emphasize markers."
     (interactive)
     (if org-hide-emphasis-markers
 	(set-variable 'org-hide-emphasis-markers nil)
       (set-variable 'org-hide-emphasis-markers t)))
-  
+
   (setq org-export-with-broken-links t)
-  
+
+  (setq org-lowest-priority '69)
 #+END_SRC
 
 ** Latex Stuff
@@ -605,6 +607,7 @@ Some settings (now using the word some here might be an underestimation, as with
     + I activate calctex and activate it when I go into calc's embedded mode. Its a neat package that allows me to type a formula inside calc and renders it automatically into latex. Latex snippets are what I use mostly but this is a very neat package and I had to include it here.
     + I activate org-cdlatex-mode which makes typing latex equations easier inside org and massively improves speed of typing equations together with snippets for org, org-fragtog mode which automatically creates previews for latex fragments when the cursor is not on them and laas mode which is a bunch of helpful latex snippets which autocomplete.
     + I tell latex to export my code blocks using the minted package so they look better
+    + Requiring "tochemfig" a neat package to generate latex figures for chemical elements.
     + I add some packages I use in all my documents in org-latex-packages-alist.
     + The next few were taken by John Kitchin's [[https://kitchingroup.cheme.cmu.edu/blog/2016/11/07/Better-equation-numbering-in-LaTeX-fragments-in-org-mode/][website]]. Its about equations in org not being properly numbered as the org latex preview takes them as independent fragments and not as a whole. This code snippet, makes org number equations properly using an advice on org-create-formula-image. Its very neat and I am glad to have found it.
     + Lastly, I redefine the laas basic snippets as there are some useful symbols not included (such as laplace transformation) or some others which I dont like the letter they are bound to. A lot of the snippets included are for adding greek letters to text. I have a greek keyboard, so to me these are useless and I replaced some of them with these symbols. I left the rest of them the same, as I dont really care about them if I can't think of a better alternative.
@@ -627,6 +630,8 @@ Some settings (now using the word some here might be an underestimation, as with
 				 (laas-mode)))
 
      (setq org-latex-listings 'minted)
+
+     (require 'tochemfig)
 
      (setq org-latex-packages-alist '(("" "booktabs")
 				      ("" "import")
@@ -882,18 +887,10 @@ Some settings (now using the word some here might be an underestimation, as with
     Essentially, I define a filter function for the latex export, which wraps the file name in a link, in a detokenize environment so that greek letters don't error out when exporting. However, this causes an unexpected error with figures so until I solve this this will be in a commented code block for use when I need it
 #+BEGIN_SRC elisp :tangle init.el
   (defun latex-filter-greek-hrefs (link backend info)
-    "Change \\href to \\href{\detokenize} so that latex exports
+    "Change \\href to \\href{\\detokenize} so that latex exports
     don't break if they see a file with greek letters"
     (when (org-export-derived-backend-p backend 'latex)
-      (let* ((bracket (search "\}" link))
-	     (size (length link))
-	     (name
-	      (concat (substring link 0 6)
-		      "\\detokenize\{"
-		      (substring link 6 bracket)
-		      "\}"
-		      (substring link bracket size))))
-	(format "%s" name))))
+      (replace-regexp-in-string "\\\\href{\\([^}]*\\)}" "\\\\href{\\\\detokenize{\\1}}" link t)))
 
   (add-to-list 'org-export-filter-link-functions
 	       'latex-filter-greek-hrefs)
@@ -1213,8 +1210,37 @@ More languages to evaluate with org-babel (by default, only elisp is evaluated).
 				    (setq company-bibtex-bibliography '("~/org_roam/Zotero_library.bib"))))
 
   #+END_SRC
-  
+
+* Search Engines 
+The ~engine-mode~ minor mode is a great package for defining search engines which you can query through emacs. I already have a list of these I use from inside my web browser so this is even handier.
+
+#+BEGIN_SRC elisp :tangle init.el
+
+  (defengine google "https://www.google.com/search?q=%s")
+  (defengine youtube "https://www.youtube.com/results?search_query=%s")
+  (defengine archwiki "https://wiki.archlinux.org/index.php?search=%s")
+  (defengine reddit "https://www.reddit.com/search/?q=%s")
+  (defengine lutris "https://lutris.net/games?q=%s")
+  (defengine protondb "https://www.protondb.com/search?q=%s")
+  (defengine lolchess "https://lolchess.gg/search?region=EUNE&name=%s")
+  (defengine wolfram "https://www.wolframalpha.com/input/?i=%s")
+  (defengine sciencedirect "https://www.sciencedirect.com/search?qs=%s")
+  (defengine translate "https://translate.google.com/?sl=auto&tl=en&text=%s")
+  (defengine bulbapedia "https://bulbapedia.bulbagarden.net/w/index.php?title=%s")
+  (defengine github "https://github.com/search?ref=simplesearch&q=%s")
+
+#+END_SRC
  
+* Mastodon
+Mastodon is a federated social network site. The emacs.ch instance is a great mastodon instance with a lot of emacs users, which I use. This code sets up mastodon.el to work as expected
+
+#+BEGIN_SRC elisp :tangle init.el
+
+  (setq mastodon-active-user "@vidianosgiannitsis")
+  (setq mastodon-instance-url "https://emacs.ch")
+  
+#+END_SRC
+
 * Elfeed - RSS Feeds
 Elfeed is an RSS reader for Emacs. I have started looking into it and adding things to my feed.
 
@@ -1234,7 +1260,7 @@ Elfeed is an RSS reader for Emacs. I have started looking into it and adding thi
 	  ("https://org-roam.discourse.group/c/dev/5.rss" emacs org zettelkasten)
 	  ("https://org-roam.discourse.group/c/meta/11.rss" emacs org zettelkasten)
 	  ("https://planet.emacslife.com/atom.xml" emacs news)
-	  ("https://irreal.org/blog/?feed=rss2" emacs linux org)
+	  ("https://irreal.org/blog/?feed=rss2" emacs linux news)
 	  ("https://sachachua.com/blog/category/emacs-news/feed/" emacs news)
 	  ("https://ag91.github.io/rss.xml" emacs)
 	  ("https://takeonrules.com/index.xml" emacs org)
@@ -1242,6 +1268,8 @@ Elfeed is an RSS reader for Emacs. I have started looking into it and adding thi
 	  ("https://magnus.therning.org/feed.xml" emacs)
 	  ("https://protesilaos.com/codelog.xml" emacs lisp)
 	  ("https://protesilaos.com/news.xml" news)
+	  ("https://emacs.ch/@melpa.rss" emacs news melpa mastodon)
+	  ("https://cestlaz.github.io/rss.xml" emacs news)
 	  ("https://karl-voit.at/feeds/lazyblorg-all.atom_1.0.links-only.xml" emacs org)
 	  ))
 

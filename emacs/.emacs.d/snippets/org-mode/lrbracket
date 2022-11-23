@@ -1,0 +1,5 @@
+# -*- mode: snippet -*-
+# name: lrbracket
+# key: lrb
+# --
+\left[$0 \right]
