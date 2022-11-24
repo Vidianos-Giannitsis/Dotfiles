@@ -96,14 +96,50 @@ function."
   (interactive)
   (org-roam-node-find nil nil #'org-roam-permanent-note-p))
 
-(defvar-local org-roam-backlinks nil
+(setq bibtex-completion-bibliography
+      '("~/Sync/My_Library.bib" "~/Sync/My_Library2.bib")
+      bibtex-completion-pdf-field "File"
+      bibtex-completion-library-path '("~/Sync/Zotero_pdfs"))
+
+(setq bibtex-completion-additional-search-fields '(keywords abstract))
+
+(setq ivy-bibtex-default-action 'ivy-bibtex-edit-notes)
+(ivy-add-actions
+ 'ivy-bibtex
+ '(("p" ivy-bibtex-open-any "Open pdf, url or DOI")))
+
+(setq bibtex-completion-format-citation-functions
+      '((org-mode . bibtex-completion-format-citation-org-title-link-to-PDF)
+	(latex-mode . bibtex-completion-format-citation-cite)
+	(markdown-mode . bibtex-completion-format-citation-pandoc-citeproc)
+	(python-mode . bibtex-completion-format-citation-sphinxcontrib-bibtex)
+	(rst-mode . bibtex-completion-format-citation-sphinxcontrib-bibtex)
+	(default . bibtex-completion-format-citation-default)))
+
+(setq citar-bibliography '("~/Sync/My_Library.bib" "~/Sync/My_Library2.bib"))
+(setq citar-notes-paths '("~/org_roam/ref"))
+
+(require 'org-roam-bibtex)
+(org-roam-bibtex-mode 1)
+
+(setq orb-insert-interface 'ivy-bibtex
+      orb-note-actions-interface 'ivy)
+(setq orb-preformat-keywords '("citekey" "author" "date" "entry-type" "keywords" "url" "file"))
+
+(require 'org-protocol)
+(require 'org-roam-protocol)
+
+(require 'websocket)
+(require 'org-roam-ui)
+
+(defvar-local org-roam-backlinks-files nil
   "Buffer local variable displaying a list of the absolute paths
   of all the files that are backlinked to current node. These are
   not added by default, and as such this variable has the value
   nil but they can be added by running the
-  `org-roam-backlink-files' function on a node.")
+  `org-roam-backlinks-find-files' function on a node.")
 
-(defvar org-roam-backlink-pdfs nil
+(defvar org-roam-backlinks-pdfs nil
   "After running `org-roam-export-backlinks-to-latex-pdf', to
   export a node and all its backlinks to pdf, the value of this
   variable in the original node's buffer will become a list of
@@ -111,23 +147,23 @@ function."
   combining them as the value of this variable can then be passed
   to a program such as pdftk to combine them.")
 
-(defun org-roam-node-sort-by-backlinks (completion-a completion-b)
+(defun org-roam-backlinks-sort-by-backlinks (completion-a completion-b)
   "Sorting function for org-roam that sorts the list of nodes by
 the number of backlinks. This is the sorting function in
-`org-roam-node-find-by-backlinks'"
+`org-roam-backlinks-node-find-by-backlinks'"
   (let ((node-a (cdr completion-a))
 	(node-b (cdr completion-b)))
     (>= (org-roam-node-backlinkscount-number node-a)
 	(org-roam-node-backlinkscount-number node-b))))
 
-(defun org-roam-node-find-by-backlinks ()
+(defun org-roam-backlinks-node-find-by-backlinks ()
   "Essentially works like `org-roam-node-find' (although it uses
 a combination of `find-file' and `org-roam-node-read' to
 accomplish that and not `org-roam-node-find' as only
 `org-roam-node-read' can take a sorting function as an argument)
 but the list of nodes is sorted by the number of backlinks
 instead of most recent nodes. Sorting is done with
-`org-roam-node-sort-by-backlinks'"
+`org-roam-backlinks-sort-by-backlinks'"
   (interactive)
   (find-file (org-roam-node-file (org-roam-node-read nil nil #'org-roam-node-sort-by-backlinks))))
 
@@ -135,7 +171,7 @@ instead of most recent nodes. Sorting is done with
   "Simple org-roam query function that stores the IDs of all the
   files that link to the node at point. This is a modified part
   of the `org-roam-backlinks-get' function keeping only the part
-  necessary for `org-roam-backlink-files' to work as this is a
+  necessary for `org-roam-backlinks-find-files' to work as this is a
   complimentary function to that"
   (org-roam-db-query
    [:select [source dest]
@@ -144,7 +180,7 @@ instead of most recent nodes. Sorting is done with
 	    :and (= type "id")]
    (org-roam-node-id (org-roam-node-at-point))))
 
-(defun org-roam-backlink-files ()
+(defun org-roam-backlinks-find-files ()
     "Get all nodes that link to the node at point with the
     `org-roam-backlink-query' function, find their absolute path
     and save a list of those paths to the buffer local variable
@@ -158,25 +194,25 @@ instead of most recent nodes. Sorting is done with
       (dotimes (number backlinks)
 	(let* ((id (car (nth number (org-roam-backlinks-query))))
 	       (node (org-roam-node-from-id id)))
-	  (setq-local org-roam-backlinks (cons (org-roam-node-file node) org-roam-backlinks))))
-      org-roam-backlinks))
+	  (setq-local org-roam-backlinks-files (cons (org-roam-node-file node) org-roam-backlinks-files))))
+      org-roam-backlinks-files))
 
-(defun org-roam-export-backlinks-to-latex-pdf ()
+(defun org-roam-backlinks-export-to-latex-pdf ()
   "Export the current buffer and every buffer that mentions it to
 a pdf through the org-latex export. Makes use of the
-`org-roam-backlink-files' function to find all the
+`org-roam-backlinks-find-files' function to find all the
 backlinks. Also saves all the pdf names in a variable called
-`org-roam-backlink-pdfs'. These names can then be passed to
+`org-roam-backlinks-pdfs'. These names can then be passed to
 something like pdftk to merge them into one pdf"
   (interactive)
   (save-current-buffer
-    (let ((backlinks (cons (buffer-file-name) org-roam-backlinks))
+    (let ((backlinks (cons (buffer-file-name) org-roam-backlinks-files))
 	  (org-startup-with-latex-preview nil))
       (while backlinks
 	(find-file (car backlinks))
 	(org-latex-export-to-pdf)
-	(setq org-roam-backlink-pdfs
-	      (cons (concat (file-name-sans-extension (car backlinks)) ".pdf") org-roam-backlink-pdfs))
+	(setq org-roam-backlinks-pdfs
+	      (cons (concat (file-name-sans-extension (car backlinks)) ".pdf") org-roam-backlinks-pdfs))
 	(setq backlinks (cdr backlinks)))))
   (message "%s" "Done!"))
 
@@ -274,41 +310,157 @@ backlinks."
   (let ((node (org-roam-node-read nil #'org-roam-backlinks-poi-or-moc-p)))
     (org-roam-backlinks-node-read node)))
 
-(setq bibtex-completion-bibliography
-      '("~/Sync/My_Library.bib" "~/Sync/My_Library2.bib")
-      bibtex-completion-pdf-field "File"
-      bibtex-completion-library-path '("~/Sync/Zotero_pdfs"))
+(defvar org-roam-backlinks-selected-nodes '()
+  "List of nodes selected in `org-roam-backlinks--select-nodes'.")
 
-(setq bibtex-completion-additional-search-fields '(keywords abstract))
+(defun org-roam-backlinks--select-nodes (NUM)
+  "Select NUM `org-org-roam-nodes' and return a list of those."
+  (setq org-roam-backlinks-selected-nodes '())
+  (dotimes (i NUM)
+    (let ((node (org-roam-node-read)))
+      (add-to-list 'org-roam-backlinks-selected-nodes node)))
+  org-roam-backlinks-selected-nodes)
 
-(setq ivy-bibtex-default-action 'ivy-bibtex-edit-notes)
-(ivy-add-actions
- 'ivy-bibtex
- '(("p" ivy-bibtex-open-any "Open pdf, url or DOI")))
+(defvar org-roam-backlinks-selected-node-backlinks '()
+  "List of backlinks of nodes in `org-roam-backlinks-selected-nodes'.
 
-(setq bibtex-completion-format-citation-functions
-      '((org-mode . bibtex-completion-format-citation-org-title-link-to-PDF)
-	(latex-mode . bibtex-completion-format-citation-cite)
-	(markdown-mode . bibtex-completion-format-citation-pandoc-citeproc)
-	(python-mode . bibtex-completion-format-citation-sphinxcontrib-bibtex)
-	(rst-mode . bibtex-completion-format-citation-sphinxcontrib-bibtex)
-	(default . bibtex-completion-format-citation-default)))
+This list is filled using `org-roam-backlinks-get-node-backlinks'")
 
-(setq citar-bibliography '("~/Sync/My_Library.bib" "~/Sync/My_Library2.bib"))
-(setq citar-notes-paths '("~/org_roam/ref"))
+(defun org-roam-backlinks-get-node-backlinks (NUM)
+  "Get a list of lists of backlinks of the nodes in NODE-LIST."
+  (setq org-roam-backlinks-selected-node-backlinks '())
+  (let ((node-list (org-roam-backlinks--select-nodes NUM)))
+    (dolist (node node-list)
+      (let ((backlinks (org-roam-backlinks-query* node))
+	    (backlink-ids))
+	(dolist (id backlinks)
+	  (add-to-list 'backlink-ids (car id)))
+	(add-to-list 'org-roam-backlinks-selected-node-backlinks backlink-ids)))
+    org-roam-backlinks-selected-node-backlinks))
 
-(require 'org-roam-bibtex)
-(org-roam-bibtex-mode 1)
+(defun org-roam-backlinks-id-intersection (list1 list2)
+  "Find intersection of LIST1 and LIST2 using `cl-loop'."
+  (cl-loop for id in list1
+	   if (member id list2)
+	   collect id into ids
+	   finally (return ids)))
 
-(setq orb-insert-interface 'ivy-bibtex
-      orb-note-actions-interface 'ivy)
-(setq orb-preformat-keywords '("citekey" "author" "date" "entry-type" "keywords" "url" "file"))
+(defun org-roam-backlinks-get-ids (NUM)
+  "Get the ids of all nodes which are backlinks of the selected nodes.
 
-(require 'org-protocol)
-(require 'org-roam-protocol)
+Node selection is done with the underlying function
+`org-roam-backlinks--select-nodes'."
+  (let* ((backlink-ids (org-roam-backlinks-get-node-backlinks NUM))
+	 (result (car backlink-ids)))
+    (dolist (ids backlink-ids)
+      (setq result (org-roam-backlinks-id-intersection result ids)))
+    result))
 
-(require 'websocket)
-(require 'org-roam-ui)
+(defun org-roam-backlinks-roam-node-read--completions* (node-list &optional filter-fn sort-fn)
+  "Run `org-roam-node-read--completions' with NODE-LIST being a list of nodes.
+
+Typically, the function takes `org-roam-node-list' as the initial
+list of nodes and creates the alist `org-roam-node-read'
+uses.  However, it can be helpful to supply the list of nodes
+yourself, when the predicate function used cannot be inferred
+through a filter function of the form this function
+takes.  FILTER-FN and SORT-FN are the same as in
+`org-roam-node-read--completions'.  The resulting alist is to be
+used with `org-roam-backlinks-roam-node-read*'."
+  (let* ((template (org-roam-node--process-display-format org-roam-node-display-template))
+	 (nodes node-list)
+	 (nodes (mapcar (lambda (node)
+			  (org-roam-node-read--to-candidate node template)) nodes))
+	 (nodes (if filter-fn
+		    (cl-remove-if-not
+		     (lambda (n) (funcall filter-fn (cdr n)))
+		     nodes)
+		  nodes))
+	 (sort-fn (or sort-fn
+		      (when org-roam-node-default-sort
+			(intern (concat "org-roam-node-read-sort-by-"
+					(symbol-name org-roam-node-default-sort))))))
+	 (nodes (if sort-fn (seq-sort sort-fn nodes)
+		  nodes)))
+    nodes))
+
+(defun org-roam-backlinks-roam-node-read* (node-list &optional initial-input filter-fn sort-fn require-match prompt)
+  "Run `org-roam-node-read' with the nodes supplied by NODE-LIST.
+
+NODE-LIST is a list of nodes passed to
+`org-roam-backlinks-roam-node-read--completions*', which creates an alist of
+nodes with the proper formatting to be used in this
+function.  This is for those cases where it is helpful to use your
+own list of nodes, because a predicate function can not filter
+them in the way you want easily.
+
+INITIAL-INPUT, SORT-FN, FILTER-FN, REQUIRE-MATCH, PROMPT are the
+same as in `org-roam-node-read'."
+  (let* ((nodes (org-roam-backlinks-roam-node-read--completions* node-list filter-fn sort-fn))
+	 (prompt (or prompt "Node: "))
+	 (node (completing-read
+		prompt
+		(lambda (string pred action)
+		  (if (eq action 'metadata)
+		      `(metadata
+			;; Preserve sorting in the completion UI if a sort-fn is used
+			,@(when sort-fn
+			    '((display-sort-function . identity)
+			      (cycle-sort-function . identity)))
+			(annotation-function
+			 . ,(lambda (title)
+			      (funcall org-roam-node-annotation-function
+				       (get-text-property 0 'node title))))
+			(category . org-roam-node))
+		    (complete-with-action action nodes string pred)))
+		nil require-match initial-input 'org-roam-node-history)))
+    (or (cdr (assoc node nodes))
+	(org-roam-node-create :title node))))
+
+(defun org-roam-backlinks-multi-node-read ()
+  "Read a node from intersecting backlinks of multiple nodes.
+
+This is the low-level interactive function which is used for
+collecting the nodes which are backlinks to a number of selected
+nodes. This function calls `org-roam-backlinks-get-ids' for a lot
+of the work, which returns a list of ids of all nodes which are
+backlinked to some selected nodes. For more, check its
+docstring. With this list of ids, this function runs
+`org-roam-backlinks-roam-node-read*', which is a modified
+`org-roam-node-read' which accepts a list of nodes as its
+argument. This function returns the selected node to be used in
+the higher level functions."
+  (interactive)
+  (let* ((num (read-number "Number of Nodes: "))
+	 (ids (org-roam-backlinks-get-ids num))
+	 (nodes (cl-loop for id in ids
+			 collect (org-roam-node-from-id id) into nodes
+			 finally (return nodes))))
+    (org-roam-backlinks-roam-node-read* nodes)))
+
+(defun org-roam-backlinks-multi-node-find ()
+  "Find node from intersecting backlinks of multiple nodes.
+
+This is a wrapper function for
+`org-roam-backlinks-multi-node-read', which finds the file
+associated with the selected node instead of returning it."
+  (interactive)
+  (let ((node (org-roam-backlinks-multi-node-read)))
+    (find-file (org-roam-node-file node))))
+
+(defun org-roam-backlinks-multi-search ()
+  "Select an `org-roam-node' and recursively search its backlinks.
+
+This function is an extension of the `org-roam-backlinks-search'
+function which is used for recursively searching a node's
+backlinks using `org-roam-backlinks-node-read'. Its main
+difference is that it kickstarts the system not by selecting a
+node but by running `org-roam-backlinks-multi-node-read'.  This
+means that the selected node will be the intersection of
+backlinks of a number of nodes selected from that function."
+  (interactive)
+  (let ((node (org-roam-backlinks-multi-node-read)))
+    (org-roam-backlinks-node-read node)))
 
 (defun org-roam-node-sort-by-atime (NODE1 NODE2)
   "Sorting function that sorts NODE1 and NODE2 by their file atime.
