@@ -106,7 +106,9 @@
  "d" 'sly-hyperspec-lookup
  "l" 'sly-load-file
  "c" 'sly-compile-and-load-file
- "e" 'sly-interactive-eval)
+ "E" 'sly-interactive-eval
+ "e" 'sly-eval-last-expression
+ "s" 'sly-scratch)
 
 (general-define-key
  :states 'normal
@@ -178,14 +180,15 @@
     ("s" (lambda() (interactive)(dired "~/.emacs.d/snippets/org-mode")) "Org-mode snippets")
     ("r" (lambda() (interactive)(find-file "~/.emacs.d/libs/zettelkasten.org")) "Org-Roam and friends")
     ("Z" (lambda() (interactive)(find-file "~/.emacs.d/libs/zetteldesk.org")) "Zetteldesk literate config")
+    ("z" (lambda() (interactive)(dired "~/Zetteldesk")) "Zetteldesk Directory")
     ("S" (lambda() (interactive)(find-file "~/scratchpad.org")) "Emacs Scratchpad file"))
 
    "University"
    (("u" (lambda() (interactive)(dired "~/Documents/7o_εξάμηνο")) "University Documents folder")
     ("B" (lambda() (interactive)(find-file "~/Sync/My_Library.bib")) "Master Bibliography file")
     ("o" (lambda() (interactive)(dired "~/Documents/Octave")) "Octave scripts directory")
-    ("z" (lambda() (interactive)(dired "~/Zetteldesk")) "Zetteldesk Directory")
     ("O" (lambda() (interactive)(dired "~/org_roam/outlines")) "Outlines")
+    ("p" (lambda() (interactive)(dired "~/Documents/7o_εξάμηνο/Σχεδιασμός_Ι/Project/git_repo")))
     ("C" (lambda() (interactive)(dired "~/Documents/Chemecar")) "Chemecar"))
 
    "General Computer Things"
@@ -197,7 +200,7 @@
 
 (pretty-hydra-define my/roam-backlinks-hydra (:color blue :title "Backlink Commands")
   ("Backlinks"
-   (("f" org-roam-node-find-by-backlinks "Find node, Sorted by Backlink Count")
+   (("f" org-roam-backlinks-node-find-by-backlinks "Find node, Sorted by Backlink Count")
     ("s" org-roam-backlinks-search-from-moc-or-poi "Search for Backlinks by MOCs and POIs")
     ("S" org-roam-backlinks-search "Search for Backlinks"))))
 
@@ -214,7 +217,8 @@
    (("I" isbn-to-bibtex "Get ref from isbn")
     ("d" doi-utils-add-bibtex-entry-from-doi "Get ref from DOI")
     ("r" org-roam-ref-find "Find Reference")
-    ("c" org-ref-insert-cite-link "Insert Citation")
+    ("C" org-ref-insert-cite-link "Insert Citation (Org-ref)")
+    ("c" org-cite-insert "Insert Citation (Org-Cite)")
     ("h" org-ref-insert-link-hydra/body "Org Ref Insert-Link Hydra")
     ("B" org-ref-bibtex-hydra/body "Org Ref Bibtex Hydra"))
 
@@ -222,7 +226,6 @@
    (("G" org-roam-ui-mode "Open the Org Roam UI")
     ("s" org-roam-db-sync "Sync the Org Roam db")
     ("g" counsel-rg "Search regex in the org-roam db")
-    ("C" (lambda() (interactive) (org-roam-capture nil "d")) "Capture with default template")
     ("D" org-roam-buffer-display-dedicated "Dedicated Org Roam buffer"))
    )
   )

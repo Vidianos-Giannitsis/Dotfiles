@@ -116,6 +116,15 @@ function."
 	(rst-mode . bibtex-completion-format-citation-sphinxcontrib-bibtex)
 	(default . bibtex-completion-format-citation-default)))
 
+(require 'oc)
+(require 'oc-csl)
+(setq org-cite-global-bibliography '("~/Sync/My_Library.bib"))
+
+(setq org-cite-export-processors '((t csl)))
+
+(setq org-cite-csl-styles-dir "~/Zotero/styles")
+(setq citeproc-org-default-style-file "~/Zotero/styles/american-chemical-society.csl")
+
 (setq citar-bibliography '("~/Sync/My_Library.bib" "~/Sync/My_Library2.bib"))
 (setq citar-notes-paths '("~/org_roam/ref"))
 
@@ -165,7 +174,7 @@ but the list of nodes is sorted by the number of backlinks
 instead of most recent nodes. Sorting is done with
 `org-roam-backlinks-sort-by-backlinks'"
   (interactive)
-  (find-file (org-roam-node-file (org-roam-node-read nil nil #'org-roam-node-sort-by-backlinks))))
+  (find-file (org-roam-node-file (org-roam-node-read nil nil #'org-roam-backlinks-sort-by-backlinks))))
 
 (defun org-roam-backlinks-query ()
   "Simple org-roam query function that stores the IDs of all the

@@ -1,0 +1,2 @@
+;;; Generated package description from elfeed-summary.el  -*- no-byte-compile: t -*-
+(define-package "elfeed-summary" "20221210.1349" "Feed summary interface for elfeed" '((emacs "27.1") (magit-section "3.3.0") (elfeed "3.4.1")) :commit "ccbaf85d9ea442203027e784a42b21686f3a87d8" :authors '(("Korytov Pavel" . "thexcloud@gmail.com")) :maintainer '("Korytov Pavel" . "thexcloud@gmail.com") :url "https://github.com/SqrtMinusOne/elfeed-summary.el")

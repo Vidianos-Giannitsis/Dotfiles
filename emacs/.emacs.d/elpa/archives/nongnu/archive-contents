@@ -28,13 +28,13 @@
 		(:authors
 		 ("Jordon Biondo" . "jordonbiondo@gmail.com")))])
  (annotate .
-	   [(1 8 1)
+	   [(1 8 2)
 	    nil "annotate files without changing them" tar
 	    ((:url . "https://github.com/bastibe/annotate.el")
 	     (:maintainer "Bastian Bechtold <bastibe.dev@mailbox.org>, cage" . "cage-dev@twistfold.it")
 	     (:authors
 	      ("Bastian Bechtold"))
-	     (:commit . "a2751a028f9303e6b891bfe1beee49e1e3197256"))])
+	     (:commit . "02bc30d041934ce8d6092a7f80325e6e4a875f95"))])
  (anti-zenburn-theme .
 		     [(2 5 1)
 		      nil "Low-contrast Zenburn-inverted theme" tar
@@ -87,6 +87,17 @@
 	      ((:url . "https://github.com/jasonm23/autothemer")
 	       (:maintainer "Jason Milkins" . "jasonm23@gmail.com")
 	       (:commit . "87a21019ed4f41a487a8af34467e0ebff19f365e"))])
+ (bash-completion .
+		  [(3 1 0)
+		   ((emacs
+		     (24 3)))
+		   "BASH completion for the shell buffer" tar
+		   ((:url . "http://github.com/szermatt/emacs-bash-completion")
+		    (:keywords "shell" "bash" "bash-completion")
+		    (:maintainer "Stephane Zermatten" . "szermatt@gmail.com")
+		    (:authors
+		     ("Stephane Zermatten" . "szermatt@gmx.net"))
+		    (:commit . "d47edb9d4142a22746009c1f680df93a4fefd107"))])
  (better-jumper .
 		[(1 0 1)
 		 ((emacs
@@ -115,6 +126,17 @@
 		("Eric Beuscher" . "beuscher@eecs.tulane.edu"))
 	       (:keywords "bison-mode" "yacc-mode")
 	       (:url . "https://elpa.nongnu.org/nongnu/bison-mode.html"))])
+ (blow .
+       [(1 0)
+	((emacs
+	  (24 1)))
+	"Blow away mode lighters" tar
+	((:url . "https://codeberg.org/akib/emacs-blow")
+	 (:keywords "convenience")
+	 (:maintainer "Akib Azmain Turja" . "akib@disroot.org")
+	 (:authors
+	  ("Akib Azmain Turja" . "akib@disroot.org"))
+	 (:commit . "19152095662c95bc73f1f25b8dcce432294b06a1"))])
  (boxquote .
 	   [(2 3)
 	    ((cl-lib
@@ -127,7 +149,7 @@
 	      ("Dave Pearson" . "davep@davep.org"))
 	     (:commit . "fe676396fa7e4372e01bf2c3d9a62e8d53615d46"))])
  (buttercup .
-	    [(1 28)
+	    [(1 29)
 	     ((emacs
 	       (24 3)))
 	     "Behavior-Driven Emacs Lisp Testing" tar
@@ -135,7 +157,18 @@
 	      (:maintainer "Ola Nilsson" . "ola.nilsson@gmail.com")
 	      (:authors
 	       ("Jorgen Schaefer" . "contact@jorgenschaefer.de"))
-	      (:commit . "eaa4b3ccd115a2bb25be98dc637950645d3adbae"))])
+	      (:commit . "b3ea11826e2ca5d648d677c4ae27974ce8e7c7e3"))])
+ (camera .
+	 [(0 2)
+	  ((emacs
+	    (25 1)))
+	  "Take picture with your camera" tar
+	  ((:url . "https://codeberg.org/akib/emacs-camera")
+	   (:keywords "comm")
+	   (:maintainer "Akib Azmain Turja" . "akib@disroot.org")
+	   (:authors
+	    ("Akib Azmain Turja" . "akib@disroot.org"))
+	   (:commit . "99ced5db8d59004edd90b12f88a5dd1a6044ac45"))])
  (caml .
        [(4 9)
 	((emacs
@@ -271,6 +304,17 @@
 	      (:authors
 	       ("https://github.com/bradyt/dart-mode/issues"))
 	      (:keywords "languages"))])
+ (devhelp .
+	  [(1 0)
+	   ((emacs
+	     (27 1)))
+	   "Browse documentation in Devhelp format" tar
+	   ((:url . "https://codeberg.org/akib/emacs-devhelp")
+	    (:keywords "docs")
+	    (:maintainer "Akib Azmain Turja" . "akib@disroot.org")
+	    (:authors
+	     ("Akib Azmain Turja" . "akib@disroot.org"))
+	    (:commit . "bebdb6a165bdc3bb6b357706d0ce58f57271d137"))])
  (diff-ansi .
 	    [(0 2)
 	     ((emacs
@@ -320,6 +364,17 @@
 		(:authors
 		 ("Arne Jørgensen" . "arne@arnested.dk"))
 		(:commit . "ed90b0c4d808365e9ae9f16cc8a96eff17815621"))])
+ (eat .
+      [(0 1 1)
+       ((emacs
+	 (28 1)))
+       "Emulate A Terminal, in a region, in a buffer and in Eshell" tar
+       ((:url . "https://codeberg.org/akib/emacs-eat")
+	(:keywords "terminals" "processes")
+	(:maintainer "Akib Azmain Turja" . "akib@disroot.org")
+	(:authors
+	 ("Akib Azmain Turja" . "akib@disroot.org"))
+	(:commit . "16d9a5074fb3887caa90a56f546ce316d6ac9f2d"))])
  (edit-indirect .
 		[(0 1 10)
 		 ((emacs
@@ -456,16 +511,16 @@
 		  ("Chen Bin" . "chenbin.sh@gmail.com"))
 		 (:commit . "7a2a7384b6e752a805d6fbb78cf9425e54c2b18b"))])
  (evil-nerd-commenter .
-		      [(3 5 8)
+		      [(3 6 0)
 		       ((emacs
-			 (25 1)))
+			 (26 1)))
 		       "Comment/uncomment lines efficiently. Like Nerd Commenter in Vim" tar
 		       ((:url . "http://github.com/redguardtoo/evil-nerd-commenter")
 			(:keywords "convenience" "evil")
 			(:maintainer "Chen Bin" . "chenbin.sh@gmail.com")
 			(:authors
 			 ("Chen Bin" . "chenbin.sh@gmail.com"))
-			(:commit . "9609fb170da00aeca1716b022d93e1cb68464a34"))])
+			(:commit . "8c0f23d46a3927b9f83c1c2c4590be53d0b740db"))])
  (evil-numbers .
 	       [(0 7)
 		((emacs
@@ -547,8 +602,19 @@
 	      (:authors
 	       ("Matus Goljer" . "matus.goljer@gmail.com"))
 	      (:commit . "6f9172376af4d399c7853cbdfdd7425348a878f9"))])
+ (gc-buffers .
+	     [(1 0)
+	      ((emacs
+		(24 1)))
+	      "Kill garbage buffers automatically" tar
+	      ((:url . "https://codeberg.org/akib/emacs-gc-buffers")
+	       (:keywords "internal")
+	       (:maintainer "Akib Azmain Turja" . "akib@disroot.org")
+	       (:authors
+		("Akib Azmain Turja" . "akib@disroot.org"))
+	       (:commit . "ce2ea016a67b200862788e81f0ff1f8f7e4e0454"))])
  (geiser .
-	 [(0 28)
+	 [(0 28 1)
 	  ((emacs
 	    (25 1))
 	   (project
@@ -559,7 +625,7 @@
 	   (:maintainer "Jose Antonio Ortega Ruiz" . "jao@gnu.org")
 	   (:authors
 	    ("Jose Antonio Ortega Ruiz" . "jao@gnu.org"))
-	   (:commit . "04dbdacfeca0190856abad859360da4bb873f9dd"))])
+	   (:commit . "a29ad0533090e804f84b72c064a595b35c077977"))])
  (geiser-chez .
 	      [(0 17)
 	       ((emacs
@@ -622,20 +688,20 @@
 		   ("András Simonyi" . "andras.simonyi@gmail.com"))
 		  (:keywords "languages" "gauche" "scheme" "geiser"))])
  (geiser-guile .
-	       [(0 28 0)
+	       [(0 28 1)
 		((emacs
 		  (25 1))
 		 (transient
 		  (0 3))
 		 (geiser
-		  (0 28)))
+		  (0 28 1)))
 		"Guile and Geiser talk to each other" tar
 		((:url . "https://gitlab.com/emacs-geiser/guile")
 		 (:keywords "languages" "guile" "scheme" "geiser")
 		 (:maintainer "Jose Antonio Ortega Ruiz" . "jao@gnu.org")
 		 (:authors
 		  ("Jose Antonio Ortega Ruiz" . "jao@gnu.org"))
-		 (:commit . "f5e82dc0f5a076335f201885a7edbefaa1ad435f"))])
+		 (:commit . "f57bfd5039ce158de95d2ef2933e64fb16def4f6"))])
  (geiser-kawa .
 	      [(0 0 1)
 	       ((emacs
@@ -724,6 +790,17 @@
 		 (:authors
 		  ("Elias Mårtenson" . "lokedhs@gmail.com"))
 		 (:commit . "deabf59d2375d4662221f8222e28caeb1be96428"))])
+ (gnu-indent .
+	     [(1 0)
+	      ((emacs
+		(27 2)))
+	      "Indent your code with GNU Indent" tar
+	      ((:url . "https://codeberg.org/akib/emacs-why-this")
+	       (:keywords "tools" "convenience" "vc")
+	       (:maintainer "Akib Azmain Turja" . "akib@disroot.org")
+	       (:authors
+		("Akib Azmain Turja" . "akib@disroot.org"))
+	       (:commit . "6bb82ce89ed93222dd919bc65e0f46ac4aa13479"))])
  (gnuplot .
 	  [(0 8 0)
 	   ((emacs
@@ -875,6 +952,17 @@
 		  (:authors
 		   ("Campbell Barton" . "ideasman42@gmail.com"))
 		  (:commit . "877e14c0645397aa8c1a45eb34ea70f3ecd21280"))])
+ (hl-column .
+	    [(1 0)
+	     ((emacs
+	       (24 1)))
+	     "Highlight the current column" tar
+	     ((:url . "https://codeberg.org/akib/emacs-hl-column")
+	      (:keywords "convenience")
+	      (:maintainer "Akib Azmain Turja" . "akib@disroot.org")
+	      (:authors
+	       ("Akib Azmain Turja" . "akib@disroot.org"))
+	      (:commit . "2d3a3f551b52c07a11b9ea0f842ef39915911c55"))])
  (htmlize .
 	  [(1 57)
 	   nil "Convert buffer text and decorations to HTML." tar
@@ -951,6 +1039,21 @@
 		  ("Sarah Iovan" . "sarah@hwaetageek.com")
 		  ("Campbell Barton" . "ideasman42@gmail.com"))
 		 (:commit . "de745de9ab7f67431a5ce493a63be68d408ec40e"))])
+ (iwindow .
+	  [(1 0)
+	   ((emacs
+	     (24 3))
+	    (seq
+	     (2 23))
+	    (compat
+	     (28 1 2 2)))
+	   "Interactively manipulate windows" tar
+	   ((:url . "https://codeberg.org/akib/emacs-iwindow")
+	    (:keywords "frames")
+	    (:maintainer "Akib Azmain Turja" . "akib@disroot.org")
+	    (:authors
+	     ("Akib Azmain Turja" . "akib@disroot.org"))
+	    (:commit . "602387e56fb6850c7309573b678931b5a51c3ca8"))])
  (j-mode .
 	 [(1 1 1)
 	  nil "Major mode for editing J programs" tar
@@ -1103,6 +1206,17 @@
 	   (:authors
 	    ("Stefan Kangas" . "stefankangas@gmail.com"))
 	   (:commit . "480602f2ec5467aa2418ee98b328fb85d3b58d0c"))])
+ (minibar .
+	  [(0 2)
+	   ((emacs
+	     (27 2)))
+	   "Modular status bar in minibuffer" tar
+	   ((:url . "https://codeberg.org/akib/emacs-minibar")
+	    (:keywords "calendar" "hardware")
+	    (:maintainer "Akib Azmain Turja" . "akib@disroot.org")
+	    (:authors
+	     ("Akib Azmain Turja" . "akib@disroot.org"))
+	    (:commit . "2f059a8f8a49495e611065bc01c94803c322fa86"))])
  (moe-theme .
 	    [(1 0 2)
 	     nil "A colorful eye-candy theme. Moe, moe, kyun!" tar
@@ -1160,7 +1274,7 @@
 	       (:keywords "languages" "nginx")
 	       (:url . "https://elpa.nongnu.org/nongnu/nginx-mode.html"))])
  (nix-mode .
-	   [(1 4 4)
+	   [(1 5 0)
 	    ((emacs
 	      (25 1))
 	     (magit-section
@@ -1171,7 +1285,7 @@
 	    ((:url . "https://github.com/NixOS/nix-mode")
 	     (:keywords "nix" "languages" "tools" "unix")
 	     (:maintainer "Matthew Bauer" . "mjbauer95@gmail.com")
-	     (:commit . "e4e604ae3ac91748c4e7d51a591cb9ee60961b7c"))])
+	     (:commit . "54e5626829168e22126b233e079f04dff3c71b90"))])
  (oblivion-theme .
 		 [(0 1)
 		  ((emacs
@@ -1306,6 +1420,15 @@
 	    (:authors
 	     ("Codingteam" . "codingteam@conference.jabber.ru"))
 	    (:commit . "071d008ebd734f469b87597cbdd34139a92e5308"))])
+ (paredit .
+	  [(26)
+	   nil "minor mode for editing parentheses" tar
+	   ((:keywords "lisp")
+	    (:maintainer "Taylor R. Campbell" . "campbell@paredit.org")
+	    (:authors
+	     ("Taylor R. Campbell" . "campbell@paredit.org"))
+	    (:url . "https://elpa.nongnu.org/nongnu/paredit.html")
+	    (:commit . "72cc1f6055321a53021186b86d2f825167b81478"))])
  (parseclj .
 	   [(1 1 0)
 	    ((emacs
@@ -1354,9 +1477,9 @@
 	     ("joddie <jonxfield at gmail.com>"))
 	    (:commit . "3a59d133d1ed9fd941ddecc85ee2a8e32be3d267"))])
  (pdf-tools .
-	    [(1 0)
+	    [(1 0 0)
 	     ((emacs
-	       (24 3))
+	       (26 3))
 	      (tablist
 	       (1 0))
 	      (let-alist
@@ -1364,9 +1487,10 @@
 	     "Support library for PDF documents" tar
 	     ((:url . "http://github.com/vedang/pdf-tools/")
 	      (:keywords "files" "multimedia")
-	      (:maintainer "Andreas Politz" . "politza@fh-trier.de")
+	      (:maintainer "Vedang Manerikar" . "vedang.manerikar@gmail.com")
 	      (:authors
-	       ("Andreas Politz" . "politza@fh-trier.de")))])
+	       ("Andreas Politz" . "mail@andreas-politz.de"))
+	      (:commit . "96703b2bb5c937afd05778086c43280b0593fe99"))])
  (php-mode .
 	   [(1 24 2)
 	    ((emacs
@@ -1400,7 +1524,7 @@
 	  (:authors
 	   ("Tomohiro Matsuyama" . "m2ym.pub@gmail.com")))])
  (projectile .
-	     [(2 6 0)
+	     [(2 7 0)
 	      ((emacs
 		(25 1)))
 	      "Manage and navigate projects in Emacs easily" tar
@@ -1409,7 +1533,7 @@
 	       (:maintainer "Bozhidar Batsov" . "bozhidar@batsov.dev")
 	       (:authors
 		("Bozhidar Batsov" . "bozhidar@batsov.dev"))
-	       (:commit . "e3bae8c91bb69c501dcc2e74f9ea14e89cf0a09c"))])
+	       (:commit . "14beeaee7a77601aee4d4982811f6a27f696403c"))])
  (proof-general .
 		[(4 5)
 		 ((emacs
@@ -1430,14 +1554,14 @@
 	       ("David Christiansen" . "david@davidchristiansen.dk"))
 	      (:keywords "convenience"))])
  (racket-mode .
-	      [(1 0 20221118 122133)
+	      [(1 0 20221205 101826)
 	       ((emacs
 		 (25 1)))
 	       "Racket editing, REPL, and more" tar
 	       ((:url . "https://www.racket-mode.com/")
 		(:maintainer "Greg Hendershott")
 		(:authors
-		 ("Greg Hendershott"))
+		 ("Greg Hendershott" . "racket-mode-author@greghendershott.com"))
 		(:commit . "HEAD"))])
  (rainbow-delimiters .
 		     [(2 1 5)
@@ -1479,15 +1603,15 @@
 	    (:authors
 	     ("Takafumi Arakaki <aka.tkf at gmail.com>")))])
  (rfc-mode .
-	   [(1 3 0)
+	   [(1 4 0)
 	    ((emacs
 	      (25 1)))
 	    "RFC document browser and viewer" tar
 	    ((:url . "https://github.com/galdor/rfc-mode")
-	     (:maintainer "Nicolas Martyanoff" . "khaelin@gmail.com")
+	     (:maintainer "Nicolas Martyanoff" . "nicolas@n16f.net")
 	     (:authors
-	      ("Nicolas Martyanoff" . "khaelin@gmail.com"))
-	     (:commit . "02546beecf4c495940885e7b7b911d84b12646ef"))])
+	      ("Nicolas Martyanoff" . "nicolas@n16f.net"))
+	     (:commit . "53ec006aa6aa4fae9c6c64004692aa3d01b38275"))])
  (rubocop .
 	  [(0 6 0)
 	   ((emacs
@@ -1654,7 +1778,7 @@
 		     ("John Olsson" . "john@cryon.se"))
 		    (:commit . "2d5acd143a153e16372d59000e57d76291ab81dd"))])
  (subed .
-	[(1 0 24)
+	[(1 0 26)
 	 ((emacs
 	   (25 1)))
 	 "A major mode for editing subtitles" tar
@@ -1663,9 +1787,9 @@
 	  (:maintainer "Sacha Chua" . "sacha@sachachua.com")
 	  (:authors
 	   ("Random User"))
-	  (:commit . "7842bb9f15f08ea3d223f98bf7be98d6d01be522"))])
+	  (:commit . "7563c61b7e152e0c7e06387edf98809c08cb134f"))])
  (sweeprolog .
-	     [(0 8 11)
+	     [(0 9 4)
 	      ((emacs
 		(28 1)))
 	      "Embedded SWI-Prolog" tar
@@ -1674,7 +1798,7 @@
 	       (:maintainer "Eshel Yaron" . "~eshel/dev@lists.sr.ht")
 	       (:authors
 		("Eshel Yaron" . "me@eshelyaron.com"))
-	       (:commit . "560ba07e9220aab5f56091ee028da3aa3b4ee5b7"))])
+	       (:commit . "0e324b3216ff031104fefbdb23e081d88ed1e7f6"))])
  (swift-mode .
 	     [(8 6 0)
 	      ((emacs
@@ -1759,6 +1883,17 @@
 		   (:maintainer "Daniel Bordak" . "dbordak@fastmail.fm")
 		   (:authors
 		    ("Daniel Bordak" . "dbordak@fastmail.fm")))])
+ (testcover-mark-line .
+		      [(0 3)
+		       ((emacs
+			 (25 1)))
+		       "Mark whole line with Testcover" tar
+		       ((:url . "https://codeberg.org/akib/emacs-testcover-mark-line")
+			(:keywords "lisp" "utility")
+			(:maintainer "Akib Azmain Turja" . "akib@disroot.org")
+			(:authors
+			 ("Akib Azmain Turja" . "akib@disroot.org"))
+			(:commit . "36a2a9422dcdf6f01e842b153fa492c1604ca48b"))])
  (textile-mode .
 	       [(1 0 0)
 		nil "Textile markup editing major mode" tar
@@ -1903,6 +2038,17 @@
 	  (:authors
 	   ("Masahiro Hayashi" . "mhayashi1120@gmail.com"))
 	  (:keywords "grep" "edit" "extensions"))])
+ (why-this .
+	   [(2 0 4)
+	    ((emacs
+	      (27 1)))
+	    "Why is this line here?  Ask version control" tar
+	    ((:url . "https://codeberg.org/akib/emacs-why-this")
+	     (:keywords "tools" "convenience" "vc")
+	     (:maintainer "Akib Azmain Turja" . "akib@disroot.org")
+	     (:authors
+	      ("Akib Azmain Turja" . "akib@disroot.org"))
+	     (:commit . "5203d9379afaf6703746823a580c804e1dd98e08"))])
  (with-editor .
 	      [(3 2 0)
 	       ((emacs
@@ -1926,6 +2072,21 @@
 			  ("Ryan C. Thompson" . "rct@thompsonclan.org")
 			  ("Nikita Bloshchanevich" . "nikblos@outlook.com"))
 			 (:commit . "07bdfbe9ab9eab4a04ad02e98b011649a4f4e6a2"))])
+ (workroom .
+	   [(2 2 5)
+	    ((emacs
+	      (25 1))
+	     (project
+	      (0 3 0))
+	     (compat
+	      (28 1 2 2)))
+	    "Named rooms for work without irrelevant distracting buffers" tar
+	    ((:url . "https://codeberg.org/akib/emacs-workroom")
+	     (:keywords "tools" "convenience")
+	     (:maintainer "Akib Azmain Turja" . "akib@disroot.org")
+	     (:authors
+	      ("Akib Azmain Turja" . "akib@disroot.org"))
+	     (:commit . "532835eda02c64a8b93437e8c3fb220e60859896"))])
  (ws-butler .
 	    [(0 6)
 	     nil "Unobtrusively remove trailing whitespace." tar
@@ -1934,7 +2095,7 @@
 	      (:authors
 	       ("Le Wang")))])
  (xah-fly-keys .
-	       [(22 2 20221121172301)
+	       [(22 3 20221208105541)
 		((emacs
 		  (24 1)))
 		"ergonomic modal keybinding minor mode." tar
@@ -1943,7 +2104,7 @@
 		 (:maintainer "Xah Lee" . "xah@xahlee.org")
 		 (:authors
 		  ("Xah Lee ( http://xahlee.info/ )"))
-		 (:commit . "094095d6084d6a640c33dd1f503e00b81da481ab"))])
+		 (:commit . "c00742c6c86fbd44e28cb008339c6307aff4f16e"))])
  (xml-rpc .
 	  [(1 6 16)
 	   nil "An elisp implementation of clientside XML-RPC" tar

@@ -1,0 +1,2 @@
+;;; Generated package description from company-math.el  -*- no-byte-compile: t -*-
+(define-package "company-math" "20221206.2137" "Completion backends for unicode math symbols and latex tags" '((company "0.8.0") (math-symbol-lists "1.3")) :commit "3e1bd33f5a5a3fe4afc834919a4ad36c34f5ce98" :authors '(("Vitalie Spinu" . "spinuvit@gmail.com")) :maintainer '("Vitalie Spinu" . "spinuvit@gmail.com") :keywords '("unicode" "symbols" "completion") :url "https://github.com/vspinu/company-math")

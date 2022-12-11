@@ -2,5 +2,5 @@
 # name: bibliography
 # key: bib
 # --
-bibliography:~/Sync/My_Library.bib
-bibliographystyle:unsrt
+* Βιβλιογραφία
+#+print_bibliography:

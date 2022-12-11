@@ -129,8 +129,10 @@ This file is a core part of my emacs configuration and is all about my Org-roam 
     (org-roam-node-find nil nil #'org-roam-permanent-note-p))
 #+END_SRC
 
-* Bibtex completion (Ivy) and Org-Ref
+* Bibtex completion (Ivy), Org-Ref and Org-Cite
   Ivy Bibtex and Org ref are two excellent packages for managing bibliography. The main thing I need to configure is the location of my master .bib file and pdfs (which are exported with Zotero). I also change some other variables where I see fit.
+
+  Since this is the section all about bibliography, I also included my org-cite configuration here. Org-cite is the standard org mode citation syntax (which is different from org-ref) that I have been willing to try.
    
   In detail
   - Zotero exports a .bib file with all my references (the main way it "talks" to Emacs). I "tell" ivy-bibtex and org-ref the location of this file for usage in their various commands.
@@ -159,6 +161,15 @@ This file is a core part of my emacs configuration and is all about my Org-roam 
 	       (python-mode . bibtex-completion-format-citation-sphinxcontrib-bibtex)
 	       (rst-mode . bibtex-completion-format-citation-sphinxcontrib-bibtex)
 	       (default . bibtex-completion-format-citation-default)))
+
+       (require 'oc)
+       (require 'oc-csl)
+       (setq org-cite-global-bibliography '("~/Sync/My_Library.bib"))
+
+       (setq org-cite-export-processors '((t csl)))
+
+       (setq org-cite-csl-styles-dir "~/Zotero/styles")
+       (setq citeproc-org-default-style-file "~/Zotero/styles/american-chemical-society.csl")
     #+END_SRC
 
 ** Citar
@@ -235,7 +246,7 @@ The bibliography backend I currently use is ivy-bibtex (hence the above config).
     instead of most recent nodes. Sorting is done with
     `org-roam-backlinks-sort-by-backlinks'"
       (interactive)
-      (find-file (org-roam-node-file (org-roam-node-read nil nil #'org-roam-node-sort-by-backlinks))))
+      (find-file (org-roam-node-file (org-roam-node-read nil nil #'org-roam-backlinks-sort-by-backlinks))))
 
     (defun org-roam-backlinks-query ()
       "Simple org-roam query function that stores the IDs of all the

@@ -1,2 +1,0 @@
-;;; Generated package description from /home/vidianos/.emacs.d/elpa/dired-avfs-20161012.1104/dired-avfs.el  -*- no-byte-compile: t -*-
-(define-package "dired-avfs" "20161012.1104" "AVFS support for dired" '((dash "2.5.0") (dired-hacks-utils "0.0.1")) :commit "7c0ef09d57a80068a11edc74c3568e5ead5cc15a" :authors '(("Matus Goljer" . "matus.goljer@gmail.com")) :maintainer '("Matus Goljer" . "matus.goljer@gmail.com") :keywords '("files"))
