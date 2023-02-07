@@ -46,7 +46,7 @@
     (let ((buffer (get-file-buffer (org-roam-node-file node))))
       buffer))
 
-  (setq org-roam-node-display-template "${title:100} ${backlinkscount:6} ${todostate:20} ${directories:10} ${tags:25}")
+  (setq org-roam-node-display-template "${title:115} ${backlinkscount:6} ${todostate:20} ${directories:10} ${tags:15}")
 
   (add-to-list 'display-buffer-alist
 	       '("\\*org-roam\\*"
@@ -118,12 +118,16 @@ function."
 
 (require 'oc)
 (require 'oc-csl)
-(setq org-cite-global-bibliography '("~/Sync/My_Library.bib"))
+(setq org-cite-global-bibliography '("~/Sync/My_Library.bib" "~/Sync/My_Library2.bib"))
 
 (setq org-cite-export-processors '((t csl)))
 
 (setq org-cite-csl-styles-dir "~/Zotero/styles")
 (setq citeproc-org-default-style-file "~/Zotero/styles/american-chemical-society.csl")
+
+(require 'zotra)
+(setq zotra-default-bibliography "~/Sync/My_Library2.bib"
+      zotra-download-attachment-default-directory "~/Sync/Zotero_pdfs")
 
 (setq citar-bibliography '("~/Sync/My_Library.bib" "~/Sync/My_Library2.bib"))
 (setq citar-notes-paths '("~/org_roam/ref"))
@@ -225,7 +229,7 @@ something like pdftk to merge them into one pdf"
 	(setq backlinks (cdr backlinks)))))
   (message "%s" "Done!"))
 
-(defcustom org-roam-backlinks-choices '("View Backlinks" "Go to Node" "Add to Zetteldesk" "Quit")
+(defcustom org-roam-backlinks-choices '("View Backlinks" "Go to Node" "Add to Zetteldesk" "Find Similar Nodes" "Quit")
   "List of choices for `org-roam-backlinks-node-read'.
 Check that function's docstring for more info about these.")
 
@@ -281,19 +285,23 @@ interaction with it in this function."
     (cond
      ((string-equal
        choice
-       (car org-roam-backlinks-choices))
+       (first org-roam-backlinks-choices))
       (org-roam-backlinks-node-read backlink))
      ((string-equal
        choice
-       (cadr org-roam-backlinks-choices))
+       (second org-roam-backlinks-choices))
       (find-file (org-roam-node-file backlink)))
      ((string-equal
        choice
-       (caddr org-roam-backlinks-choices))
+       (third org-roam-backlinks-choices))
       (zetteldesk-add-node-to-desktop backlink))
      ((string-equal
        choice
-       (cadddr org-roam-backlinks-choices))))))
+       (fourth org-roam-backlinks-choices))
+      (org-roam-similarity-node-find backlink))
+     ((string-equal
+       choice
+       (fifth org-roam-backlinks-choices))))))
 
 (defun org-roam-backlinks-search ()
   "Select an `org-roam-node' and recursively search its backlinks.
@@ -527,6 +535,38 @@ to switch to the newly-created buffer."
       (concat "elisp:(switch-to-buffer \"" buffer-name "\")")
       (concat "#" TAG)))))
 
+(let ((default-directory "~/org-roam-similarity"))
+  (normal-top-level-add-to-load-path '(".")))
+(require 'org-roam-similarity)
+
+(setq org-roam-similarity-directory org-roam-directory
+      org-roam-similarity-root "~/org-roam-similarity"
+      org-roam-similarity-show-scores t)
+
+(defun org-roam-similarity-sidebuffer ()
+    "Puts the results of org-similarity in a side-window."
+    (interactive)
+    (let ((command (format "python3 %s -i %s -d %s -l %s -n %s %s"
+	    (concat org-similarity-root "/assets/org-similarity.py")
+	     buffer-file-name
+	     org-similarity-directory
+	     org-similarity-language
+	     org-similarity-number-of-documents
+	     (if org-similarity-show-scores "--score" ""))))
+      (setq similarity-results (shell-command-to-string command)))
+      (with-output-to-temp-buffer "*Similarity Results*"
+      (princ similarity-results))
+      (with-current-buffer "*Similarity Results*"
+      (org-mode))
+    )
+  (add-to-list 'display-buffer-alist
+	       '("*Similarity Results*"
+		 (display-buffer-in-side-window)
+		 (inhibit-same-window . t)
+		 (side . right)
+		 (window-width . 0.4))
+  )
+
 (setq org-todo-keywords
       '((sequence "INBOX(i)"
 		  "PROCESSING(p)"
@@ -601,7 +641,7 @@ out"
 	 :jump-to-captured t)
 
 	("o" "outline" plain "%?" :if-new
-	 (file+head "outlines/${slug}-%<%d-%m-%y>.org" "#+title: ${title}\n
+	 (file+head "outlines/${slug}-%<%d-%m-%y>.org" "#+title: ${title}
 #+filetags: outline")
 	 :unarrowed t
 	 :jump-to-captured t)

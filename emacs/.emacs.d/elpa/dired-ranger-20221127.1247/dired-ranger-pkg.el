@@ -1,2 +1,0 @@
-;;; Generated package description from dired-ranger.el  -*- no-byte-compile: t -*-
-(define-package "dired-ranger" "20221127.1247" "Implementation of useful ranger features for dired" '((dash "2.7.0") (dired-hacks-utils "0.0.1")) :commit "41d3eb42195d9f0894c20d18cc8e722b099aa1c1" :authors '(("Matúš Goljer" . "matus.goljer@gmail.com")) :maintainer '("Matúš Goljer" . "matus.goljer@gmail.com") :keywords '("files"))

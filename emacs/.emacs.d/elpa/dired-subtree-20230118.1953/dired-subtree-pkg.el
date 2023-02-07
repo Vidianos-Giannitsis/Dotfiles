@@ -1,0 +1,2 @@
+;;; Generated package description from dired-subtree.el  -*- no-byte-compile: t -*-
+(define-package "dired-subtree" "20230118.1953" "Insert subdirectories in a tree-like fashion" '((dash "2.5.0") (dired-hacks-utils "0.0.1")) :commit "1382acb219c5e3b179662bcacd9c57463802718a" :authors '(("Matúš Goljer" . "matus.goljer@gmail.com")) :maintainer '("Matúš Goljer" . "matus.goljer@gmail.com") :keywords '("files"))

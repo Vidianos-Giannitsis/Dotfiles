@@ -1,0 +1,8 @@
+# -*- mode: snippet -*-
+# name: tagalign
+# key: tal
+# --
+\begin{align*}
+\tag{$1}
+$2
+\end{align*}

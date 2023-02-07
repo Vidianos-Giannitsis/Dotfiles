@@ -24,6 +24,7 @@ I hope you will find something useful here that you can put to your emacs config
   - [[#setting-up-external-packages-for-org][Setting up external packages for org]]
   - [[#org-mode-utilities][Org mode utilities]]
   - [[#latex-stuff][Latex Stuff]]
+  - [[#org-tree-slide][Org-tree-slide]]
   - [[#org-noter][Org Noter]]
   - [[#org-babel][Org Babel]]
 - [[#skeletons][Skeletons]]
@@ -33,7 +34,10 @@ I hope you will find something useful here that you can put to your emacs config
 - [[#drawing-with-emacs][Drawing with Emacs]]
   - [[#inkscape][Inkscape]]
 - [[#company][Company]]
+- [[#search-engines][Search Engines]]
+- [[#mastodon][Mastodon]]
 - [[#elfeed---rss-feeds][Elfeed - RSS Feeds]]
+- [[#org-reveal][Org-Reveal]]
 - [[#scimax][Scimax]]
   - [[#exporting][Exporting]]
   - [[#abbreviations--spellchecking][Abbreviations & Spellchecking]]
@@ -41,14 +45,15 @@ I hope you will find something useful here that you can put to your emacs config
 - [[#sage][Sage]]
 - [[#ebib][Ebib]]
 - [[#other-major-modes][Other Major Modes]]
+  - [[#julia][Julia]]
   - [[#python][Python]]
+  - [[#maxima][Maxima]]
   - [[#calc][Calc]]
   - [[#ebuku][Ebuku]]
   - [[#pdf-tools][PDF Tools]]
   - [[#periodic-table-in-emacs][Periodic Table in emacs]]
-  - [[#emacs-application-framework][Emacs Application Framework]]
   - [[#elisp][Elisp]]
-  - [[#common-lisp][Common Lisp]]
+  - [[#common-lisp--clojure][Common Lisp & Clojure]]
   - [[#deft][Deft]]
 - [[#custom-variables][Custom Variables]]
 
@@ -1496,6 +1501,16 @@ Ebib is an emacs bibliography manager program. My customisations for it live her
 * Other Major Modes
 Some other extensions inside my Emacs config that require some changes for their major modes to function as I want them. 
 
+** Julia
+Julia snail is a SLIME equivalent environment for Julia
+#+BEGIN_SRC elisp :tangle init.el
+
+  (use-package julia-snail
+    :ensure t
+    :hook (julia-mode . julia-snail-mode))
+  
+#+END_SRC
+
 ** Python 
    Python-mls is a small utility package to allow the python repl for emacs to have multi line commands
 
@@ -1550,6 +1565,8 @@ Some other extensions inside my Emacs config that require some changes for their
 	(pdf-tools-install))
       )
 
+  (setq pdf-view-midnight-colors '("#e9eaeb" . "#292d3e"))
+  (setq pdf-view-midnight-invert nil)
   (add-hook 'pdf-view-mode-hook 'pdf-view-midnight-minor-mode)
   (org-pdftools-setup-link)
 #+END_SRC

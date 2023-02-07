@@ -33,6 +33,7 @@
   "f" '(ace-window :which-key "Switch focus")
   "φ" '(ace-window :which-key "Switch focus")
   "w" '(:ignore t :which-key "Define Word")
+  "J" '(:ignore t :which-key "Julia")
   "W" 'wolfram-alpha
   "n" 'winner-redo
   "p" 'winner-undo
@@ -92,7 +93,8 @@
  :prefix "SPC R"
  "o" '(inferior-octave :which-key "Octave")
  "p" '(run-python :which-key "Python")
- "j" '(ein:jupyter-server-start :which-key "Jupyter Notebook")
+ "J" '(ein:jupyter-server-start :which-key "Jupyter Notebook")
+ "j" '(julia-snail :which-key "Julia")
  "g" '(run-gnuplot :which-key "Gnuplot")
  "e" '(ielm :which-key "Emacs Lisp")
  "m" '(maxima :which-key "Maxima"))
@@ -135,6 +137,8 @@
  "e" 'eval-expression
  "f" 'eval-defun
  "s" 'eval-last-sexp)
+
+
 
 ;; (general-define-key
 ;;  :states 'normal
@@ -181,7 +185,7 @@
     ("r" (lambda() (interactive)(find-file "~/.emacs.d/libs/zettelkasten.org")) "Org-Roam and friends")
     ("Z" (lambda() (interactive)(find-file "~/.emacs.d/libs/zetteldesk.org")) "Zetteldesk literate config")
     ("z" (lambda() (interactive)(dired "~/Zetteldesk")) "Zetteldesk Directory")
-    ("S" (lambda() (interactive)(find-file "~/scratchpad.org")) "Emacs Scratchpad file"))
+    ("S" (lambda() (interactive)(find-file "~/org-roam-similarity/org-roam-similarity.org")) "Org Roam Similarity Config"))
 
    "University"
    (("u" (lambda() (interactive)(dired "~/Documents/7o_εξάμηνο")) "University Documents folder")
@@ -195,6 +199,7 @@
    (("h" (lambda() (interactive)(dired "~")) "Home directory")
     ("q" (lambda() (interactive)(find-file "~/.config/qtile/README.org")) "Literate Qtile config")
     ("w" (lambda() (interactive)(find-file "~/startpage/script/var.js")) "Web Start page source")
+    ("a" (lambda() (interactive)(dired "~/Documents/advent_of_code_2022")) "Advent of Code")
     ("b" (lambda() (interactive)(dired "~/Books")) "Books Directory"))
    ))
 
@@ -204,8 +209,18 @@
     ("s" org-roam-backlinks-search-from-moc-or-poi "Search for Backlinks by MOCs and POIs")
     ("S" org-roam-backlinks-search "Search for Backlinks"))))
 
+(pretty-hydra-define my/org-roam-similarity-hydra (:color blue :title "Org Roam Similarity")
+  ("Org-roam functions"
+   (("r" org-roam-similarity-node-read "Org-roam-node-read on similar nodes")
+    ("f" org-roam-similarity-node-find "Org-roam-node-find on similar nodes"))
+
+   "Others"
+   (("s" org-roam-similarity-sidebuffer "Open a sidebuffer for nodes similar to the selected")
+    ("S" org-roam-similarity-sidebuffer* "Open a sidebuffer for nodes similar to the current")
+    ("i" org-roam-similarity-insert-list "Insert links to similar nodes in the current buffer"))))
+
 (pretty-hydra-define my/roam-ref-hydra (:color blue :title "Org Roam and Org Ref")
-  ("Note Specific Commands"
+  ("Org-roam-node-find and its filters"
    (("f" org-roam-node-find "org-roam-node-find")
     ("i" (lambda () (interactive)(find-file "~/org_roam/index.org")) "Master index file for org_roam")
     ("l" ivy-bibtex-with-notes "Find Literature Note")
@@ -224,8 +239,9 @@
 
    "General Org Roam Commands"
    (("G" org-roam-ui-mode "Open the Org Roam UI")
-    ("s" org-roam-db-sync "Sync the Org Roam db")
+    ("S" org-roam-db-sync "Sync the Org Roam db")
     ("g" counsel-rg "Search regex in the org-roam db")
+    ("s" my/org-roam-similarity-hydra/body "Org-roam-similarity commands")
     ("D" org-roam-buffer-display-dedicated "Dedicated Org Roam buffer"))
    )
   )
@@ -462,6 +478,16 @@
  ", a" 'cider-apropos
  ", s" 'xref-find-definitions
  ", S" 'cider-pop-back)
+
+(general-define-key
+ :states 'normal
+ :keymaps 'julia-mode-map
+ ", r" 'julia-snail
+ ", p" 'julia-snail-package-activate
+ ", d" 'julia-snail-doc-lookup
+ ", l" 'julia-snail-send-line
+ ", f" 'julia-snail-send-buffer-file
+ ", t" 'julia-snail-send-top-level-form)
 
 (general-define-key
  :states 'normal

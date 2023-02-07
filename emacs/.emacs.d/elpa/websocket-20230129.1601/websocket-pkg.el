@@ -1,0 +1,2 @@
+;;; Generated package description from websocket.el  -*- no-byte-compile: t -*-
+(define-package "websocket" "20230129.1601" "Emacs WebSocket client and server" '((cl-lib "0.5")) :commit "2c576b6cb8e7b868e09e09c8e9cb6cf66f427bad" :authors '(("Andrew Hyatt" . "ahyatt@gmail.com")) :maintainer '("Andrew Hyatt" . "ahyatt@gmail.com") :keywords '("communication" "websocket" "server") :url "https://github.com/ahyatt/emacs-websocket")

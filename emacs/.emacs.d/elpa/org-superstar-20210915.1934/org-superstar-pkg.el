@@ -1,2 +1,0 @@
-;;; Generated package description from /home/vidianos/.emacs.d/elpa/org-superstar-20210915.1934/org-superstar.el  -*- no-byte-compile: t -*-
-(define-package "org-superstar" "20210915.1934" "Prettify headings and plain lists in Org mode" '((org "9.1.9") (emacs "26.1")) :commit "03be6c0a3081c46a59b108deb8479ee24a6d86c0" :authors '(("D. Williams" . "d.williams@posteo.net")) :maintainer '("D. Williams" . "d.williams@posteo.net") :keywords '("faces" "outlines") :url "https://github.com/integral-dw/org-superstar-mode")

@@ -71,7 +71,7 @@ This file is a core part of my emacs configuration and is all about my Org-roam 
        (let ((buffer (get-file-buffer (org-roam-node-file node))))
 	 buffer))
 
-     (setq org-roam-node-display-template "${title:100} ${backlinkscount:6} ${todostate:20} ${directories:10} ${tags:25}")
+     (setq org-roam-node-display-template "${title:115} ${backlinkscount:6} ${todostate:20} ${directories:10} ${tags:15}")
 
      (add-to-list 'display-buffer-alist
 		  '("\\*org-roam\\*"
@@ -140,6 +140,8 @@ This file is a core part of my emacs configuration and is all about my Org-roam 
   - I make the default action of ivy-bibtex, the edit notes action. Personally, its the action I use most as opening the link/pdf to the reference (which is the original default) is more easily done from Zotero imo. In Emacs I find more utility in this function creating bibliographical notes.
   - Since opening the pdf, url or DOI of a bibtex entry is no longer the default action in my config, I bind it to the letter p in the options menu of Ivy-bibtex
   - Change the citation format bibtex uses on org mode. I enter cite links with org-ref-insert-cite-links so I make the ivy-bibtex link be a link to the pdf.
+  - Require org-cite, the package for org's native citation format and configure it to know where to look for bibliography, export with csl and use the ACS bibliography style
+  - Require zotra, a package for getting bibliographic information using Zotero's translators, but in Emacs
 
      #+BEGIN_SRC elisp :tangle yes
        (setq bibtex-completion-bibliography
@@ -164,12 +166,16 @@ This file is a core part of my emacs configuration and is all about my Org-roam 
 
        (require 'oc)
        (require 'oc-csl)
-       (setq org-cite-global-bibliography '("~/Sync/My_Library.bib"))
+       (setq org-cite-global-bibliography '("~/Sync/My_Library.bib" "~/Sync/My_Library2.bib"))
 
        (setq org-cite-export-processors '((t csl)))
 
        (setq org-cite-csl-styles-dir "~/Zotero/styles")
        (setq citeproc-org-default-style-file "~/Zotero/styles/american-chemical-society.csl")
+
+       (require 'zotra)
+       (setq zotra-default-bibliography "~/Sync/My_Library2.bib"
+	     zotra-download-attachment-default-directory "~/Sync/Zotero_pdfs")
     #+END_SRC
 
 ** Citar
@@ -304,7 +310,7 @@ This section is about a small "package" I recently wrote. Its a backlink selecto
 
 #+BEGIN_SRC elisp :tangle yes
 
-  (defcustom org-roam-backlinks-choices '("View Backlinks" "Go to Node" "Add to Zetteldesk" "Quit")
+  (defcustom org-roam-backlinks-choices '("View Backlinks" "Go to Node" "Add to Zetteldesk" "Find Similar Nodes" "Quit")
     "List of choices for `org-roam-backlinks-node-read'.
   Check that function's docstring for more info about these.")
 
@@ -360,19 +366,23 @@ This section is about a small "package" I recently wrote. Its a backlink selecto
       (cond
        ((string-equal
 	 choice
-	 (car org-roam-backlinks-choices))
+	 (first org-roam-backlinks-choices))
 	(org-roam-backlinks-node-read backlink))
        ((string-equal
 	 choice
-	 (cadr org-roam-backlinks-choices))
+	 (second org-roam-backlinks-choices))
 	(find-file (org-roam-node-file backlink)))
        ((string-equal
 	 choice
-	 (caddr org-roam-backlinks-choices))
+	 (third org-roam-backlinks-choices))
 	(zetteldesk-add-node-to-desktop backlink))
        ((string-equal
 	 choice
-	 (cadddr org-roam-backlinks-choices))))))
+	 (fourth org-roam-backlinks-choices))
+	(org-roam-similarity-node-find backlink))
+       ((string-equal
+	 choice
+	 (fifth org-roam-backlinks-choices))))))
 
   (defun org-roam-backlinks-search ()
     "Select an `org-roam-node' and recursively search its backlinks.
@@ -656,6 +666,51 @@ Finally, we are down to the easiest part. Having written the backbone of the pro
 
   #+END_SRC
 
+* Org-roam-similarity
+Org-similarity is a package to be used with org-roam for discovering documents similar to the current buffer. I discovered it from [[https://org-roam.discourse.group/t/a-demo-of-ai-for-linking-writing-and-thinking-with-org-roam-should-we-build-org-roam-ai/2891/3][this]] discussion in the Org-Roam Discourse group.
+
+The original package has an input of a file and an output which is a list of links. I have decided to fork the project and widen its scope to be able to have an arbitrary org-roam file as its input and return a list of org-roam nodes. This section here is the changes I will make which are user customizations. The literate configuration for this package, which will be where all the code will be is going to be stored in ~/org-roam-similarity. 
+
+#+BEGIN_SRC elisp :tangle yes
+
+  (let ((default-directory "~/org-roam-similarity"))
+    (normal-top-level-add-to-load-path '(".")))
+  (require 'org-roam-similarity)
+
+  (setq org-roam-similarity-directory org-roam-directory
+	org-roam-similarity-root "~/org-roam-similarity"
+	org-roam-similarity-show-scores t)
+
+  (defun org-roam-similarity-sidebuffer ()
+      "Puts the results of org-similarity in a side-window."
+      (interactive)
+      (let ((command (format "python3 %s -i %s -d %s -l %s -n %s %s"
+	      (concat org-similarity-root "/assets/org-similarity.py")
+	       buffer-file-name
+	       org-similarity-directory
+	       org-similarity-language
+	       org-similarity-number-of-documents
+	       (if org-similarity-show-scores "--score" ""))))
+	(setq similarity-results (shell-command-to-string command)))
+	(with-output-to-temp-buffer "*Similarity Results*"
+	(princ similarity-results))
+	(with-current-buffer "*Similarity Results*"
+	(org-mode))
+      )
+    (add-to-list 'display-buffer-alist
+		 '("*Similarity Results*"
+		   (display-buffer-in-side-window)
+		   (inhibit-same-window . t)
+		   (side . right)
+		   (window-width . 0.4))
+    )
+
+#+END_SRC
+
+#+RESULTS:
+| *Similarity Results* | (display-buffer-in-side-window) | (inhibit-same-window . t) | (side . right)       | (window-width . 0.4)                   |
+| \*org-roam\*       | (display-buffer-in-direction)   | (direction . right)       | (window-width . 0.4) | (window-height . fit-window-to-buffer) |
+  
 * Fleeting notes
    This is one of the more interesting sections of my workflow as its really custom and from what I have seen really unique. The zettelkasten method has a concept of fleeting notes. They are small notes which should be easy and non intrusive to write quickly to capture ideas and need to be archived when done. I "abuse" the todo-keywords org provides for this to completely repurpose them into what I need. As mentioned above, my org-roam-node-find UI shows the todo state of files which have one. 
 
@@ -755,7 +810,7 @@ Lastly, for this system to work properly for fleeting notes I need a seamless wa
 	      :jump-to-captured t)
 
 	     ("o" "outline" plain "%?" :if-new
-	      (file+head "outlines/${slug}-%<%d-%m-%y>.org" "#+title: ${title}\n
+	      (file+head "outlines/${slug}-%<%d-%m-%y>.org" "#+title: ${title}
      ,#+filetags: outline")
 	      :unarrowed t
 	      :jump-to-captured t)
