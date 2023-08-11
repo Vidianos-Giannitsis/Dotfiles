@@ -3,7 +3,6 @@
 #+PROPERTY: header-args :results silent
 
 * About this config
-  
 Welcome kind stranger, to my Emacs config. This is the heart of my dotfiles and of my entire computer workflow. Mostly everything I do in a computer with only a few excuses, stems from here and I absolutely love it. Emacs is the most extensible program I have ever seen. It allows you to change basically everything, until you have an environment which suits you perfectly. This is a vanilla GNU Emacs install with a ton of configurations. Actually its not even vanilla Emacs at this point, as its probably got more things than some emacs distros like doom, but it uses the tabula rasa that is vanilla emacs and customises it with this extremely long config file to make it into my own Emacs. Vanilla Emacs is all about creating a computer environment with consistency between all your tasks which is 100% customisable. I doubt there is a single thing in Emacs that can't be changed. And for that very reason I absolutely love it. Its truly the perfect workflow for me as I have handcrafted it from scratch. 
 
 I have drawn inspiration from a lot of other init.el's but the most apparent one is the spacemacs keybindings. I was a spacemacs user for a few months before deciding to start using this personal config for Emacs. I found its keybindings very ergonomic and although most things arent exactly the way they are done in spacemacs, the inspiration is apparent. For example the Space and , keys are leader keys which I use a lot (space for general commands and , for mode specific, currently only org though).
@@ -218,6 +217,7 @@ This enables:
 + Set up the ivy-youtube key to get integration between ivy and youtube
 + Make the minibuffer store the last 20 inputs it had. Minibuffer history is pretty cool
 + Define the default dictionary-server for dictionary commands in emacs
++ Add the code for emacs-gc-stats to help the devs optimize Emacs, yeah
 
 #+BEGIN_SRC elisp :tangle init.el
 
@@ -242,8 +242,6 @@ This enables:
   (ace-window-display-mode 1)
   (setq aw-keys '(?a ?s ?d ?f ?g ?h ?j ?k ?l))
 
-  (require 'info+)
-
   (require 'pdftotext)
 
   (defun set-font-size (SIZE)
@@ -258,6 +256,7 @@ This enables:
 
   (add-to-list 'auto-mode-alist '("\\.m\\'" . octave-mode))
   (add-to-list 'auto-mode-alist '("\\.epub\\'" . nov-mode))
+  (add-to-list 'auto-mode-alist '("\\.gms\\'" . gams-mode))
 
   (setq org-link-elisp-confirm-function nil)
 
@@ -266,6 +265,10 @@ This enables:
   (ace-link-setup-default)
 
   (setq dictionary-server "dict.org")
+
+  (require 'emacs-gc-stats)
+  (setq emacs-gc-stats-gc-defaults 'emacs-defaults) ; optional
+  (emacs-gc-stats-mode +1)
 #+END_SRC
 
 * Emacs Launchers
@@ -443,9 +446,6 @@ This enables:
   #+END_SRC
 
 
-  This is how Dired ends up looking after these changes
-  [[https://github.com/AuroraDragoon/Dotfiles/blob/master/screenshots/dired.png]]
-
 ** COMMENT Dirvish  
    Dirvish is a package for file management based on dired. I want to try using it for a while and see if I like it.
    
@@ -468,15 +468,15 @@ This enables:
 + Winner mode is a mode for navigating through buffer history
   
   #+BEGIN_SRC elisp :tangle init.el
-    
+
     (show-paren-mode 1)
     (electric-pair-mode 1)
     (setq wolfram-alpha-app-id "U9PERG-KTPL49AWA2")
     (global-undo-tree-mode 1)
-    
+
     (require 'calfw-git)
     (require 'calfw-org)
-    
+
     (use-package openwith
       :config
       (setq openwith-associations
@@ -505,16 +505,16 @@ This enables:
 		   "libreoffice"
 		   '(file))))
 	    (openwith-mode 1))
-    
+
     (use-package projectile
       :ensure t
       :init
       (projectile-mode +1)
       :bind (:map projectile-mode-map
 		  ("M-p" . projectile-command-map)))
-    
+
     (setq flyspell-default-dictionary "greek")
-    
+
     (winner-mode 1)
   #+END_SRC
 
@@ -607,7 +607,6 @@ Some settings (now using the word some here might be an underestimation, as with
     + Making latex view my bibtex bibliography and export it properly. I took this from the org-ref docs as originally I wasnt getting proper bibliographic entries. It works with this.
     + I make the default process for creating latex previews dvisvgm. For the most part, both this and dvipng work flawlessly. But one specific latex package (chemfig) which I use from time to time cant preview things correctly in org with dvipng and previewing them as svgs with dvisvgm fixes that issue. Besides that, I havent really noticed any other major problems with either one.
     + I tell org to preview latex fragments by default when opening a document, as I use them extensively so this makes my life easier.
-    + I activate calctex and activate it when I go into calc's embedded mode. Its a neat package that allows me to type a formula inside calc and renders it automatically into latex. Latex snippets are what I use mostly but this is a very neat package and I had to include it here.
     + I activate org-cdlatex-mode which makes typing latex equations easier inside org and massively improves speed of typing equations together with snippets for org, org-fragtog mode which automatically creates previews for latex fragments when the cursor is not on them and laas mode which is a bunch of helpful latex snippets which autocomplete.
     + I tell latex to export my code blocks using the minted package so they look better
     + Requiring "tochemfig" a neat package to generate latex figures for chemical elements.
@@ -623,9 +622,6 @@ Some settings (now using the word some here might be an underestimation, as with
      (setq org-preview-latex-default-process 'dvisvgm)
 
      (setq org-startup-with-latex-preview t)
-
-     (require 'calctex)
-     (add-hook 'calc-embedded-new-formula-hook 'calctex-mode)
 
      (add-hook 'org-mode-hook #'(lambda ()
 				 (turn-on-org-cdlatex)
@@ -648,6 +644,7 @@ Some settings (now using the word some here might be an underestimation, as with
 				      ("" "glossaries")
 				      ("" "newfloat")
 				      ("" "minted")
+				      ("a4paper, margin=3cm" "geometry")
 				      ("" "chemfig")
 				      ("" "svg")))
 
@@ -809,7 +806,6 @@ Some settings (now using the word some here might be an underestimation, as with
 	 "CC" "\\CC"
 	 "FF" "\\FF"
 	 "HH" "\\HH"
-	 "NN" "\\NN"
 	 "PP" "\\PP"
 	 "QQ" "\\QQ"
 	 "RR" "\\RR"
@@ -995,12 +991,13 @@ More languages to evaluate with org-babel (by default, only elisp is evaluated).
        (maxima . t)
        (lisp . t)
        (clojure . t)
+       (julia . t)
   )
      )
 
   (setq org-babel-lisp-eval-fn 'sly-eval)
   (setq org-babel-clojure-backend 'cider)
-
+  (setq org-babel-julia-command "~/.local/bin/julia")
 #+END_SRC
 
 
@@ -1058,14 +1055,17 @@ More languages to evaluate with org-babel (by default, only elisp is evaluated).
   (define-skeleton hw-skeleton
     "A skeleton for quickly adding a list of this semester's lessons to a new note which I use for tracking what I need to do for each lesson"
     ""
-    "*** Ενέργεια\n\n"
-    "*** ΜΧΔ\n\n"
-    "*** Βιοχημική Μηχανική\n"
-    "**** Ένζυμα\n\n"
-    "**** Μαμούνια\n\n"
-    "*** Ρύθμιση Διεργασιών\n\n"
-    "*** Σχεδιασμός\n\n"
+    "*** Διαχείριση Βιομηχανικών Αποβλήτων\n\n"
+    "*** Περιβαλλοντική Βιοτεχνολογία\n\n"
+    "*** Περιβαλλοντική Μηχανική\n"
+    "**** Στερεά\n\n"
+    "**** Υγρά\n\n"
+    "**** Αέρια\n\n"
+    "**** Ασκήσεις\n\n"
+    "*** Πράσινη Χημεία\n\n"
+    "*** Σχεδιασμός\n"
     "**** Εργασία\n\n"
+    "*** Άρθρα to-read\n\n"
     "*** Other\n\n")
 
   #+END_SRC
@@ -1262,7 +1262,6 @@ Elfeed is an RSS reader for Emacs. I have started looking into it and adding thi
 	  ("https://irreal.org/blog/?feed=rss2" emacs linux news)
 	  ("https://sachachua.com/blog/category/emacs-news/feed/" emacs news)
 	  ("https://ag91.github.io/rss.xml" emacs)
-	  ("https://takeonrules.com/index.xml" emacs org)
 	  ("https://andreyorst.gitlab.io/feed.xml" emacs lisp)
 	  ("https://magnus.therning.org/feed.xml" emacs)
 	  ("https://protesilaos.com/codelog.xml" emacs lisp)
@@ -1271,6 +1270,7 @@ Elfeed is an RSS reader for Emacs. I have started looking into it and adding thi
 	  ("https://amodernist.com/all.atom" emacs lisp)
 	  ("https://tilde.town/~ramin_hal9001/atom.xml" emacs lisp org)
 	  ("https://karl-voit.at/feeds/lazyblorg-all.atom_1.0.links-only.xml" emacs org)
+	  ("https://karthinks.com/index.xml" emacs news)
 	  ))
 
   (setq elfeed-search-filter "@1-months-ago +unread")
@@ -1464,40 +1464,6 @@ Org reveal is a tool for making reveal.js presentations with org-mode. I am tryi
      (t nil)))
 #+END_SRC
 
-* Sage
-  Sage is a FOSS mathematics software system based on Python that uses tools from a large variety of mathematics based tools. Sage-shell is an emacs package which ports Sage and its interface to the emacs environment, which seems really cool. This section is all about the configuration I have done to Sage
-
-#+BEGIN_SRC elisp :tangle init.el
-
-  ;; Run SageMath by M-x run-sage instead of M-x sage-shell:run-sage
-  (sage-shell:define-alias)
-
-  ;; Turn on eldoc-mode in Sage terminal and in Sage source files
-  (add-hook 'sage-shell-mode-hook #'eldoc-mode)
-  (add-hook 'sage-shell:sage-mode-hook #'eldoc-mode)
-
-  (add-hook 'sage-shell-after-prompt-hook #'sage-shell-view-mode)
-
-#+END_SRC
-
-* Ebib
-Ebib is an emacs bibliography manager program. My customisations for it live here
-
-#+BEGIN_SRC elisp :tangle init.el
-  (setq ebib-preload-bib-files '("~/Sync/My_Library.bib"))
-  
-  (add-hook 'ebib-entry-mode-hook 'visual-line-mode)
-  
-  (setq ebib-index-columns '(("Title" 60 t)
-			     ("Author/Editor" 40 t)
-			     ("Year" 6 t)
-			     ("Entry Key" 40 t)
-			     ("Note" 10 t)))
-  
-  (setq ebib-notes-directory "~/org_roam/ref")
-#+END_SRC
-
-
 * Other Major Modes
 Some other extensions inside my Emacs config that require some changes for their major modes to function as I want them. 
 
@@ -1508,10 +1474,14 @@ Julia snail is a SLIME equivalent environment for Julia
   (use-package julia-snail
     :ensure t
     :hook (julia-mode . julia-snail-mode))
-  
+
+  (setq-default julia-snail-executable "~/.local/bin/julia")
+
+  (setq julia-snail-multimedia-enable t)
+  (setq julia-snail-extensions '(ob-julia repl-history))
 #+END_SRC
 
-** Python 
+** COMMENT Python 
    Python-mls is a small utility package to allow the python repl for emacs to have multi line commands
 
 #+BEGIN_SRC elisp :tangle init.el
@@ -1605,6 +1575,18 @@ Julia snail is a SLIME equivalent environment for Julia
 
    #+END_SRC
 
+** Eww
+Using eww to view some browser pages may be useful. Having latex previews in these is even more useful.
+
+#+BEGIN_SRC elisp :tangle init.el
+
+  (add-hook 'eww-mode-hook #'(lambda ()
+			       (texfrag-mode)
+			       (texfrag-document)
+			       (visual-line-mode)))
+
+#+END_SRC
+   
 ** Common Lisp & Clojure
    I started learning CL recently, both out of interest and so that I can give software such as Nyxt and StumpWM a real try. But the sly-documentation-lookup function uses a browser to open Hyperspec in and by default that is your default browser (which makes sense). But for CL documentation, its really not handy to have to use an actual browser (I am also addicted to how ELisp docs are always inside emacs). Something like eww does the work very well. So I add an advice to the common-lisp-hyperspec function (which is what sly-documentation-lookup uses as a backend) to temporarily make eww the default browser when using it. Essentially this makes these documentation pages open in eww, while not disrupting the default behaviour of browse-url (which is to open a link with my default browser).
 
@@ -1643,6 +1625,40 @@ Julia snail is a SLIME equivalent environment for Julia
      (setq deft-recursive t)
      
    #+END_SRC
+
+
+** COMMENT Sage
+  Sage is a FOSS mathematics software system based on Python that uses tools from a large variety of mathematics based tools. Sage-shell is an emacs package which ports Sage and its interface to the emacs environment, which seems really cool. This section is all about the configuration I have done to Sage
+
+#+BEGIN_SRC elisp :tangle init.el
+
+  ;; Run SageMath by M-x run-sage instead of M-x sage-shell:run-sage
+  (sage-shell:define-alias)
+
+  ;; Turn on eldoc-mode in Sage terminal and in Sage source files
+  (add-hook 'sage-shell-mode-hook #'eldoc-mode)
+  (add-hook 'sage-shell:sage-mode-hook #'eldoc-mode)
+
+  (add-hook 'sage-shell-after-prompt-hook #'sage-shell-view-mode)
+
+#+END_SRC
+
+** Ebib
+Ebib is an emacs bibliography manager program. My customisations for it live here
+
+#+BEGIN_SRC elisp :tangle init.el
+  (setq ebib-preload-bib-files '("~/Sync/My_Library.bib"))
+  
+  (add-hook 'ebib-entry-mode-hook 'visual-line-mode)
+  
+  (setq ebib-index-columns '(("Title" 60 t)
+			     ("Author/Editor" 40 t)
+			     ("Year" 6 t)
+			     ("Entry Key" 40 t)
+			     ("Note" 10 t)))
+  
+  (setq ebib-notes-directory "~/org_roam/ref")
+#+END_SRC
 
 
 * Custom Variables

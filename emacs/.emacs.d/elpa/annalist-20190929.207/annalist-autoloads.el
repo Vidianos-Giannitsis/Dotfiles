@@ -1,4 +1,4 @@
-;;; annalist-autoloads.el --- automatically extracted autoloads
+;;; annalist-autoloads.el --- automatically extracted autoloads  -*- lexical-binding: t -*-
 ;;
 ;;; Code:
 
@@ -30,7 +30,7 @@ those settings for displaying recorded information instead of the defaults.
 
 \(fn ANNALIST TYPE &optional VIEW)" nil nil)
 
-(if (fboundp 'register-definition-prefixes) (register-definition-prefixes "annalist" '("annalist-")))
+(register-definition-prefixes "annalist" '("annalist-"))
 
 ;;;***
 

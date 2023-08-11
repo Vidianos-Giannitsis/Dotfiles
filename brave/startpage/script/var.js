@@ -55,7 +55,7 @@ var favorites = [
 	  ["Science Direct" , "https://www.sciencedirect.com/", "sc"],
 	  ["Research Rabbit" , "https://www.researchrabbitapp.com/home", "rr"],
 	  ["Scopus" , "https://www.scopus.com/search/form.uri?display=basic#basic", "sc"],
-	  ["Minitab" , "https://app.minitab.com/", "mt"],
+	  ["IPSEN Tools" , "https://tools.ipsen.ntua.gr/ipsentools/web/index.php?r=site%2Ftools", "ips"],
 	  ["Helios", "https://helios.ntua.gr/my/", "h"]
       ]
     ],
@@ -67,6 +67,8 @@ var favorites = [
 	  ["Youtube" , "https://www.youtube.com/", "yt"],
 	  ["Discord" , "https://discord.com/channels/@me", "dc"],
 	  ["Reddit", "https://www.reddit.com/", "rd"],
+	  ["Matrix", "https://app.element.io/", "mtr"],
+	  ["Mobilizon", "https://mobilizon.fr/@m_x_research", "mb"],
 	  ["Instagram" , "https://instagram.com/", "in"]
       ]
     ],
@@ -78,8 +80,7 @@ var favorites = [
 	  ["Org-Roam-Bibtex" , "https://github.com/org-roam/org-roam-bibtex", "orb"],
 	  ["Org-Roam Discourse", "https://org-roam.discourse.group/", "ord"],
 	  ["Qtile", "http://docs.qtile.org/en/latest/", "qt"],
-	  ["Clojure", "https://www.braveclojure.com/clojure-for-the-brave-and-true/", "clj"],
-	  ["EXWM", "https://github.com/ch11ng/exwm/wiki", "ex"]
+	  ["Clojure", "https://www.braveclojure.com/clojure-for-the-brave-and-true/", "clj"]
       ]
     ],
     [ "Games",
@@ -97,21 +98,21 @@ var favorites = [
 	  ["Type Chart", "https://www.smogon.com/dex/sm/types/", "tc"]
       ]
     ],
-    [ "Pokemon Unbound Docs",
+    [ "Draft League",
       [
-	  ["Learnsets", "https://github.com/Skeli789/Dynamic-Pokemon-Expansion/blob/Unbound/src/Learnsets.c", "lr"],
-	  ["Egg Moves", "https://github.com/Skeli789/Dynamic-Pokemon-Expansion/blob/Unbound/src/Egg_Moves.c", "em"],
-	  ["Evolutions", "https://github.com/Skeli789/Dynamic-Pokemon-Expansion/blob/Unbound/src/Evolution%20Table.c", "evo"],
-	  ["Bosses (Insane)", "https://docs.google.com/spreadsheets/d/1pLTQKQkWTnSkev4_kcjHbY0AkBujbTUDybxXFNZ_aVY/edit#gid=707456878", "bs"],
-	  ["Damage Calcs", "https://pastebin.com/raw/iyN9Ls90", "calcs"],
-	  ["Locations", "https://docs.google.com/spreadsheets/d/1LFSBZuPDtJrwAz7t6ZkJ-il4j8M3qCdaKLNe6EZdPmQ/edit#gid=309549967", "lc"],
-	  ["EV training guide", "https://bulbapedia.bulbagarden.net/wiki/List_of_Pok%C3%A9mon_by_effort_value_yield", "ev"],
-	  ["Wild Held Items", "https://github.com/Skeli789/Dynamic-Pokemon-Expansion/blob/Unbound/src/Base_Stats.c", "whi"]
+	  ["JJDL Doc", "https://docs.google.com/spreadsheets/d/15D8o1dlbnV6spGy5yFLxCsmXpMSq7tKDBNrA9lYv1Ww/edit?usp=sharing", "jj"],
+	  ["DDL Doc", "https://docs.google.com/spreadsheets/d/1ETsqjC3oaxM8zc1ZqZXZKFLPA5AnT4j6FuJ_gujxJPI/edit#gid=0", "ddl"],
+	  ["OGDL Doc", "https://docs.google.com/spreadsheets/d/1w0dDYmfTb6NGo0Ybvm56zMl58YV27ydPeIfXvuMvuog/edit#gid=136029154", "og"],
+	  ["Prep Doc", "https://docs.google.com/spreadsheets/d/1M7dHdzZ8aCEqPqQPl9Ga5mf15KCGa3jX_IoHDjCfbeY/edit#gid=1762857116", "pd"],
+	  ["DL Showdown", "https://dl.psim.us/", "dl"],
+	  ["Damage Calc", "https://calc.pokemonshowdown.com/index.html", "calc"]
       ]
     ],
+
     [ "Other",
       [
 	  ["Darebee", "https://darebee.com/", "d"],
+	  ["MIT SciML Course", "https://book.sciml.ai/", "mit"],
 	  ["Raindrop", "https://app.raindrop.io/my/0", "rd"],
 	  ["Hex Color Codes", "https://www.color-hex.com/", "ch"],
 	  ["Word Counter", "https://wordcounter.net/", "wc"],

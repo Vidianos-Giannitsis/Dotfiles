@@ -1,4 +1,4 @@
-;;; ivy-yasnippet-autoloads.el --- automatically extracted autoloads
+;;; ivy-yasnippet-autoloads.el --- automatically extracted autoloads  -*- lexical-binding: t -*-
 ;;
 ;;; Code:
 
@@ -20,7 +20,7 @@ If text before point matches snippet key of any candidate, that
 candidate will be initially selected, unless variable
 `ivy-yasnippet-expand-keys' is set to nil." t nil)
 
-(if (fboundp 'register-definition-prefixes) (register-definition-prefixes "ivy-yasnippet" '("ivy-yasnippet-")))
+(register-definition-prefixes "ivy-yasnippet" '("ivy-yasnippet-"))
 
 ;;;***
 

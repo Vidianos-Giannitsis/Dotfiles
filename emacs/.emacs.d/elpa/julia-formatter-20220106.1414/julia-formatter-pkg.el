@@ -1,2 +1,0 @@
-;;; Generated package description from julia-formatter.el  -*- no-byte-compile: t -*-
-(define-package "julia-formatter" "20220106.1414" "Use JuliaFormatter.jl for julia code" '((emacs "27.1")) :commit "a17490fbf8902fc11827651f567924edb22f81cb" :authors '(("Felipe Lema" . "felipe.lema@mortemale.org")) :maintainer '("Felipe Lema" . "felipe.lema@mortemale.org") :keywords '("convenience" "tools") :url "https://codeberg.org/FelipeLema/julia-formatter.el")

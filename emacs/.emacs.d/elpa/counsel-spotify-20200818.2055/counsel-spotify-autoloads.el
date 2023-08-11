@@ -1,4 +1,4 @@
-;;; counsel-spotify-autoloads.el --- automatically extracted autoloads
+;;; counsel-spotify-autoloads.el --- automatically extracted autoloads  -*- lexical-binding: t -*-
 ;;
 ;;; Code:
 
@@ -40,7 +40,7 @@ Bring Ivy frontend to search for all tracks for a given artist." t nil)
 (autoload 'counsel-spotify-search-tracks-by-album "counsel-spotify" "\
 Bring Ivy frontend to search for all track on a given album." t nil)
 
-(if (fboundp 'register-definition-prefixes) (register-definition-prefixes "counsel-spotify" '("counsel-spotify-")))
+(register-definition-prefixes "counsel-spotify" '("counsel-spotify-"))
 
 ;;;***
 
@@ -48,7 +48,7 @@ Bring Ivy frontend to search for all track on a given album." t nil)
 ;;;;;;  (0 0 0 0))
 ;;; Generated autoloads from counsel-spotify-backends.el
 
-(if (fboundp 'register-definition-prefixes) (register-definition-prefixes "counsel-spotify-backends" '("counsel-spotify-")))
+(register-definition-prefixes "counsel-spotify-backends" '("counsel-spotify-"))
 
 ;;;***
 
@@ -56,7 +56,7 @@ Bring Ivy frontend to search for all track on a given album." t nil)
 ;;;;;;  (0 0 0 0))
 ;;; Generated autoloads from counsel-spotify-notifications.el
 
-(if (fboundp 'register-definition-prefixes) (register-definition-prefixes "counsel-spotify-notifications" '("counsel-spotify-")))
+(register-definition-prefixes "counsel-spotify-notifications" '("counsel-spotify-"))
 
 ;;;***
 
@@ -64,7 +64,7 @@ Bring Ivy frontend to search for all track on a given album." t nil)
 ;;;;;;  (0 0 0 0))
 ;;; Generated autoloads from counsel-spotify-search.el
 
-(if (fboundp 'register-definition-prefixes) (register-definition-prefixes "counsel-spotify-search" '("counsel-spotify-")))
+(register-definition-prefixes "counsel-spotify-search" '("counsel-spotify-"))
 
 ;;;***
 

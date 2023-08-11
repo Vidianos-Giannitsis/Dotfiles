@@ -1,2 +1,0 @@
-;;; Generated package description from literate-calc-mode.el  -*- no-byte-compile: t -*-
-(define-package "literate-calc-mode" "20230127.153" "Inline results from calc" '((emacs "25.1") (s "1.12.0")) :commit "900bdd12c0a6e6874f60b0df99a72fd329873ea1" :authors '(("Robin Schroer")) :maintainer '("Robin Schroer") :keywords '("calc" "languages" "tools") :url "https://github.com/sulami/literate-calc-mode.el")

@@ -5,8 +5,6 @@
 ;; Author: Roland Walker <walker@pobox.com>
 ;; Homepage: http://github.com/rolandwalker/anaphora
 ;; URL: http://raw.githubusercontent.com/rolandwalker/anaphora/master/anaphora.el
-;; Package-Version: 20180618.2200
-;; Package-Commit: 3b2da3f759b244975852e79721c4a2dbad3905cf
 ;; Version: 1.0.4
 ;; Last-Updated: 18 Jun 2018
 ;; EmacsWiki: Anaphora

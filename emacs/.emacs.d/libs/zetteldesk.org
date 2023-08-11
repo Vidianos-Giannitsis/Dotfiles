@@ -583,7 +583,7 @@ I tried to follow a rather simple idea to do this and not overcomplicate things.
 	   (goto-char (point-max))
 	   (newline)
 	   (insert-file-contents file nil 67)
- 	   (zetteldesk--replace-title)))
+	   (zetteldesk--replace-title)))
        (switch-to-buffer-other-window "*zetteldesk-scratch*"))
 
      (defun zetteldesk-insert-org-file-contents (&optional arg)
@@ -753,6 +753,92 @@ Saving the current state of the ~zetteldesk-desktop~ could be a very useful feat
 
 #+END_SRC
    
+** Multiple scratches
+The idea of having multiple zetteldesk-scratch buffers in one session and being able to select which is active or not in a given time is an interesting concept as mentioned in an issue. It simulates having multiple desks and placing different things in each. I personally haven't found the need for it, but it makes sense why it would be useful.
+
+Multiple desktops means a few things:
+
+- First write the current desktop to a file (write-file)
+- Run the scratch initialization function to create a new desktop (zetteldesk--create-scratch-buffer)
+- Store the old one in a variable
+- Have a function to switch between desktops
+
+  The first three can be done with the same top level function. Out of the three, only the third needs to be written here. Of the function below, the first is this implementation, while the other two are switching functions with different behaviour on the current scratch.
+
+#+BEGIN_SRC elisp :tangle zetteldesk.el
+
+  (defcustom zetteldesk-scratch-list '()
+    "List of saved zetteldesk-scratch buffers.
+
+  Each item in this list is added to it via the functions
+  `zetteldesk-create-new-desktop' or
+  `zetteldesk-store-active-desktop-and-switch' and is a buffer name
+  of an inactive zetteldesk-scratch buffer that those functions
+  saved."
+    :type 'list
+    :group 'zetteldesk)
+
+  (defun zetteldesk-create-new-scratch (file)
+    "Create a new zetteldesk-scratch buffer.
+
+  This function initially prompts for a file to write the current
+  zetteldesk-scratch to so it is not lost when replacing it.  It
+  then stores its name and file as a cons cell to
+  `zetteldesk-scratch-list'.  Finally, it creates a new
+  zetteldesk-scratch buffer, with the low-level
+  `zetteldesk--create-scratch-buffer' function, which is empty."
+    (interactive "F")
+    (let* ((name (read-string "Name of old desktop: "))
+	   (cell (cons name file)))
+      (with-current-buffer "*zetteldesk-scratch*"
+	(write-file file))
+      (push cell zetteldesk-desktop-list)
+      (zetteldesk--create-scratch-buffer)))
+
+  (defun zetteldesk-store-active-scratch-and-switch (file)
+    "Store the active zetteldesk-scratch buffer and switch to an inactive one.
+
+  This function initializes with `zetteldesk-create-new-scratch'
+  but inserts the contents of an inactive scratch to the newly
+  initialized one instead of keeping it empty.
+
+  The function prompts the user for an inactive zetteldesk-scratch
+  stored in `zetteldesk-scratch-list' and inserts its contents to
+  the new zetteldesk-scratch, making it the active
+  zetteldesk-scratch buffer."
+    (interactive "F")
+    (zetteldesk-create-new-scratch file)
+    (with-current-buffer "*zetteldesk-scratch*"
+      (insert-file-contents (cdr (assoc
+				  (completing-read "Select desktop to activate: "
+						   zetteldesk-desktop-list)
+				  zetteldesk-desktop-list)))))
+
+  (defun zetteldesk-delete-active-scratch-and-switch ()
+    "Switch the active zetteldesk-scratch buffer deleting the current.
+
+  This function is a sister function of
+  `zetteldesk-store-active-desktop-and-switch' with their main
+  difference being that this function deletes the current
+  zetteldesk-scratch with `erase-buffer' and replaces it with the
+  one selected from `zetteldesk-scratch-list'.
+
+  This function is useful when the current zetteldesk-scratch has
+  already been saved to `zetteldesk-scratch-list' and you want to
+  switch to an inactive one as in that case there is no point to
+  re-store it to `zetteldesk-scratch-list'.  Another reason to use
+  this is if the scratch is currently empty and you want to fill it
+  up."
+    (interactive)
+    (with-current-buffer "*zetteldesk-scratch*"
+      (erase-buffer)
+      (insert-file-contents (cdr (assoc
+				  (completing-read "Select desktop to activate: "
+						   zetteldesk-desktop-list)
+				  zetteldesk-desktop-list)))))
+
+#+END_SRC
+
 * Keybindings
 This section is for the default keybindings of zetteldesk.el, implemented in a seperate file zetteldesk-kb.el. I personally don't use these but they are very useful to have
 
@@ -819,7 +905,7 @@ This section is for the default keybindings of zetteldesk.el, implemented in a s
   (pretty-hydra-define zetteldesk-add-hydra (:color blue :title "Add to Zetteldesk")
     ("Org-Roam"
      (("n" zetteldesk-add-node-to-desktop "Add Node")
-      ("b" zetteldesk-add-backlinks-to-desktop "Add Node + All its backlinks")
+      ("b" zetteldesk-add-backlinks-to-desktop "Add Current Node + All its backlinks")
       ("p" zetteldesk-add-poi-or-moc-backlink-to-desktop "Select MOC or POI - Add one of its backlinks"))
 
      "Other"
@@ -828,7 +914,7 @@ This section is for the default keybindings of zetteldesk.el, implemented in a s
   (pretty-hydra-define zetteldesk-remove-hydra (:color blue :title "Remove from Zetteldesk")
     ("Org-Roam"
      (("n" zetteldesk-remove-node-from-desktop "Remove Node")
-      ("b" zetteldesk-remove-backlinks-from-desktop "Remove Node + All its backlinks"))
+      ("b" zetteldesk-remove-backlinks-from-desktop "Remove Current Node + All its backlinks"))
 
      "Other"
      (("r" zetteldesk-remove-from-desktop "Remove Buffer"))))
@@ -845,6 +931,15 @@ This section is for the default keybindings of zetteldesk.el, implemented in a s
       (("p" zetteldesk-insert-link-to-pdf "Link to PDF")
        ("o" zetteldesk-insert-org-file-contents "Org File Contents"))))
 
+  (pretty-hydra-define zetteldesk-scratch-hydra (:color blue :title "Zetteldesk Scratch functions")
+    ("Switch to Existing Scratch"
+     (("s" zetteldesk-switch-to-scratch-buffer "Switch to *zetteldesk-scratch*"))
+
+     "Manipulate the Zetteldesk-scratch"
+     (("c" zetteldesk-create-new-scratch "Create a new *zetteldesk-scratch*")
+      ("a" zetteldesk-store-active-scratch-and-switch "Switch to an inactive scratch storing the existing one")
+      ("d" zetteldesk-delete-active-scratch-and-switch "Switch to an inactive scratch deleting the existing one"))))
+
   ;; The Primary Hydra
 
   (pretty-hydra-define zetteldesk-main-hydra (:color blue :title "Zetteldesk Hydra")
@@ -857,7 +952,7 @@ This section is for the default keybindings of zetteldesk.el, implemented in a s
       ("a" zetteldesk-add-hydra/body "Run the Adding Hydra"))
 
      "Inserting Things and *zetteldesk-scratch*"
-     (("s" zetteldesk-switch-to-scratch-buffer "Switch to *zetteldesk-scratch*")
+     (("s" zetteldesk-scratch-hydra/body "Run the Scratch Hydra")
       ("i" zetteldesk-insert-hydra/body "Run the Insert Hydra"))
 
      "Saving/Restoring the Desktop"
@@ -1310,7 +1405,7 @@ This section is for the default keybindings of zetteldesk.el, implemented in a s
      through a filter function of the form this function
      takes.  FILTER-FN and SORT-FN are the same as in
      `org-roam-node-read--completions'.  The resulting alist is to be
-     used with `org-roam-node-read*'."
+     used with `zetteldesk-ref-roam-node-read*'."
        (let* ((template (org-roam-node--process-display-format org-roam-node-display-template))
 	      (nodes node-list)
 	      (nodes (mapcar (lambda (node)

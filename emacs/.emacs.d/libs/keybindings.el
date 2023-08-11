@@ -73,7 +73,8 @@
  "w" 'engine/search-wolfram
  "s" 'engine/search-sciencedirect
  "t" 'engine/search-translate
- "b" 'engine/search-bulbapedia
+ "B" 'engine/search-bulbapedia
+ "b" 'bookmark-selector-browse-bookmark
  "G" 'engine/search-github)
 
 (general-define-key
@@ -188,18 +189,21 @@
     ("S" (lambda() (interactive)(find-file "~/org-roam-similarity/org-roam-similarity.org")) "Org Roam Similarity Config"))
 
    "University"
-   (("u" (lambda() (interactive)(dired "~/Documents/7o_εξάμηνο")) "University Documents folder")
+   (("u" (lambda() (interactive)(dired "~/Documents/8o_εξάμηνο")) "University Documents folder")
     ("B" (lambda() (interactive)(find-file "~/Sync/My_Library.bib")) "Master Bibliography file")
     ("o" (lambda() (interactive)(dired "~/Documents/Octave")) "Octave scripts directory")
     ("O" (lambda() (interactive)(dired "~/org_roam/outlines")) "Outlines")
     ("p" (lambda() (interactive)(dired "~/Documents/7o_εξάμηνο/Σχεδιασμός_Ι/Project/git_repo")))
+    ("e" (lambda() (interactive)(dired "~/Documents/BISC-E")))
     ("C" (lambda() (interactive)(dired "~/Documents/Chemecar")) "Chemecar"))
 
    "General Computer Things"
    (("h" (lambda() (interactive)(dired "~")) "Home directory")
     ("q" (lambda() (interactive)(find-file "~/.config/qtile/README.org")) "Literate Qtile config")
     ("w" (lambda() (interactive)(find-file "~/startpage/script/var.js")) "Web Start page source")
-    ("a" (lambda() (interactive)(dired "~/Documents/advent_of_code_2022")) "Advent of Code")
+    ("a" (lambda() (interactive)(find-file "~/auth.org")) "Git auth token")
+    ("j" (lambda() (interactive)(dired "~/Documents/Julia")) "Julia")
+    ("d" (lambda() (interactive)(dired "~/Games/Pokemon_Draft")) "Draft")
     ("b" (lambda() (interactive)(dired "~/Books")) "Books Directory"))
    ))
 
@@ -257,6 +261,14 @@
  "t" 'org-journal-open-current-journal-file
  "d" 'org-journal-new-date-entry
  "S" 'org-journal-new-scheduled-entry)
+
+(general-define-key
+ :states 'normal
+ :keymaps 'override
+ :prefix "SPC J"
+ "r" 'julia-snail
+ "h" 'julia-snail/repl-history-buffer
+ "s" 'julia-snail/repl-history-search-and-yank)
 
 (general-define-key
  :states 'normal
@@ -450,6 +462,17 @@
 
 (general-define-key
  :states 'normal
+ :keymaps 'org-mode-map
+ :prefix ", j"
+ "r" 'julia-snail
+ "p" 'julia-snail-package-activate
+ "d" 'julia-snail-doc-lookup
+ "l" 'julia-snail-send-line
+ "f" 'julia-snail-send-buffer-file
+ "t" 'julia-snail-send-top-level-form)
+
+(general-define-key
+ :states 'normal
  :keymaps 'lisp-mode-map
  ", f" 'sly-compile-defun
  ", h" '(sly-documentation :which-key "Documentation at point"))
@@ -473,6 +496,11 @@
 
 (general-define-key
  :states 'normal
+ :keymaps 'hy-mode-map
+ ", e" 'hy-shell-eval-current-form)
+
+(general-define-key
+ :states 'normal
  :keymaps 'cider-repl-mode-map
  ", d" 'cider-doc
  ", a" 'cider-apropos
@@ -488,6 +516,66 @@
  ", l" 'julia-snail-send-line
  ", f" 'julia-snail-send-buffer-file
  ", t" 'julia-snail-send-top-level-form)
+
+(general-define-key
+ :states 'normal
+ :keymaps 'gams-mode-map
+ ", g" 'gams-start-menu
+ ", s" 'gams-start-processor
+ ", d" 'gams-view-lst
+ ", i" '(:ignore t :which-key "Insertion functions")
+ ", c" 'gams-insert-comment
+ ", t" 'gams-template
+ ", I" 'gams-show-identifier
+ ", l" 'gams-show-identifier-list
+ ", a" 'gams-align-block
+ ", m" 'gams-view-document
+ ", h" '(:ignore t :which-key "Headings functions")
+ "TAB" 'gams-orglike-cycle
+ "S-TAB" 'gams-orglike-global-cycle)
+
+(general-define-key
+ :states 'normal
+ :keymaps 'gams-mode-map
+ :prefix ", i"
+ "s" 'gams-insert-statement
+ "d" 'gams-insert-dollar-control
+ "t" 'gams-insert-statement-extended)
+
+(general-define-key
+ :states 'normal
+ :keymaps 'gams-mode-map
+ :prefix ", h"
+ "n" 'outline-next-visible-heading
+ "p" 'outline-previous-visible-heading
+ "f" 'outline-hide-leaves
+ "s" 'outline-show-branches)
+
+(general-define-key
+ :states 'normal
+ :keymaps 'gams-lst-mode-map
+ ", i" 'gams-lst-jump-to-input-file
+ ", q" 'gams-lst-kill-buffer
+ ", o" 'gams-outline
+ ", e" 'gams-lst-view-error
+ ", f" 'gams-lst-jump-to-error-file
+ ", l" 'gams-lst-jump-to-line
+ ", s" 'gams-lst-solve-summary
+ ", S" 'gams-lst-solve-summary-back
+ ", r" 'gams-lst-report-summary
+ ", R" 'gams-lst-report-summary-back
+ ", v" 'gams-lst-next-var
+ ", V" 'gams-lst-previous-var
+ ", n e" 'gams-lst-next-equ
+ ", E" 'gams-lst-previous-equ
+ ", p" 'gams-lst-next-par
+ ", P" 'gams-lst-previous-par
+ ", t" 'gams-lst-next-set
+ ", T" 'gams-lst-previous-set
+ ", x" 'gams-lst-next-elt
+ ", X" 'gams-lst-previous-elt
+ ", c" 'gams-lst-next-clt
+ ", C" 'gams-lst-previous-clt)
 
 (general-define-key
  :states 'normal
@@ -517,11 +605,11 @@
  "s n" 'dired-subtree-narrow
  "<C-return>" 'helm-dired-open)
 
-(define-key calc-mode-map (kbd "/") nil)
-(general-define-key
- :states 'normal
- :keymaps 'calc-mode-map
- "/" 'calc-divide)
+;; (define-key calc-mode-map (kbd "/") nil)
+;; (general-define-key
+;;  :states 'normal
+;;  :keymaps 'calc-mode-map
+;;  "/" 'calc-divide)
 
 (general-define-key
  :states 'normal

@@ -1,4 +1,4 @@
-;;; auto-package-update-autoloads.el --- automatically extracted autoloads
+;;; auto-package-update-autoloads.el --- automatically extracted autoloads  -*- lexical-binding: t -*-
 ;;
 ;;; Code:
 
@@ -31,7 +31,7 @@ Update installed Emacs packages if at least
 `auto-package-update-interval' days have passed since the last
 update." nil nil)
 
-(if (fboundp 'register-definition-prefixes) (register-definition-prefixes "auto-package-update" '("apu--" "auto-package-")))
+(register-definition-prefixes "auto-package-update" '("apu--" "auto-package-"))
 
 ;;;***
 

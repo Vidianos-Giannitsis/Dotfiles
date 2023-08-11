@@ -1,4 +1,4 @@
-;;; csv-autoloads.el --- automatically extracted autoloads
+;;; csv-autoloads.el --- automatically extracted autoloads  -*- lexical-binding: t -*-
 ;;
 ;;; Code:
 
@@ -9,7 +9,7 @@
 ;;;### (autoloads nil "csv" "csv.el" (0 0 0 0))
 ;;; Generated autoloads from csv.el
 
-(if (fboundp 'register-definition-prefixes) (register-definition-prefixes "csv" '("csv-")))
+(register-definition-prefixes "csv" '("csv-"))
 
 ;;;***
 

@@ -1,4 +1,4 @@
-;;; dired-toggle-sudo-autoloads.el --- automatically extracted autoloads
+;;; dired-toggle-sudo-autoloads.el --- automatically extracted autoloads  -*- lexical-binding: t -*-
 ;;
 ;;; Code:
 
@@ -19,7 +19,7 @@ If called with `universal-argument' (C-u), ask for username.
 
 \(fn &optional SUDO-USER)" t nil)
 
-(if (fboundp 'register-definition-prefixes) (register-definition-prefixes "dired-toggle-sudo" '("dired-toggle-sudo-")))
+(register-definition-prefixes "dired-toggle-sudo" '("dired-toggle-sudo-"))
 
 ;;;***
 

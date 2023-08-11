@@ -535,37 +535,44 @@ to switch to the newly-created buffer."
       (concat "elisp:(switch-to-buffer \"" buffer-name "\")")
       (concat "#" TAG)))))
 
-(let ((default-directory "~/org-roam-similarity"))
-  (normal-top-level-add-to-load-path '(".")))
-(require 'org-roam-similarity)
+(require 'org-similarity)
 
-(setq org-roam-similarity-directory org-roam-directory
-      org-roam-similarity-root "~/org-roam-similarity"
-      org-roam-similarity-show-scores t)
+;; Directory to scan for possibly similar documents.
+;; org-roam users might want to change it to `org-roam-directory'.
+(setq org-similarity-directory org-roam-directory)
 
-(defun org-roam-similarity-sidebuffer ()
-    "Puts the results of org-similarity in a side-window."
-    (interactive)
-    (let ((command (format "python3 %s -i %s -d %s -l %s -n %s %s"
-	    (concat org-similarity-root "/assets/org-similarity.py")
-	     buffer-file-name
-	     org-similarity-directory
-	     org-similarity-language
-	     org-similarity-number-of-documents
-	     (if org-similarity-show-scores "--score" ""))))
-      (setq similarity-results (shell-command-to-string command)))
-      (with-output-to-temp-buffer "*Similarity Results*"
-      (princ similarity-results))
-      (with-current-buffer "*Similarity Results*"
-      (org-mode))
-    )
-  (add-to-list 'display-buffer-alist
-	       '("*Similarity Results*"
-		 (display-buffer-in-side-window)
-		 (inhibit-same-window . t)
-		 (side . right)
-		 (window-width . 0.4))
-  )
+;; How many similar entries to list at the end of the buffer.
+(setq org-similarity-number-of-documents 10)
+
+;; Whether to prepend the list entries with similarity scores.
+(setq org-similarity-show-scores nil)
+
+;; Similarity score threshold. All results with a similarity score below this
+;; value will be omitted from the final list.
+;; Default is 0.05.
+(setq org-similarity-threshold 0.05)
+
+;; Whether the resulting list of similar documents will point to ID property or
+;; filename. Default is nil.
+;; However, I recommend setting it to `t' if you use `org-roam' v2.
+(setq org-similarity-use-id-links t)
+
+;; Scan for files inside `org-similarity-directory' recursively.
+(setq org-similarity-recursive-search t)
+
+;; Remove first result from the scores list. Useful if the current buffer is
+;; saved in the searched directory, and you don't want to see it included
+;; in the list. Default is nil."
+(setq org-similarity-remove-first nil)
+
+;; Text to show in the list heading. You can set it to "" if you
+;; wish to hide the heading altogether.
+(setq org-similarity-heading "** Related notes")
+
+;; String to prepend the list items. You can set it to "* " to turn each
+;; item into org headings, or "- " to turn them into an unordered org list.
+;; Set the variable to "" to hide prefixes.
+(setq org-similarity-prefix "- ")
 
 (setq org-todo-keywords
       '((sequence "INBOX(i)"

@@ -1,4 +1,4 @@
-;;; bibtex-utils-autoloads.el --- automatically extracted autoloads
+;;; bibtex-utils-autoloads.el --- automatically extracted autoloads  -*- lexical-binding: t -*-
 ;;
 ;;; Code:
 
@@ -9,7 +9,7 @@
 ;;;### (autoloads nil "bibtex-utils" "bibtex-utils.el" (0 0 0 0))
 ;;; Generated autoloads from bibtex-utils.el
 
-(if (fboundp 'register-definition-prefixes) (register-definition-prefixes "bibtex-utils" '("bibtex-search-m" "bu-")))
+(register-definition-prefixes "bibtex-utils" '("bibtex-search-m" "bu-"))
 
 ;;;***
 

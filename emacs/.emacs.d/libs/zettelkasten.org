@@ -666,51 +666,54 @@ Finally, we are down to the easiest part. Having written the backbone of the pro
 
   #+END_SRC
 
-* Org-roam-similarity
-Org-similarity is a package to be used with org-roam for discovering documents similar to the current buffer. I discovered it from [[https://org-roam.discourse.group/t/a-demo-of-ai-for-linking-writing-and-thinking-with-org-roam-should-we-build-org-roam-ai/2891/3][this]] discussion in the Org-Roam Discourse group.
-
-The original package has an input of a file and an output which is a list of links. I have decided to fork the project and widen its scope to be able to have an arbitrary org-roam file as its input and return a list of org-roam nodes. This section here is the changes I will make which are user customizations. The literate configuration for this package, which will be where all the code will be is going to be stored in ~/org-roam-similarity. 
+* Org-similarity
+Org-similarity is a package to be used with org-roam for discovering documents similar to the current buffer. I discovered it from [[https://org-roam.discourse.group/t/a-demo-of-ai-for-linking-writing-and-thinking-with-org-roam-should-we-build-org-roam-ai/2891/3][this]] discussion in the Org-Roam Discourse group. The first code block is setting various configuration variables. Then will be config I have added myself.
 
 #+BEGIN_SRC elisp :tangle yes
 
-  (let ((default-directory "~/org-roam-similarity"))
-    (normal-top-level-add-to-load-path '(".")))
-  (require 'org-roam-similarity)
+  (require 'org-similarity)
 
-  (setq org-roam-similarity-directory org-roam-directory
-	org-roam-similarity-root "~/org-roam-similarity"
-	org-roam-similarity-show-scores t)
+  ;; Directory to scan for possibly similar documents.
+  ;; org-roam users might want to change it to `org-roam-directory'.
+  (setq org-similarity-directory org-roam-directory)
 
-  (defun org-roam-similarity-sidebuffer ()
-      "Puts the results of org-similarity in a side-window."
-      (interactive)
-      (let ((command (format "python3 %s -i %s -d %s -l %s -n %s %s"
-	      (concat org-similarity-root "/assets/org-similarity.py")
-	       buffer-file-name
-	       org-similarity-directory
-	       org-similarity-language
-	       org-similarity-number-of-documents
-	       (if org-similarity-show-scores "--score" ""))))
-	(setq similarity-results (shell-command-to-string command)))
-	(with-output-to-temp-buffer "*Similarity Results*"
-	(princ similarity-results))
-	(with-current-buffer "*Similarity Results*"
-	(org-mode))
-      )
-    (add-to-list 'display-buffer-alist
-		 '("*Similarity Results*"
-		   (display-buffer-in-side-window)
-		   (inhibit-same-window . t)
-		   (side . right)
-		   (window-width . 0.4))
-    )
+  ;; How many similar entries to list at the end of the buffer.
+  (setq org-similarity-number-of-documents 10)
 
+  ;; Whether to prepend the list entries with similarity scores.
+  (setq org-similarity-show-scores nil)
+
+  ;; Similarity score threshold. All results with a similarity score below this
+  ;; value will be omitted from the final list.
+  ;; Default is 0.05.
+  (setq org-similarity-threshold 0.05)
+
+  ;; Whether the resulting list of similar documents will point to ID property or
+  ;; filename. Default is nil.
+  ;; However, I recommend setting it to `t' if you use `org-roam' v2.
+  (setq org-similarity-use-id-links t)
+
+  ;; Scan for files inside `org-similarity-directory' recursively.
+  (setq org-similarity-recursive-search t)
+
+  ;; Remove first result from the scores list. Useful if the current buffer is
+  ;; saved in the searched directory, and you don't want to see it included
+  ;; in the list. Default is nil."
+  (setq org-similarity-remove-first nil)
+
+  ;; Text to show in the list heading. You can set it to "" if you
+  ;; wish to hide the heading altogether.
+  (setq org-similarity-heading "** Related notes")
+
+  ;; String to prepend the list items. You can set it to "* " to turn each
+  ;; item into org headings, or "- " to turn them into an unordered org list.
+  ;; Set the variable to "" to hide prefixes.
+  (setq org-similarity-prefix "- ")
 #+END_SRC
 
 #+RESULTS:
-| *Similarity Results* | (display-buffer-in-side-window) | (inhibit-same-window . t) | (side . right)       | (window-width . 0.4)                   |
-| \*org-roam\*       | (display-buffer-in-direction)   | (direction . right)       | (window-width . 0.4) | (window-height . fit-window-to-buffer) |
-  
+: - 
+
 * Fleeting notes
    This is one of the more interesting sections of my workflow as its really custom and from what I have seen really unique. The zettelkasten method has a concept of fleeting notes. They are small notes which should be easy and non intrusive to write quickly to capture ideas and need to be archived when done. I "abuse" the todo-keywords org provides for this to completely repurpose them into what I need. As mentioned above, my org-roam-node-find UI shows the todo state of files which have one. 
 

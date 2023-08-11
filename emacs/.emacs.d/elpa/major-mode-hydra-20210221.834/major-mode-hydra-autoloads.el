@@ -62,10 +62,6 @@ Show the hydra for the current major mode." t nil)
 
 ;;;***
 
-;;;### (autoloads nil nil ("major-mode-hydra-pkg.el") (0 0 0 0))
-
-;;;***
-
 ;; Local Variables:
 ;; version-control: never
 ;; no-byte-compile: t

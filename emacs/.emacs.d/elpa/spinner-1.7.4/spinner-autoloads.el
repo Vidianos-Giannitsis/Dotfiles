@@ -1,4 +1,4 @@
-;;; spinner-autoloads.el --- automatically extracted autoloads
+;;; spinner-autoloads.el --- automatically extracted autoloads  -*- lexical-binding: t -*-
 ;;
 ;;; Code:
 
@@ -60,7 +60,7 @@ this time, in which case it won't display at all.
 
 \(fn &optional TYPE-OR-OBJECT FPS DELAY)" nil nil)
 
-(if (fboundp 'register-definition-prefixes) (register-definition-prefixes "spinner" '("spinner-")))
+(register-definition-prefixes "spinner" '("spinner-"))
 
 ;;;***
 

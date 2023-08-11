@@ -1,85 +1,167 @@
-* org-similarity
+#+TITLE: org-similarity
+#+HTML: <a href="https://github.com/brunoarine/org-similarity/releases"><img alt="Last release" src="https://img.shields.io/github/v/tag/brunoarine/org-similarity"></a> &nbsp; <a href="https://github.com/brunoarine/org-similarity/blob/main/LICENSE"><img alt="License" src="https://img.shields.io/github/license/brunoarine/org-similarity"></a><br>
 
-=org-similarity= is a package to help Emacs [[https://orgmode.org][org-mode]] users discover similar or related files. Under the hood, it uses Python and [[https://github.com/scikit-learn/scikit-learn][scikit-learn]] for text feature extraction, and [[https://github.com/nltk/nltk][nltk]]  for text pre-processing. More specifically, this package provides a function to recursively scan a given directory for =org= files, clean their content by stripping the front matter and some undesired characters, tokenize them, replace each token with its respective linguistic stem, generate a TF-IDF sparse matrix, and calculate the cosine similarity between these documents and the buffer you are currently working on.
+=org-similarity= is a package to help Emacs [[https://orgmode.org][org-mode]] users (re)discover similar documents in relation to the current buffer or to an input query using lexical similarity calculation algorithms like TF-IDF and BM25.
 
-[[./example.gif]]
+#+ATTR_HTML: :style margin-left: auto; margin-right: auto;
+[[./assets/example.gif]]
 
-** Dependencies
- - Emacs 24 or above
- - Python 3
- - [[https://github.com/scikit-learn/scikit-learn][scikit-learn]] 
- - [[https://github.com/nltk/nltk][nltk]] 
+** Table of contents :TOC:
+  - [[#introduction][Introduction]]
+  - [[#pre-requisites][Pre-requisites]]
+  - [[#installation][Installation]]
+  - [[#loading-the-package][Loading the package]]
+  - [[#usage][Usage]]
+  - [[#configuration][Configuration]]
+  - [[#benchmarking][Benchmarking]]
+  - [[#changelog][Changelog]]
 
- To ensure you have the latest packages, run:
- #+begin_src
-$ pip install -U scikit-learn nltk
- #+end_src
+** Introduction
+
+A good note-taking system should help you connect your ideas. But what if you have many years worth of notes in your computer, and you can't remember the older ones?
+
+That's why I've written =org-similarity=. As an avid =org-roam= user with more than a thousand notes, I can't count on my brain to recall them all.
+
+=org-similarity= makes it easier to retrieve those long forgotten files that are possibly buried in everyone's piles of notes. It's different from a simple keyword search. This package is levered by [[https://github.com/brunoarine/findlike]], which looks at the words and phrases used in your reference document or a specific question you have, and then finds other files that use similar language. It’s a bit like doing a Google search across your own files.
+
+** Pre-requisites
+
+- Emacs 27.1+
+- Python 3.6+
+- Git 2.23+ (for manual installation)
+
 
 ** Installation
 
-*** Via straight.el
+You can install =org-similarity= using =straing.el=, its Doom Emacs wrapper, or manually cloning the repository. In either case, you can choose to use the =main= branch for a stable version of the repository, =develop= for the latest additions, or ={RELEASE_VERSION}= for a specific release version (e.g. =v1.0.0=). Just replace the =branch= property accordingly in the instructions below.
+
+*Using straight.el*
+
+Add the following to your =init.el=:
+
 #+begin_src elisp
-(straight-use-package
- '(org-similarity :type git :host github :repo "brunoarine/org-similarity"))
+(straight-use-package '(org-similarity :type git :host github :repo
+ "brunoarine/org-similarity" :branch "main"))
 #+end_src
 
-*** Doom Emacs
+*Doom Emacs*
 
-  #+begin_src elisp
-(package! org-similarity
-  :recipe (:host github :repo "brunoarine/org-similarity"))
-  #+end_src
-  
-*** Via cloning
-
-You can also clone the repository somewhere in your load-path. If you would like to assist with development, this is the way to go.
-
-To do that:
-
-1. Create a directory where you’d like to clone the repository, e.g. =mkdir ~/projects=.
-2. cd ~/projects
-3. git clone https://github.com/brunoarine/org-similarity.git
-
-You now have the repository cloned in =~/projects/org-similarity/=. Now paste the following sexps in your init-file (e.g. =~/.emacs.d/init.el=):
+Add the following to =packages.el=:
 
 #+begin_src elisp
-;; If you cloned the repository
-(add-to-list 'load-path "~/projects/org-similarity/") ;Modify with your own path
+(package! org-similarity :recipe (:host github :repo "brunoarine/org-similarity"
+   :branch "main"))
+#+end_src
+
+*Manual installation*
+
+Clone the repository:
+
+#+begin_src sh
+git clone -b main https://github.com/brunoarine/org-similarity
+#+end_src
+
+Then add the package to your =load-path= in your =init.el=:
+#+begin_src elisp
+(add-to-list 'load-path "/path/to/org-similarity")
+#+end_src
+
+** Loading the package
+
+Load the package using the =require= function in your =init.el=:
+
+#+begin_src elisp
 (require 'org-similarity)
 #+end_src
 
-You can also copy =org-similarity/= somewhere where load-path can access it, but you’d have to update the file manually.
+Or using =use-package=:
+
+#+begin_src elisp
+(use-package org-similarity
+  :load-path  "path/to/org-similarity")
+#+end_src
+
+** Usage
+
+Upon running the commands below for the first time, =org-similarity=
+will ask you to install the necessary Python dependencies (if they are not found in the configured environment---see [[#configuration][Configuration]] for more info). By pressing =y= to continue, it will create a virtual environment under the hood and download the requirements automatically. Once finished, you can close the installation log buffer, and run the command again.
+
+| Command                          | Description                                                                           |
+|----------------------------------+---------------------------------------------------------------------------------------|
+| =M-x org-similarity-insert-list= | Inserts a list of files that are similar to the current buffer at the end of it.      |
+| =M-x org-similarity-sidebuffer=  | Shows a list of files that are similar to the current buffer in a side buffer.        |
+| =M-x org-similarity-query=       | Lets the user input a query and shows a list of related documents in the side buffer. |
 
 ** Configuration
 
 There are a few variables that can be set to customize how =org-similarity= operates and generates the list of similar documents:
 
 #+begin_src elisp
-;; directory to scan for possibly similar documents.
-;; org-roam users might want to change it to org-roam-directory
+;; Directory to scan for possibly similar documents.
+;; org-roam users might want to change it to `org-roam-directory'.
 (setq org-similarity-directory org-directory)
-;; the language passed to nltk's Snowball stemmer
+
+;; Filename extension to scan for similar text. By default, it will
+;; only scan Org-mode files, but you can change it to scan other
+;; kind of files as well.
+(setq org-similarity-file-extension-pattern "*.org")
+
+;; Changing this value will impact stopwords filtering and word stemmer.
+;; The following languages are supported: Arabic, Danish, Dutch, English, Finnish,
+;; French, German, Hungarian, Italian, Norwegian, Portuguese, Romanian, Russian,
+;; Spanish and Swedish.
 (setq org-similarity-language "english")
-;; how many similar entries to list at the end of the buffer
+
+;; Algorithm to use when generating the scores list. The possible choices are
+;; `tfidf' or `bm25'. Default is `tfidf' and it generally works better in
+;; most cases. However, `bm25' may be a bit more robust in rare cases, depending
+;; on the size of your notes.
+(setq org-similarity-algorithm "tfidf")
+
+;; How many similar entries to list at the end of the buffer.
 (setq org-similarity-number-of-documents 10)
-;; whether to prepend the list entries with their cosine similarity score
+
+;; Minimum document size (in number of characters) to be included in the corpus.
+;; It includes every character, including the file properties drawer.
+;; Default is 0 (include all documents, even empty ones).
+(setq org-similarity-min-chars 0)
+
+;; Whether to prepend the list entries with similarity scores.
 (setq org-similarity-show-scores nil)
+
+;; Similarity score threshold. All results with a similarity score below this
+;; value will be omitted from the final list.
+;; Default is 0.05.
+(setq org-similarity-threshold 0.05)
+
+;; Whether the resulting list of similar documents will point to ID property or
+;; filename. Default is nil.
+;; However, I recommend setting it to `t' if you use `org-roam' v2.
+(setq org-similarity-use-id-links nil)
+
+;; Scan for files inside `org-similarity-directory' recursively.
+(setq org-similarity-recursive-search nil)
+
+;; Filepath to a custom Python interpreter (e.g. '/path/to/venv/bin/python'
+;; If the package's requirements aren't met, `org-similarity' will try to
+;; install or upgrade them automatically. If `nil', the package will create
+;; and use a virtual environment in the same directory where `org-similarity'
+;; is located (usually `~/.emacs.d/.local' if you installed via a package
+;; manager, or in the path where you cloned this repo and loaded the package
+;; manually).
+(setq org-similarity-custom-python-interpreter nil)
+
+;; Remove first result from the scores list. Useful if the current buffer is
+;; saved in the searched directory, and you don't want to see it included
+;; in the list. Default is nil."
+(setq org-similarity-remove-first nil)
+
+;; Text to show in the list heading. You can set it to "" if you
+;; wish to hide the heading altogether.
+(setq org-similarity-heading "** Related notes")
+
+;; String to prepend the list items. You can set it to "* " to turn each
+;; item into org headings, or "- " to turn them into an unordered org list.
+;; Set the variable to "" to hide prefixes.
+(setq org-similarity-prefix "- ")
 #+end_src
-
-** Usage
-
-Use =M-x org-similarity-insert-list RET= to insert a list of =org-mode= links to similar files at the end of your current buffer.
-
-** License
-
-Copyright 2020 Bruno Arine
-
-Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:
-
-1. Redistributions of source code must retain the above copyright notice, this list of conditions and the following disclaimer.
-
-2. Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the following disclaimer in the documentation and/or other materials provided with the distribution.
-
-3. Neither the name of the copyright holder nor the names of its contributors may be used to endorse or promote products derived from this software without specific prior written permission.
-
-THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.

@@ -1,4 +1,4 @@
-;;; iedit-autoloads.el --- automatically extracted autoloads
+;;; iedit-autoloads.el --- automatically extracted autoloads  -*- lexical-binding: t -*-
 ;;
 ;;; Code:
 
@@ -80,14 +80,14 @@ Apply last modification in Iedit mode to the current buffer or an active region.
 
 \(fn &optional ARG)" t nil)
 
-(if (fboundp 'register-definition-prefixes) (register-definition-prefixes "iedit" '("iedit-")))
+(register-definition-prefixes "iedit" '("iedit-"))
 
 ;;;***
 
 ;;;### (autoloads nil "iedit-lib" "iedit-lib.el" (0 0 0 0))
 ;;; Generated autoloads from iedit-lib.el
 
-(if (fboundp 'register-definition-prefixes) (register-definition-prefixes "iedit-lib" '("iedit-")))
+(register-definition-prefixes "iedit-lib" '("iedit-"))
 
 ;;;***
 
@@ -106,7 +106,7 @@ Commands:
 
 \(fn &optional BEG END)" t nil)
 
-(if (fboundp 'register-definition-prefixes) (register-definition-prefixes "iedit-rect" '("iedit-rect")))
+(register-definition-prefixes "iedit-rect" '("iedit-rect"))
 
 ;;;***
 

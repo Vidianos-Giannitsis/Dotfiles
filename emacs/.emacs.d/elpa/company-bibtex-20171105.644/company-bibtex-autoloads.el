@@ -1,4 +1,4 @@
-;;; company-bibtex-autoloads.el --- automatically extracted autoloads
+;;; company-bibtex-autoloads.el --- automatically extracted autoloads  -*- lexical-binding: t -*-
 ;;
 ;;; Code:
 
@@ -20,7 +20,7 @@ COMMAND, ARG, and IGNORED are used by `company-mode'.
 
 \(fn COMMAND &optional ARG &rest IGNORED)" t nil)
 
-(if (fboundp 'register-definition-prefixes) (register-definition-prefixes "company-bibtex" '("company-bibtex-")))
+(register-definition-prefixes "company-bibtex" '("company-bibtex-"))
 
 ;;;***
 

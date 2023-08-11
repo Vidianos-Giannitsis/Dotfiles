@@ -1,4 +1,4 @@
-;;; pkg-info-autoloads.el --- automatically extracted autoloads
+;;; pkg-info-autoloads.el --- automatically extracted autoloads  -*- lexical-binding: t -*-
 ;;
 ;;; Code:
 
@@ -114,7 +114,7 @@ version.
 
 \(fn LIBRARY &optional PACKAGE SHOW)" t nil)
 
-(if (fboundp 'register-definition-prefixes) (register-definition-prefixes "pkg-info" '("pkg-info-")))
+(register-definition-prefixes "pkg-info" '("pkg-info-"))
 
 ;;;***
 

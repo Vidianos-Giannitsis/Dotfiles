@@ -1,0 +1,2 @@
+;;; Generated package description from session-async.el  -*- no-byte-compile: t -*-
+(define-package "session-async" "20230223.313" "Asynchronous processing in a forked process session" '((emacs "27.1") (jsonrpc "1.0.9")) :commit "e06835ea181b3a15099280527c9a4590d2fa61d1" :authors '(("Felipe Lema" . "felipelema@mortemale.org")) :maintainer '("Felipe Lema" . "felipelema@mortemale.org") :keywords '("async" "comm" "data" "files" "internal" "maint" "processes" "tools") :url "https://codeberg.org/FelipeLema/session-async.el")

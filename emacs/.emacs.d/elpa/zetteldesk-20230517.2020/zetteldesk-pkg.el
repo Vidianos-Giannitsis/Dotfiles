@@ -1,0 +1,2 @@
+;;; Generated package description from zetteldesk.el  -*- no-byte-compile: t -*-
+(define-package "zetteldesk" "20230517.2020" "A revision and outlining tool for org-roam" '((emacs "27.1") (org-roam "2.0")) :commit "73f691989c094ec196bb614318ae51b60209a8de" :authors '(("Vidianos Giannitsis" . "vidianosgiannitsis@gmail.com")) :maintainers '(("Vidianos Giannitsis" . "vidianosgiannitsis@gmail.com")) :maintainer '("Vidianos Giannitsis" . "vidianosgiannitsis@gmail.com") :url "https://github.com/Vidianos-Giannitsis/zetteldesk.el")

@@ -1,2 +1,2 @@
-;;; Generated package description from /home/vidianos/.emacs.d/elpa/calfw-20180118.45/calfw.el  -*- no-byte-compile: t -*-
+;;; Generated package description from calfw.el  -*- no-byte-compile: t -*-
 (define-package "calfw" "20180118.45" "Calendar view framework on Emacs" 'nil :commit "03abce97620a4a7f7ec5f911e669da9031ab9088" :authors '(("SAKURAI Masashi <m.sakurai at kiwanami.net>")) :maintainer '("SAKURAI Masashi <m.sakurai at kiwanami.net>") :keywords '("calendar") :url "https://github.com/kiwanami/emacs-calfw")

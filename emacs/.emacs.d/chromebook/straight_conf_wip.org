@@ -1,0 +1,238 @@
+#+TITLE: Straight-ifying my Emacs Config
+#+PROPERTY: header-args :results silent
+
+* About this file
+This file is a WIP document about straight-ifying my Emacs Config, aka switching it from package.el to straight.el as the package manager. Package.el is an incredible package manager and in my opinion worthy of being the default as its very easy to use, gets out of your way and you needn't think about it. However, once your config becomes as long as mine (having over 150 installed packages currently), it easily becomes a mess.
+
+To properly version control it, you need to vc the /elpa directory which has all the elisp files of all those packages, which are in theory unnecessary to include. Also, updating it is another mess, because it needs to be done manually or semi-automatically with solutions such as ~auto-package-update-now~ and it makes git pushes unnecessarily long if they are vc'd. Lastly, out of these 150+ packages that are installed I legit have no idea how many that I don't use are still there and package.el doesn't make it easy to manage that. For all of these reasons, while I will still like and support package.el as the default package manager, I believe it is not suitable for really large and messy configs such as mine.
+
+This package will mention everything that needs to change to make my config more suitable for straight. The first thing is seeing everything that can be deemed unnecessary (package.el stuff mostly) and removing it as well as listing every package that needs to be installed with straight. This is definitely going to be a very, very large list of packages, but probably not all the ones in my current config.
+
+* Packages
+This section will be fully changed as its basically setting up package.el and it needs to be set up to use straight.el instead.
+
+- straight
+- use-package
+  (2)
+
+* Sensible Defaults
+Most of this is going to stay the same. But, most of this also relies on external packages so here is a list of the ones I will be needing. 
+
+- gcmh
+- doom-themes
+- which-key
+- ivy
+- counsel
+- swiper
+- all-the-icons-ivy
+- marginalia
+- dash-functional
+- helpful
+- doom-modeline
+  (11)
+  
+  Some of the stuff written here could be in a more use-package style format but its ok if its not.
+  
+* Evil mode
+This is another very necessary scetion which will see insignificant changes. Packages that should be installed are:
+
+- evil-collection
+- evil
+- evil-org
+- evil-org-agenda
+  (4)
+  
+* Utilities
+This is a section which includes mostly small packages that are somehow utilized in the config so first all those packages would need to be installed.
+
+- yasnippet
+- general
+- vterm-toggle
+- molar-mass
+- tab-jump-out
+- mediator
+- ace-window
+- info+
+- pdftotext
+- nov.
+- gams
+- ace-link
+- math-at-point
+  (13)
+
+* Emacs launchers
+This is a section about some cool utilities I have wrote. In making the config more modular, it will definitely be a separate file. All its code is either built-in or packages are mentioned above.
+
+In the chromebook config which I'm building rn I'm not including this.
+
+* Keybindings
+The keybindings section is here as of now. If I do that, it will have a million straight-use-package entries so I might put it later down this time. However, I am going to list here every package that is not mentioned elsewhere here.
+
+- hydra
+- pretty-hydra
+- magit-section
+- magit
+- magit-annex
+- ivy-yasnippet
+- avy
+- gnuplot
+- sly
+- sly-quicklisp
+- org-ref-isbn
+- doi-utils
+- org-journal
+- counsel-spotify
+- define-word
+- toc-org
+- cider
+- pdf-annot
+  (18)
+  
+* Dired
+Its worth mentioning most of this is use-package'd already so the transition will be very easy. However, for consistency, the packages are
+
+- dired-x
+- all-the-icons-dired
+- dired-hide-dotfile
+- dired-collapse
+- dired-subtree
+  (5)
+
+* Useful Minor Modes
+This is another section of a million useful packages. Included are:
+
+- wolfram
+- undo-tree
+- calfw
+- calfw-git
+- calfw-org
+- openwith
+- projectile
+- flyspell
+- winner
+  (9)
+
+* Org mode
+This is one of the largest sections of my config. There was a time I thought it should be separated for modularity and I think this is that time. But, for now I am just going to write down all the org related packages I need.
+
+- org
+- org-superstar
+- org-download
+- org-tree-slide
+- ox-beamer
+- ox-hugo
+- ox-pandoc
+- org-pandoc-import
+- tochemfig
+- laas
+- org-noter
+- org-fragtog
+- org-translate
+  (13)
+
+* Org-roam and Refs
+This is a very large part of the config that is already separated. It needs a lot of packages. These are:
+
+- org-roam
+- ivy-bibtex
+- bibtex-utils
+- org-ref
+- zotra
+- citar
+- citar-org-roam
+- org-roam-bibtex
+- org-protocol
+- org-roam-protocol
+- websocket
+- org-roam-ui
+- org-transclusion
+- org-similarity
+- org-remark
+- zetteldesk
+- zetteldesk-kb-complete
+- zetteldesk-ref
+- zetteldesk-ref-citar
+- zetteldesk-info
+- zetteldesk-remark
+  (21)
+
+* Company
+Company is my favourite autocompletion package. I have a few packages it needs
+
+- company
+- company-maxima
+- company-math
+- company-bibtex
+- company-capf
+  (5)
+
+* Search Engines
+This is basically a section dedicated to engine-mode.el (1)
+
+* Mastodon (1)
+
+* Elfeed
+- elfeed
+- elfeed-score
+  (2)
+
+* Org-reveal (2)
+
+* Scimax
+- ox-word
+- org-show
+- scimax-autoformat-abbrev
+  (3)
+
+* Other major modes
+Each section of this is basically a package so I will include them in one list
+
+- julia-mode
+- julia-formatter
+- julia-snail
+- julia-repl
+- maxima
+- imaxima
+- pdf-tools
+- org-pdf-tools
+- eperiodic
+- lispy
+- lispyville
+- common-lisp
+  (12)
+
+* Other packages
+Other packages I have installed which are interesting to keep around
+
+- with-editor
+- transient
+- rg
+- restart-emacs
+- python-mode
+- paredit
+- package-lint
+- ox-gfm
+- org-ql
+- org-noter-pdftools
+- markdown-mode
+- git-commit
+- flycheck
+- fancy-battery
+- exec-path-from-shell
+- ess
+- dracula-theme
+- dired-toggle-sudo
+- deadgrep
+- csv
+- csv-mode
+- citeproc
+- chembalance
+- cdlatex
+- bibtex-utils
+- all-the-icons
+- auctex
+- aas
+- oc-octave
+- oc-cider
+- + many, many dependencies/libraries that I don't even remember and will hopefully be auto-installed
+  (30)

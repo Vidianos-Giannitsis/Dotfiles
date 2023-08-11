@@ -1,4 +1,4 @@
-;;; lv-autoloads.el --- automatically extracted autoloads
+;;; lv-autoloads.el --- automatically extracted autoloads  -*- lexical-binding: t -*-
 ;;
 ;;; Code:
 
@@ -9,7 +9,7 @@
 ;;;### (autoloads nil "lv" "lv.el" (0 0 0 0))
 ;;; Generated autoloads from lv.el
 
-(if (fboundp 'register-definition-prefixes) (register-definition-prefixes "lv" '("lv-")))
+(register-definition-prefixes "lv" '("lv-"))
 
 ;;;***
 

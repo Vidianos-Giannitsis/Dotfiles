@@ -1,4 +1,4 @@
-;;; ivy-bibtex-autoloads.el --- automatically extracted autoloads
+;;; ivy-bibtex-autoloads.el --- automatically extracted autoloads  -*- lexical-binding: t -*-
 ;;
 ;;; Code:
 
@@ -37,7 +37,7 @@ reread.
 
 \(fn &optional ARG)" t nil)
 
-(if (fboundp 'register-definition-prefixes) (register-definition-prefixes "ivy-bibtex" '("ivy-bibtex-")))
+(register-definition-prefixes "ivy-bibtex" '("ivy-bibtex-"))
 
 ;;;***
 

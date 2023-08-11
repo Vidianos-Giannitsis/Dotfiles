@@ -1,4 +1,4 @@
-;;; kv-autoloads.el --- automatically extracted autoloads
+;;; kv-autoloads.el --- automatically extracted autoloads  -*- lexical-binding: t -*-
 ;;
 ;;; Code:
 
@@ -9,7 +9,7 @@
 ;;;### (autoloads nil "kv" "kv.el" (0 0 0 0))
 ;;; Generated autoloads from kv.el
 
-(if (fboundp 'register-definition-prefixes) (register-definition-prefixes "kv" '("dotass" "keyword->symbol" "map-bind")))
+(register-definition-prefixes "kv" '("dotass" "keyword->symbol" "map-bind"))
 
 ;;;***
 

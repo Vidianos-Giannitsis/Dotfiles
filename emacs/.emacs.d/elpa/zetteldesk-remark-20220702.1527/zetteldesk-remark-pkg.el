@@ -1,0 +1,2 @@
+;;; Generated package description from zetteldesk-remark.el  -*- no-byte-compile: t -*-
+(define-package "zetteldesk-remark" "20220702.1527" "Org-Remark integration for zetteldesk.el" '((zetteldesk "1.0") (org-remark "1.0") (emacs "27.2")) :commit "99c5434a809da0b783f31b10872c8cb2a2176e2d" :authors '(("Vidianos Giannitsis" . "vidianosgiannitsis@gmail.com")) :maintainer '("Vidianos Giannitsis" . "vidianosgiannitsis@gmail.com") :url "https://github.com/Vidianos-Giannitsis/zetteldesk-remark.el")

@@ -115,8 +115,6 @@
 (ace-window-display-mode 1)
 (setq aw-keys '(?a ?s ?d ?f ?g ?h ?j ?k ?l))
 
-(require 'info+)
-
 (require 'pdftotext)
 
 (defun set-font-size (SIZE)
@@ -131,6 +129,7 @@
 
 (add-to-list 'auto-mode-alist '("\\.m\\'" . octave-mode))
 (add-to-list 'auto-mode-alist '("\\.epub\\'" . nov-mode))
+(add-to-list 'auto-mode-alist '("\\.gms\\'" . gams-mode))
 
 (setq org-link-elisp-confirm-function nil)
 
@@ -139,6 +138,10 @@
 (ace-link-setup-default)
 
 (setq dictionary-server "dict.org")
+
+(require 'emacs-gc-stats)
+(setq emacs-gc-stats-gc-defaults 'emacs-defaults) ; optional
+(emacs-gc-stats-mode +1)
 
 (defcustom bookmark-selector-web-page-alist '()
   "Alist used by `bookmark-selector-browse-bookmark' to associate
@@ -398,9 +401,6 @@ implemented with the `bookmark-selector-launcher' macro."
 
 (setq org-startup-with-latex-preview t)
 
-(require 'calctex)
-(add-hook 'calc-embedded-new-formula-hook 'calctex-mode)
-
 (add-hook 'org-mode-hook #'(lambda ()
 			    (turn-on-org-cdlatex)
 			    (org-fragtog-mode)
@@ -422,6 +422,7 @@ implemented with the `bookmark-selector-launcher' macro."
 				 ("" "glossaries")
 				 ("" "newfloat")
 				 ("" "minted")
+				 ("a4paper, margin=3cm" "geometry")
 				 ("" "chemfig")
 				 ("" "svg")))
 
@@ -583,7 +584,6 @@ change from one assignment to the next."
     "CC" "\\CC"
     "FF" "\\FF"
     "HH" "\\HH"
-    "NN" "\\NN"
     "PP" "\\PP"
     "QQ" "\\QQ"
     "RR" "\\RR"
@@ -733,11 +733,13 @@ change from one assignment to the next."
      (maxima . t)
      (lisp . t)
      (clojure . t)
+     (julia . t)
 )
    )
 
 (setq org-babel-lisp-eval-fn 'sly-eval)
 (setq org-babel-clojure-backend 'cider)
+(setq org-babel-julia-command "~/.local/bin/julia")
 
 (define-skeleton lab-skeleton
   "A skeleton which I use for initialising my lab reports which have standard formatting"
@@ -788,14 +790,17 @@ change from one assignment to the next."
 (define-skeleton hw-skeleton
   "A skeleton for quickly adding a list of this semester's lessons to a new note which I use for tracking what I need to do for each lesson"
   ""
-  "*** Ενέργεια\n\n"
-  "*** ΜΧΔ\n\n"
-  "*** Βιοχημική Μηχανική\n"
-  "**** Ένζυμα\n\n"
-  "**** Μαμούνια\n\n"
-  "*** Ρύθμιση Διεργασιών\n\n"
-  "*** Σχεδιασμός\n\n"
+  "*** Διαχείριση Βιομηχανικών Αποβλήτων\n\n"
+  "*** Περιβαλλοντική Βιοτεχνολογία\n\n"
+  "*** Περιβαλλοντική Μηχανική\n"
+  "**** Στερεά\n\n"
+  "**** Υγρά\n\n"
+  "**** Αέρια\n\n"
+  "**** Ασκήσεις\n\n"
+  "*** Πράσινη Χημεία\n\n"
+  "*** Σχεδιασμός\n"
   "**** Εργασία\n\n"
+  "*** Άρθρα to-read\n\n"
   "*** Other\n\n")
 
 (require 'zettelkasten)
@@ -925,7 +930,6 @@ it."
 	("https://irreal.org/blog/?feed=rss2" emacs linux news)
 	("https://sachachua.com/blog/category/emacs-news/feed/" emacs news)
 	("https://ag91.github.io/rss.xml" emacs)
-	("https://takeonrules.com/index.xml" emacs org)
 	("https://andreyorst.gitlab.io/feed.xml" emacs lisp)
 	("https://magnus.therning.org/feed.xml" emacs)
 	("https://protesilaos.com/codelog.xml" emacs lisp)
@@ -934,6 +938,7 @@ it."
 	("https://amodernist.com/all.atom" emacs lisp)
 	("https://tilde.town/~ramin_hal9001/atom.xml" emacs lisp org)
 	("https://karl-voit.at/feeds/lazyblorg-all.atom_1.0.links-only.xml" emacs org)
+	("https://karthinks.com/index.xml" emacs news)
 	))
 
 (setq elfeed-search-filter "@1-months-ago +unread")
@@ -1086,34 +1091,14 @@ it."
       org-link))
    (t nil)))
 
-;; Run SageMath by M-x run-sage instead of M-x sage-shell:run-sage
-(sage-shell:define-alias)
-
-;; Turn on eldoc-mode in Sage terminal and in Sage source files
-(add-hook 'sage-shell-mode-hook #'eldoc-mode)
-(add-hook 'sage-shell:sage-mode-hook #'eldoc-mode)
-
-(add-hook 'sage-shell-after-prompt-hook #'sage-shell-view-mode)
-
-(setq ebib-preload-bib-files '("~/Sync/My_Library.bib"))
-
-(add-hook 'ebib-entry-mode-hook 'visual-line-mode)
-
-(setq ebib-index-columns '(("Title" 60 t)
-			   ("Author/Editor" 40 t)
-			   ("Year" 6 t)
-			   ("Entry Key" 40 t)
-			   ("Note" 10 t)))
-
-(setq ebib-notes-directory "~/org_roam/ref")
-
 (use-package julia-snail
   :ensure t
   :hook (julia-mode . julia-snail-mode))
 
-(use-package python-mls
-  :config
-  (python-mls-setup))
+(setq-default julia-snail-executable "~/.local/bin/julia")
+
+(setq julia-snail-multimedia-enable t)
+(setq julia-snail-extensions '(ob-julia repl-history))
 
 (push "/usr/local/share/emacs/site-lisp" load-path)
 (autoload 'imaxima "imaxima" "Maxima frontend" t)
@@ -1150,6 +1135,11 @@ it."
 				   (lispyville-mode)))
 (add-hook 'ielm-mode-hook 'eldoc-mode)
 
+(add-hook 'eww-mode-hook #'(lambda ()
+			     (texfrag-mode)
+			     (texfrag-document)
+			     (visual-line-mode)))
+
 (advice-add 'common-lisp-hyperspec
 	    :around
 	    (lambda (orig-fun &rest args)
@@ -1171,6 +1161,18 @@ it."
 (setq deft-extensions '("org"))
 (setq deft-directory "~/org_roam")
 (setq deft-recursive t)
+
+(setq ebib-preload-bib-files '("~/Sync/My_Library.bib"))
+
+(add-hook 'ebib-entry-mode-hook 'visual-line-mode)
+
+(setq ebib-index-columns '(("Title" 60 t)
+			   ("Author/Editor" 40 t)
+			   ("Year" 6 t)
+			   ("Entry Key" 40 t)
+			   ("Note" 10 t)))
+
+(setq ebib-notes-directory "~/org_roam/ref")
 
 ;; CUSTOM VARIABLES
 (custom-set-variables

@@ -1,4 +1,4 @@
-;;; chembalance-autoloads.el --- automatically extracted autoloads
+;;; chembalance-autoloads.el --- automatically extracted autoloads  -*- lexical-binding: t -*-
 ;;
 ;;; Code:
 
@@ -14,7 +14,7 @@ Balance reaction in string DATA.
 
 \(fn &optional DATA)" t nil)
 
-(if (fboundp 'register-definition-prefixes) (register-definition-prefixes "chembalance" '("chembalance-")))
+(register-definition-prefixes "chembalance" '("chembalance-"))
 
 ;;;***
 

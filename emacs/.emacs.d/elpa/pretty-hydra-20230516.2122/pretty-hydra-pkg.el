@@ -1,0 +1,2 @@
+;;; Generated package description from pretty-hydra.el  -*- no-byte-compile: t -*-
+(define-package "pretty-hydra" "20230516.2122" "A macro for creating nice-looking hydras" '((hydra "0.15.0") (s "1.12.0") (dash "2.18.0") (emacs "24")) :commit "72bdce649245df276a3f49fb57f890c10fbf0a31" :authors '(("Jerry Peng" . "pr2jerry@gmail.com")) :maintainers '(("Jerry Peng" . "pr2jerry@gmail.com")) :maintainer '("Jerry Peng" . "pr2jerry@gmail.com") :url "https://github.com/jerrypnz/major-mode-hydra.el")

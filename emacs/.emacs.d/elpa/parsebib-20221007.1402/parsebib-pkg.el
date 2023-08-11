@@ -1,2 +1,0 @@
-;;; Generated package description from parsebib.el  -*- no-byte-compile: t -*-
-(define-package "parsebib" "20221007.1402" "A library for parsing bib files" '((emacs "25.1")) :commit "1efca921cbb49380396df9d81308b32e55fc8b63" :authors '(("Joost Kremers" . "joostkremers@fastmail.fm")) :maintainer '("Joost Kremers" . "joostkremers@fastmail.fm") :keywords '("text" "bibtex") :url "https://github.com/joostkremers/parsebib")

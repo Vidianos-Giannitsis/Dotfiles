@@ -1,2 +1,0 @@
-;;; Generated package description from nov.el  -*- no-byte-compile: t -*-
-(define-package "nov" "20220428.1417" "Featureful EPUB reader mode" '((esxml "0.3.6") (emacs "25.1")) :commit "8f5b42e9d9f304b422c1a7918b43ee323a7d3532" :authors '(("Vasilij Schneidermann" . "mail@vasilij.de")) :maintainer '("Vasilij Schneidermann" . "mail@vasilij.de") :keywords '("hypermedia" "multimedia" "epub") :url "https://depp.brause.cc/nov.el")

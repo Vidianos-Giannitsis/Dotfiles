@@ -1,0 +1,2 @@
+;;; Generated package description from texfrag.el  -*- no-byte-compile: t -*-
+(define-package "texfrag" "20230117.1746" "preview LaTeX fragments in alien major modes" '((emacs "25") (auctex "11.90.2")) :commit "6df9044c3d6bbb2a104f2c9b78ad10aa3cdf9506" :authors '(("Tobias Zawada" . "i@tn-home.de")) :maintainers '(("Tobias Zawada" . "i@tn-home.de")) :maintainer '("Tobias Zawada" . "i@tn-home.de") :keywords '("tex" "languages" "wp") :url "https://github.com/TobiasZawada/texfrag")

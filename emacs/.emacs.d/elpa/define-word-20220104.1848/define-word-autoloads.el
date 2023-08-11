@@ -1,4 +1,4 @@
-;;; define-word-autoloads.el --- automatically extracted autoloads
+;;; define-word-autoloads.el --- automatically extracted autoloads  -*- lexical-binding: t -*-
 ;;
 ;;; Code:
 
@@ -26,7 +26,7 @@ In a non-interactive call SERVICE can be passed.
 
 \(fn ARG &optional SERVICE)" t nil)
 
-(if (fboundp 'register-definition-prefixes) (register-definition-prefixes "define-word" '("define-word-")))
+(register-definition-prefixes "define-word" '("define-word-"))
 
 ;;;***
 

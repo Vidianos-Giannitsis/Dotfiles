@@ -1,0 +1,91 @@
+[More recent changes v1.0.0 are in NEWS file]
+
+Version 0.2.0
+  - add: org-remark-delete
+  - rm: Adding Org-ID automatically to file level when file is empty
+
+Version 0.1.0
+* Features & additions
+
+  - docs: comprehensive user manual (online - Info to be added on ELPA release)
+
+  - feat: org-remark-create macro to let users create their own custom pens
+
+  - feat: minor-mode menu for menu-bar-mode
+
+          This works as mouse context-menu for the new context-menu-mode (>=
+          Emacs 28)
+
+  - add: browse-next/prev: move and display next/prev marginal notes at the same
+         time
+
+  - add: view/open to display side-window by default (user option)
+
+  - add: org-remark-link property in marginal notes file with ::line-number
+         search option
+
+  - feat: org-remark-legacy-convert as a separate feature
+
+          This is for automatically converting legacy Org-marginalia file to
+          Org-remark.
+
+  - feat: Legacy data facility with org-remark-tracking
+
+* Changes
+
+  - chg: `remove' (and delete) only removes one highlight at a time instead of
+         remove all at point
+
+  - chg: Save marginal notes on `mark' instead of wainting for `save'
+
+  - chg: define org-remark-mark explicitly for autoload cookie
+
+  - chg: `org-remark-view' and `org-remark-open'. View will stay in the
+          current main note; open will move the cursor to the marginal notes
+          buffer for further editing.
+
+  - chg: When updating the existing headline and position properties, don't
+         update the headline text when it already exists. Let the user decide
+         how to manage headlines.
+
+  - doc: copyright assignment to FSF; copyright years
+
+* Alpha
+
+** 0.0.6
+
+Feature:
+- feat: Add =org-marginalia-global-tracking-mode= with a separate .el file
+- feat: Use Org-ID to create a link from the marginal notes back to the main file
+  Add Customizable variable =org-marginalia-use-org-id=; default is =t=
+
+Change:
+- chg: Highlights are now overlay; no longer text-properties
+
+Improvement to existing functions
+- add: Deactivate mark after highlighting
+- add: org-marginalia-remove can take C-u to delete
+
+Fix & Internal Refactor
+- intrnl: Add housekeeping for =org-marginalia-highlights= variable
+- fix: org-id-uuid is not found
+- fix: Add highlighter face def for terminal
+
+** 0.0.5
+- break: Replace the prefix "om/" in the source code with "org-marginalia"
+- break: Remove default keybindings; add examples in readme instead. Addresses [#3](https://github.com/nobiot/org-marginalia/issues/3)
+
+** 0.0.4
+- feat: Add transient navigation to next/prev
+  See [[*Credits][§ Credits]] for the piece of code to achieve the transient map I used.
+
+** 0.0.3
+- feat: Add om/toggle for show/hide highlighters
+
+** 0.0.2
+- feat: Add om/next and /prev
+- break: Change om/open-at-point to org-marginalia-open
+- break: Change om/save-all to org-marginalia-save
+
+** 0.0.1
+Initial alpha release. I consider it to be the minimal viable scope.
