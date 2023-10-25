@@ -1,5 +1,5 @@
 # -*- mode: snippet -*-
 # name: acs_bib
-# key: acsbib
+# key: acs
 # --
 #+cite_export: csl american-chemical-society.csl

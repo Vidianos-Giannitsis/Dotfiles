@@ -97,7 +97,7 @@ function."
   (org-roam-node-find nil nil #'org-roam-permanent-note-p))
 
 (setq bibtex-completion-bibliography
-      '("~/Sync/My_Library.bib" "~/Sync/My_Library2.bib")
+      '("~/org_roam/My_Library.bib" "~/org_roam/My_Library2.bib")
       bibtex-completion-pdf-field "File"
       bibtex-completion-library-path '("~/Sync/Zotero_pdfs"))
 
@@ -118,18 +118,19 @@ function."
 
 (require 'oc)
 (require 'oc-csl)
-(setq org-cite-global-bibliography '("~/Sync/My_Library.bib" "~/Sync/My_Library2.bib"))
+(setq org-cite-global-bibliography '("~/org_roam/My_Library.bib" "~/org_roam/My_Library2.bib"))
 
 (setq org-cite-export-processors '((t csl)))
 
 (setq org-cite-csl-styles-dir "~/Zotero/styles")
 (setq citeproc-org-default-style-file "~/Zotero/styles/american-chemical-society.csl")
 
-(require 'zotra)
-(setq zotra-default-bibliography "~/Sync/My_Library2.bib"
+(setq zotra-backend 'zotra-server
+      zotra-local-server-directory "~/Cloned_Repositories/zotra-server/"
+      zotra-default-bibliography "~/org_roam/My_Library2.bib"
       zotra-download-attachment-default-directory "~/Sync/Zotero_pdfs")
 
-(setq citar-bibliography '("~/Sync/My_Library.bib" "~/Sync/My_Library2.bib"))
+(setq citar-bibliography '("~/org_roam/My_Library.bib" "~/org_roam/My_Library2.bib"))
 (setq citar-notes-paths '("~/org_roam/ref"))
 
 (require 'org-roam-bibtex)
@@ -644,13 +645,13 @@ out"
 	 (file+head "${slug}-%<%d-%m-%y>.org" "#+title: ${title}
 - index ::  
 - tags :: ")
-	 :unarrowed t
+	 :unnarrowed t
 	 :jump-to-captured t)
 
 	("o" "outline" plain "%?" :if-new
 	 (file+head "outlines/${slug}-%<%d-%m-%y>.org" "#+title: ${title}
 #+filetags: outline")
-	 :unarrowed t
+	 :unnarrowed t
 	 :jump-to-captured t)
 
 	("r" "bibliography reference" plain
@@ -678,8 +679,8 @@ out"
 - tags :: \n
 
 [[elisp:(Info-goto-node \"(%:file)%:node\")][Link to Info page]]
-\n
-")
+     \n
+     ")
 	 :unnarowed t)
 
 	("e" "elfeed" plain
@@ -692,13 +693,20 @@ out"
 
 [[%:link][Link to Elfeed Buffer]]
 [[%:elfeed-entry-link][Link to Web Page]]")
-	 :unnarowed t)))
+	 :unnarowed t)
+
+	("t" "thesis" plain "%?" :if-new
+	 (file+head "thesis/${slug}-%<%d-%m-%y>.org" "#+title: ${title}
+- index ::  
+- tags :: ")
+	 :unnarrowed t
+	 :jump-to-captured t)))
 
 (setq org-roam-capture-ref-templates 
       '(("r" "ref" entry "* %?" :target
 	 (file+head "ref/${slug}.org" "#+title: ${title}\n
-#+filetags: 
- - tags :: \n")
+     #+filetags: 
+      - tags :: \n")
 	 :unnarrowed t
 	 :jump-to-captured t)))
 

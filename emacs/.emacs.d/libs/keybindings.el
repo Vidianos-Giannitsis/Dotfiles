@@ -194,7 +194,7 @@
     ("o" (lambda() (interactive)(dired "~/Documents/Octave")) "Octave scripts directory")
     ("O" (lambda() (interactive)(dired "~/org_roam/outlines")) "Outlines")
     ("p" (lambda() (interactive)(dired "~/Documents/7o_εξάμηνο/Σχεδιασμός_Ι/Project/git_repo")))
-    ("e" (lambda() (interactive)(dired "~/Documents/BISC-E")))
+    ("t" (lambda() (interactive)(dired "~/Documents/9o_εξάμηνο/Διπλωματική Εργασία/")) "Thesis")
     ("C" (lambda() (interactive)(dired "~/Documents/Chemecar")) "Chemecar"))
 
    "General Computer Things"
@@ -223,6 +223,16 @@
     ("S" org-roam-similarity-sidebuffer* "Open a sidebuffer for nodes similar to the current")
     ("i" org-roam-similarity-insert-list "Insert links to similar nodes in the current buffer"))))
 
+(pretty-hydra-define my/org-roam-thesis-hydra (:color blue :title "Org Roam Thesis")
+  ("Capture Functions"
+   (("l" org-roam-thesis-capture-log "Capture Log File")
+    ("m" org-roam-thesis-capture-measurements "Capture Measurements File"))
+
+   "Find Node"
+   (("f" org-roam-thesis-node-find "Find thesis file")
+    ("L" org-roam-thesis-log-find "Find log file")
+    ("M" org-roam-thesis-measurements-find "Find measurements file"))))
+
 (pretty-hydra-define my/roam-ref-hydra (:color blue :title "Org Roam and Org Ref")
   ("Org-roam-node-find and its filters"
    (("f" org-roam-node-find "org-roam-node-find")
@@ -230,7 +240,7 @@
     ("l" ivy-bibtex-with-notes "Find Literature Note")
     ("p" org-roam-find-permanent-node "Find Permanent Note")
     ("b" my/roam-backlinks-hydra/body "Backlinks Hydra")
-    ("t" org-roam-node-find-todos "Find Fleeting Note"))
+    ("T" org-roam-node-find-todos "Find Fleeting Note"))
 
    "References"
    (("I" isbn-to-bibtex "Get ref from isbn")
@@ -246,6 +256,7 @@
     ("S" org-roam-db-sync "Sync the Org Roam db")
     ("g" counsel-rg "Search regex in the org-roam db")
     ("s" my/org-roam-similarity-hydra/body "Org-roam-similarity commands")
+    ("t" my/org-roam-thesis-hydra/body "Org-roam-thesis commands")
     ("D" org-roam-buffer-display-dedicated "Dedicated Org Roam buffer"))
    )
   )
@@ -346,7 +357,8 @@
  :states 'visual
  :keymaps 'global
  "e r" 'eval-region
- "m" 'org-marginalia-mark)
+ "m" 'org-marginalia-mark
+ "SPC r" 'replace-string)
 
 (general-define-key
  :states 'motion

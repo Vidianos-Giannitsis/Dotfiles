@@ -3,6 +3,7 @@
 #+PROPERTY: header-args :results silent
 
 * About this config
+  
 Welcome kind stranger, to my Emacs config. This is the heart of my dotfiles and of my entire computer workflow. Mostly everything I do in a computer with only a few excuses, stems from here and I absolutely love it. Emacs is the most extensible program I have ever seen. It allows you to change basically everything, until you have an environment which suits you perfectly. This is a vanilla GNU Emacs install with a ton of configurations. Actually its not even vanilla Emacs at this point, as its probably got more things than some emacs distros like doom, but it uses the tabula rasa that is vanilla emacs and customises it with this extremely long config file to make it into my own Emacs. Vanilla Emacs is all about creating a computer environment with consistency between all your tasks which is 100% customisable. I doubt there is a single thing in Emacs that can't be changed. And for that very reason I absolutely love it. Its truly the perfect workflow for me as I have handcrafted it from scratch. 
 
 I have drawn inspiration from a lot of other init.el's but the most apparent one is the spacemacs keybindings. I was a spacemacs user for a few months before deciding to start using this personal config for Emacs. I found its keybindings very ergonomic and although most things arent exactly the way they are done in spacemacs, the inspiration is apparent. For example the Space and , keys are leader keys which I use a lot (space for general commands and , for mode specific, currently only org though).
@@ -1074,6 +1075,8 @@ More languages to evaluate with org-babel (by default, only elisp is evaluated).
 * Org Roam, References and the Zettelkasten Workflow 
   This is one of the largest and most important sections of my entire config. It is about org roam, the various reference management packages and the whole overarching workflow. It is really large so I decided to split it into its own file, [[https://github.com/Vidianos-Giannitsis/Dotfiles/blob/master/emacs/.emacs.d/libs/zettelkasten.org][zettelkasten.org]] (which can be found in the libs directory). One section of it, I envision to publish as a seperate library, so it tangles to a different file called zetteldesk.el. So here, I require both. I also enable the zetteldesk-mode, a helpful mode which initialises the zetteldesk-scratch buffer and isolates all the bindings of the package. 
 
+  I also require org-roam-thesis, an elisp file with some helper functions for my thesis.
+
 #+BEGIN_SRC elisp :tangle init.el
 
   (require 'zettelkasten)
@@ -1085,6 +1088,7 @@ More languages to evaluate with org-babel (by default, only elisp is evaluated).
   (require 'zetteldesk-info)
   (require 'zetteldesk-remark)
   (require 'zetteldesk-saves)
+  (require 'org-roam-thesis)
 
 #+END_SRC
   

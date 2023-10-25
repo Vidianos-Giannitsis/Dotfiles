@@ -292,7 +292,7 @@ alias personal='cp -Rf /personal/* ~'
 # General aliases
 alias chemacs='emacs-user-changer.sh'
 alias config='/usr/bin/git --git-dir=/home/vidianos/dotfiles --work-tree=/home/vidianos'
-alias lol="sudo sh -c 'sysctl -w abi.vsyscall32=0'"
+alias lol="sudo sysctl -w abi.vsyscall32=0"
 alias cp="cp -i"                          # confirm before overwriting something
 alias df='df -h'                          # human-readable sizes
 alias free='free -m'                      # show sizes in MB

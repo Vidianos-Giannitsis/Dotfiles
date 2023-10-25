@@ -85,27 +85,30 @@ var favorites = [
     ],
     [ "Games",
       [
-	  ["Smogon", "https://smogon.com", "sm"],
 	  ["Dod", "https://www.dod.gr", "d"],
 	  ["LolChess Account", "https://lolchess.gg/profile/eune/auroradraco", "lcm"],
 	  ["Proton", "https://www.protondb.com/", "pr"],
-	  ["DuelingBook", "https://www.duelingbook.com/", "db"],
 	  ["MC Biome Finder", "https://www.chunkbase.com/apps/biome-finder#-3038289977291799158", "bf"],
+	  ["Smogon", "https://smogon.com", "sm"],
 	  ["Showdown", "https://play.pokemonshowdown.com/", "ps"],
 	  ["Damage Calc", "https://calc.pokemonshowdown.com/index.html", "calc"],
+	  ["Type Chart", "https://www.smogon.com/dex/sm/types/", "tc"],
+	  ["RR Dex", "https://funnotbun.github.io/?table=speciesTable&", "rrp"],
+	  ["RR Changelog", "https://docs.google.com/spreadsheets/d/1bhgRoclN54ur0NqjpqYzRO-OtNlFb1bWWhFilgzYOls/edit#gid=1231377635", "rrc"],
+	  ["DuelingBook", "https://www.duelingbook.com/", "db"],
 	  ["Master Duel Meta", "https://www.masterduelmeta.com/", "mdm"],
-	  ["Pack Opener", "https://db.ygoprodeck.com/pack-open/", "po"],
-	  ["Type Chart", "https://www.smogon.com/dex/sm/types/", "tc"]
+	  ["Pack Opener", "https://db.ygoprodeck.com/pack-open/", "po"]
       ]
     ],
     [ "Draft League",
       [
-	  ["JJDL Doc", "https://docs.google.com/spreadsheets/d/15D8o1dlbnV6spGy5yFLxCsmXpMSq7tKDBNrA9lYv1Ww/edit?usp=sharing", "jj"],
-	  ["DDL Doc", "https://docs.google.com/spreadsheets/d/1ETsqjC3oaxM8zc1ZqZXZKFLPA5AnT4j6FuJ_gujxJPI/edit#gid=0", "ddl"],
-	  ["OGDL Doc", "https://docs.google.com/spreadsheets/d/1w0dDYmfTb6NGo0Ybvm56zMl58YV27ydPeIfXvuMvuog/edit#gid=136029154", "og"],
-	  ["Prep Doc", "https://docs.google.com/spreadsheets/d/1M7dHdzZ8aCEqPqQPl9Ga5mf15KCGa3jX_IoHDjCfbeY/edit#gid=1762857116", "pd"],
+	  ["JJDL Doc", "https://docs.google.com/spreadsheets/d/1fLTY4qCIeeGz0kTGlQ0V9x4OhjWfsaefiZFS8oeT6EM/edit#gid=97112776", "jj"],
+	  ["RR Doc", "https://docs.google.com/spreadsheets/d/1sN6qiEOaT6vMtBhpS9qP4HnpMUYHZmMHoic8fOfgmYU/edit#gid=1875583273", "rrd"],
+	  ["DLC Prep Doc", "https://docs.google.com/spreadsheets/d/1-6lKYjsoXxAF3vrNjKeRAYyFrkHmPrQxSGAbBDpHcsE/edit#gid=1575484654", "dpd"],
+	  ["RR Showdown", "https://play.radicalred.net/", "rrs"],
 	  ["DL Showdown", "https://dl.psim.us/", "dl"],
-	  ["Damage Calc", "https://calc.pokemonshowdown.com/index.html", "calc"]
+	  ["Damage Calc", "https://calc.pokemonshowdown.com/index.html", "calc"],
+	  ["RR Calc", "https://calc.radicalred.net/", "rcalc"]
       ]
     ],
 
@@ -113,6 +116,7 @@ var favorites = [
       [
 	  ["Darebee", "https://darebee.com/", "d"],
 	  ["MIT SciML Course", "https://book.sciml.ai/", "mit"],
+	  ["UDE Examples", "https://github.com/ChrisRackauckas/universal_differential_equations/tree/master", "ude"],
 	  ["Raindrop", "https://app.raindrop.io/my/0", "rd"],
 	  ["Hex Color Codes", "https://www.color-hex.com/", "ch"],
 	  ["Word Counter", "https://wordcounter.net/", "wc"],
