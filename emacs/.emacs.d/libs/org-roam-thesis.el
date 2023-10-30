@@ -23,7 +23,7 @@
 	("m" "measurements" plain "%?" :if-new
 	 (file+head "thesis/measurements-%<%d-%m-%y>.org" "#+title: Measurements for %<%d-%m-%y>
 #+filetags: Measurements
--tags :: [[id:7e72e352-fffd-46f8-ab55-5adee534302a][Ενζυμική Υδρόλυση Αποβλήτων Τροφών και Παραγωγή Βιοαερίου μέσω Αναερόβιας Χώνευσης]] , ")
+- tags :: [[id:7e72e352-fffd-46f8-ab55-5adee534302a][Ενζυμική Υδρόλυση Αποβλήτων Τροφών και Παραγωγή Βιοαερίου μέσω Αναερόβιας Χώνευσης]] , ")
 	 :unnarrowed t
 	 :jump-to-captured t
 	 :immediate-finish t)))

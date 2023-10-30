@@ -211,6 +211,49 @@ The bibliography backend I currently use is ivy-bibtex (hence the above config).
 
 #+END_SRC
 
+* Export a bibtex entry to org-roam
+After a discussion in the M-x research group, the idea of a way to export a bibtex entry to an org-roam file was suggested. The idea is simple. Take a bibtex entry that has the typical fields but also some fields like related papers and annotations (essentially notes on the paper) and make it into an org-roam file to leverage the database capabilities of org-roam.
+
+It is not of need for me as I initialize literature nodes with my own template (which can be found later in this file in my templates), but I understand the value of it for someone who wants to move to org-roam and already has a large amount of bibtex entries they wish to export.
+
+Org-roam-bibtex allows for template pre-expanding, meaning a template that expands with information taken from the bibtex file. First, we need to set the preformat keywords to include everything we may be interested in. Then, create a template that automatically finishes and inserts all the information we want. Lastly, create an interactive function that prompts for a bibtex entry and initializes a note for it with our predefined template.
+ 
+#+BEGIN_SRC elisp
+
+  (setq orb-preformat-keywords '("citekey" "author" "date" "entry-type" "keywords" "url" "file" "journaltitle" "note" "annote"))
+
+  (setq bibtex-export-capture-template
+	'(("b" "bibliographic entry" plain "%?" :if-new
+	   (file+head "ref/${citekey}.org" "#+title: ${title}\n
+  - keywords :: ${keywords}
+  - tags :: ${note}
+
+  ,* ${entry-type} by ${author} in ${journaltitle}, ${date}\n
+  ${annote}")
+	   :unnarowed t
+	   :jump-to-captured t
+	   :immediate-finish t)))
+
+  (defun bibtex-export-org-roam (citekey)
+    "Export a bibtex entry to an org-roam file.
+
+  If called interactively, select a citekey using
+  `citar-select-ref'.  Otherwise, give a citekey and with that, set
+  `org-roam-capture-templates' to `bibtex-export-capture-template',
+  a template specifically for this purpose and run `orb--new-note'
+  on that citekey using that template."
+    (interactive (list (citar-select-ref)))
+    (let ((org-roam-capture-templates bibtex-export-capture-template))
+      (orb--new-note citekey)))
+
+#+END_SRC
+
+Another potential step in this system is to create methods specializing on the org-roam-node object which get the various fields of the bibtex file. This can be done fairly easily as the snippet
+#+BEGIN_SRC elisp
+(bibtex-completion-get-entry (car (org-roam-node-refs (org-roam-node-at-point))))
+#+END_SRC
+gets an alist of all the bibtex entries. (org-roam-node-at-point is used here for simplicity of testing, in a method this would be the NODE argument). From that alist, each method could extract a different field with ~assoc~. Once we have these, we can more easily manipulate the system to display more info about each bibtex entry in an org-roam-node-find type function. It could also be used for finding similar papers (two nodes which have at least one same keyword), filter by author, year or journal and many other things.
+
 * Acting on backlinks
   Backlinks are a pivotal part of this workflow. A file has a backlink if another file links to it. As a core part of my workflow revolves around index files (or Maps of Contents) and those are files that basically everything connected to that subject links to them, they end up being files with a lot of backlinks. I have some functions here that act on backlinks which I consider useful. Excluded from this list are two defmethods I use concerning backlinks as I define all my defmethods in the first part of the config.
 
