@@ -1,0 +1,5 @@
+# -*- mode: snippet -*-
+# name: underbrace
+# key: underbrace
+# --
+\underbrace{$1}_{\substack{\text{$2}}}

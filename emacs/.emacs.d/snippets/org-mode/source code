@@ -2,6 +2,7 @@
 # name: source code
 # key: \s
 # --
-#+BEGIN_SRC $1
-$2
+#+NAME: $1
+#+BEGIN_SRC $2
+$3
 #+END_SRC

@@ -156,15 +156,7 @@ abbreviation should be expanded at the current point."
     ("thursday" "Thursday")
     ("friday" "Friday")
     ("saturday" "Saturday")
-    ("sunday" "Sunday")
-    ;; abbreviations
-    ("mon" "Mon.")
-    ("tue" "Tue.")
-    ("wed" "Wed.")
-    ("thur" "Thur.")
-    ("fri" "Fri.")
-    ("sat" "Sat.")
-    ("sun" "Sun."))
+    ("sunday" "Sunday"))
   "Weekdays that should be expanded."
   :group 'scimax-autoformat
   :type '(repeat (list string string)))

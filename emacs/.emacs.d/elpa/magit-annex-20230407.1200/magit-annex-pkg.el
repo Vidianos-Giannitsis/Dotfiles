@@ -1,2 +1,0 @@
-;;; Generated package description from magit-annex.el  -*- no-byte-compile: t -*-
-(define-package "magit-annex" "20230407.1200" "Control git-annex from Magit" '((cl-lib "0.3") (magit "3.0.0")) :commit "255e443e19a32e716ff414e09ad5e00f6f8bc8fb" :authors '(("Kyle Meyer" . "kyle@kyleam.com") ("Rémi Vanicat" . "vanicat@debian.org")) :maintainer '("Kyle Meyer" . "kyle@kyleam.com") :keywords '("vc" "tools") :url "https://github.com/magit/magit-annex")

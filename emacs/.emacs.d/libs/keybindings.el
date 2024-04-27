@@ -36,7 +36,8 @@
   "J" '(:ignore t :which-key "Julia")
   "W" 'wolfram-alpha
   "n" 'winner-redo
-  "p" 'winner-undo
+  "u" 'winner-undo
+  "p" 'projectile-commander
   "i" '(my/org-pandoc-hydra/body :which-key "Org Pandoc Import")
   "y" 'ivy-yasnippet
   "z" '(zetteldesk-main-hydra/body :which-key "Zetteldesk")
@@ -46,6 +47,7 @@
   "ζ ι" 'zetteldesk-insert-node-contents
   "M" 'imaxima
   "β" 'counsel-switch-buffer
+  "I" 'iedit-mode
   "F" '(my/flyspell-hydra/body :which-key "Flyspell Commands")
   "/" '(:ignore t :which-key "Search Engines")
   "a" '(:ignore t :which-key "Avy Commands"))
@@ -189,12 +191,12 @@
     ("S" (lambda() (interactive)(find-file "~/org-roam-similarity/org-roam-similarity.org")) "Org Roam Similarity Config"))
 
    "University"
-   (("u" (lambda() (interactive)(dired "~/Documents/8o_εξάμηνο")) "University Documents folder")
+   (("u" (lambda() (interactive)(dired "~/Documents/9o_εξάμηνο")) "University Documents folder")
     ("B" (lambda() (interactive)(find-file "~/Sync/My_Library.bib")) "Master Bibliography file")
     ("o" (lambda() (interactive)(dired "~/Documents/Octave")) "Octave scripts directory")
     ("O" (lambda() (interactive)(dired "~/org_roam/outlines")) "Outlines")
     ("p" (lambda() (interactive)(dired "~/Documents/7o_εξάμηνο/Σχεδιασμός_Ι/Project/git_repo")))
-    ("t" (lambda() (interactive)(dired "~/Documents/9o_εξάμηνο/Διπλωματική Εργασία/")) "Thesis")
+    ("t" (lambda() (interactive)(dired "~/Documents/9o_εξάμηνο/Masters_Thesis/")) "Thesis")
     ("C" (lambda() (interactive)(dired "~/Documents/Chemecar")) "Chemecar"))
 
    "General Computer Things"
@@ -398,15 +400,19 @@
      "i" 'org-toggle-inline-images
      "P" 'org-tree-slide-mode
      "p" '(org-plot/gnuplot :which-key "Plot table data")
-     "f" 'org-footnote-action
-     "L" '(lab-skeleton :which-key "Insert my lab report template")
+     "F" 'org-footnote-action
+     "f" 'org-table-edit-formulas
+     "L" 'org-toggle-pretty-entities
+     "R" '(lab-skeleton :which-key "Insert my lab report template")
      "h" 'hw-skeleton
      "E" 'org-table-export
-     "c" 'org-table-create-or-convert-from-region
+     "C" 'org-table-create-or-convert-from-region
+     "c" 'org-edit-special
      "u" '(uo-lab-skeleton :which-key "Unit Operations lab template")
      "T" '(toc-org-mode :which-key "Insert ToC")
      "b" 'org-beamer-select-environment
      "z" '(:ignore t :which-key "Zetteldesk")
+     "j" '(:ignore t :which-key "Julia")
      "m" '(:ignore t :which-key "Org-Marginalia commands"))
 
 (general-define-key
@@ -472,6 +478,12 @@
  "α" 'evil-append
  "ι" 'evil-insert)
 
+(define-key org-src-mode-map (kbd ",") nil)
+(general-define-key
+ :states 'normal
+ :keymaps 'org-src-mode-map
+ ", c" 'org-edit-src-exit)
+
 (general-define-key
  :states 'normal
  :keymaps 'org-mode-map
@@ -482,6 +494,12 @@
  "l" 'julia-snail-send-line
  "f" 'julia-snail-send-buffer-file
  "t" 'julia-snail-send-top-level-form)
+
+(general-define-key
+ :states 'visual
+ :keymaps 'org-mode-map
+ :prefix ", j"
+ "R" 'julia-snail-send-region)
 
 (general-define-key
  :states 'normal
@@ -527,7 +545,8 @@
  ", d" 'julia-snail-doc-lookup
  ", l" 'julia-snail-send-line
  ", f" 'julia-snail-send-buffer-file
- ", t" 'julia-snail-send-top-level-form)
+ ", t" 'julia-snail-send-top-level-form
+ ", c" 'org-edit-src-exit)
 
 (general-define-key
  :states 'normal

@@ -25,7 +25,7 @@
   (cl-defmethod org-roam-node-backlinkscount-number ((node org-roam-node))
     "Access slot \"backlinks\" of org-roam-node struct CL-X. This
     is identical to `org-roam-node-backlinkscount' with the
-    difference that it returns a number instead of a fromatted
+    difference that it returns a number instead of a formatted
     string. This is to be used in
     `org-roam-node-sort-by-backlinks'"
     (let* ((count (caar (org-roam-db-query

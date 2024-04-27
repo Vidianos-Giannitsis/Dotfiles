@@ -113,7 +113,7 @@ This includes:
 
 #+BEGIN_SRC elisp :tangle init.el
 
-  (gcmh-mode 1)
+  ;; (gcmh-mode 1)
 
   (load-theme 'doom-palenight t)
 
@@ -218,7 +218,8 @@ This enables:
 + Set up the ivy-youtube key to get integration between ivy and youtube
 + Make the minibuffer store the last 20 inputs it had. Minibuffer history is pretty cool
 + Define the default dictionary-server for dictionary commands in emacs
-+ Add the code for emacs-gc-stats to help the devs optimize Emacs, yeah
++ Add the code for emacs-gc-stats to help the devs optimize Emacs
++ Add orderless to my config and make it work with ivy.
 
 #+BEGIN_SRC elisp :tangle init.el
 
@@ -270,6 +271,12 @@ This enables:
   (require 'emacs-gc-stats)
   (setq emacs-gc-stats-gc-defaults 'emacs-defaults) ; optional
   (emacs-gc-stats-mode +1)
+
+  (setq completion-styles '(orderless basic)
+	completion-category-overrides '((file (styles basic partial-completion))))
+
+  (setq ivy-re-builders-alist '((t . orderless-ivy-re-builder)))
+  (add-to-list 'ivy-highlight-functions-alist '(orderless-ivy-re-builder . orderless-ivy-highlight))
 #+END_SRC
 
 * Emacs Launchers
@@ -502,6 +509,10 @@ This enables:
 		   "audacity"
 		   '(file))
 	     (list (openwith-make-extension-regexp
+		    '("xopp"))
+		   "xournalpp"
+		   '(file))
+	     (list (openwith-make-extension-regexp
 		    '("docx" "doc" "xlsx" "xls" "ppt" "odt" "ods"))
 		   "libreoffice"
 		   '(file))))
@@ -562,6 +573,7 @@ Some settings (now using the word some here might be an underestimation, as with
    + A function to toggle the behaviour of markup elements such as visible asterisks when writing a message in bold. I dont like seeing them usually, but its good to have a function which toggle this behaviour
    + When exporting, I want the export to work regardless of if the links work or not. If I am exporting a link heavy file (such as something from my Zettelkasten) I want it to export even if the links will not work.
    + Set the lowest priority to '69 (E), so I have 5 priority levels
+   + Define a helper function that moves point N lines, deletes any table in point and then imports a different one. This is used in my thesis notebooks to refresh CSV tables automatically.
 
  
 #+BEGIN_SRC elisp :tangle init.el
@@ -600,6 +612,19 @@ Some settings (now using the word some here might be an underestimation, as with
   (setq org-export-with-broken-links t)
 
   (setq org-lowest-priority '69)
+
+  (defun org-table-import-after-n-lines (N FILE SEPARATOR)
+    "Helper function for `org-table-import'.
+
+  This function moves point by N lines, checks if there is a table
+  in point and if there is deletes it and after that inserts an org
+  table from FILE using SEPARATOR using `org-table-import'. This is
+  a useful helper function for my thesis notebooks built in
+  org-mode."
+    (next-line N)
+    (when (org-table-p) (goto-char (org-table-begin))
+	  (delete-char (- (org-table-end) (org-table-begin))))
+    (org-table-import FILE SEPARATOR))
 #+END_SRC
 
 ** Latex Stuff
@@ -609,7 +634,7 @@ Some settings (now using the word some here might be an underestimation, as with
     + I make the default process for creating latex previews dvisvgm. For the most part, both this and dvipng work flawlessly. But one specific latex package (chemfig) which I use from time to time cant preview things correctly in org with dvipng and previewing them as svgs with dvisvgm fixes that issue. Besides that, I havent really noticed any other major problems with either one.
     + I tell org to preview latex fragments by default when opening a document, as I use them extensively so this makes my life easier.
     + I activate org-cdlatex-mode which makes typing latex equations easier inside org and massively improves speed of typing equations together with snippets for org, org-fragtog mode which automatically creates previews for latex fragments when the cursor is not on them and laas mode which is a bunch of helpful latex snippets which autocomplete.
-    + I tell latex to export my code blocks using the minted package so they look better
+    + I tell latex to export my code blocks using the minted package so they look better and activate text wrapping in these buffers.
     + Requiring "tochemfig" a neat package to generate latex figures for chemical elements.
     + I add some packages I use in all my documents in org-latex-packages-alist.
     + The next few were taken by John Kitchin's [[https://kitchingroup.cheme.cmu.edu/blog/2016/11/07/Better-equation-numbering-in-LaTeX-fragments-in-org-mode/][website]]. Its about equations in org not being properly numbered as the org latex preview takes them as independent fragments and not as a whole. This code snippet, makes org number equations properly using an advice on org-create-formula-image. Its very neat and I am glad to have found it.
@@ -622,6 +647,7 @@ Some settings (now using the word some here might be an underestimation, as with
 
      (setq org-preview-latex-default-process 'dvisvgm)
 
+     (require 'org-auctex)
      (setq org-startup-with-latex-preview t)
 
      (add-hook 'org-mode-hook #'(lambda ()
@@ -630,6 +656,8 @@ Some settings (now using the word some here might be an underestimation, as with
 				 (laas-mode)))
 
      (setq org-latex-listings 'minted)
+     (setq org-latex-minted-options '(("breaklines" "true")
+				      ("breakanywhere" "true")))
 
      (require 'tochemfig)
 
@@ -645,7 +673,7 @@ Some settings (now using the word some here might be an underestimation, as with
 				      ("" "glossaries")
 				      ("" "newfloat")
 				      ("" "minted")
-				      ("a4paper, margin=3cm" "geometry")
+;				      ("a4paper, margin=3cm" "geometry")
 				      ("" "chemfig")
 				      ("" "svg")))
 
@@ -993,6 +1021,7 @@ More languages to evaluate with org-babel (by default, only elisp is evaluated).
        (lisp . t)
        (clojure . t)
        (julia . t)
+       (shell . t)
   )
      )
 
@@ -1216,6 +1245,8 @@ More languages to evaluate with org-babel (by default, only elisp is evaluated).
 				    (setq company-math-allow-latex-symbols-in-faces t)
 				    (setq company-bibtex-bibliography '("~/org_roam/Zotero_library.bib"))))
 
+    (setq orderless-component-separator "[ &]")
+    
   #+END_SRC
 
 * Search Engines 
@@ -1289,10 +1320,26 @@ Org reveal is a tool for making reveal.js presentations with org-mode. I am tryi
 
 #+BEGIN_SRC elisp :tangle init.el
 
-  (setq org-re-reveal-root "file:///home/vidianos/reveal.js")
+  (require 'org-re-reveal)
+  (setq org-re-reveal-root "file:///home/vidianos/Cloned_Repositories/reveal.js")
   (setq org-re-reveal-width 1800)
   (setq org-re-reveal-height 960)
 
+  ;; Add Color links for slide formatting
+  (org-add-link-type
+   "color"
+   (lambda (path)
+     (message (concat "color "
+		      (progn (add-text-properties
+			      0 (length path)
+			      (list 'face `((t (:foreground ,path))))
+			      path) path))))
+   (lambda (path desc format)
+     (cond
+      ((eq format 'html)
+       (format "<span style=\"color:%s;\">%s</span>" path desc))
+      ((eq format 'latex)
+       (format "{\\color{%s}%s}" path desc)))))
 #+END_SRC
 
 * Scimax

@@ -21,7 +21,7 @@
   (auto-package-update-maybe)
   (auto-package-update-at-time "10:00"))
 
-(gcmh-mode 1)
+;; (gcmh-mode 1)
 
 (load-theme 'doom-palenight t)
 
@@ -142,6 +142,12 @@
 (require 'emacs-gc-stats)
 (setq emacs-gc-stats-gc-defaults 'emacs-defaults) ; optional
 (emacs-gc-stats-mode +1)
+
+(setq completion-styles '(orderless basic)
+      completion-category-overrides '((file (styles basic partial-completion))))
+
+(setq ivy-re-builders-alist '((t . orderless-ivy-re-builder)))
+(add-to-list 'ivy-highlight-functions-alist '(orderless-ivy-re-builder . orderless-ivy-highlight))
 
 (defcustom bookmark-selector-web-page-alist '()
   "Alist used by `bookmark-selector-browse-bookmark' to associate
@@ -326,6 +332,10 @@ implemented with the `bookmark-selector-launcher' macro."
 	       "audacity"
 	       '(file))
 	 (list (openwith-make-extension-regexp
+		'("xopp"))
+	       "xournalpp"
+	       '(file))
+	 (list (openwith-make-extension-regexp
 		'("docx" "doc" "xlsx" "xls" "ppt" "odt" "ods"))
 	       "libreoffice"
 	       '(file))))
@@ -393,271 +403,287 @@ implemented with the `bookmark-selector-launcher' macro."
 
 (setq org-lowest-priority '69)
 
+(defun org-table-import-after-n-lines (N FILE SEPARATOR)
+  "Helper function for `org-table-import'.
+
+This function moves point by N lines, checks if there is a table
+in point and if there is deletes it and after that inserts an org
+table from FILE using SEPARATOR using `org-table-import'. This is
+a useful helper function for my thesis notebooks built in
+org-mode."
+  (next-line N)
+  (when (org-table-p) (goto-char (org-table-begin))
+	(delete-char (- (org-table-end) (org-table-begin))))
+  (org-table-import FILE SEPARATOR))
+
 (setq org-format-latex-options '(:foreground default :background default :scale 1.8 :html-foreground "Black" :html-background "Transparent" :html-scale 1.0 :matchers))
 
-(setq org-latex-pdf-process (list "latexmk -shell-escape -bibtex -f -pdf %f"))
+     (setq org-latex-pdf-process (list "latexmk -shell-escape -bibtex -f -pdf %f"))
 
-(setq org-preview-latex-default-process 'dvisvgm)
+     (setq org-preview-latex-default-process 'dvisvgm)
 
-(setq org-startup-with-latex-preview t)
+     (require 'org-auctex)
+     (setq org-startup-with-latex-preview t)
 
-(add-hook 'org-mode-hook #'(lambda ()
-			    (turn-on-org-cdlatex)
-			    (org-fragtog-mode)
-			    (laas-mode)))
+     (add-hook 'org-mode-hook #'(lambda ()
+				 (turn-on-org-cdlatex)
+				 (org-fragtog-mode)
+				 (laas-mode)))
 
-(setq org-latex-listings 'minted)
+     (setq org-latex-listings 'minted)
+     (setq org-latex-minted-options '(("breaklines" "true")
+				      ("breakanywhere" "true")))
 
-(require 'tochemfig)
+     (require 'tochemfig)
 
-(setq org-latex-packages-alist '(("" "booktabs")
-				 ("" "import")
-				 ("LGR, T1" "fontenc")
-				 ("greek, english" "babel")
-				 ("" "alphabeta")
-				 ("" "esint")
-				 ("" "mathtools")
-				 ("" "esdiff")
-				 ("" "makeidx")
-				 ("" "glossaries")
-				 ("" "newfloat")
-				 ("" "minted")
-				 ("a4paper, margin=3cm" "geometry")
-				 ("" "chemfig")
-				 ("" "svg")))
+     (setq org-latex-packages-alist '(("" "booktabs")
+				      ("" "import")
+				      ("LGR, T1" "fontenc")
+				      ("greek, english" "babel")
+				      ("" "alphabeta")
+				      ("" "esint")
+				      ("" "mathtools")
+				      ("" "esdiff")
+				      ("" "makeidx")
+				      ("" "glossaries")
+				      ("" "newfloat")
+				      ("" "minted")
+;				      ("a4paper, margin=3cm" "geometry")
+				      ("" "chemfig")
+				      ("" "svg")))
 
-(defun my-latex-title-page ()
-  "Template for my assignment title pages.
+     (defun my-latex-title-page ()
+       "Template for my assignment title pages.
 
-I found a neat template for latex title pages online and decided
-to start using it for my assignments. This function inserts that
-template in an org document after prompting for the fields that
-change from one assignment to the next."
-  (interactive)
-  (let ((sector (read-string "Τομέας: "))
-	(lab (read-string "Εργαστήριο: "))
-	(title (read-string "Τίτλος: "))
-	(authors (read-string "Συγγραφείς: "))
-	(numbers (read-string "Αριθμοί Μητρώου: ")))
-    (insert
-     "#+options: toc:nil title:nil author:nil date:nil\n"
-     "#+LATEX_HEADER: \\newcommand{\\HRule}{\\rule{\\linewidth}{0.5mm}}\n"
-"#+BEGIN_SRC latex
-  \\renewcommand{\\contentsname}{Περιεχόμενα}
-  \\begin{titlepage}
+     I found a neat template for latex title pages online and decided
+     to start using it for my assignments. This function inserts that
+     template in an org document after prompting for the fields that
+     change from one assignment to the next."
+       (interactive)
+       (let ((sector (read-string "Τομέας: "))
+	     (lab (read-string "Εργαστήριο: "))
+	     (title (read-string "Τίτλος: "))
+	     (authors (read-string "Συγγραφείς: "))
+	     (numbers (read-string "Αριθμοί Μητρώου: ")))
+	 (insert
+	  "#+options: toc:nil title:nil author:nil date:nil\n"
+	  "#+LATEX_HEADER: \\newcommand{\\HRule}{\\rule{\\linewidth}{0.5mm}}\n"
+     "#+BEGIN_SRC latex
+       \\renewcommand{\\contentsname}{Περιεχόμενα}
+       \\begin{titlepage}
 
-  \\begin{center}
-    \\begin{minipage}{0.15\\textwidth}
-      \\begin{flushleft}
-	\\includegraphics[width=1\\textwidth]{~/Pictures/ntua_logo.png}\\\\[0.4cm]    
-      \\end{flushleft}
-    \\end{minipage}
-    \\begin{minipage}{0.75\\textwidth}
-      \\textsc{\\bfseries \\large ΕΘΝΙΚΟ ΜΕΤΣΟΒΙΟ ΠΟΛΥΤΕΧΝΕΙΟ}\\\\[0.2cm]
-      \\textsc{\\bfseries \\large ΣΧΟΛΗ ΧΗΜΙΚΩΝ ΜΗΧΑΝΙΚΩΝ - ΤΟΜΕΑΣ " sector
-      "}\\\\[0.2cm]
-      \\textsc{\\bfseries \\normalsize ΕΡΓΑΣΤΗΡΙΟ " lab
-      "}\\\\[0.2cm]
-    \\end{minipage}
-    \\\\[1.5cm]
+       \\begin{center}
+	 \\begin{minipage}{0.15\\textwidth}
+	   \\begin{flushleft}
+	     \\includegraphics[width=1\\textwidth]{~/Pictures/ntua_logo.png}\\\\[0.4cm]    
+	   \\end{flushleft}
+	 \\end{minipage}
+	 \\begin{minipage}{0.75\\textwidth}
+	   \\textsc{\\bfseries \\large ΕΘΝΙΚΟ ΜΕΤΣΟΒΙΟ ΠΟΛΥΤΕΧΝΕΙΟ}\\\\[0.2cm]
+	   \\textsc{\\bfseries \\large ΣΧΟΛΗ ΧΗΜΙΚΩΝ ΜΗΧΑΝΙΚΩΝ - ΤΟΜΕΑΣ " sector
+	   "}\\\\[0.2cm]
+	   \\textsc{\\bfseries \\normalsize ΕΡΓΑΣΤΗΡΙΟ " lab
+	   "}\\\\[0.2cm]
+	 \\end{minipage}
+	 \\\\[1.5cm]
 
-    \\HRule \\\\[0.3cm]
-    \\LARGE " title "\\\\[0.3cm]
-    \\HRule \\\\[1cm]
-    \\begin{minipage}{0.4\\textwidth}
-      \\begin{flushleft} \\large
-	\\emph{Συγγραφείς:}\\\\
-	Βιδιάνος Γιαννίτσης\\\\
-	" authors "
-      \\end{flushleft}
-    \\end{minipage}
-    \\begin{minipage}{0.4\\textwidth}
-      \\begin{flushright} \\large
-	\\emph{Αριθμοί Μητρώου:}\\\\
-	ch19113\\\\
-	" numbers "
-      \\end{flushright}
-    \\end{minipage}\\\\[1cm]
-    \\HRule \\\\[2cm]
-  \\end{center}
+	 \\HRule \\\\[0.3cm]
+	 \\LARGE " title "\\\\[0.3cm]
+	 \\HRule \\\\[1cm]
+	 \\begin{minipage}{0.4\\textwidth}
+	   \\begin{flushleft} \\large
+	     \\emph{Συγγραφείς:}\\\\
+	     Βιδιάνος Γιαννίτσης\\\\
+	     " authors "
+	   \\end{flushleft}
+	 \\end{minipage}
+	 \\begin{minipage}{0.4\\textwidth}
+	   \\begin{flushright} \\large
+	     \\emph{Αριθμοί Μητρώου:}\\\\
+	     ch19113\\\\
+	     " numbers "
+	   \\end{flushright}
+	 \\end{minipage}\\\\[1cm]
+	 \\HRule \\\\[2cm]
+       \\end{center}
 
-  \\begin{abstract}
+       \\begin{abstract}
 
-  \\end{abstract}
+       \\end{abstract}
 
-  \\end{titlepage}
-#+END_SRC")))
+       \\end{titlepage}
+     #+END_SRC")))
 
-(defun org-renumber-environment (orig-func &rest args)
-  (let ((results '()) 
-	(counter -1)
-	(numberp))
+     (defun org-renumber-environment (orig-func &rest args)
+       (let ((results '()) 
+	     (counter -1)
+	     (numberp))
 
-    (setq results (cl-loop for (begin .  env) in 
-			(org-element-map (org-element-parse-buffer) 'latex-environment
-			  (lambda (env)
-			    (cons
-			     (org-element-property :begin env)
-			     (org-element-property :value env))))
-			collect
-			(cond
-			 ((and (string-match "\\\\begin{equation}" env)
-			       (not (string-match "\\\\tag{" env)))
-			  (cl-incf counter)
-			  (cons begin counter))
-			 ((string-match "\\\\begin{align}" env)
-			  (prog2
-			      (cl-incf counter)
-			      (cons begin counter)                          
-			    (with-temp-buffer
-			      (insert env)
-			      (goto-char (point-min))
-			      ;; \\ is used for a new line. Each one leads to a number
-			      (cl-incf counter (count-matches "\\\\$"))
-			      ;; unless there are nonumbers.
-			      (goto-char (point-min))
-			      (cl-decf counter (count-matches "\\nonumber")))))
-			 (t
-			  (cons begin nil)))))
+	 (setq results (cl-loop for (begin .  env) in 
+			     (org-element-map (org-element-parse-buffer) 'latex-environment
+			       (lambda (env)
+				 (cons
+				  (org-element-property :begin env)
+				  (org-element-property :value env))))
+			     collect
+			     (cond
+			      ((and (string-match "\\\\begin{equation}" env)
+				    (not (string-match "\\\\tag{" env)))
+			       (cl-incf counter)
+			       (cons begin counter))
+			      ((string-match "\\\\begin{align}" env)
+			       (prog2
+				   (cl-incf counter)
+				   (cons begin counter)                          
+				 (with-temp-buffer
+				   (insert env)
+				   (goto-char (point-min))
+				   ;; \\ is used for a new line. Each one leads to a number
+				   (cl-incf counter (count-matches "\\\\$"))
+				   ;; unless there are nonumbers.
+				   (goto-char (point-min))
+				   (cl-decf counter (count-matches "\\nonumber")))))
+			      (t
+			       (cons begin nil)))))
 
-    (when (setq numberp (cdr (assoc (point) results)))
-      (setf (car args)
-	    (concat
-	     (format "\\setcounter{equation}{%s}\n" numberp)
-	     (car args)))))
+	 (when (setq numberp (cdr (assoc (point) results)))
+	   (setf (car args)
+		 (concat
+		  (format "\\setcounter{equation}{%s}\n" numberp)
+		  (car args)))))
 
-  (apply orig-func args))
+       (apply orig-func args))
 
-(advice-add 'org-create-formula-image :around #'org-renumber-environment)
+     (advice-add 'org-create-formula-image :around #'org-renumber-environment)
 
-(setq laas-basic-snippets
-  '(:cond laas-mathp
-    "!="    "\\neq"
-    "!>"    "\\mapsto"
-    "**"    "\\cdot"
-    "+-"    "\\pm"
-    "-+"    "\\mp"
-    "->"    "\\to"
-    "..."   "\\dots"
-    "<<"    "\\ll"
-    "<="    "\\leq"
-    "<>"    "\\diamond"
-    "=<"    "\\impliedby"
-    "=="    "&="
-    "=>"    "\\implies"
-    ">="    "\\geq"
-    ">>"    "\\gg"
-    "AA"    "\\forall"
-    "EE"    "\\exists"
-    "cb"    "^3"
-    "iff"   "\\iff"
-    "inn"   "\\in"
-    "notin" "\\not\\in"
-    "sr"    "^2"
-    "xx"    "\\times"
-    "|->"   "\\mapsto"
-    "|="    "\\models"
-    "||"    "\\mid"
-    "~="    "\\approx"
-    "~~"    "\\sim"
+     (setq laas-basic-snippets
+       '(:cond laas-mathp
+	 "!="    "\\neq"
+	 "!>"    "\\mapsto"
+	 "**"    "\\cdot"
+	 "+-"    "\\pm"
+	 "-+"    "\\mp"
+	 "->"    "\\to"
+	 "..."   "\\dots"
+	 "<<"    "\\ll"
+	 "<="    "\\leq"
+	 "<>"    "\\diamond"
+	 "=<"    "\\impliedby"
+	 "=="    "&="
+	 "=>"    "\\implies"
+	 ">="    "\\geq"
+	 ">>"    "\\gg"
+	 "AA"    "\\forall"
+	 "EE"    "\\exists"
+	 "cb"    "^3"
+	 "iff"   "\\iff"
+	 "inn"   "\\in"
+	 "notin" "\\not\\in"
+	 "sr"    "^2"
+	 "xx"    "\\times"
+	 "|->"   "\\mapsto"
+	 "|="    "\\models"
+	 "||"    "\\mid"
+	 "~="    "\\approx"
+	 "~~"    "\\sim"
 
-    "arccos" "\\arccos"
-    "arccot" "\\arccot"
-    "arccot" "\\arccot"
-    "arccsc" "\\arccsc"
-    "arcsec" "\\arcsec"
-    "arcsin" "\\arcsin"
-    "arctan" "\\arctan"
-    "cos"    "\\cos"
-    "cot"    "\\cot"
-    "csc"    "\\csc"
-    "exp"    "\\exp"
-    "ln"     "\\ln"
-    "log"    "\\log"
-    "perp"   "\\perp"
-    "sin"    "\\sin"
-    "star"   "\\star"
-    "gcd"    "\\gcd"
-    "min"    "\\min"
-    "max"    "\\max"
+	 "arccos" "\\arccos"
+	 "arccot" "\\arccot"
+	 "arccot" "\\arccot"
+	 "arccsc" "\\arccsc"
+	 "arcsec" "\\arcsec"
+	 "arcsin" "\\arcsin"
+	 "arctan" "\\arctan"
+	 "cos"    "\\cos"
+	 "cot"    "\\cot"
+	 "csc"    "\\csc"
+	 "exp"    "\\exp"
+	 "ln"     "\\ln"
+	 "log"    "\\log"
+	 "perp"   "\\perp"
+	 "sin"    "\\sin"
+	 "star"   "\\star"
+	 "gcd"    "\\gcd"
+	 "min"    "\\min"
+	 "max"    "\\max"
 
-    "CC" "\\CC"
-    "FF" "\\FF"
-    "HH" "\\HH"
-    "PP" "\\PP"
-    "QQ" "\\QQ"
-    "RR" "\\RR"
-    "ZZ" "\\ZZ"
+	 "CC" "\\CC"
+	 "FF" "\\FF"
+	 "HH" "\\HH"
+	 "PP" "\\PP"
+	 "QQ" "\\QQ"
+	 "RR" "\\RR"
+	 "ZZ" "\\ZZ"
 
-    ";a"  "\\alpha"
-    ";A"  "\\forall"        ";;A" "\\aleph"
-    ";b"  "\\beta"
-    ";C"  "\\mathbb{C}"                            ";;;C" "\\arccos"
-    ";d"  "\\dot"         ";;d" "\\partial"
-    ";D"  "\\Delta"         ";;D" "\\nabla"
-    ";e"  "\\mathcal{E}"       ";;e" "\\varepsilon"   ";;;e" "\\exp"
-    ";E"  "\\exists"                               ";;;E" "\\ln"
-    ";f"  "\\phi"           ";;f" "\\varphi"
-    ";F"  "\\Phi"
-    ";g"  "\\gamma"                                ";;;g" "\\lg"
-    ";G"  "\\Gamma"                                ";;;G" "10^{?}"
-    ";h"  "\\eta"           ";;h" "\\hbar"
-    ";i"  "\\infty"            ";;i" "\\imath"
-    ";I"  "\\in"          ";;I" "\\Im"
-    ";;j" "\\jmath"
-    ";k"  "\\kappa"
-    ";l"  "\\mathcal{L}"        ";;l" "\\ell"          ";;;l" "\\log"
-    ";L"  "\\Lambda"
-    ";m"  "\\mu"
-    ";n"  "\\nabla"         ";;n" "\\vec{\\nabla}"     ";;;n" "\\ln"
-    ";N"  "\\mathbb{N}"                                ";;;N" "\\exp"
-    ";o"  "\\overline"
-    ";O"  "\\Omega"         ";;O" "\\mho"
-    ";p"  "\\partial"            ";;p" "\\varpi"
-    ";P"  "\\Pi"
-    ";q"  "\\theta"         ";;q" "\\vartheta"
-    ";Q"  "\\mathbb{Q}"
-    ";r"  "\\rho"           ";;r" "\\varrho"
-    ";R"  "\\mathbb{R}"      ";;R" "\\Re"
-    ";s"  "\\sqrt"         ";;s" "\\varsigma"    ";;;s" "\\sin"
-    ";S"  "\\Sigma"                               ";;;S" "\\arcsin"
-    ";t"  "\\tau"                                 ";;;t" "\\tan"
-    ";;;T" "\\arctan"
-    ";u"  "\\upsilon"
-    ";U"  "\\Upsilon"
-    ";v"  "\\vec"
-    ";V"  "\\Phi"
-    ";w"  "\\xi"
-    ";W"  "\\Xi"
-    ";x"  "\\chi"
-    ";y"  "\\psi"
-    ";Y"  "\\Psi"
-    ";z"  "\\zeta"
-    ";Z"  "\\mathbb{Z}"
-    ";0"  "\\emptyset"
-    ";8"  "\\infty"
-    ";!"  "\\neg"
-    ";^"  "\\uparrow"
-    ";&"  "\\wedge"
-    ";~"  "\\approx"        ";;~" "\\simeq"
-    ";_"  "\\downarrow"
-    ";+"  "\\cup"
-    ";-"  "\\leftrightarrow"";;-" "\\longleftrightarrow"
-    ";*"  "\\times"
-    ";/"  "\\not"
-    ";|"  "\\mapsto"        ";;|" "\\longmapsto"
-    ";\\" "\\setminus"
-    ";="  "\\Leftrightarrow"";;=" "\\Longleftrightarrow"
-    ";(" "\\langle"
-    ";)" "\\rangle"
-    ";[" "\\Leftarrow"     ";;[" "\\Longleftarrow"
-    ";]" "\\Rightarrow"    ";;]" "\\Longrightarrow"
-    ";{"  "\\subset"
-    ";}"  "\\supset"
-    ";<"  "\\leftarrow"    ";;<" "\\longleftarrow"  ";;;<" "\\min"
-    ";>"  "\\rightarrow"   ";;>" "\\longrightarrow" ";;;>" "\\max"
-    ";'"  "\\prime"
-    ";."  "\\cdot"))
+	 ";a"  "\\alpha"
+	 ";A"  "\\forall"        ";;A" "\\aleph"
+	 ";b"  "\\beta"
+	 ";C"  "\\mathbb{C}"                            ";;;C" "\\arccos"
+	 ";d"  "\\dot"         ";;d" "\\partial"
+	 ";D"  "\\Delta"         ";;D" "\\nabla"
+	 ";e"  "\\mathcal{E}"       ";;e" "\\varepsilon"   ";;;e" "\\exp"
+	 ";E"  "\\exists"                               ";;;E" "\\ln"
+	 ";f"  "\\phi"           ";;f" "\\varphi"
+	 ";F"  "\\Phi"
+	 ";g"  "\\gamma"                                ";;;g" "\\lg"
+	 ";G"  "\\Gamma"                                ";;;G" "10^{?}"
+	 ";h"  "\\eta"           ";;h" "\\hbar"
+	 ";i"  "\\infty"            ";;i" "\\imath"
+	 ";I"  "\\in"          ";;I" "\\Im"
+	 ";;j" "\\jmath"
+	 ";k"  "\\kappa"
+	 ";l"  "\\mathcal{L}"        ";;l" "\\ell"          ";;;l" "\\log"
+	 ";L"  "\\Lambda"
+	 ";m"  "\\mu"
+	 ";n"  "\\nabla"         ";;n" "\\vec{\\nabla}"     ";;;n" "\\ln"
+	 ";N"  "\\mathbb{N}"                                ";;;N" "\\exp"
+	 ";o"  "\\overline"
+	 ";O"  "\\Omega"         ";;O" "\\mho"
+	 ";p"  "\\partial"            ";;p" "\\varpi"
+	 ";P"  "\\Pi"
+	 ";q"  "\\theta"         ";;q" "\\vartheta"
+	 ";Q"  "\\mathbb{Q}"
+	 ";r"  "\\rho"           ";;r" "\\varrho"
+	 ";R"  "\\mathbb{R}"      ";;R" "\\Re"
+	 ";s"  "\\sqrt"         ";;s" "\\varsigma"    ";;;s" "\\sin"
+	 ";S"  "\\Sigma"                               ";;;S" "\\arcsin"
+	 ";t"  "\\tau"                                 ";;;t" "\\tan"
+	 ";;;T" "\\arctan"
+	 ";u"  "\\upsilon"
+	 ";U"  "\\Upsilon"
+	 ";v"  "\\vec"
+	 ";V"  "\\Phi"
+	 ";w"  "\\xi"
+	 ";W"  "\\Xi"
+	 ";x"  "\\chi"
+	 ";y"  "\\psi"
+	 ";Y"  "\\Psi"
+	 ";z"  "\\zeta"
+	 ";Z"  "\\mathbb{Z}"
+	 ";0"  "\\emptyset"
+	 ";8"  "\\infty"
+	 ";!"  "\\neg"
+	 ";^"  "\\uparrow"
+	 ";&"  "\\wedge"
+	 ";~"  "\\approx"        ";;~" "\\simeq"
+	 ";_"  "\\downarrow"
+	 ";+"  "\\cup"
+	 ";-"  "\\leftrightarrow"";;-" "\\longleftrightarrow"
+	 ";*"  "\\times"
+	 ";/"  "\\not"
+	 ";|"  "\\mapsto"        ";;|" "\\longmapsto"
+	 ";\\" "\\setminus"
+	 ";="  "\\Leftrightarrow"";;=" "\\Longleftrightarrow"
+	 ";(" "\\langle"
+	 ";)" "\\rangle"
+	 ";[" "\\Leftarrow"     ";;[" "\\Longleftarrow"
+	 ";]" "\\Rightarrow"    ";;]" "\\Longrightarrow"
+	 ";{"  "\\subset"
+	 ";}"  "\\supset"
+	 ";<"  "\\leftarrow"    ";;<" "\\longleftarrow"  ";;;<" "\\min"
+	 ";>"  "\\rightarrow"   ";;>" "\\longrightarrow" ";;;>" "\\max"
+	 ";'"  "\\prime"
+	 ";."  "\\cdot"))
 
 (with-eval-after-load "org-tree-slide"
   (defvar my-hide-org-meta-line-p nil)
@@ -734,6 +760,7 @@ change from one assignment to the next."
      (lisp . t)
      (clojure . t)
      (julia . t)
+     (shell . t)
 )
    )
 
@@ -902,6 +929,8 @@ it."
 				(setq company-math-allow-latex-symbols-in-faces t)
 				(setq company-bibtex-bibliography '("~/org_roam/Zotero_library.bib"))))
 
+(setq orderless-component-separator "[ &]")
+
 (defengine google "https://www.google.com/search?q=%s")
 (defengine youtube "https://www.youtube.com/results?search_query=%s")
 (defengine archwiki "https://wiki.archlinux.org/index.php?search=%s")
@@ -947,9 +976,26 @@ it."
 (require 'elfeed-score)
 (elfeed-score-enable)
 
-(setq org-re-reveal-root "file:///home/vidianos/reveal.js")
+(require 'org-re-reveal)
+(setq org-re-reveal-root "file:///home/vidianos/Cloned_Repositories/reveal.js")
 (setq org-re-reveal-width 1800)
 (setq org-re-reveal-height 960)
+
+;; Add Color links for slide formatting
+(org-add-link-type
+ "color"
+ (lambda (path)
+   (message (concat "color "
+		    (progn (add-text-properties
+			    0 (length path)
+			    (list 'face `((t (:foreground ,path))))
+			    path) path))))
+ (lambda (path desc format)
+   (cond
+    ((eq format 'html)
+     (format "<span style=\"color:%s;\">%s</span>" path desc))
+    ((eq format 'latex)
+     (format "{\\color{%s}%s}" path desc)))))
 
 (require 'ox-word)
 (require 'org-show)
@@ -1184,7 +1230,7 @@ it."
  '(custom-safe-themes
    '("0fffa9669425ff140ff2ae8568c7719705ef33b7a927a0ba7c5e2ffcfac09b75" default))
  '(package-selected-packages
-   '(zotra evil-collection openwith sequences cl-lib-highlight helm-system-packages async-await popup-complete helm-fuzzy-find evil-space yapfify yaml-mode ws-butler winum which-key web-mode web-beautify vterm volatile-highlights vi-tilde-fringe uuidgen use-package toc-org tagedit spaceline solarized-theme slim-mode scss-mode sass-mode restart-emacs request rainbow-delimiters pyvenv pytest pyenv-mode py-isort pug-mode pspp-mode popwin pip-requirements persp-mode pcre2el paradox org-projectile-helm org-present org-pomodoro org-mime org-download org-bullets open-junk-file neotree move-text mmm-mode markdown-toc magit macrostep lorem-ipsum livid-mode live-py-mode linum-relative link-hint json-mode js2-refactor js-doc intero indent-guide hy-mode hungry-delete htmlize hlint-refactor hl-todo hindent highlight-parentheses highlight-numbers highlight-indentation helm-themes helm-swoop helm-pydoc helm-projectile helm-mode-manager helm-make helm-hoogle helm-flx helm-descbinds helm-css-scss helm-ag haskell-snippets gruvbox-theme google-translate golden-ratio gnuplot gh-md flx-ido fill-column-indicator fancy-battery eyebrowse expand-region exec-path-from-shell evil-visualstar evil-visual-mark-mode evil-unimpaired evil-tutor evil-surround evil-search-highlight-persist evil-numbers evil-nerd-commenter evil-mc evil-matchit evil-lisp-state evil-indent-plus evil-iedit-state evil-exchange evil-escape evil-ediff evil-args evil-anzu eval-sexp-fu emmet-mode elisp-slime-nav dumb-jump diminish define-word cython-mode csv-mode company-ghci company-ghc column-enforce-mode coffee-mode cmm-mode clean-aindent-mode auto-highlight-symbol auto-compile auctex-latexmk anaconda-mode aggressive-indent adaptive-wrap ace-window ace-link ace-jump-helm-line)))
+   '(git-timemachine evil-collection openwith sequences cl-lib-highlight helm-system-packages async-await popup-complete helm-fuzzy-find evil-space yapfify yaml-mode ws-butler winum which-key web-mode web-beautify vterm volatile-highlights vi-tilde-fringe uuidgen use-package toc-org tagedit spaceline solarized-theme slim-mode scss-mode sass-mode restart-emacs request rainbow-delimiters pyvenv pytest pyenv-mode py-isort pug-mode pspp-mode popwin pip-requirements persp-mode pcre2el paradox org-projectile-helm org-present org-pomodoro org-mime org-download org-bullets open-junk-file neotree move-text mmm-mode markdown-toc magit macrostep lorem-ipsum livid-mode live-py-mode linum-relative link-hint json-mode js2-refactor js-doc intero indent-guide hy-mode hungry-delete htmlize hlint-refactor hl-todo hindent highlight-parentheses highlight-numbers highlight-indentation helm-themes helm-swoop helm-pydoc helm-projectile helm-mode-manager helm-make helm-hoogle helm-flx helm-descbinds helm-css-scss helm-ag haskell-snippets gruvbox-theme google-translate golden-ratio gnuplot gh-md flx-ido fill-column-indicator fancy-battery eyebrowse expand-region exec-path-from-shell evil-visualstar evil-visual-mark-mode evil-unimpaired evil-tutor evil-surround evil-search-highlight-persist evil-numbers evil-nerd-commenter evil-mc evil-matchit evil-lisp-state evil-indent-plus evil-iedit-state evil-exchange evil-escape evil-ediff evil-args evil-anzu eval-sexp-fu emmet-mode elisp-slime-nav dumb-jump diminish define-word cython-mode csv-mode company-ghci company-ghc column-enforce-mode coffee-mode cmm-mode clean-aindent-mode auto-highlight-symbol auto-compile auctex-latexmk anaconda-mode aggressive-indent adaptive-wrap ace-window ace-link ace-jump-helm-line)))
 
 (custom-set-faces
  ;; custom-set-faces was added by Custom.

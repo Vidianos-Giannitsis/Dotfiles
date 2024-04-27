@@ -50,7 +50,7 @@ This file is a core part of my emacs configuration and is all about my Org-roam 
      (cl-defmethod org-roam-node-backlinkscount-number ((node org-roam-node))
        "Access slot \"backlinks\" of org-roam-node struct CL-X. This
        is identical to `org-roam-node-backlinkscount' with the
-       difference that it returns a number instead of a fromatted
+       difference that it returns a number instead of a formatted
        string. This is to be used in
        `org-roam-node-sort-by-backlinks'"
        (let* ((count (caar (org-roam-db-query
@@ -253,6 +253,51 @@ Another potential step in this system is to create methods specializing on the o
 (bibtex-completion-get-entry (car (org-roam-node-refs (org-roam-node-at-point))))
 #+END_SRC
 gets an alist of all the bibtex entries. (org-roam-node-at-point is used here for simplicity of testing, in a method this would be the NODE argument). From that alist, each method could extract a different field with ~assoc~. Once we have these, we can more easily manipulate the system to display more info about each bibtex entry in an org-roam-node-find type function. It could also be used for finding similar papers (two nodes which have at least one same keyword), filter by author, year or journal and many other things.
+
+Things to capture:
+The key is already stored in ~org-roam-node-refs~. Title is the file title in any sensible template. Author, year, journal, keywords are definitely worth saving. File, url, doi etc. can be found very easily and I don't think they are worth re-saving as node metadata, as the primary goal of this is to filter based on these and display them in an org-roam-display-template and neither of those would be used there.
+
+Abstract and the annote field used for notes can be grabbed, although probably not going to be used. And the note field with related papers could be taken, but processing it is a bit hard probably.
+
+#+BEGIN_SRC elisp
+
+  (cl-defmethod org-roam-node-author ((node org-roam-node))
+    "Access slot \"author\" of org-roam-node struct CL-X"
+    (if-let ((ref (org-roam-node-refs node))
+	     (key (string-remove-prefix "cite:" (car ref)))
+	     (entry (bibtex-completion-get-entry key))
+	     (author (cdr (assoc "author" entry))))
+	author
+      ""))
+
+  (cl-defmethod org-roam-node-journal ((node org-roam-node))
+    "Access slot \"journal\" of org-roam-node struct CL-X"
+    (if-let ((ref (org-roam-node-refs node))
+	     (key (string-remove-prefix "cite:" (car ref)))
+	     (entry (bibtex-completion-get-entry key))
+	     (journal (cdr (assoc "journal" entry))))
+	journal
+      ""))
+
+  (cl-defmethod org-roam-node-keywords ((node org-roam-node))
+    "Access slot \"keywords\" of org-roam-node struct CL-X"
+    (if-let ((ref (org-roam-node-refs node))
+	     (key (string-remove-prefix "cite:" (car ref)))
+	     (entry (bibtex-completion-get-entry key))
+	     (keywords (cdr (assoc "keywords" entry))))
+	keywords
+      ""))
+
+  (cl-defmethod org-roam-node-year ((node org-roam-node))
+    "Access slot \"year\" of org-roam-node struct CL-X"
+    (if-let ((ref (org-roam-node-refs node))
+	     (key (string-remove-prefix "cite:" (car ref)))
+	     (entry (bibtex-completion-get-entry key))
+	     (year (cdr (assoc "year" entry))))
+	year
+      ""))
+
+#+END_SRC
 
 * Acting on backlinks
   Backlinks are a pivotal part of this workflow. A file has a backlink if another file links to it. As a core part of my workflow revolves around index files (or Maps of Contents) and those are files that basically everything connected to that subject links to them, they end up being files with a lot of backlinks. I have some functions here that act on backlinks which I consider useful. Excluded from this list are two defmethods I use concerning backlinks as I define all my defmethods in the first part of the config.
