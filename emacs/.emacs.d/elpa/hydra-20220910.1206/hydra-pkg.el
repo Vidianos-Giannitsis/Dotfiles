@@ -3,6 +3,8 @@
     (lv "0"))
   :commit "317e1de33086637579a7aeb60f77ed0405bf359b" :authors
   '(("Oleh Krehel" . "ohwoeowho@gmail.com"))
+  :maintainers
+  '(("Oleh Krehel" . "ohwoeowho@gmail.com"))
   :maintainer
   '("Oleh Krehel" . "ohwoeowho@gmail.com")
   :keywords

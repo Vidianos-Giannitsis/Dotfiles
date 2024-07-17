@@ -7,8 +7,6 @@
 ;; Maintainer: Joost Kremers <joostkremers@fastmail.fm>
 ;; Created: 2014
 ;; Version: 4.3
-;; Package-Version: 20230228.1530
-;; Package-Commit: ace9df707108b17759c004c7387655277122d4c1
 ;; Keywords: text bibtex
 ;; URL: https://github.com/joostkremers/parsebib
 ;; Package-Requires: ((emacs "25.1"))

@@ -7,8 +7,6 @@
 ;; Created: April 17, 2020
 ;; Modified: February 20, 2022
 ;; Version: 1.2
-;; Package-Version: 20230303.2214
-;; Package-Commit: ddc2b7a58a2234477006af348b30e970f73bc2c1
 ;; Keywords: abbrev, tools
 ;; Homepage: https://github.com/ymarco/auto-activating-snippets
 ;; Package-Requires: ((emacs "26.3"))

@@ -96,8 +96,8 @@ var favorites = [
     ],
     [ "Draft League",
       [
-	  ["JJDL Doc", "https://docs.google.com/spreadsheets/d/1AOQqKq1ANuI_So-8bcf0p-8UaTNwoy_-TIrGe6AreqU/edit#gid=985887953", "jj"],
-	  ["DDL Doc", "https://docs.google.com/spreadsheets/d/1cT4S9hwjqLrjhQ8viyBzz8h0Gpivbt69e4Z72XC1fRs/edit#gid=1680450484", "ddl"],
+	  ["JJDL Doc", "https://docs.google.com/spreadsheets/d/1_0v9tQIhlNfJ7FEJlrMIvMxnuvudB8TTBESqxDbA9WI/edit?gid=892898244#gid=892898244", "jj"],
+	  ["DDL Doc", "https://docs.google.com/spreadsheets/d/1r0ehfi_wbVUk_eheVnw71HlbAqZA5etWl-8ZyYBRVLU/edit#gid=1680450484", "ddl"],
 	  ["Techno Prep Doc", "https://docs.google.com/spreadsheets/d/14RJij-bQA8fHorJzyh2w9HedpbgUhTYP2UiqasM9Ba0/edit#gid=359842964", "tpd"],
 	  ["TeamHawk Prep Doc", "https://docs.google.com/spreadsheets/d/1wM7kwLVnemo4TKX2nPLJmSaCRgDqiSyffcdszLPrYPM/edit#gid=439174144", "hpd"],
 	  ["RR Showdown", "https://play.radicalred.net/", "rrs"],

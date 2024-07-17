@@ -2,11 +2,7 @@
   '((emacs "26.1")
     (s "1.11.0")
     (test-simple "1.3.0"))
-  :commit "2de798f6644753772553cd0420d3c419ed50dd0b" :authors
-  '(("William F. Schelter")
-    ("Jay Belanger")
-    ("Fermin Munoz"))
-  :maintainers
+  :commit "2de798f6644753772553cd0420d3c419ed50dd0b" :maintainers
   '(("Fermin Munoz" . "fmfs@posteo.net"))
   :maintainer
   '("Fermin Munoz" . "fmfs@posteo.net")

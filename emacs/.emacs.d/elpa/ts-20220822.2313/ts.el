@@ -4,8 +4,6 @@
 
 ;; Author: Adam Porter <adam@alphapapa.net>
 ;; URL: http://github.com/alphapapa/ts.el
-;; Package-Version: 20220822.2313
-;; Package-Commit: 552936017cfdec89f7fc20c254ae6b37c3f22c5b
 ;; Version: 0.3
 ;; Package-Requires: ((emacs "26.1") (dash "2.14.1") (s "1.12.0"))
 ;; Keywords: calendar, lisp

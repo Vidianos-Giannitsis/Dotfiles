@@ -3,8 +3,6 @@
 ;; Copyright (C) 2014 by Shingo Fukuyama
 
 ;; Version: 1.0.6
-;; Package-Version: 20230522.1117
-;; Package-Commit: e2971ad986b6ac441e9849031d34c56c980cf40b
 ;; Author: Shingo Fukuyama - http://fukuyama.co
 ;; URL: https://github.com/ShingoFukuyama/ov.el
 ;; Created: Mar 20 2014

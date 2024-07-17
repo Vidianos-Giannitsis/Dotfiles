@@ -1,0 +1,5 @@
+# -*- mode: snippet -*-
+# name: acrshort
+# key: ash
+# --
+\acrshort{$0}

@@ -4,8 +4,6 @@
 
 ;; Author: akicho8 <akicho8@gmail.com>
 ;; Keywords: elisp
-;; Package-Version: 20220910.1306
-;; Package-Commit: 50ad54970b3cc79b6b83979bde9889ad9a9e1a9c
 ;; Version: 1.0.16
 
 ;; This file is free software; you can redistribute it and/or modify

@@ -1,0 +1,140 @@
+# Local IspellDict: en
+#+STARTUP: showeverything
+
+#+SPDX-FileCopyrightText: 2019-2021 Jens Lechtenbörger <https://lechten.gitlab.io/#me>
+#+SPDX-License-Identifier: GPL-3.0-or-later
+
+[[https://stable.melpa.org/#/org-re-reveal-ref][https://stable.melpa.org/packages/org-re-reveal-ref-badge.svg]]
+[[https://melpa.org/#/org-re-reveal-ref][https://melpa.org/packages/org-re-reveal-ref-badge.svg]]
+
+# Neither generate table of contents nor section numbers
+#+OPTIONS: toc:nil num:nil
+
+# Enable: browser history, fragment IDs in URLs, mouse wheel, links between presentations
+#+OPTIONS: reveal_history:t reveal_fragmentinurl:t
+#+OPTIONS: reveal_mousewheel:t reveal_inter_presentation_links:t
+#+OPTIONS: reveal_width:1400 reveal_height:1000
+#+OPTIONS: timestamp:nil
+
+#+REVEAL_TRANS: fade
+#+REVEAL_THEME: white
+#+REVEAL_PLUGINS: (search zoom)
+#+REVEAL_TITLE_SLIDE: <h1 class="title">%t</h1><h3 class="subtitle">%s</h3><h2 class="author">%a</h2><h2 class="date">%d</h2>
+
+# The following is necessary for PDF export.
+# Note that even without PDF export, the used bibliography file needs
+# to be declared for org-ref, which can happen in various ways.
+# First, org-ref understands the printbibliography command below.
+# Second, addbibresource:references.bib could be used before
+# the printbibliography command if PDF export is not necessary.
+# Third, org-ref-default-bibliography can be customized.
+#+LATEX_HEADER: \usepackage[backend=biber,style=alphabetic]{biblatex}
+#+LATEX_HEADER: \addbibresource{references.bib}
+
+#+TITLE: Sample presentation with bibliography
+#+SUBTITLE: (Press ~?~ for help; ~n~ and ~p~ for next and previous slide)
+#+AUTHOR: Jens Lechtenbörger
+#+DATE: October 2021
+
+* Introduction
+*Beware!* This file uses [[https://orgmode.org/][Org mode]] syntax.
+Some headers (with Org commands and comments) are not displayed
+(properly) on GitLab.
+
+Use the source.
+
+*Note:* The citation syntax introduced by Org mode 9.5 is supported by
+the alternative package
+[[https://gitlab.com/oer/org-re-reveal-citeproc][org-re-reveal-citeproc]].
+
+** Installation
+   - Install [[https://revealjs.com/][reveal.js]] and ~org-re-reveal~ (from MELPA or [[https://gitlab.com/oer/org-re-reveal/][GitLab]])
+   - Activate ~org-re-reveal-ref~
+     - Place this directory into your load path or install it from
+       [[https://melpa.org/#/getting-started][MELPA]]
+     - Load package manually (~M-x load-library~ followed by
+       ~org-re-reveal-ref~) or place ~(require 'org-re-reveal-ref)~ into your
+       "~/.emacs" and restart
+   - Load an Org file and export it to HTML
+     - Make sure that reveal.js is available in your current directory
+       (e.g., as sub-directory or symbolic link)
+     - Load "README.org" (coming with org-re-reveal-ref)
+     - Export to HTML: Press ~C-c C-e v v~ (write HTML file) or
+       ~C-c C-e v b~ (write HTML file and open in browser)
+
+** Configuration
+   - Package ~org-ref~ needs to know what bibliography file(s) to use
+   - Several options
+     - First, org-ref understands the command ~printbibliography~ used
+       in the source file of this README
+       - For PDF export, this file also contains additional LaTeX
+         headers
+
+         #+begin_src latex
+#+LATEX_HEADER: \usepackage[backend=biber,style=alphabetic]{biblatex}
+#+LATEX_HEADER: \addbibresource{references.bib}
+         #+end_src
+     - Second, ~addbibresource:references.bib~ can be used before
+       ~printbibliography~ if PDF export is not necessary
+     - Third, ~org-ref-default-bibliography~ can be customized
+
+** Rationale
+   - Teaching and learning resources should be free and open
+     - In support of
+       [[https://www.sdg4education2030.org/the-goal][Sustainable Development Goal 4 (SDG 4)]]
+     - [[https://en.wikipedia.org/wiki/Open_educational_resources][Open Educational Resources (OER)]]
+       - See cite:HWS+10 for technical and legal requirements of OER
+   - My OER requirements (see cite:Lec19)
+     - (Re-) Usable with [[https://en.wikipedia.org/wiki/Free_and_open-source_software][FLOSS]]
+     - Following paradigm of single sourcing (see cite:Roc01)
+     - Platform independent, also offline use
+     - Support proper license attribution beyond copy&paste
+       - Tool support with [[https://gitlab.com/oer/emacs-reveal][emacs-reveal]],
+         which embeds ~org-re-reveal-ref~ (see cite:Lec19b,Lec19c)
+
+* Reveal.js presentations
+** Org-re-reveal
+   - [[https://gitlab.com/oer/org-re-reveal/][Org-re-reveal]] provides
+     [[https://orgmode.org/][Org mode]] export functionality to
+     generate HTML presentations with
+     [[https://revealjs.com/][reveal.js]]
+     - See cite:SD11 for an introduction to Org mode
+   - Such presentations offer lots of features
+     - Themes, animations, and slide transitions
+     - Speaker’s view with preview, notes, and timer
+     - Embedding of images, audio, video, mathematical formulas
+     - Many more
+
+** Org-re-reveal-ref
+   - Package ~org-re-reveal-ref~ adds support for citations and bibliography to
+     ~org-re-reveal~
+     - Use citations of [[https://github.com/jkitchin/org-ref][org-ref]]
+       as usual
+     - With export to reveal.js and PDF
+   - FLOSS software bundle [[https://gitlab.com/oer/emacs-reveal][emacs-reveal]]
+     contains ~org-re-reveal-ref~
+     - Configuration of additional plugins for reveal.js, in
+       particular audio explanations
+     - Automatic license attribution for OER figures
+     - See [[https://oer.gitlab.io/OS/][OER presentations for a course on operating systems]]
+       for an example
+
+* Conclusions
+** Summary
+   - Use ~cite~ commands as usual
+   - Insert bibliography on separate slide with ~printbibliography~
+     - See next slide
+     - Important: You must use a ~CUSTOM_ID~ on that slide, whose
+       value is that of customizable variable ~org-re-reveal-ref-bib~
+
+** Bibliography
+   :PROPERTIES:
+   :CUSTOM_ID: bibliography
+   :END:
+
+printbibliography:references.bib
+
+** License Information
+   - This file is published under the terms of the GNU General Public
+     License as published by the Free Software Foundation; either
+     version 3, or (at your option) any later version.

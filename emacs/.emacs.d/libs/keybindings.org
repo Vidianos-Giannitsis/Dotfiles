@@ -410,6 +410,7 @@ General has integration with which-key, so for some functions whose names I find
    I initially planned for , to become the leader key for all major mode specific commands. In the end, the only one I use enough to need this many commands is org. So , is the leader key that signifies that this is an org mode command. And I have a lot of them. 
    
 #+BEGIN_SRC elisp
+
   (general-create-definer minor-leader-def
 	:prefix ",")
 
@@ -509,12 +510,6 @@ General has integration with which-key, so for some functions whose names I find
    "=" 'math-at-point
    "α" 'evil-append
    "ι" 'evil-insert)
-
-  (define-key org-src-mode-map (kbd ",") nil)
-  (general-define-key
-   :states 'normal
-   :keymaps 'org-src-mode-map
-   ", c" 'org-edit-src-exit)
 
   (general-define-key
    :states 'normal
@@ -667,6 +662,7 @@ Various programming language modes have keybindings I want to set. This section 
    "a m" 'pdf-annot-add-markup-annotation
    ", g" 'pdf-view-goto-page)
 
+  (require 'dired)
   (define-key dired-mode-map (kbd "+") nil)
   (general-define-key
    :states 'normal

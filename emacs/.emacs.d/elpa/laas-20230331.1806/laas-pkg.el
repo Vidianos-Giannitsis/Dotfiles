@@ -2,7 +2,9 @@
   '((emacs "26.3")
     (auctex "11.88")
     (aas "1.1"))
-  :commit "a00f0aba237b85b3e5fd60cf84de5759d1bf5d48" :maintainer
+  :commit "a00f0aba237b85b3e5fd60cf84de5759d1bf5d48" :maintainers
+  '(("Yoav Marco" . "yoavm448@gmail.com"))
+  :maintainer
   '("Yoav Marco" . "yoavm448@gmail.com")
   :keywords
   '("tools" "tex")

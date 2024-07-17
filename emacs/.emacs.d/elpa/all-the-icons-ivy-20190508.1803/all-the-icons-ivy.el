@@ -4,8 +4,6 @@
 
 ;; Author: asok
 ;; Version: 0.5.0
-;; Package-Version: 20190508.1803
-;; Package-Commit: babea626db20773de4c408acb2788e2b9c8277e3
 ;; Keywords: faces
 ;; Package-Requires: ((emacs "24.4") (all-the-icons "2.4.0") (ivy "0.8.0"))
 

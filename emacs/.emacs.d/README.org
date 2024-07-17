@@ -189,11 +189,7 @@ Enabling Evil Mode, my preffered editing mode for Emacs, with the evil-collectio
   (require 'evil)
   (evil-mode 1)
   
-  (require 'evil-org)
   (add-hook 'org-mode-hook 'evil-org-mode)
-  (evil-org-set-key-theme '(navigation insert textobjects additional calendar))
-  (require 'evil-org-agenda)
-  (evil-org-agenda-set-keys)
   
   #+END_SRC
 
@@ -267,10 +263,6 @@ This enables:
   (ace-link-setup-default)
 
   (setq dictionary-server "dict.org")
-
-  (require 'emacs-gc-stats)
-  (setq emacs-gc-stats-gc-defaults 'emacs-defaults) ; optional
-  (emacs-gc-stats-mode +1)
 
   (setq completion-styles '(orderless basic)
 	completion-category-overrides '((file (styles basic partial-completion))))
@@ -438,7 +430,7 @@ This enables:
       :hook (dired-mode . all-the-icons-dired-mode)
       :config (setq all-the-icons-dired-monochrome nil))
 
-    (use-package dired-hide-dotfile
+    (use-package dired-hide-dotfiles
       :hook (dired-mode . dired-hide-dotfiles-mode))
 
     (use-package dired-collapse
@@ -544,9 +536,9 @@ Some settings (now using the word some here might be an underestimation, as with
      
 #+BEGIN_SRC elisp :tangle init.el
 
-    (add-hook 'org-mode-hook #'(lambda ()
-				 (org-superstar-mode)
-				 (org-superstar-configure-like-org-bullets)))
+  (add-hook 'org-mode-hook #'(lambda ()
+			       (org-superstar-mode)
+			       (org-superstar-configure-like-org-bullets)))
 
   (use-package org-download
     :after org)
@@ -670,10 +662,10 @@ Some settings (now using the word some here might be an underestimation, as with
 				      ("" "mathtools")
 				      ("" "esdiff")
 				      ("" "makeidx")
-				      ("" "glossaries")
+				      ("acronym" "glossaries")
 				      ("" "newfloat")
 				      ("" "minted")
-;				      ("a4paper, margin=3cm" "geometry")
+				      ("a4paper, margin=3cm" "geometry")
 				      ("" "chemfig")
 				      ("" "svg")))
 
@@ -1028,6 +1020,13 @@ More languages to evaluate with org-babel (by default, only elisp is evaluated).
   (setq org-babel-lisp-eval-fn 'sly-eval)
   (setq org-babel-clojure-backend 'cider)
   (setq org-babel-julia-command "~/.local/bin/julia")
+
+  (define-key org-src-mode-map (kbd ",") nil)
+  (general-define-key
+   :states 'normal
+   :keymaps 'org-src-mode-map
+   ", c" 'org-edit-src-exit)
+
 #+END_SRC
 
 
@@ -1619,9 +1618,9 @@ Julia snail is a SLIME equivalent environment for Julia
    #+BEGIN_SRC elisp :tangle init.el
 
      (add-hook 'emacs-lisp-mode-hook #'(lambda ()
-					(eldoc-mode)
-					(lispy-mode)
-					(lispyville-mode)))
+					 (eldoc-mode)
+					 (lispy-mode)
+					 (lispyville-mode)))
      (add-hook 'ielm-mode-hook 'eldoc-mode)
 
    #+END_SRC

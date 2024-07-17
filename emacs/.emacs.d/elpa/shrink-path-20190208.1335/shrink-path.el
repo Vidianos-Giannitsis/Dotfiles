@@ -4,8 +4,6 @@
 
 ;; Author: Benjamin Andresen
 ;; Version: 0.3.1
-;; Package-Version: 20190208.1335
-;; Package-Commit: c14882c8599aec79a6e8ef2d06454254bb3e1e41
 ;; URL: https://gitlab.com/bennya/shrink-path.el
 ;; Package-Requires: ((emacs "24") (s "1.6.1") (dash "1.8.0") (f "0.10.0"))
 

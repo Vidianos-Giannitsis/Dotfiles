@@ -4,8 +4,6 @@
 
 ;; Author: Oleh Krehel <ohwoeowho@gmail.com>
 ;; URL: https://github.com/abo-abo/zoutline
-;; Package-Version: 20220102.835
-;; Package-Commit: 32857c6c4b9b0bcbed14d825a10b91a98d5fed0a
 ;; Version: 0.2.0
 ;; Keywords: outline
 

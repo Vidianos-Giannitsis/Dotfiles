@@ -1,4 +1,3 @@
-from libqtile.command import lazy
 from typing import List  # noqa: F401
 from libqtile import bar, layout, widget, hook
 from libqtile.config import Click, Drag, Group, Screen, Key, Match, Rule, ScratchPad, DropDown, KeyChord

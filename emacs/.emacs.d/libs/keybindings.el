@@ -478,12 +478,6 @@
  "α" 'evil-append
  "ι" 'evil-insert)
 
-(define-key org-src-mode-map (kbd ",") nil)
-(general-define-key
- :states 'normal
- :keymaps 'org-src-mode-map
- ", c" 'org-edit-src-exit)
-
 (general-define-key
  :states 'normal
  :keymaps 'org-mode-map
@@ -618,6 +612,7 @@
  "a m" 'pdf-annot-add-markup-annotation
  ", g" 'pdf-view-goto-page)
 
+(require 'dired)
 (define-key dired-mode-map (kbd "+") nil)
 (general-define-key
  :states 'normal

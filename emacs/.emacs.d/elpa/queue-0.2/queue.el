@@ -158,33 +158,6 @@ from the queue. The queue itself is not modified."
    (let ((list (queue-head queue)))
      (while list (iter-yield (pop list))))))
 
-;;;; ChangeLog:
-
-;; 2017-08-16  Toby S. Cubitt  <tsc25@cantab.net>
-;; 
-;; 	Upgrade data structure packages to latest versions.
-;; 
-;; 2014-05-15  Toby S. Cubitt  <tsc25@cantab.net>
-;; 
-;; 	queue.el: fix buggy queue-first and queue-empty definitions.
-;; 
-;; 2012-04-30  Toby S. Cubitt  <tsc25@cantab.net>
-;; 
-;; 	Minor fixes to commentaries, package headers, and whitespace
-;; 
-;; 	* queue.el: fix description of data structure in Commentary; add
-;; 	Maintainer
-;; 	 header.
-;; 
-;; 	* queue.el, heap.el, tNFA.el, trie.el, dict-tree.el: trivial whitespace
-;; 	fixes.
-;; 
-;; 2012-04-29  Toby S. Cubitt  <tsc25@cantab.net>
-;; 
-;; 	Add queue.el
-;; 
-
-
 
 (provide 'queue)
 

@@ -1,0 +1,1759 @@
+This is docd6Y1XY.info, produced by makeinfo version 6.8 from
+org-remark.texi.
+
+Copyright © 2021-2023 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover Texts
+     being “A GNU Manual,” and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     “GNU Free Documentation License.”
+
+     (a) The FSF’s Back-Cover Text is: “You have the freedom to copy and
+     modify this GNU manual.”
+
+INFO-DIR-SECTION Emacs
+START-INFO-DIR-ENTRY
+* Org-remark: (org-remark). Highlight and annotate any text file.
+END-INFO-DIR-ENTRY
+
+
+File: docd6Y1XY.info,  Node: Top,  Next: Installation,  Up: (dir)
+
+Org-remark User Manual
+**********************
+
+This manual is for Org-remark version 1.3.x.  The new features
+introduced with version 1.3.x are currently only available GNU-devel
+ELPA (https://elpa.gnu.org/devel/org-remark.html) until the new version
+is released to GNU-ELPA (https://elpa.gnu.org/packages/org-remark.html).
+
+Last updated: 01 February 2024.
+
+Org-remark lets you highlight and annotate text files, websites (EWW),
+EPUB books (nov.el) and Info documentation (Info-mode).
+
+Copyright © 2021-2023 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover Texts
+     being “A GNU Manual,” and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     “GNU Free Documentation License.”
+
+     (a) The FSF’s Back-Cover Text is: “You have the freedom to copy and
+     modify this GNU manual.”
+
+* Menu:
+
+* Installation::
+* Getting Started::
+* Usage, Features, Concepts: Usage Features Concepts.
+* Customizing::
+* Known Limitations::
+* Credits::
+* Contributing & Feedback::
+* Index - Features::             Key concepts & features
+* Index - Commands::             Interactive functions
+* Index - User Options::         Customizable variables & faces
+* GNU Free Documentation License::
+
+— The Detailed Node Listing —
+
+Installation
+
+* Basic Setup::
+* Setup with use-package::
+
+Getting Started
+
+* Highlighting and Annotating::
+* Navigating from One Highlight to Another::
+* Create Your Own Highlighter Pens::
+* Highlight and Annotate Websites::
+* Highlight and Annotate EPUB Books::
+* Highlight and Annotate Info documentation in Info-mode::
+
+Usage, Features, Concepts
+
+* How to Create Custom Highlighter Pens::
+* How to Automatically Turn On Highlights after Re-starting Emacs::
+* How to Manage Marginal Notes:: Where Org-remark stores highlights and how to control it
+* How to Remove and Delete Highlights::
+* What is Automatic Adjustment of Highlight Positions?::
+* How to Set Org-remark to Use SVG Icons::
+* Other Commands::
+
+How to Manage Marginal Notes
+
+* Marginal Notes File::
+* Organize Headlines in Marginal Notes Buffer in Your Way::
+* *marginal-notes* Buffer::
+* How to Change Where Marginal Notes File is Saved::
+* How to Use Relative or Absolute File Names for Links in Marginal Notes File::
+
+Customizing
+
+* Customizing Line Highlights::
+
+
+
+File: docd6Y1XY.info,  Node: Installation,  Next: Getting Started,  Prev: Top,  Up: Top
+
+1 Installation
+**************
+
+This package is available on:
+
+   • GNU-ELPA (https://elpa.gnu.org/packages/org-remark.html) (releases
+     only; equivalent to MELPA-Stable)
+   • GNU-devel ELPA (https://elpa.gnu.org/devel/org-remark.html)
+     (unreleased main branch; equivalent to MELPA)
+
+GNU ELPA should be already set up in your Emacs by default.  If you wish
+to add GNU-devel ELPA, simply add its URL to ‘package-archives’ like
+this:
+
+     (add-to-list 'package-archives
+                  '("gnu-devel" . "https://elpa.gnu.org/devel/") :append)
+
+* Menu:
+
+* Basic Setup::
+* Setup with use-package::
+
+
+File: docd6Y1XY.info,  Node: Basic Setup,  Next: Setup with use-package,  Up: Installation
+
+1.1 Basic Setup
+===============
+
+After installation, we suggest you put the setup below in your
+configuration.
+
+     (org-remark-global-tracking-mode +1)
+
+     ;; Optional if you would like to highlight websites via eww-mode
+     (with-eval-after-load 'eww
+       (org-remark-eww-mode +1))
+
+     ;; Optional if you would like to highlight EPUB books via nov.el
+     (with-eval-after-load 'nov
+       (org-remark-nov-mode +1))
+
+     ;; Optional if you would like to highlight Info documentation via Info-mode
+     (with-eval-after-load 'info
+       (org-remark-info-mode +1))
+
+‘org-remark-global-tracking-mode’ automatically turns on
+‘org-remark-mode’ when you open a file, website via EWW, EPUB book via
+nov.el, or other supported buffer that has a marginal notes file
+associated with it.  This is useful to keep the location of your
+highlights correct across Emacs sessions after you shutdown Emacs.
+
+Unless you explicitly load ‘org’ during Emacs initialization, we suggest
+to defer loading ‘org-remark’ (thus there is no ‘(require 'org-remark)’
+in the example above).  This is because it will also pull in ‘org’,
+which can slow down initialization.  You can control the timing of
+loading ‘org-remark’ by autoloading some commands in a similar way with
+the example keybindings below.
+
+Below are example keybindings you might like to consider:
+
+     ;; Key-bind `org-remark-mark' to global-map so that you can call it
+     ;; globally before the library is loaded.
+
+     (define-key global-map (kbd "C-c n m") #'org-remark-mark)
+     (define-key global-map (kbd "C-c n l") #'org-remark-mark-line) ; new in v1.3
+
+     ;; The rest of keybidings are done only on loading `org-remark'
+     (with-eval-after-load 'org-remark
+       (define-key org-remark-mode-map (kbd "C-c n o") #'org-remark-open)
+       (define-key org-remark-mode-map (kbd "C-c n ]") #'org-remark-view-next)
+       (define-key org-remark-mode-map (kbd "C-c n [") #'org-remark-view-prev)
+       (define-key org-remark-mode-map (kbd "C-c n r") #'org-remark-remove)
+       (define-key org-remark-mode-map (kbd "C-c n d") #'org-remark-delete))
+
+
+File: docd6Y1XY.info,  Node: Setup with use-package,  Prev: Basic Setup,  Up: Installation
+
+1.2 Setup with ‘use-package’
+============================
+
+Alternatively, you can use ‘use-package’ to set up Org-remark.  The
+example provided below should be equivalent to the setup described
+above.
+
+     (use-package org-remark
+       :bind (;; :bind keyword also implicitly defers org-remark itself.
+              ;; Keybindings before :map is set for global-map.
+              ("C-c n m" . org-remark-mark)
+              ("C-c n l" . org-remark-mark-line) ; new in v1.3
+              :map org-remark-mode-map
+              ("C-c n o" . org-remark-open)
+              ("C-c n ]" . org-remark-view-next)
+              ("C-c n [" . org-remark-view-prev)
+              ("C-c n r" . org-remark-remove)
+              ("C-c n d" . org-remark-delete))
+       ;; Alternative way to enable `org-remark-global-tracking-mode' in
+       ;; `after-init-hook'.
+       ;; :hook (after-init . org-remark-global-tracking-mode)
+       :init
+       ;; It is recommended that `org-remark-global-tracking-mode' be
+       ;; enabled when Emacs initializes. Alternatively, you can put it to
+       ;; `after-init-hook' as in the comment above
+       (org-remark-global-tracking-mode +1)
+       :config
+       (use-package org-remark-info :after info :config (org-remark-info-mode +1))
+       (use-package org-remark-eww  :after eww  :config (org-remark-eww-mode +1))
+       (use-package org-remark-nov  :after nov  :config (org-remark-nov-mode +1)))
+
+
+File: docd6Y1XY.info,  Node: Getting Started,  Next: Usage Features Concepts,  Prev: Installation,  Up: Top
+
+2 Getting Started
+*****************
+
+* Menu:
+
+* Highlighting and Annotating::
+* Navigating from One Highlight to Another::
+* Create Your Own Highlighter Pens::
+* Highlight and Annotate Websites::
+* Highlight and Annotate EPUB Books::
+* Highlight and Annotate Info documentation in Info-mode::
+
+
+File: docd6Y1XY.info,  Node: Highlighting and Annotating,  Next: Navigating from One Highlight to Another,  Up: Getting Started
+
+2.1 Highlighting and Annotating
+===============================
+
+Once you have installed and set it up (*note Installation::), Org-remark
+is simple to use.  Select a part of text and call ‘M-x org-remark-mark’
+to highlight it.  You will see the selected text gets highlighted.  This
+is a range-highlight.  With the new version 1.3, you can also highlight
+a whole line in addition to a range of text by calling
+‘org-remark-mark-line’.  Visually, instead of adding a highlight to the
+line, it will add a mark on the margin of the buffer (the left margin is
+the default and you can customize it with
+‘org-remark-line-margin-side’).  This is a line-highlight.  Both the
+range- and line-highlights behave the same way except for how they
+appear in the buffer you are editing or viewing.  You can mix them in
+the same buffer as you see fit for your purposes.
+
+The menu bar item “Org-remark” is available when you turn on
+‘org-remark-mode’.  It helps you discover Org-remark’s main commands.
+If you use Emacs version 28 or newer, a context menu is also available
+by right-clicking your mouse.  Turn on the Emacs built-in
+‘context-menu-mode’ to enable the context menu.
+
+To display the marginal notes for the highlight you have just marked,
+place your cursor on the highlight and call ‘M-x org-remark-open’ or
+‘M-x org-remark-view’.  This will create a new buffer to the left of the
+current buffer you are editing.  You can customize where the marginal
+notes buffer is to be placed (see the documentation of customizing
+variable ‘org-remark-notes-display-buffer-action’).
+
+The ‘open’ command takes the cursor to the marginal notes buffer for you
+to edit notes; the ‘view’ command keeps the cursor in the current buffer
+only to display the marginal notes.  Both commands narrow the *marginal
+notes file* to the entry for the highlight under the cursor.  The
+marginal notes file is a normal Org file.  Edit your notes just as you
+would do with any other Org files and save the buffer.
+
+
+File: docd6Y1XY.info,  Node: Navigating from One Highlight to Another,  Next: Create Your Own Highlighter Pens,  Prev: Highlighting and Annotating,  Up: Getting Started
+
+2.2 Navigating from One Highlight to Another
+============================================
+
+After you have added a couple of highlights in the text, you can move
+through the highlights easily.  Use ‘org-remark-view-next’ and
+‘org-remark-view-prev’ to browse the marginal notes as you move from one
+highlight to another.  They display the marginal notes on the
+side-window by default.  Or use ‘org-remark-next’ and ‘org-remark-prev’
+if you simply want to move to the next/previous highlight without
+displaying marginal notes for them.
+
+To make navigation easy, you can use define the same “prefix key” to
+Org-remark commands like this:
+
+   • ‘C-c n o’: ‘org-remark-open’
+   • ‘C-c n ]’: ‘org-remark-view-next’
+   • ‘C-c n [’: ‘org-remark-view-prev’
+   • ‘C-c n r’: ‘org-remark-remove’
+   • ‘C-c n d’: ‘org-remark-delete’
+
+The ‘C-c n’ part is the prefix key common to all of them.  If you set
+the keybindings like this, you can use ‘C-c n ]’ once to view the next
+highlight and keep pressing a single key ‘]’ or ‘[’ to browse through
+the next/previous highlights.  After you have reached the one you like
+to act on, press ‘o’ to open it, ‘r’ or ‘d’ to remove/delete it.
+
+
+File: docd6Y1XY.info,  Node: Create Your Own Highlighter Pens,  Next: Highlight and Annotate Websites,  Prev: Navigating from One Highlight to Another,  Up: Getting Started
+
+2.3 Create Your Own Highlighter Pens
+====================================
+
+Org-remark has a default highlighter pen function, and comes with a set
+of two additional pens by default:
+
+‘org-remark-mark’
+     default highlighter pen
+‘org-remark-mark-line’
+     default line-highlighter pen, which adds a mark on the margin
+     instead of a range of text
+‘org-remark-mark-yellow’
+     yellow highlight with “important” category in the marginal notes
+     entry
+‘org-remark-mark-red-line’
+     wavy red underline with “review” category in the marginal notes
+     entry and “Review this” in tool-tips
+
+Org-remark lets you create your own custom pen functions with
+‘org-remark-create’.  Use the yellow and red line pens as examples, and
+create your own.  For how to do it, *note How to Create Custom
+Highlighter Pens::.
+
+This is all you need to get started.  For more detail, refer to the rest
+of this user manual, especially *note Usage: Usage Features Concepts.
+and *note Customizing:: sections.  There is more to the commands
+introduced in this section and more ways in which you can customize
+Org-remark.
+
+
+File: docd6Y1XY.info,  Node: Highlight and Annotate Websites,  Next: Highlight and Annotate EPUB Books,  Prev: Create Your Own Highlighter Pens,  Up: Getting Started
+
+2.4 Highlight and Annotate Websites
+===================================
+
+‘org-remark-eww-mode’ lets you highlight and annotate websites just like
+text files.  It is a global minor mode.  It does not require any
+additional configuration.  All you need is to turn it on, visit a
+website with ‘eww-mode’, and select text and highlight it.  Refer to the
+example of a basic setup given in *note Installation::.  Org-remark can
+attempt to automatically adjust the position of highlights when a
+websites get edited.  Lear more about the feature in *note What is
+Automatic Adjustment of Highlight Positions?::
+
+
+File: docd6Y1XY.info,  Node: Highlight and Annotate EPUB Books,  Next: Highlight and Annotate Info documentation in Info-mode,  Prev: Highlight and Annotate Websites,  Up: Getting Started
+
+2.5 Highlight and Annotate EPUB Books
+=====================================
+
+‘org-remark-nov-mode’ lets you highlight and annotate EPUB books just
+like text files.  It is a global minor mode.  It does not require any
+additional configuration.  All you need is to turn it on, open a EPUB
+book with ‘nov-mode’, and select text and highlight it.  Refer to the
+example of a basic setup given in *note Installation::.  If you read
+books with tables, it is useful to learn about the feature that
+automatically adjust the highlight positions: *note What is Automatic
+Adjustment of Highlight Positions?::
+
+
+File: docd6Y1XY.info,  Node: Highlight and Annotate Info documentation in Info-mode,  Prev: Highlight and Annotate EPUB Books,  Up: Getting Started
+
+2.6 Highlight and Annotate Info documentation in ‘Info-mode’
+============================================================
+
+‘org-remark-info-mode’ lets you highlight and annotate Info
+documentation just like text files.  It is a global minor mode.  It does
+not require any additional configuration.  All you need is to turn it
+on, open an Info node with ‘Info-mode’, and select text and highlight
+it.  Refer to the example of a basic setup given in *note
+Installation::.
+
+
+File: docd6Y1XY.info,  Node: Usage Features Concepts,  Next: Customizing,  Prev: Getting Started,  Up: Top
+
+3 Usage, Features, Concepts
+***************************
+
+* Menu:
+
+* How to Create Custom Highlighter Pens::
+* How to Automatically Turn On Highlights after Re-starting Emacs::
+* How to Manage Marginal Notes:: Where Org-remark stores highlights and how to control it
+* How to Remove and Delete Highlights::
+* What is Automatic Adjustment of Highlight Positions?::
+* How to Set Org-remark to Use SVG Icons::
+* Other Commands::
+
+
+File: docd6Y1XY.info,  Node: How to Create Custom Highlighter Pens,  Next: How to Automatically Turn On Highlights after Re-starting Emacs,  Up: Usage Features Concepts
+
+3.1 How to Create Custom Highlighter Pens
+=========================================
+
+‘org-remark-create’ is a macro that lets you create your own custom pen
+functions.  Org-remark comes with two additional pens that are created
+by default.  Use them as examples to learn how to create your own.
+
+     (org-remark-create "red-line"
+                        '(:underline (:color "dark red" :style wave))
+                        '(CATEGORY "review" help-echo "Review this"))
+     (org-remark-create "yellow"
+                        '(:underline "gold" :background "lemon chiffon")
+                        '(CATEGORY "important"))
+
+Macro: ‘org-remark-create’ label &optional face properties
+     Create and register new highlighter pen functions.  The newly
+     created pen function will be registered to variable
+     ‘org-remark-available-pens’.  It is used by ‘org-remark-change’ as
+     a selection list.
+
+     ‘LABEL’ is the name of the highlighter and mandatory.  The function
+     will be named ‘org-remark-mark-LABEL’.
+
+     The highlighter pen function will apply ‘FACE’ to the selected
+     region.  ‘FACE’ can be an anonymous face.  When ‘FACE’ is nil, this
+     macro uses the default face ‘org-remark-highlighter’.
+
+     ‘PROPERTIES’ is a plist of pairs of a symbol and value.  Each
+     highlighted text region will have a corresponding Org headline in
+     the notes file, and it can have additional properties in the
+     property drawer from the highlighter pen.  To do this, prefix
+     property names with “‘org-remark-’” or use “‘CATEGORY’”.
+
+As of version 1.3, you can use ‘org-remark-create’ to create a new
+line-highlighter pen.  Use the ‘PROPERTIES’ parameter like the example
+below to specify ‘org-remark-type’ to be ‘line’.  This tells Org-remark
+to create a line-highlighter pen function instead of a default
+range-highlighter one.  The ‘LABEL’ does not need to include the string
+“line”, but it is recommended for consistency with the default command
+‘org-remark-mark-line’.
+
+     ;; This creates a custom command named org-remark-mark-line-alt with
+     ;; face diff-hunk-header
+     (org-remark-create "line-alt"
+                      'diff-hunk-header
+                      '(org-remark-type line))
+
+     NOTE: Don’t use ‘category’ (all lowercase, symbol) as a property –
+     it’s a special one for text properties.  If you use it, the value
+     also need to be a symbol; otherwise, you will get an error.  You
+     can use ‘CATEGORY’ (all uppercase, symbol), which will result in
+     adding ‘CATEGORY’ with the value in the property drawer in marginal
+     notes Org files.
+
+
+File: docd6Y1XY.info,  Node: How to Automatically Turn On Highlights after Re-starting Emacs,  Next: How to Manage Marginal Notes,  Prev: How to Create Custom Highlighter Pens,  Up: Usage Features Concepts
+
+3.2 How to Automatically Turn On Highlights after Re-starting Emacs
+===================================================================
+
+It is recommended that ‘org-remark-global-tracking-mode’ be turned on as
+part of your Emacs initialization.  This should be done before you start
+adding highlights in any file.
+
+Once you have added highlights to some files, quit Emacs, and re-start
+it, active ‘org-remark-global-tracking-mode’ will automatically turn on
+‘org-remark-mode’ and load the highlights from your previous sessions
+for the files being globally tracked.
+
+Without this global minor mode, you would need to remember to activate
+‘org-remark-mode’ for each file where you add highlights and annotation.
+This is often unpractical.
+
+
+File: docd6Y1XY.info,  Node: How to Manage Marginal Notes,  Next: How to Remove and Delete Highlights,  Prev: How to Automatically Turn On Highlights after Re-starting Emacs,  Up: Usage Features Concepts
+
+3.3 How to Manage Marginal Notes
+================================
+
+* Menu:
+
+* Marginal Notes File::
+* Organize Headlines in Marginal Notes Buffer in Your Way::
+* *marginal-notes* Buffer::
+* How to Change Where Marginal Notes File is Saved::
+* How to Use Relative or Absolute File Names for Links in Marginal Notes File::
+
+
+File: docd6Y1XY.info,  Node: Marginal Notes File,  Next: Organize Headlines in Marginal Notes Buffer in Your Way,  Up: How to Manage Marginal Notes
+
+3.3.1 Marginal Notes File
+-------------------------
+
+When you mark a part of text with a highlighter pen function, Org-remark
+will automatically create a *marginal notes file*.  By default, it will
+be named ‘marginalia.org’ and created in the same directory as the file
+you are editing (*note How to Change Where Marginal Notes File is
+Saved:: *note ;Customizing: Customizing, ‘org-remark-notes-file-name’).
+
+The important thing to note is that Org-remark uses following properties
+in the property drawer of the headline to remember the highlights:
+
+   • :org-remark-beg:
+   • :org-remark-end:
+   • :org-remark-id:
+   • :org-remark-label:
+
+Essentially, the marginal notes file is a database in the plain text
+with using Org mode.  As a plain text database, you can easily edit
+these properties manually if necessary.  You can directly edit the
+marginal notes file as a normal Org file.
+
+The marginal notes file stores highlights and notes like this below; it
+is designed to organize highlights and notes for multiple files and
+multiple highlights (You are free to change the default headline titles
+Org-remark automatically inserts.  Refer to section *note Organize
+Headlines in Marginal Notes Buffer in Your Way::).
+
+     * File 1
+     ** Highlight 1 in File 1
+     ** Highlight 2 in File 1
+     [...]
+     * File 2
+     ** Highlight 1 in File 2
+     [...]
+
+You can leave the marginal notes file as it is without writing any
+notes.  In this case, the entries in marginal notes file simply save the
+locations of your highlighted text.  After you quit Emacs, re-start it,
+and visit the same source file, Org-remark uses this information to
+highlight the text again.
+
+In addition to the properties above that Org-remark reserves for itself,
+you can add your own custom properties and ‘CATEGORY’ property.  Use
+“org-remark-” as the prefix to the property names (or “CATEGORY”, which
+is the only exception), and Org-remark put them to the property drawer
+of highlight’s headline entry in the marginal notes buffer.  Define the
+custom properties in your own custom pen functions (for how to create
+your own pens, *note How to Create Custom Highlighter Pens::).
+
+
+File: docd6Y1XY.info,  Node: Organize Headlines in Marginal Notes Buffer in Your Way,  Next: *marginal-notes* Buffer,  Prev: Marginal Notes File,  Up: How to Manage Marginal Notes
+
+3.3.2 Organize Headlines in Marginal Notes Buffer in Your Way
+-------------------------------------------------------------
+
+When you highlight a range of text or a line, Org-remark creates a
+corresponding headline in the marginal notes buffer with using Org mode.
+By default, the headline’s title is either the selected text for the
+range-highlight or the first 40 characters of the line for the
+line-highlight.  For the latter, if the string is longer than the
+maximum characters, it will be truncated and replaced by an ellipsis
+“…”.  Both the 40 character maximum length and the ellipsis can be
+customized with customizing variables
+‘org-remark-line-heading-title-max-length’ and
+‘org-remark-line-ellipsis’ respectively.
+
+These are only default initial headline titles and you are free to
+change them as you see fit.  For example, you may add a line-highlight
+to the line where you define a function in an Emacs Lisp script file.
+The initial title of the corresponding headline in the marginal notes
+buffer will be something like this below.
+
+     ** (defun name-of-the-function (arg)...)
+      :PROPERTIES:...
+      I will revisit this function later.
+
+It may make sense to change this to something like this, especially if
+you would prefer to organize marginal notes as ‘TODO’ items so as to
+show the headlines in your agenda.
+
+     ** TODO review name-of-the-function
+      :PROPERTIES:...
+      I will revisit this function later.
+
+
+File: docd6Y1XY.info,  Node: *marginal-notes* Buffer,  Next: How to Change Where Marginal Notes File is Saved,  Prev: Organize Headlines in Marginal Notes Buffer in Your Way,  Up: How to Manage Marginal Notes
+
+3.3.3 ‘*marginal-notes*’ Buffer
+-------------------------------
+
+When you display the marginal notes with ‘org-remark-view’ or
+‘org-remark-open’ for a given highlight, Org-remark creates a cloned
+indirect buffer visiting the marginal notes file.  By default, it is a
+dedicated side-window opened to the left part of the current frame, and
+it is named ‘*marginal notes*’.  You can change the behavior of
+‘display-buffer’ function and the name of the buffer (*note
+Customizing::).
+
+Org-remark displays the marginal notes buffer narrowed to the highlight
+the cursor is on.
+
+After all the properties, you can freely write your notes for the
+highlight.  Once you save the notes buffer, an excerpt of the text
+(currently up to 200 characters) gets updated back onto the highlight in
+the source buffer.  You can hover your mouse over the highlight to see
+the excerpt displayed in the echo area (bottom of the screen) of Emacs.
+If you have ‘tooltip-mode’ mode turned on, the excerpt is displayed as a
+took tip for the highlight.
+
+
+File: docd6Y1XY.info,  Node: How to Change Where Marginal Notes File is Saved,  Next: How to Use Relative or Absolute File Names for Links in Marginal Notes File,  Prev: *marginal-notes* Buffer,  Up: How to Manage Marginal Notes
+
+3.3.4 How to Change Where Marginal Notes File is Saved
+------------------------------------------------------
+
+The location of the marginal notes file is specified by user option
+‘org-remark-notes-file-name’ and its default is “marginalia.org”.  This
+means the marginal notes file will reside in the same directory as the
+source files as a separate file.
+
+If you use the ‘customize’ command to customize
+‘org-remark-notes-file-name’, you will have an option to choose a ‘File’
+or ‘Function’ (customization group ‘org-remark’).  The default is ‘File’
+with the default “marginal.org” as noted above.  Use a string to specify
+the single file name; you can specify a relative path like the default
+or an absolute path.
+
+If you would like to dynamically change the location based on the file
+and various different conditions, select the function as an option.  The
+default function is ‘org-remark-notes-file-name-function’.  It adds
+‘-notes.org’ as a suffix to the source file’s name without the
+extension.  For example, for a file named ‘my-source-file.txt’,
+Org-remark will store highlights in ‘my-source-file-notes.org’.  You can
+create your own function and use it.
+
+Some examples and use cases are listed below:
+
+Store Marginal Notes in the Source File
+     In order to use the source file also as the marginal notes file
+     (storing the notes in the source file), you can set the built-in
+     function ‘buffer-file-name’ as the value of
+     ‘org-remark-notes-file-name’.  Note that you will need to ensure
+     that the source files are an Org file.
+
+Create a marginal notes file for each source file and store all of them in a specific location
+     Create a custom function that returns an absolute file name per
+     source file, and set ‘org-remark-notes-file-name’ to the function
+     name.  It might look like this:
+
+          (defun my/function ()
+            (concat "~/path/to/note-files/"
+                    (file-name-base (org-remark-notes-file-name-function))
+                    ".org"))
+
+          (setq org-remark-notes-file-name
+                #'my/function)
+
+
+File: docd6Y1XY.info,  Node: How to Use Relative or Absolute File Names for Links in Marginal Notes File,  Prev: How to Change Where Marginal Notes File is Saved,  Up: How to Manage Marginal Notes
+
+3.3.5 How to Use Relative or Absolute File Names for Links in Marginal Notes File
+---------------------------------------------------------------------------------
+
+The marginal notes file stores the file name pointing back at source
+files.  For example, a marginal notes entry for File1.txt might look
+like this example below.
+
+     * File 1
+     :PROPERTIES:
+     :org-remark-file: path/to/File1.txt
+     :END:
+     ** Highlight 1 in File 1
+     :PROPERTIES:
+     :[...other-properties]:
+     :org-remark-link: [[file:path/to/File1.txt::14]]
+     :END:
+
+The level-1 headline named “File 1” records the file name of the source
+file ‘path/to/File1.txt’.  Similarly, the level-2 headline named
+“Highlight 1 in File 1” stores the link pointing back at the source file
+and the line number of the highlight.
+
+As you can see, both file names use a relative file name from the
+marginal notes file.  This is the default setting of
+‘org-remark-source-file-name’.
+
+You can customize the variable to use absolute file names, or to use a
+function of your choice.  The function is called with a single argument:
+the absolute file name of source file.  The ‘default-directory’ is
+temporarily set to the directory where the marginal notes file resides.
+If you choose to use relative file names, the relative path is computed
+from ‘default-directory’.
+
+
+File: docd6Y1XY.info,  Node: How to Remove and Delete Highlights,  Next: What is Automatic Adjustment of Highlight Positions?,  Prev: How to Manage Marginal Notes,  Up: Usage Features Concepts
+
+3.4 How to Remove and Delete Highlights
+=======================================
+
+You can remove the highlight under the cursor with command
+‘org-remark-remove’.  This command does not delete the corresponding
+entry in the marginal notes file.  This is intentional; Org-remark is
+conservative when it deletes anything that the user might have edited.
+
+If you wish to delete the entry and the highlight at the same time, pass
+a universal argument to ‘org-remark-remove‘ (e.g.  by adding ‘C-u’
+before ‘M-x org-remark-remove’) or use ‘org-remark-delete’.
+‘org-remark-delete’ is identical with adding ‘C-u’ to
+‘org-remark-remove’.
+
+The delete function will prompt for confirmation if it detects any notes
+present in the corresponding entry for the highlight in question in the
+marginal notes buffer.
+
+     NOTE: Note that you can undo the deletion or removal *in the
+     marginal notes buffer* – not in the source buffer where you mark
+     text with a highlighter.  Technically, highlights are overlays and
+     are therefore not part of the undo tree in the source buffer.
+
+As of version 1.3, you can use a new optional feature, automatic
+deletion.  When the feature is enabled, Org-remark will automatically
+delete the highlight’s headline when you delete text that includes a
+highlight, provided there is no marginal notes for it.  If marginal
+notes are present for the highlight’s headline, Org-remark only removes
+the highlight, deleting the properties from the highlight headline –
+same operation as ‘org-remark-remove’.  Your marginal notes will be kept
+intact.  In either case, Org-remark does not ask for your confirmation.
+
+You can enable it with the new user option
+‘org-remark-notes-auto-delete’ like this example below.
+
+     (setopt org-remark-notes-auto-delete :auto-delete)
+
+Furthermore, with v1.3, if you pass a universal argument to
+‘org-remark-delete’ (e.g.  ‘C-u M-x org-remark-delete’) you can manually
+get Org-remark to do automatic deletion for the highlight at point.  You
+can also pass double universal arguments to ‘org-remark-remove’ (e.g.
+‘C-u C-u M-x org-remark-remove’) for the same operation.  This should
+make sense because passing a single universal argument to
+‘org-remark-remove’ is the same as ‘org-remark-delete’.  Refer to the
+documentation of the customizing variable
+‘org-remark-notes-auto-delete,’ the functions ‘org-remark-remove’ and
+‘org-remark-delete’.
+
+
+File: docd6Y1XY.info,  Node: What is Automatic Adjustment of Highlight Positions?,  Next: How to Set Org-remark to Use SVG Icons,  Prev: How to Remove and Delete Highlights,  Up: Usage Features Concepts
+
+3.5 What is Automatic Adjustment of Highlight Positions?
+========================================================
+
+Org-remark by default attempts to automatically adjust the position of
+highlights when they are loaded.  This is useful especially for EPUB
+books read by nov.el.  It renders tables in different sizes depending on
+the available space of the window to maximize their readability.
+
+This is a good feature for reading; however, it also changes the
+positions of subsequent text elements depending on the window size when
+the page is rendered.  It can result in dislocating the positions of
+highlights, different from they are originally created.
+
+Org-remark attempts to automatically corrects the highlights dislocated.
+This is a general feature so Org-remark attempts to correct minor edits
+to websites (for EWW).
+
+More technically, it works as follows.
+
+  1. When you create a new highlight, Org-remark records the original
+     text highlighted in the Org property named
+     “‘org-remark-original-text’”.
+
+  2. Next time when you open a new file (EPUB book as an example),
+     Org-remark loads the highlights from the notes Org buffer.
+
+  3. For each highlight, it compares the currently highlighted text with
+     the value of ‘org-remark-original-text’ property.
+
+  4. If they are the same, Org-remark does nothing.
+
+  5. If different, Org-remark by default looks for the same text string
+     +- two paragraphs.  When it finds the *first* matching text string,
+     it automatically moves the highlight to the matched text string.
+
+  6. Org-remark adds an icon to the auto-adjusted highlight to make it
+     clear that the position of highlight has been adjusted.
+
+  7. This adjustment is temporary.  If you prefer to change the position
+     permanently, you can do so by manually changing the
+     ‘org-remark-beg’ and ‘org-remark-end’ properties in the notes
+     buffer and save.  You can also choose to alter the value of
+     ‘org-remark-original-text’ if you have adjusted the range of
+     highlighted text.
+
+You can customize the icon itself and its face with the following
+customizing variables:
+
+   • Option: ‘org-remark-icon-position-adjusted’
+   • Face: ‘org-remark-highlighter-warning’
+
+
+File: docd6Y1XY.info,  Node: How to Set Org-remark to Use SVG Icons,  Next: Other Commands,  Prev: What is Automatic Adjustment of Highlight Positions?,  Up: Usage Features Concepts
+
+3.6 How to Set Org-remark to Use SVG Icons
+==========================================
+
+As of v1.2, highlights can display an icon.  With this option, you can
+customize Org-remark to visually indicate that marginal notes exist for
+them instead of the default ASCII string “(*)”, or to indicate that the
+Org-remark has automatically adjusted the highlight position (default
+ASCII string “(d)”; refer to *note What is Automatic Adjustment of
+Highlight Positions?::).
+
+There are mainly two ways to set up SVG icons.
+
+  1. Use the new built-in ‘icons‘ library available as of Emacs version
+     29.1
+  2. Create a custom function and use a third-party library such as
+     ‘svg-lib’ (https://github.com/rougier/svg-lib) by Nicolas Rougier
+
+Below is a quick guide on the first option to use the built-in library
+
+  1. Get or create an SVG icon
+  2. Put the downloaded SVG file somewhere in your local
+  3. Use define-icon macro to create an icon with the SVG file
+
+First, create or download an icon as an ‘.svg’ file.  For example,
+Boxicons (https://boxicons.com/) has a collection of SVG icons, which
+are provided under The MIT License (https://boxicons.com/usage#license).
+Second, place the SVG file in your local directory, e.g.
+‘~/.config/emacs/.cache/svg/bx-pen.svg’.  And finally, use ‘define-icon’
+to define the icon in your configuration like this example below.
+
+     (define-icon annotation nil
+     '((image "~/.config/emacs/.cache/svg/bx-pen.svg"
+              :height (0.8 . em)))
+     "Notes svg icon for Org-remark"
+     :version 29.1)
+
+Now the icon has been defined, you can set it to customizing variable
+‘org-remark-icon-notes’ like so:
+
+     ;; This example uses `setopt' that is made available as of 29.1. `setq' works too.
+     (setopt org-remark-icon-notes (icon-string 'annotation))
+
+If you have a buffer with highlights already open, use ‘revert-buffer’
+to reload the highlights.  You should see the icon you have defined
+instead of the default “(*)” string.
+
+
+File: docd6Y1XY.info,  Node: Other Commands,  Prev: How to Set Org-remark to Use SVG Icons,  Up: Usage Features Concepts
+
+3.7 Other Commands
+==================
+
+Command ‘org-remark-toggle’
+     Toggle showing/hiding of highlights in current buffer.  If you
+     would like to hide/show the highlights in the current buffer, it is
+     recommended to use this command instead of ‘org-remark-mode’.  This
+     command only affects the display of the highlights and their
+     locations are still kept tracked.  Toggling off ‘org-remark-mode’
+     stops this tracking completely, which will likely result in
+     inconsistency between the marginal notes file and the current
+     source buffer.
+
+Command ‘org-remark-change’
+     Change the highlight at point to one by another pen.  This command
+     will show you a list of available pens to choose from.
+
+To navigate through highlights in the current buffer, you can use
+‘org-remark-view-next’ / ‘org-remark-view-prev’ or the following pair of
+commands.  The former moves your cursor and displays the marginal notes
+buffer; the latter only moves your cursor.
+
+Command ‘org-remark-next’
+     Move to the next highlight, if any.  If there is none below the
+     point but there is a highlight in the buffer, cycle back to the
+     first one.  After the point has moved to the next highlight, this
+     command lets you move further by re-entering only the last letter
+     like this example: ‘C-n ] ] ] ] ]’ (assuming this command is bound
+     to C-n ])
+
+Command ‘org-remark-prev’
+     Move to the previous highlight, if any.
+
+
+File: docd6Y1XY.info,  Node: Customizing,  Next: Known Limitations,  Prev: Usage Features Concepts,  Up: Top
+
+4 Customizing
+*************
+
+Org-remark’s user options are available in the customization group
+‘org-remark’.
+
+Face: ‘org-remark-highlighter’
+     Default face for ‘org-remark-mark’
+
+Option: ‘org-remark-create-default-pen-set’
+     When non-nil, Org-remark creates default pen set.  Set to nil if
+     you prefer for it not to.
+
+Option: ‘org-remark-notes-file-name’
+     Name of the file where we store highlights and marginal notes.  It
+     can be either a string or function.  If it is a string, it should
+     be a file name to the marginal notes file.  The default is
+     ‘marginalia.org’.  The default will result in one marginal notes
+     file per directory.  Ensure that it is an Org file.  If it is a
+     function, the default function is
+     ‘org-remark-notes-file-name-function’.  It returns a file name like
+     this: ‘FILE-notes.org’ by adding ‘-notes.org’ as a suffix to the
+     file name without the extension.
+
+Option: ‘org-remark-notes-display-buffer-action’
+     Buffer display action that Org-remark uses to open marginal notes
+     buffer.
+
+Option: ‘org-remark-notes-buffer-name’
+     Buffer name of the marginal notes buffer.  ‘org-remark-open’ and
+     ‘org-remark-visit’ create an indirect clone buffer with this name.
+
+Option: ‘org-remark-source-file-name’
+     Function that returns the file name to point back at the source
+     file.  The function is called with a single argument: the absolute
+     file name of source file.  The ‘default-directory’ is temporarily
+     set to the directory where the marginal notes file resides.  This
+     means that when the ‘Relative file name’ option is selected, the
+     source file name recorded in the marginal notes file will be
+     relative to it.
+
+Option: ‘org-remark-use-org-id’
+     When non-nil, Org-remark adds an Org-ID link to marginal notes.
+     The link points at the relevant Org-ID in the source file.
+     Org-remark does not create this ID, which needs to be added
+     manually or some other function to either the headline or file.
+
+Option: ‘org-remark-icon-notes’
+     It’s the icon used to indicate that a given highlight has its
+     associated notes entry.  The default is a combination of ASCII
+     characters to be compatible with terminal and others.  If it is
+     preferred, you can set an emoji to it.  The author has not
+     experienced well with icon fonts and other means of displaying
+     graphic elements.  The face of the icon becomes the same as the
+     highlight, thus it does not have its own face definition.
+
+     By setting it to ‘nil’, you can disable the icon altogether.
+
+     ‘org-remark-toggle’ also toggles the icon along with the highlight
+
+     Option: ‘org-remark-icon-position-adjusted’ : It’s the icon used to
+     indicate that the position of a given highlight has been
+     automatically adjusted by Org-remark.  The default is a combination
+     of ASCII characters to be compatible with terminal and others.  If
+     it is preferred, you can set an emoji to it.  The author has not
+     experienced well with icon fonts and other means of displaying
+     graphic elements.
+
+     By setting it to ‘nil’, you can disable the icon altogether.
+
+     ‘org-remark-toggle’ also toggles the icon along with the highlight
+
+Face: ‘org-remark-highlighter-warning’
+     This face is used by the icon to indicate that the position of a
+     given highlight has been adjusted.  To know more about the feature
+     itself, refer to *note What is Automatic Adjustment of Highlight
+     Positions?::.
+
+Option: ‘org-remark-open-hook’
+     Hook run when a note buffer is opened/visited.  It gets run with no
+     additional argument but the current buffer will become the note
+     buffer.
+
+Option ‘org-remark-highlights-after-load-functions’
+     Abnormal hook run after Org-remark loads the highlights from the
+     note org buffer.  It is run with OVERLAYS and NOTES-BUF as
+     arguments.  OVERLAYS are highlights.  It is run with the source
+     buffer as current buffer.  This hook is used by the automatic
+     adjustment feature.  To know more about the feature itself, refer
+     to *note What is Automatic Adjustment of Highlight Positions?::.
+
+* Menu:
+
+* Customizing Line Highlights::
+
+
+File: docd6Y1XY.info,  Node: Customizing Line Highlights,  Up: Customizing
+
+4.1 Customizing Line Highlights
+===============================
+
+These are user options for line highlights available as of v1.3.  They
+are listed in customizing group ‘org-remark-line’.
+
+Face: ‘org-remark-line-highlighter’
+     Face for the default line highlighter pen.
+
+Option: ‘org-remark-line-icon’
+     Glyph displayed on the margin to indicate the line-highlight.  You
+     can set an SVG icon to it.  Refer to *note How to Set Org-remark to
+     Use SVG Icons::.
+
+Option: ‘org-remark-line-minimum-margin-width’
+     Margin width in a natural number.  It can be a single number or a
+     cons cell of two.  When it is a single number, both the left and
+     right margin widths will be the
+same.  When this customizing variable is a cons cell, the format is as
+follows: (LEFT-MARGIN-WIDTH .  RIGHT-MARGIN-WIDTH).
+
+Option: ‘org-remark-line-margin-padding’
+     Padding between the main text area the glyph/icon on the margin.
+
+Option: ‘org-remark-line-margin-side’
+     The side of margin to display line highlights.
+Left or Right can be chosen.
+
+Option: ‘org-remark-line-heading-title-max-length’
+     Maximum length of string included as the highlight title.
+
+Option ‘org-remark-line-ellipsis’
+     Ellipsis used when the highlight title is longer than maximum.
+The maximum is set in ‘org-remark-line-heading-title-max-length’.
+
+
+File: docd6Y1XY.info,  Node: Known Limitations,  Next: Credits,  Prev: Customizing,  Up: Top
+
+5 Known Limitations
+*******************
+
+No export together with the source file
+     There is no out-of-the-box feature to export marginal notes
+     together with the source file.  Nevertheless, the marginal notes is
+     a normal Org file, thus if the source file is also an Org file, you
+     could use the built-in ‘include’ feature, for example, to include
+     relevant parts of the marginal notes into the export output.
+
+Copy & pasting loses highlights
+     Overlays are not part of the kill; thus cannot be yanked.
+
+Undo highlight does not undo it
+     Overlays are not part of the undo list; you cannot undo
+     highlighting.  Use ‘org-remark-remove’ or ‘org-remark-delete’
+     commands instead.
+
+Moving source files and marginal notes files
+     Moving your files and remark file to another directory does not
+     update the source paths and file names stored in the marginal notes
+     file.  One way to keep the links between the source files and
+     marginal notes files is to use relative file names with
+     ‘org-remark-source-file-name’ (default).
+
+With ‘org-remark-eww-mode’ highlights can get displaced
+     This happens when the website is edited and its content changes
+     outside Emacs – of course this is normal for websites.  Currently
+     there is no way to fix the location of highlights.
+
+
+File: docd6Y1XY.info,  Node: Credits,  Next: Contributing & Feedback,  Prev: Known Limitations,  Up: Top
+
+6 Credits
+*********
+
+To create this package, I was inspired by the following packages.  I did
+not copy any part of them, but borrowed some ideas from them – e.g.
+saving the margin notes in a separate file.
+
+Ov-highlight (https://github.com/jkitchin/ov-highlight)
+     John Kitchin’s (author of Org-ref).  Great UX for markers with
+     hydra.  Saves the marker info and comments directly within the Org
+     file as Base64 encoded string.  It uses overlays with using ‘ov’
+     package.
+
+Annotate.el (https://github.com/bastibe/annotate.el)
+     Bastian Bechtold’s (author of Org-journal).  Unique display of
+     annotations right next to (or on top of) the text.  It seems to be
+     designed for very short annotations, and perhaps for code review
+     (programming practice); I have seen recent issues reported when
+     used with variable-pitch fonts (prose).
+
+Org-annotate-file (https://github.com/tkf/org-mode/blob/master/contrib/lisp/org-annotate-file.el)
+     Part of Org’s contrib library.  It seems to be designed to annotate
+     a whole file in a separate Org file, rather than specific text
+     items.
+
+InPlaceAnnotations (ipa-mode) (https://github.com/IdoMagal/ipa.el)
+     It looks similar to Annotate.el above.
+
+Transient navigation feature
+     To implement the transient navigation feature, I liberally copied
+     the relevant code from a wonderful Emacs package, Binder
+     (https://github.com/rnkn/binder/blob/24d55db236fea2b405d4bdc69b4c33d0f066059c/binder.el#L658-L665)
+     by Paul W.  Rankin (GitHub user rnkn (https://github.com/rnkn)).
+
+
+File: docd6Y1XY.info,  Node: Contributing & Feedback,  Next: Index - Features,  Prev: Credits,  Up: Top
+
+7 Contributing & Feedback
+*************************
+
+Create issues, discussion, and/or pull requests in the GitHub
+repository.  All welcome.
+
+Org-remark is planned to be submitted to GNU ELPA and thus copyrighted
+by the Free Software Foundation (http://fsf.org) (FSF). This means that
+anyone who is making a substantive code contribution will need to
+“assign the copyright for your contributions to the FSF so that they can
+be included in GNU Emacs” (Org Mode website
+(https://orgmode.org/contribute.html#copyright)).
+
+Thank you.
+
+
+File: docd6Y1XY.info,  Node: Index - Features,  Next: Index - Commands,  Prev: Contributing & Feedback,  Up: Top
+
+Appendix A Index - Features
+***************************
+
+ [index ]
+* Menu:
+
+* *marginal notes* buffer:               *marginal-notes* Buffer.
+                                                                (line 6)
+* Context menu:                          Navigating from One Highlight to Another.
+                                                                (line 6)
+* Custom highlighter pens:               Create Your Own Highlighter Pens.
+                                                                (line 6)
+* Custom highlighter pens <1>:           How to Create Custom Highlighter Pens.
+                                                                (line 6)
+* Echo text / Tool tip on the Highlight: *marginal-notes* Buffer.
+                                                                (line 6)
+* Highlighting EPUB Books with nov.el:   Highlight and Annotate EPUB Books.
+                                                                (line 6)
+* Highlighting Info documentation with Info-mode: Highlight and Annotate Info documentation in Info-mode.
+                                                                (line 6)
+* Highlighting websites with EWW:        Highlight and Annotate Websites.
+                                                                (line 6)
+* line-highlight:                        Highlighting and Annotating.
+                                                                (line 6)
+* Marginal notes file:                   Highlighting and Annotating.
+                                                                (line 6)
+* Marginal notes file <1>:               Marginal Notes File.   (line 6)
+* Menu in the menu bar:                  Navigating from One Highlight to Another.
+                                                                (line 6)
+* Org-remark automatically adjusts positions of highlights: What is Automatic Adjustment of Highlight Positions?.
+                                                                (line 6)
+* Org-remark properties for highlights:  How to Create Custom Highlighter Pens.
+                                                                (line 6)
+* Org-remark properties for highlights <1>: Marginal Notes File.
+                                                                (line 6)
+* range-highlight:                       Highlighting and Annotating.
+                                                                (line 6)
+* Relative or absolute file names pointing back at source files in marginal notes: How to Use Relative or Absolute File Names for Links in Marginal Notes File.
+                                                                (line 6)
+
+
+File: docd6Y1XY.info,  Node: Index - Commands,  Next: Index - User Options,  Prev: Index - Features,  Up: Top
+
+Appendix B Index - Commands
+***************************
+
+ [index ]
+* Menu:
+
+* org-remark-change:                     Other Commands.        (line 6)
+* org-remark-create:                     How to Create Custom Highlighter Pens.
+                                                                (line 6)
+* org-remark-delete:                     How to Remove and Delete Highlights.
+                                                                (line 6)
+* org-remark-eww-mode:                   Highlight and Annotate Websites.
+                                                                (line 6)
+* org-remark-global-tracking-mode:       How to Automatically Turn On Highlights after Re-starting Emacs.
+                                                                (line 6)
+* org-remark-info-mode:                  Highlight and Annotate Info documentation in Info-mode.
+                                                                (line 6)
+* org-remark-mark:                       Highlighting and Annotating.
+                                                                (line 6)
+* org-remark-mark <1>:                   How to Create Custom Highlighter Pens.
+                                                                (line 6)
+* org-remark-mark-line:                  Highlighting and Annotating.
+                                                                (line 6)
+* org-remark-mark-red-line:              How to Create Custom Highlighter Pens.
+                                                                (line 6)
+* org-remark-mark-yellow:                How to Create Custom Highlighter Pens.
+                                                                (line 6)
+* org-remark-mode:                       How to Automatically Turn On Highlights after Re-starting Emacs.
+                                                                (line 6)
+* org-remark-next:                       Other Commands.        (line 6)
+* org-remark-nov-mode:                   Highlight and Annotate EPUB Books.
+                                                                (line 6)
+* org-remark-open:                       Highlighting and Annotating.
+                                                                (line 6)
+* org-remark-prev:                       Other Commands.        (line 6)
+* org-remark-remove:                     How to Remove and Delete Highlights.
+                                                                (line 6)
+* org-remark-toggle:                     Other Commands.        (line 6)
+* org-remark-view:                       Highlighting and Annotating.
+                                                                (line 6)
+* org-remark-view-next:                  Navigating from One Highlight to Another.
+                                                                (line 6)
+* org-remark-view-prev:                  Navigating from One Highlight to Another.
+                                                                (line 6)
+
+
+File: docd6Y1XY.info,  Node: Index - User Options,  Next: GNU Free Documentation License,  Prev: Index - Commands,  Up: Top
+
+Appendix C Index - User Options
+*******************************
+
+ [index ]
+* Menu:
+
+* org-remark-create-default-pen-set:     Customizing.           (line 6)
+* org-remark-highlighter:                Customizing.           (line 6)
+* org-remark-highlighter-warning:        What is Automatic Adjustment of Highlight Positions?.
+                                                                (line 6)
+* org-remark-highlighter-warning <1>:    Customizing.           (line 6)
+* org-remark-highlights-after-load-functions: Customizing.      (line 6)
+* org-remark-icon-notes:                 Customizing.           (line 6)
+* org-remark-icon-position-adjusted:     What is Automatic Adjustment of Highlight Positions?.
+                                                                (line 6)
+* org-remark-icon-position-adjusted <1>: Customizing.           (line 6)
+* org-remark-line-ellipsis:              Organize Headlines in Marginal Notes Buffer in Your Way.
+                                                                (line 6)
+* org-remark-line-ellipsis <1>:          Customizing Line Highlights.
+                                                                (line 6)
+* org-remark-line-heading-title-max-length: Organize Headlines in Marginal Notes Buffer in Your Way.
+                                                                (line 6)
+* org-remark-line-heading-title-max-length <1>: Customizing Line Highlights.
+                                                                (line 6)
+* org-remark-line-highlighter:           Customizing Line Highlights.
+                                                                (line 6)
+* org-remark-line-icon:                  Customizing Line Highlights.
+                                                                (line 6)
+* org-remark-line-margin-padding:        Customizing Line Highlights.
+                                                                (line 6)
+* org-remark-line-margin-side:           Highlighting and Annotating.
+                                                                (line 6)
+* org-remark-line-margin-side <1>:       Customizing Line Highlights.
+                                                                (line 6)
+* org-remark-line-minimum-margin-width:  Customizing Line Highlights.
+                                                                (line 6)
+* org-remark-notes-auto-delete:          How to Remove and Delete Highlights.
+                                                                (line 6)
+* org-remark-notes-buffer-name:          Customizing.           (line 6)
+* org-remark-notes-display-buffer-action: Highlighting and Annotating.
+                                                                (line 6)
+* org-remark-notes-display-buffer-action <1>: Customizing.      (line 6)
+* org-remark-notes-file-name:            How to Change Where Marginal Notes File is Saved.
+                                                                (line 6)
+* org-remark-notes-file-name <1>:        Customizing.           (line 6)
+* org-remark-open-hook:                  Customizing.           (line 6)
+* org-remark-source-file-name:           How to Use Relative or Absolute File Names for Links in Marginal Notes File.
+                                                                (line 6)
+* org-remark-source-file-name <1>:       Customizing.           (line 6)
+* org-remark-use-org-id:                 Customizing.           (line 6)
+
+
+File: docd6Y1XY.info,  Node: GNU Free Documentation License,  Prev: Index - User Options,  Up: Top
+
+Appendix D GNU Free Documentation License
+*****************************************
+
+                     Version 1.3, 3 November 2008
+
+     Copyright © 2000, 2001, 2002, 2007, 2008 Free Software Foundation, Inc.
+     <https://fsf.org/>
+
+     Everyone is permitted to copy and distribute verbatim copies
+     of this license document, but changing it is not allowed.
+
+  0. PREAMBLE
+
+     The purpose of this License is to make a manual, textbook, or other
+     functional and useful document “free” in the sense of freedom: to
+     assure everyone the effective freedom to copy and redistribute it,
+     with or without modifying it, either commercially or
+     noncommercially.  Secondarily, this License preserves for the
+     author and publisher a way to get credit for their work, while not
+     being considered responsible for modifications made by others.
+
+     This License is a kind of “copyleft”, which means that derivative
+     works of the document must themselves be free in the same sense.
+     It complements the GNU General Public License, which is a copyleft
+     license designed for free software.
+
+     We have designed this License in order to use it for manuals for
+     free software, because free software needs free documentation: a
+     free program should come with manuals providing the same freedoms
+     that the software does.  But this License is not limited to
+     software manuals; it can be used for any textual work, regardless
+     of subject matter or whether it is published as a printed book.  We
+     recommend this License principally for works whose purpose is
+     instruction or reference.
+
+  1. APPLICABILITY AND DEFINITIONS
+
+     This License applies to any manual or other work, in any medium,
+     that contains a notice placed by the copyright holder saying it can
+     be distributed under the terms of this License.  Such a notice
+     grants a world-wide, royalty-free license, unlimited in duration,
+     to use that work under the conditions stated herein.  The
+     “Document”, below, refers to any such manual or work.  Any member
+     of the public is a licensee, and is addressed as “you”.  You accept
+     the license if you copy, modify or distribute the work in a way
+     requiring permission under copyright law.
+
+     A “Modified Version” of the Document means any work containing the
+     Document or a portion of it, either copied verbatim, or with
+     modifications and/or translated into another language.
+
+     A “Secondary Section” is a named appendix or a front-matter section
+     of the Document that deals exclusively with the relationship of the
+     publishers or authors of the Document to the Document’s overall
+     subject (or to related matters) and contains nothing that could
+     fall directly within that overall subject.  (Thus, if the Document
+     is in part a textbook of mathematics, a Secondary Section may not
+     explain any mathematics.)  The relationship could be a matter of
+     historical connection with the subject or with related matters, or
+     of legal, commercial, philosophical, ethical or political position
+     regarding them.
+
+     The “Invariant Sections” are certain Secondary Sections whose
+     titles are designated, as being those of Invariant Sections, in the
+     notice that says that the Document is released under this License.
+     If a section does not fit the above definition of Secondary then it
+     is not allowed to be designated as Invariant.  The Document may
+     contain zero Invariant Sections.  If the Document does not identify
+     any Invariant Sections then there are none.
+
+     The “Cover Texts” are certain short passages of text that are
+     listed, as Front-Cover Texts or Back-Cover Texts, in the notice
+     that says that the Document is released under this License.  A
+     Front-Cover Text may be at most 5 words, and a Back-Cover Text may
+     be at most 25 words.
+
+     A “Transparent” copy of the Document means a machine-readable copy,
+     represented in a format whose specification is available to the
+     general public, that is suitable for revising the document
+     straightforwardly with generic text editors or (for images composed
+     of pixels) generic paint programs or (for drawings) some widely
+     available drawing editor, and that is suitable for input to text
+     formatters or for automatic translation to a variety of formats
+     suitable for input to text formatters.  A copy made in an otherwise
+     Transparent file format whose markup, or absence of markup, has
+     been arranged to thwart or discourage subsequent modification by
+     readers is not Transparent.  An image format is not Transparent if
+     used for any substantial amount of text.  A copy that is not
+     “Transparent” is called “Opaque”.
+
+     Examples of suitable formats for Transparent copies include plain
+     ASCII without markup, Texinfo input format, LaTeX input format,
+     SGML or XML using a publicly available DTD, and standard-conforming
+     simple HTML, PostScript or PDF designed for human modification.
+     Examples of transparent image formats include PNG, XCF and JPG.
+     Opaque formats include proprietary formats that can be read and
+     edited only by proprietary word processors, SGML or XML for which
+     the DTD and/or processing tools are not generally available, and
+     the machine-generated HTML, PostScript or PDF produced by some word
+     processors for output purposes only.
+
+     The “Title Page” means, for a printed book, the title page itself,
+     plus such following pages as are needed to hold, legibly, the
+     material this License requires to appear in the title page.  For
+     works in formats which do not have any title page as such, “Title
+     Page” means the text near the most prominent appearance of the
+     work’s title, preceding the beginning of the body of the text.
+
+     The “publisher” means any person or entity that distributes copies
+     of the Document to the public.
+
+     A section “Entitled XYZ” means a named subunit of the Document
+     whose title either is precisely XYZ or contains XYZ in parentheses
+     following text that translates XYZ in another language.  (Here XYZ
+     stands for a specific section name mentioned below, such as
+     “Acknowledgements”, “Dedications”, “Endorsements”, or “History”.)
+     To “Preserve the Title” of such a section when you modify the
+     Document means that it remains a section “Entitled XYZ” according
+     to this definition.
+
+     The Document may include Warranty Disclaimers next to the notice
+     which states that this License applies to the Document.  These
+     Warranty Disclaimers are considered to be included by reference in
+     this License, but only as regards disclaiming warranties: any other
+     implication that these Warranty Disclaimers may have is void and
+     has no effect on the meaning of this License.
+
+  2. VERBATIM COPYING
+
+     You may copy and distribute the Document in any medium, either
+     commercially or noncommercially, provided that this License, the
+     copyright notices, and the license notice saying this License
+     applies to the Document are reproduced in all copies, and that you
+     add no other conditions whatsoever to those of this License.  You
+     may not use technical measures to obstruct or control the reading
+     or further copying of the copies you make or distribute.  However,
+     you may accept compensation in exchange for copies.  If you
+     distribute a large enough number of copies you must also follow the
+     conditions in section 3.
+
+     You may also lend copies, under the same conditions stated above,
+     and you may publicly display copies.
+
+  3. COPYING IN QUANTITY
+
+     If you publish printed copies (or copies in media that commonly
+     have printed covers) of the Document, numbering more than 100, and
+     the Document’s license notice requires Cover Texts, you must
+     enclose the copies in covers that carry, clearly and legibly, all
+     these Cover Texts: Front-Cover Texts on the front cover, and
+     Back-Cover Texts on the back cover.  Both covers must also clearly
+     and legibly identify you as the publisher of these copies.  The
+     front cover must present the full title with all words of the title
+     equally prominent and visible.  You may add other material on the
+     covers in addition.  Copying with changes limited to the covers, as
+     long as they preserve the title of the Document and satisfy these
+     conditions, can be treated as verbatim copying in other respects.
+
+     If the required texts for either cover are too voluminous to fit
+     legibly, you should put the first ones listed (as many as fit
+     reasonably) on the actual cover, and continue the rest onto
+     adjacent pages.
+
+     If you publish or distribute Opaque copies of the Document
+     numbering more than 100, you must either include a machine-readable
+     Transparent copy along with each Opaque copy, or state in or with
+     each Opaque copy a computer-network location from which the general
+     network-using public has access to download using public-standard
+     network protocols a complete Transparent copy of the Document, free
+     of added material.  If you use the latter option, you must take
+     reasonably prudent steps, when you begin distribution of Opaque
+     copies in quantity, to ensure that this Transparent copy will
+     remain thus accessible at the stated location until at least one
+     year after the last time you distribute an Opaque copy (directly or
+     through your agents or retailers) of that edition to the public.
+
+     It is requested, but not required, that you contact the authors of
+     the Document well before redistributing any large number of copies,
+     to give them a chance to provide you with an updated version of the
+     Document.
+
+  4. MODIFICATIONS
+
+     You may copy and distribute a Modified Version of the Document
+     under the conditions of sections 2 and 3 above, provided that you
+     release the Modified Version under precisely this License, with the
+     Modified Version filling the role of the Document, thus licensing
+     distribution and modification of the Modified Version to whoever
+     possesses a copy of it.  In addition, you must do these things in
+     the Modified Version:
+
+       A. Use in the Title Page (and on the covers, if any) a title
+          distinct from that of the Document, and from those of previous
+          versions (which should, if there were any, be listed in the
+          History section of the Document).  You may use the same title
+          as a previous version if the original publisher of that
+          version gives permission.
+
+       B. List on the Title Page, as authors, one or more persons or
+          entities responsible for authorship of the modifications in
+          the Modified Version, together with at least five of the
+          principal authors of the Document (all of its principal
+          authors, if it has fewer than five), unless they release you
+          from this requirement.
+
+       C. State on the Title page the name of the publisher of the
+          Modified Version, as the publisher.
+
+       D. Preserve all the copyright notices of the Document.
+
+       E. Add an appropriate copyright notice for your modifications
+          adjacent to the other copyright notices.
+
+       F. Include, immediately after the copyright notices, a license
+          notice giving the public permission to use the Modified
+          Version under the terms of this License, in the form shown in
+          the Addendum below.
+
+       G. Preserve in that license notice the full lists of Invariant
+          Sections and required Cover Texts given in the Document’s
+          license notice.
+
+       H. Include an unaltered copy of this License.
+
+       I. Preserve the section Entitled “History”, Preserve its Title,
+          and add to it an item stating at least the title, year, new
+          authors, and publisher of the Modified Version as given on the
+          Title Page.  If there is no section Entitled “History” in the
+          Document, create one stating the title, year, authors, and
+          publisher of the Document as given on its Title Page, then add
+          an item describing the Modified Version as stated in the
+          previous sentence.
+
+       J. Preserve the network location, if any, given in the Document
+          for public access to a Transparent copy of the Document, and
+          likewise the network locations given in the Document for
+          previous versions it was based on.  These may be placed in the
+          “History” section.  You may omit a network location for a work
+          that was published at least four years before the Document
+          itself, or if the original publisher of the version it refers
+          to gives permission.
+
+       K. For any section Entitled “Acknowledgements” or “Dedications”,
+          Preserve the Title of the section, and preserve in the section
+          all the substance and tone of each of the contributor
+          acknowledgements and/or dedications given therein.
+
+       L. Preserve all the Invariant Sections of the Document, unaltered
+          in their text and in their titles.  Section numbers or the
+          equivalent are not considered part of the section titles.
+
+       M. Delete any section Entitled “Endorsements”.  Such a section
+          may not be included in the Modified Version.
+
+       N. Do not retitle any existing section to be Entitled
+          “Endorsements” or to conflict in title with any Invariant
+          Section.
+
+       O. Preserve any Warranty Disclaimers.
+
+     If the Modified Version includes new front-matter sections or
+     appendices that qualify as Secondary Sections and contain no
+     material copied from the Document, you may at your option designate
+     some or all of these sections as invariant.  To do this, add their
+     titles to the list of Invariant Sections in the Modified Version’s
+     license notice.  These titles must be distinct from any other
+     section titles.
+
+     You may add a section Entitled “Endorsements”, provided it contains
+     nothing but endorsements of your Modified Version by various
+     parties—for example, statements of peer review or that the text has
+     been approved by an organization as the authoritative definition of
+     a standard.
+
+     You may add a passage of up to five words as a Front-Cover Text,
+     and a passage of up to 25 words as a Back-Cover Text, to the end of
+     the list of Cover Texts in the Modified Version.  Only one passage
+     of Front-Cover Text and one of Back-Cover Text may be added by (or
+     through arrangements made by) any one entity.  If the Document
+     already includes a cover text for the same cover, previously added
+     by you or by arrangement made by the same entity you are acting on
+     behalf of, you may not add another; but you may replace the old
+     one, on explicit permission from the previous publisher that added
+     the old one.
+
+     The author(s) and publisher(s) of the Document do not by this
+     License give permission to use their names for publicity for or to
+     assert or imply endorsement of any Modified Version.
+
+  5. COMBINING DOCUMENTS
+
+     You may combine the Document with other documents released under
+     this License, under the terms defined in section 4 above for
+     modified versions, provided that you include in the combination all
+     of the Invariant Sections of all of the original documents,
+     unmodified, and list them all as Invariant Sections of your
+     combined work in its license notice, and that you preserve all
+     their Warranty Disclaimers.
+
+     The combined work need only contain one copy of this License, and
+     multiple identical Invariant Sections may be replaced with a single
+     copy.  If there are multiple Invariant Sections with the same name
+     but different contents, make the title of each such section unique
+     by adding at the end of it, in parentheses, the name of the
+     original author or publisher of that section if known, or else a
+     unique number.  Make the same adjustment to the section titles in
+     the list of Invariant Sections in the license notice of the
+     combined work.
+
+     In the combination, you must combine any sections Entitled
+     “History” in the various original documents, forming one section
+     Entitled “History”; likewise combine any sections Entitled
+     “Acknowledgements”, and any sections Entitled “Dedications”.  You
+     must delete all sections Entitled “Endorsements.”
+
+  6. COLLECTIONS OF DOCUMENTS
+
+     You may make a collection consisting of the Document and other
+     documents released under this License, and replace the individual
+     copies of this License in the various documents with a single copy
+     that is included in the collection, provided that you follow the
+     rules of this License for verbatim copying of each of the documents
+     in all other respects.
+
+     You may extract a single document from such a collection, and
+     distribute it individually under this License, provided you insert
+     a copy of this License into the extracted document, and follow this
+     License in all other respects regarding verbatim copying of that
+     document.
+
+  7. AGGREGATION WITH INDEPENDENT WORKS
+
+     A compilation of the Document or its derivatives with other
+     separate and independent documents or works, in or on a volume of a
+     storage or distribution medium, is called an “aggregate” if the
+     copyright resulting from the compilation is not used to limit the
+     legal rights of the compilation’s users beyond what the individual
+     works permit.  When the Document is included in an aggregate, this
+     License does not apply to the other works in the aggregate which
+     are not themselves derivative works of the Document.
+
+     If the Cover Text requirement of section 3 is applicable to these
+     copies of the Document, then if the Document is less than one half
+     of the entire aggregate, the Document’s Cover Texts may be placed
+     on covers that bracket the Document within the aggregate, or the
+     electronic equivalent of covers if the Document is in electronic
+     form.  Otherwise they must appear on printed covers that bracket
+     the whole aggregate.
+
+  8. TRANSLATION
+
+     Translation is considered a kind of modification, so you may
+     distribute translations of the Document under the terms of section
+     4.  Replacing Invariant Sections with translations requires special
+     permission from their copyright holders, but you may include
+     translations of some or all Invariant Sections in addition to the
+     original versions of these Invariant Sections.  You may include a
+     translation of this License, and all the license notices in the
+     Document, and any Warranty Disclaimers, provided that you also
+     include the original English version of this License and the
+     original versions of those notices and disclaimers.  In case of a
+     disagreement between the translation and the original version of
+     this License or a notice or disclaimer, the original version will
+     prevail.
+
+     If a section in the Document is Entitled “Acknowledgements”,
+     “Dedications”, or “History”, the requirement (section 4) to
+     Preserve its Title (section 1) will typically require changing the
+     actual title.
+
+  9. TERMINATION
+
+     You may not copy, modify, sublicense, or distribute the Document
+     except as expressly provided under this License.  Any attempt
+     otherwise to copy, modify, sublicense, or distribute it is void,
+     and will automatically terminate your rights under this License.
+
+     However, if you cease all violation of this License, then your
+     license from a particular copyright holder is reinstated (a)
+     provisionally, unless and until the copyright holder explicitly and
+     finally terminates your license, and (b) permanently, if the
+     copyright holder fails to notify you of the violation by some
+     reasonable means prior to 60 days after the cessation.
+
+     Moreover, your license from a particular copyright holder is
+     reinstated permanently if the copyright holder notifies you of the
+     violation by some reasonable means, this is the first time you have
+     received notice of violation of this License (for any work) from
+     that copyright holder, and you cure the violation prior to 30 days
+     after your receipt of the notice.
+
+     Termination of your rights under this section does not terminate
+     the licenses of parties who have received copies or rights from you
+     under this License.  If your rights have been terminated and not
+     permanently reinstated, receipt of a copy of some or all of the
+     same material does not give you any rights to use it.
+
+  10. FUTURE REVISIONS OF THIS LICENSE
+
+     The Free Software Foundation may publish new, revised versions of
+     the GNU Free Documentation License from time to time.  Such new
+     versions will be similar in spirit to the present version, but may
+     differ in detail to address new problems or concerns.  See
+     <https://www.gnu.org/licenses/>.
+
+     Each version of the License is given a distinguishing version
+     number.  If the Document specifies that a particular numbered
+     version of this License “or any later version” applies to it, you
+     have the option of following the terms and conditions either of
+     that specified version or of any later version that has been
+     published (not as a draft) by the Free Software Foundation.  If the
+     Document does not specify a version number of this License, you may
+     choose any version ever published (not as a draft) by the Free
+     Software Foundation.  If the Document specifies that a proxy can
+     decide which future versions of this License can be used, that
+     proxy’s public statement of acceptance of a version permanently
+     authorizes you to choose that version for the Document.
+
+  11. RELICENSING
+
+     “Massive Multiauthor Collaboration Site” (or “MMC Site”) means any
+     World Wide Web server that publishes copyrightable works and also
+     provides prominent facilities for anybody to edit those works.  A
+     public wiki that anybody can edit is an example of such a server.
+     A “Massive Multiauthor Collaboration” (or “MMC”) contained in the
+     site means any set of copyrightable works thus published on the MMC
+     site.
+
+     “CC-BY-SA” means the Creative Commons Attribution-Share Alike 3.0
+     license published by Creative Commons Corporation, a not-for-profit
+     corporation with a principal place of business in San Francisco,
+     California, as well as future copyleft versions of that license
+     published by that same organization.
+
+     “Incorporate” means to publish or republish a Document, in whole or
+     in part, as part of another Document.
+
+     An MMC is “eligible for relicensing” if it is licensed under this
+     License, and if all works that were first published under this
+     License somewhere other than this MMC, and subsequently
+     incorporated in whole or in part into the MMC, (1) had no cover
+     texts or invariant sections, and (2) were thus incorporated prior
+     to November 1, 2008.
+
+     The operator of an MMC Site may republish an MMC contained in the
+     site under CC-BY-SA on the same site at any time before August 1,
+     2009, provided the MMC is eligible for relicensing.
+
+ADDENDUM: How to use this License for your documents
+====================================================
+
+To use this License in a document you have written, include a copy of
+the License in the document and put the following copyright and license
+notices just after the title page:
+
+       Copyright (C)  YEAR  YOUR NAME.
+       Permission is granted to copy, distribute and/or modify this document
+       under the terms of the GNU Free Documentation License, Version 1.3
+       or any later version published by the Free Software Foundation;
+       with no Invariant Sections, no Front-Cover Texts, and no Back-Cover
+       Texts.  A copy of the license is included in the section entitled ``GNU
+       Free Documentation License''.
+
+If you have Invariant Sections, Front-Cover Texts and Back-Cover Texts,
+replace the “with...Texts.” line with this:
+
+         with the Invariant Sections being LIST THEIR TITLES, with
+         the Front-Cover Texts being LIST, and with the Back-Cover Texts
+         being LIST.
+
+If you have Invariant Sections without Cover Texts, or some other
+combination of the three, merge those two alternatives to suit the
+situation.
+
+If your document contains nontrivial examples of program code, we
+recommend releasing these examples in parallel under your choice of free
+software license, such as the GNU General Public License, to permit
+their use in free software.
+
+
+
+Tag Table:
+Node: Top837
+Node: Installation3477
+Node: Basic Setup4179
+Node: Setup with use-package6407
+Node: Getting Started7941
+Node: Highlighting and Annotating8346
+Node: Navigating from One Highlight to Another10499
+Node: Create Your Own Highlighter Pens11937
+Node: Highlight and Annotate Websites13249
+Node: Highlight and Annotate EPUB Books14029
+Node: Highlight and Annotate Info documentation in Info-mode14826
+Node: Usage Features Concepts15460
+Node: How to Create Custom Highlighter Pens15996
+Node: How to Automatically Turn On Highlights after Re-starting Emacs18880
+Node: How to Manage Marginal Notes19844
+Node: Marginal Notes File20373
+Node: Organize Headlines in Marginal Notes Buffer in Your Way22711
+Node: *marginal-notes* Buffer24354
+Node: How to Change Where Marginal Notes File is Saved25612
+Node: How to Use Relative or Absolute File Names for Links in Marginal Notes File27995
+Node: How to Remove and Delete Highlights29557
+Node: What is Automatic Adjustment of Highlight Positions?32233
+Node: How to Set Org-remark to Use SVG Icons34694
+Node: Other Commands36897
+Node: Customizing38510
+Node: Customizing Line Highlights42947
+Node: Known Limitations44398
+Node: Credits45841
+Node: Contributing & Feedback47528
+Node: Index - Features48170
+Node: Index - Commands50944
+Node: Index - User Options54050
+Node: GNU Free Documentation License57622
+
+End Tag Table
+
+
+Local Variables:
+coding: utf-8
+End:
