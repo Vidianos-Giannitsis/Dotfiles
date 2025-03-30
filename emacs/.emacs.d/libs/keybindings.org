@@ -701,7 +701,8 @@ Various programming language modes have keybindings I want to set. This section 
    "C-u" 'universal-argument
    "F p" 'ebib-list-recent
    "n" 'ebib-popup-note
-   "N" 'ebib-search-next)
+   "N" 'ebib-search-next
+   "U" 'ebib-mark-all-entries)
 
 #+END_SRC
 #+RESULTS:

@@ -651,6 +651,7 @@
  "C-u" 'universal-argument
  "F p" 'ebib-list-recent
  "n" 'ebib-popup-note
- "N" 'ebib-search-next)
+ "N" 'ebib-search-next
+ "U" 'ebib-mark-all-entries)
 
 (provide 'keybindings)

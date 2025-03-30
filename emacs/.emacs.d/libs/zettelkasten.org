@@ -251,9 +251,14 @@ I have also written some minor extensions for ebib, shown in this code block. Th
 
   This function collects the citekeys of all entries that have been marked
   in ebib, a value stored in the function `ebib-db-list-marked-entries'
-  and finds the `org-roam-node's related to them."
+  and finds the `org-roam-node's related to them. As this list will be
+  populated with `nil' values for any marked entry that is not related to
+  an `org-roam-node' make sure to remove all `nil' values before returning
+  the list. This is important if this list is to be used in other
+  functions, such as `org-roam-ebib-nodes-find'."
     (cl-loop for ref in (ebib-db-list-marked-entries ebib--cur-db)
-  	   collect (org-roam-node-from-ref (concat "cite:" ref))))
+  	   collect (org-roam-node-from-ref (concat "cite:" ref)) into nodes
+  	   finally return (cl-remove-if nil nodes)))
 
   (defun org-roam-ebib-nodes-find ()
     "Run `org-roam-node-find' for nodes marked in ebib.
