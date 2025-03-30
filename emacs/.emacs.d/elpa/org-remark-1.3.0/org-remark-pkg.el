@@ -1,0 +1,2 @@
+;; Generated package description from org-remark.el  -*- no-byte-compile: t -*-
+(define-package "org-remark" "1.3.0" "Highlight & annotate text, Info, EPUB, EWW" '((emacs "27.1") (org "9.4")) :commit "c458649989ab32babb61cf9fc5c178cdaef1a62a" :authors '(("Noboru Ota" . "me@nobiot.com")) :maintainer '("Noboru Ota" . "me@nobiot.com") :keywords '("org-mode" "annotation" "note-taking" "marginal-notes" "wp") :url "https://github.com/nobiot/org-remark")

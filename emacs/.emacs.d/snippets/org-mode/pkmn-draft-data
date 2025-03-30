@@ -1,0 +1,5 @@
+# -*- mode: snippet -*-
+# name: pkmn-draft-data
+# key: draft
+# --
+(create-data-table "$1" "$2" $3nil $4nil "$5" '($6) '(("HP" . $7) ("Atk" . $8) ("Def" . $9) ("SpA" . $10) ("SpD" . $11) ("Spe" . $12)))

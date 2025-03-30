@@ -3,7 +3,6 @@
 #+PROPERTY: header-args :results silent
 
 * About this config
-  
 Welcome kind stranger, to my Emacs config. This is the heart of my dotfiles and of my entire computer workflow. Mostly everything I do in a computer with only a few excuses, stems from here and I absolutely love it. Emacs is the most extensible program I have ever seen. It allows you to change basically everything, until you have an environment which suits you perfectly. This is a vanilla GNU Emacs install with a ton of configurations. Actually its not even vanilla Emacs at this point, as its probably got more things than some emacs distros like doom, but it uses the tabula rasa that is vanilla emacs and customises it with this extremely long config file to make it into my own Emacs. Vanilla Emacs is all about creating a computer environment with consistency between all your tasks which is 100% customisable. I doubt there is a single thing in Emacs that can't be changed. And for that very reason I absolutely love it. Its truly the perfect workflow for me as I have handcrafted it from scratch. 
 
 I have drawn inspiration from a lot of other init.el's but the most apparent one is the spacemacs keybindings. I was a spacemacs user for a few months before deciding to start using this personal config for Emacs. I found its keybindings very ergonomic and although most things arent exactly the way they are done in spacemacs, the inspiration is apparent. For example the Space and , keys are leader keys which I use a lot (space for general commands and , for mode specific, currently only org though).
@@ -127,7 +126,7 @@ This includes:
   (which-key-mode 1)
 
   (setq inhibit-startup-screen t)
-  (setq initial-buffer-choice "/home/vidianos")
+  (setq initial-buffer-choice "~")
 
   (ivy-mode 1)
   (all-the-icons-ivy-setup)
@@ -155,7 +154,7 @@ This includes:
 
   (defun set-font-faces ()
     "Needed to set up my fonts to work with the emacs daemon"
-    (set-face-attribute 'default nil :font "Source Code Pro 14"))
+    (set-face-attribute 'default nil :font "Source Code Pro 15"))
 
   (if (daemonp)
       (add-hook 'after-make-frame-functions
@@ -216,6 +215,7 @@ This enables:
 + Define the default dictionary-server for dictionary commands in emacs
 + Add the code for emacs-gc-stats to help the devs optimize Emacs
 + Add orderless to my config and make it work with ivy.
++ Enable recentf
 
 #+BEGIN_SRC elisp :tangle init.el
 
@@ -269,6 +269,8 @@ This enables:
 
   (setq ivy-re-builders-alist '((t . orderless-ivy-re-builder)))
   (add-to-list 'ivy-highlight-functions-alist '(orderless-ivy-re-builder . orderless-ivy-highlight))
+
+  (recentf-mode 1)
 #+END_SRC
 
 * Emacs Launchers
@@ -421,29 +423,29 @@ This enables:
   + Added the functionality of when a folder has a single item, directly go to that item (open if its file, display the directory if its a directory). This is how you vieew folders in github, which behaviour I really like it so since I found a package with this behaviour (dired-collapse) I added it to my config and hooked it to dired mode.
   + Require helm-dired-open, a small package to prompt for opening files outside of Emacs. 
 
-  #+BEGIN_SRC elisp :tangle init.el
-     (require 'dired-x)
+#+BEGIN_SRC elisp :tangle init.el
+  (require 'dired-x)
 
-    ;(add-hook 'dired-mode-hook 'treemacs-icons-dired-mode)
+  					;(add-hook 'dired-mode-hook 'treemacs-icons-dired-mode)
 
-    (use-package all-the-icons-dired
-      :hook (dired-mode . all-the-icons-dired-mode)
-      :config (setq all-the-icons-dired-monochrome nil))
+  (use-package all-the-icons-dired
+    :hook (dired-mode . all-the-icons-dired-mode)
+    :config (setq all-the-icons-dired-monochrome nil))
 
-    (use-package dired-hide-dotfiles
-      :hook (dired-mode . dired-hide-dotfiles-mode))
+  (use-package dired-hide-dotfiles
+    :hook (dired-mode . dired-hide-dotfiles-mode))
 
-    (use-package dired-collapse
-      :hook (dired-mode . dired-collapse-mode))
+  ;;(use-package dired-collapse
+  ;;  :hook (dired-mode . dired-collapse-mode))
 
-    (require 'helm-dired-open)
+  (require 'helm-dired-open)
 
-    (use-package dired-subtree :ensure t
-      :after dired
-      :config
-      (bind-key "<tab>" #'dired-subtree-toggle dired-mode-map)
-      (bind-key "<backtab>" #'dired-subtree-cycle dired-mode-map))
-  #+END_SRC
+  (use-package dired-subtree :ensure t
+    :after dired
+    :config
+    (bind-key "<tab>" #'dired-subtree-toggle dired-mode-map)
+    (bind-key "<backtab>" #'dired-subtree-cycle dired-mode-map))
+#+END_SRC
 
 
 ** COMMENT Dirvish  
@@ -1001,31 +1003,31 @@ More languages to evaluate with org-babel (by default, only elisp is evaluated).
 
 #+BEGIN_SRC elisp :tangle init.el
 
-  (org-babel-do-load-languages
-     'org-babel-load-languages
-     '(
-       (python . t)
-       (haskell . t)
-       (octave . t)
-       (latex . t)
-       (gnuplot . t)
-       (maxima . t)
-       (lisp . t)
-       (clojure . t)
-       (julia . t)
-       (shell . t)
-  )
-     )
+   (org-babel-do-load-languages
+      'org-babel-load-languages
+      '(
+	(python . t)
+	(haskell . t)
+	(octave . t)
+	(latex . t)
+	(gnuplot . t)
+	(maxima . t)
+	(lisp . t)
+	(clojure . t)
+	(julia . t)
+	(shell . t)
+   )
+      )
 
-  (setq org-babel-lisp-eval-fn 'sly-eval)
-  (setq org-babel-clojure-backend 'cider)
-  (setq org-babel-julia-command "~/.local/bin/julia")
+   (setq org-babel-lisp-eval-fn 'sly-eval)
+   (setq org-babel-clojure-backend 'cider)
+   (setq org-babel-julia-command "~/.julia/juliaup/julia-1.10.1+0.x64.linux.gnu/bin/julia")
 
-  (define-key org-src-mode-map (kbd ",") nil)
-  (general-define-key
-   :states 'normal
-   :keymaps 'org-src-mode-map
-   ", c" 'org-edit-src-exit)
+   (define-key org-src-mode-map (kbd ",") nil)
+   (general-define-key
+    :states 'normal
+    :keymaps 'org-src-mode-map
+    ", c" 'org-edit-src-exit)
 
 #+END_SRC
 
@@ -1248,6 +1250,47 @@ More languages to evaluate with org-babel (by default, only elisp is evaluated).
     
   #+END_SRC
 
+* Avy
+Avy is a minor mode to help jump between different points in a buffer in an easier manner. I am trying to use this more in my config. These snippets are taken from Karthik's blog (https://karthinks.com/software/avy-can-do-anything/#google-search-for-a-word-or-sexp) and are useful additions to Avy.
+
+#+BEGIN_SRC elisp :tangle init.el
+
+  (defun dictionary-search-dwim (&optional arg)
+    "Search for definition of word at point. If region is active,
+    search for contents of region instead. If called with a prefix
+    argument, query for word to search."
+    (interactive "P")
+    (if arg
+	(dictionary-search nil)
+      (if (use-region-p)
+	  (dictionary-search (buffer-substring-no-properties
+			      (region-beginning)
+			      (region-end)))
+	(if (thing-at-point 'word)
+	    (dictionary-lookup-definition)
+	  (dictionary-search-dwim '(4))))))
+
+  (defun avy-action-define (pt)
+    (save-excursion
+      (goto-char pt)
+      (dictionary-search-dwim))
+    (select-window
+     (cdr (ring-ref avy-ring 0)))
+    t)
+
+  (setf (alist-get ?= avy-dispatch-alist) 'dictionary-search-dwim)
+
+  (defun avy-action-helpful (pt)
+    (save-excursion
+      (goto-char pt)
+      (helpful-at-point))
+    (select-window
+     (cdr (ring-ref avy-ring 0)))
+    t)
+
+  (setf (alist-get ?H avy-dispatch-alist) 'avy-action-helpful)
+#+END_SRC
+  
 * Search Engines 
 The ~engine-mode~ minor mode is a great package for defining search engines which you can query through emacs. I already have a list of these I use from inside my web browser so this is even handier.
 
@@ -1525,7 +1568,7 @@ Julia snail is a SLIME equivalent environment for Julia
     :ensure t
     :hook (julia-mode . julia-snail-mode))
 
-  (setq-default julia-snail-executable "~/.local/bin/julia")
+  (setq julia-snail-executable "julia")
 
   (setq julia-snail-multimedia-enable t)
   (setq julia-snail-extensions '(ob-julia repl-history))
@@ -1612,7 +1655,7 @@ Julia snail is a SLIME equivalent environment for Julia
 
    #+END_SRC
   
-** Elisp
+** COMMENT Elisp
    Elisp is the internal language of Emacs. I enable eldoc-mode in Elisp and ielm which is just awesome for writing elisp. 
    
    #+BEGIN_SRC elisp :tangle init.el
@@ -1637,7 +1680,7 @@ Using eww to view some browser pages may be useful. Having latex previews in the
 
 #+END_SRC
    
-** Common Lisp & Clojure
+** COMMENT Common Lisp & Clojure
    I started learning CL recently, both out of interest and so that I can give software such as Nyxt and StumpWM a real try. But the sly-documentation-lookup function uses a browser to open Hyperspec in and by default that is your default browser (which makes sense). But for CL documentation, its really not handy to have to use an actual browser (I am also addicted to how ELisp docs are always inside emacs). Something like eww does the work very well. So I add an advice to the common-lisp-hyperspec function (which is what sly-documentation-lookup uses as a backend) to temporarily make eww the default browser when using it. Essentially this makes these documentation pages open in eww, while not disrupting the default behaviour of browse-url (which is to open a link with my default browser).
 
    Clojure is another interesting lisp language that I am getting into, so I want lispy active on its modes as well.
@@ -1692,24 +1735,6 @@ Using eww to view some browser pages may be useful. Having latex previews in the
   (add-hook 'sage-shell-after-prompt-hook #'sage-shell-view-mode)
 
 #+END_SRC
-
-** Ebib
-Ebib is an emacs bibliography manager program. My customisations for it live here
-
-#+BEGIN_SRC elisp :tangle init.el
-  (setq ebib-preload-bib-files '("~/Sync/My_Library.bib"))
-  
-  (add-hook 'ebib-entry-mode-hook 'visual-line-mode)
-  
-  (setq ebib-index-columns '(("Title" 60 t)
-			     ("Author/Editor" 40 t)
-			     ("Year" 6 t)
-			     ("Entry Key" 40 t)
-			     ("Note" 10 t)))
-  
-  (setq ebib-notes-directory "~/org_roam/ref")
-#+END_SRC
-
 
 * Custom Variables
 These are some variables automatically generated by the "M-x customize" menu. Its better not to play around with this section of the config file as to not mess something up accidentally. I honestly almost never set something with the customize menu because I prefer writing it manually in my config. Gives me a sense of order really. 

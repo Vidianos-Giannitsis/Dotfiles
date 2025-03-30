@@ -1,2 +1,0 @@
-;;; Generated package description from zetteldesk-info.el  -*- no-byte-compile: t -*-
-(define-package "zetteldesk-info" "20220702.1527" "A zetteldesk extension for interacting with the info program" '((zetteldesk "0.4") (emacs "27.1")) :commit "99c5434a809da0b783f31b10872c8cb2a2176e2d" :authors '(("Vidianos Giannitsis" . "vidianosgiannitsis@gmail.com")) :maintainer '("Vidianos Giannitsis" . "vidianosgiannitsis@gmail.com") :url "https://github.com/Vidianos-Giannitsis/zetteldesk-info.el")

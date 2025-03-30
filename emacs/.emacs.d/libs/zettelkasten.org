@@ -64,14 +64,14 @@ This file is a core part of my emacs configuration and is all about my Org-roam 
      (cl-defmethod org-roam-node-todostate ((node org-roam-node))
        "Modified version of org-roam-node-todo to look a bit better"
        (if-let ((state (org-roam-node-todo node)))
-	   (format "Status: %s" state)))
+	   (format "%s: " state)))
 
      (cl-defmethod org-roam-node-buffer ((node org-roam-node))
        "Access slot \"buffer\" of org-roam-node struct CL-X"
        (let ((buffer (get-file-buffer (org-roam-node-file node))))
 	 buffer))
 
-     (setq org-roam-node-display-template "${title:115} ${backlinkscount:6} ${todostate:20} ${directories:10} ${tags:15}")
+     (setq org-roam-node-display-template "${title:100} ${backlinkscount:6} ${todostate:20} ${directories:10} ${tags:15}")
 
      (add-to-list 'display-buffer-alist
 		  '("\\*org-roam\\*"
@@ -143,41 +143,42 @@ This file is a core part of my emacs configuration and is all about my Org-roam 
   - Require org-cite, the package for org's native citation format and configure it to know where to look for bibliography, export with csl and use the ACS bibliography style
   - Require zotra, a package for getting bibliographic information using Zotero's translators, but in Emacs
 
-     #+BEGIN_SRC elisp :tangle yes
-       (setq bibtex-completion-bibliography
-	     '("~/org_roam/My_Library.bib" "~/org_roam/My_Library2.bib")
-	     bibtex-completion-pdf-field "File"
-	     bibtex-completion-library-path '("~/Sync/Zotero_pdfs"))
+#+BEGIN_SRC elisp :tangle yes
+  (setq bibtex-completion-bibliography
+	'("~/org_roam/My_Library.bib" "~/org_roam/My_Library2.bib")
+	bibtex-completion-pdf-field "File"
+	bibtex-completion-library-path '("~/Sync/Zotero_pdfs"))
 
-       (setq bibtex-completion-additional-search-fields '(keywords abstract))
+  (setq bibtex-completion-additional-search-fields '(keywords abstract))
 
-       (setq ivy-bibtex-default-action 'ivy-bibtex-edit-notes)
-       (ivy-add-actions
-	'ivy-bibtex
-	'(("p" ivy-bibtex-open-any "Open pdf, url or DOI")))
+  (setq ivy-bibtex-default-action 'ivy-bibtex-edit-notes)
+  (ivy-add-actions
+   'ivy-bibtex
+   '(("p" ivy-bibtex-open-any "Open pdf, url or DOI")))
 
-       (setq bibtex-completion-format-citation-functions
-	     '((org-mode . bibtex-completion-format-citation-org-title-link-to-PDF)
-	       (latex-mode . bibtex-completion-format-citation-cite)
-	       (markdown-mode . bibtex-completion-format-citation-pandoc-citeproc)
-	       (python-mode . bibtex-completion-format-citation-sphinxcontrib-bibtex)
-	       (rst-mode . bibtex-completion-format-citation-sphinxcontrib-bibtex)
-	       (default . bibtex-completion-format-citation-default)))
+  (setq bibtex-completion-format-citation-functions
+	'((org-mode . bibtex-completion-format-citation-org-title-link-to-PDF)
+	  (latex-mode . bibtex-completion-format-citation-cite)
+	  (markdown-mode . bibtex-completion-format-citation-pandoc-citeproc)
+	  (python-mode . bibtex-completion-format-citation-sphinxcontrib-bibtex)
+	  (rst-mode . bibtex-completion-format-citation-sphinxcontrib-bibtex)
+	  (default . bibtex-completion-format-citation-default)))
 
-       (require 'oc)
-       (require 'oc-csl)
-       (setq org-cite-global-bibliography '("~/org_roam/My_Library.bib" "~/org_roam/My_Library2.bib"))
+  (require 'oc)
+  (require 'oc-csl)
+  (setq org-cite-global-bibliography '("~/org_roam/My_Library.bib" "~/org_roam/My_Library2.bib"))
 
-       (setq org-cite-export-processors '((t csl)))
+  (setq org-cite-export-processors '((t csl)))
 
-       (setq org-cite-csl-styles-dir "~/Zotero/styles")
-       (setq citeproc-org-default-style-file "~/Zotero/styles/american-chemical-society.csl")
+  (setq org-cite-csl-styles-dir "~/Zotero/styles")
+  (setq citeproc-org-default-style-file "~/Zotero/styles/american-chemical-society.csl")
 
-       (setq zotra-backend 'zotra-server
-	     zotra-local-server-directory "~/Cloned_Repositories/zotra-server/"
-	     zotra-default-bibliography "~/org_roam/My_Library2.bib"
-	     zotra-download-attachment-default-directory "~/Sync/Zotero_pdfs")
-    #+END_SRC
+  (require 'zotra)
+  (setq zotra-backend 'zotra-server
+	zotra-local-server-directory "~/Cloned_Repositories/zotra-server/"
+	zotra-default-bibliography "~/org_roam/My_Library2.bib"
+	zotra-download-attachment-default-directory "~/Sync/Zotero_pdfs")
+#+END_SRC
 
 ** Citar
 The bibliography backend I currently use is ivy-bibtex (hence the above config). However, I have experimented with Citar for porting my package ~zetteldesk-ref~ to use it as a backend besides ivy-bibtex and honestly its a pretty neat package. I am considering moving to it as its a very nice and definitely super active project. This section holds my basic configurations for it which are for now at least only defining the paths to the bibliography and notes.
@@ -189,6 +190,93 @@ The bibliography backend I currently use is ivy-bibtex (hence the above config).
 
 #+END_SRC
   
+** Ebib
+Ebib is an emacs bibliography manager program. My customisations for it live here. The 2 functions at the end of the block are taken directly from the info page and are used to view entries that were created recently. However, a minor change is made as ~ebib--newer-than~ compares the "timestamp" entry, while my files only have the "urldate" entry for this purpose.
+
+#+BEGIN_SRC elisp :tangle yes
+  (setq ebib-preload-bib-files '("~/org_roam/My_Library.bib" "~/org_roam/My_Library2.bib"))
+  (setq ebib-notes-directory "~/org_roam/ref")
+  (setq ebib-multiline-major-mode 'org-mode)
+
+  (add-hook 'ebib-entry-mode-hook 'visual-line-mode)
+
+  (setq ebib-index-columns '(("Title" 60 t)
+  			     ("Author/Editor" 40 t)
+  			     ("Year" 6 t)
+  			     ("Entry Key" 40 t)
+  			     ("Note" 10 t)))
+
+  (require 'org-ebib)
+
+  (setq ebib-citation-description-function 'ebib-create-org-title)
+
+  (defun ebib-list-recent (days)
+    "List entries created in the last DAYS days."
+    (interactive "nNumber of days: ")
+    ;; Save the database's current filter, if there is one.
+    (let ((filter (ebib-db-get-filter ebib--cur-db)))
+      (when filter (setq ebib--filters-last-filter filter)))
+    (let*
+  	;; Calculate the from-date in Emacs' time format.
+  	((date (time-subtract (current-time) (days-to-time days)))
+  	 ;; Create a Lisp expression that will function as the filter.
+  	 (filter `(ebib--newer-than (quote ,date))))
+      ;; Install it as the current database's filter.
+      (ebib-db-set-filter filter ebib--cur-db)
+      ;; Update the current entry key.
+      (ebib-db-set-current-entry-key (ebib--get-key-at-point) ebib--cur-db)
+      ;; Update the display, so that only filtered entries are visible.
+      (ebib--update-buffers)))
+
+  (defun ebib--newer-than (date)
+    "Function for use in filters.
+  Return t if the entry being tested is newer than DATE.  DATE must
+  be a list of the format returned by `current-time' and is
+  compared to the timestamp of the entry being tested.  If the
+  entry has no timestamp, or a timestamp that cannot be converted
+  into a date representation, return nil."
+    (let ((timestamp (cdr (assoc-string "urldate" ebib-entry))))
+      (when (and timestamp
+  	       (setq timestamp (ignore-errors (date-to-time timestamp))))
+        (time-less-p date timestamp))))
+
+#+END_SRC
+
+I have also written some minor extensions for ebib, shown in this code block. They revolve around filtering org-roam functions by entries currently marked in ebib, which I personally find useful. These rely on org-roam, zetteldesk.el, my extension to org-roam for richer filtering capabilities and my custom function ~org-roam-backlinks-roam-node-read*~ which runs ~org-roam-node-read~ with a custom node list. I already use that functionality from that section of my org-roam config and I didn't want to redefine in this section with a different name, to avoid unnecessary complexity.
+
+#+BEGIN_SRC elisp :tangle yes
+
+  (defun org-roam-ebib-collect-marked-nodes ()
+    "Collect the `org-roam-node's of all references marked in ebib.
+
+  This function collects the citekeys of all entries that have been marked
+  in ebib, a value stored in the function `ebib-db-list-marked-entries'
+  and finds the `org-roam-node's related to them."
+    (cl-loop for ref in (ebib-db-list-marked-entries ebib--cur-db)
+  	   collect (org-roam-node-from-ref (concat "cite:" ref))))
+
+  (defun org-roam-ebib-nodes-find ()
+    "Run `org-roam-node-find' for nodes marked in ebib.
+
+  This function uses `org-roam-ebib-collect-marked-nodes' to find a list
+  of `org-roam-node's that have been marked in ebib and then essentially
+  runs `org-roam-node-find' for them. However, it is implemented via the
+  custom function `org-roam-backlinks-roam-node-read*' from my config,
+  which accepts a custom list of nodes."
+    (interactive)
+    (find-file (org-roam-node-file (org-roam-backlinks-roam-node-read* (org-roam-ebib-collect-marked-nodes)))))
+
+  (defun zetteldesk-add-ebib-marked-nodes ()
+    "Add nodes marked in ebib to the `zetteldesk-desktop'.
+
+  This function collects a list of `org-roam-node's via
+  `org-roam-ebib-collect-marked-nodes' and adds them to the
+  `zetteldesk-desktop' using `zetteldesk-add-node-to-desktop'."
+    (cl-loop for node in (org-roam-ebib-collect-marked-nodes)
+  	   do (zetteldesk-add-node-to-desktop node)))
+
+#+END_SRC
+
 * Org Roam Bibtex, Protocols (Reference notes) and UI (graphing capabilities)
    I require a bunch of packages so ORB, org roam ui and the roam protocols work as intended. I also make orb use ivy for completions.
 

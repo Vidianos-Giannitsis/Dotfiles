@@ -1,0 +1,339 @@
+#+TITLE: AUCTeX NEWS -- History of notable and user-visible changes
+#+AUTHOR: AUCTeX Maintenance Team
+#+LANGUAGE: en
+#+OPTIONS: num:nil toc:nil
+#+LINK: ELPA https://elpa.gnu.org/packages/%s
+# Copyright (C) 2024 Free Software Foundation, Inc.
+# License: GNU General Public License 3
+# The format is based on [[https://keepachangelog.com/en/1.1.0/][Keep a Changelog]]
+
+* [14.0.9] - 2025-02-25
+
+** Added
+
+- Add new support files =style/csthm.el=, =style/elsarticle.el=,
+  =style/enumerate.el=, =style/keytheorems.el= and
+  =style/marginalia.el=.
+
+* [14.0.8] - 2024-12-11
+
+** Added
+
+- Improve support for folding of citations macros.  The current folding
+  =[c]= is changed to a more descriptive version, using author names and
+  publication years, like =[Ne21]= or =[ABC99]=.  These are extracted
+  from any bib files referenced in the document or specified by the user
+  option ~TeX-fold-bib-file~.
+
+- Add support for folding of =\begin{env}= and =\end{env}= macros.  The
+  replacement specifiers are controlled by the custom option
+  ~TeX-fold-begin-end-spec-list~.
+
+- Add new custom option ~TeX-fold-alert-color~ which determines the
+  color used when folding the ~\alert~ macro, defaults to ~red~.
+
+- Add new support files =style/glossaries-extra.el=,
+  =style/glossaries.el=, =style/inlinegraphicx.el=, =style/minted2.el=
+  (=style/minted.el= is updated to package v3.1.2) and
+  =style/stocksize.el=.
+
+- Add preliminary support for parsing =\graphicspath= in
+  =style/graphicx.el=.
+
+** Changed
+
+- Change the default value of ~LaTeX-insert-into-comments~ from ~t~ to
+  ~nil~.
+
+* [14.0.7] - 2024-10-05
+
+** Added
+
+- Respect the value of ~TeX-output-dir~ when processing files with
+  latexmk.  This means that the default value of ~TeX-command-list~ is
+  changed.
+
+- Add new support files =style/authblk.el=, =style/langscibook.cls=,
+  =style/lstautogobble.el=, =style/lstlinebgrd.el=,
+  =style/ninecolors.el=, =style/supertabular.el=, =style/tabularray.el=
+  and =style/xtab.el=.
+
+** Changed
+
+- AUCTeX 13.3 marks the last standalone tarball release.  From now on,
+  AUCTeX releases are made available through the
+  [[ELPA:auctex.html][Emacs Lisp Package Archive (ELPA)]].  Distro
+  packagers are encouraged to use the [[ELPA:auctex.html][ELPA]]
+  packages as-is and install them under one of the new Emacs locations
+  for system-wide packages, see ~package-directory-list~.
+
+  At the same time, development is now done on the =main= branch and the
+  =master= branch has been deleted.  Its last state has been pushed as
+  =auctex-13= branch for archiving purposes but it won't get any updates
+  anymore.
+
+  For users who tracked the master branch: Do =git switch main= to
+  switch to the main branch where development takes place nowadays.
+
+- Move additions to the variable ~LaTeX-indent-environment-list~ for
+  various tabular environments to =latex.el= from the respective style
+  files.
+
+** Fixed
+
+- Fold argument of verbatim macros more accurately.
+
+** Removed
+
+- Remove the possibility to disable the side-wide installation with:
+  #+begin_src emacs-lisp
+    (unload-feature 'tex-site)
+  #+end_src
+  Using this form when installed from [[ELPA:auctex.html][ELPA]] will
+  throw an error.
+
+* [14.0.6] - 2024-06-30
+
+** Added
+
+- Complete support for in-buffer completion of color support macros.
+- Add new support files =style/contract.el=, =style/diagbox.el= and
+  =style/standalone.el=.
+
+** Fixed
+
+- Add appropriate ~delete-selection~ properties for
+  ~LaTeX-insert-left-brace~, ~TeX-insert-dollar~ and
+  ~TeX-insert-backslash~ that differentiate between the "electric" and
+  "just-insert-the-symbol" behavior.  That should simplify cooperation
+  with other electric modes.
+
+  As a result of this adjustment, the behavior of ~TeX-insert-dollar~
+  is affected in some ways:
+  - With raw prefix argument =C-u=, =$= (~TeX-insert-dollar~) now
+    inserts four dollars as opposed to one.  This behavior is in-line
+    with other symbols, in particular ="= (~TeX-insert-quote~) and =\=
+    (~TeX-insert-backslash~).  If you need one literal =$=, you can type
+    =C-1 $= or =C-q $=.
+  - We no longer have explicit support of the special behavior that if
+    ~TeX-electric-math~ is non-~nil~ and point is inside math mode right
+    between a couple of single dollars, pressing =$= will insert another
+    pair of dollar signs and leave the point between them.
+
+    It still works as before if ~TeX-electric-math~ is pair of dollars
+    while it inserts =\(= and =\)= when ~TeX-electric-math~ is
+    =("\(" . "\)")=.
+  - When ~TeX-electric-math~ is a pair of dollars and the point is in
+    inline math (without active region), =$= inserts two dollars, not
+    one dollar which just closes the math mode.
+- Recognize =.ltx= extension as regular LaTeX file.
+
+** Removed
+
+- Delete function ~LaTeX-env-contents~.
+- Delete obsolete variables ~TeX-symbol-marker~,
+  ~TeX-symbol-marker-pos~, ~TeX-dollar-sign~, ~TeX-dollar-string~ and
+  ~TeX-dollar-regexp~.
+- Delete obsolete minor-mode ~TeX-Omega-mode~.
+
+* [14.0.5] - 2024-05-19
+
+** Added
+
+- Add support for indirect buffers cloned from buffers visiting a file.
+  In indirect buffer, preview-latex works correctly when the command
+  ~preview-region~ is invoked.  The command ~preview-document~ puts
+  preview images in the base buffer, not in the indirect buffer itself.
+- Add preliminary support for processing files with latexmk.  Support
+  for =dvipdfmx= and the choice for viewer after compilation are not
+  optimal, yet.  Overall, the support comes close to what the
+  =auctex-latexmk= library provides.
+- Add new command ~TeX-fold-section~ (bound to =C-c C-o C-s=) which
+  hides all configured macros in the section containing point when
+  ~TeX-fold-mode~ is active.  The unfold counterpart
+  ~TeX-fold-clearout-section~ is bound to =C-c C-o s=.
+- Add new custom option ~TeX-fold-region-functions~ which is a list of
+  additional functions to call when folding a region.
+- Add new custom option ~TeX-fold-auto-reveal~ which controls how the
+  original source text is revealed when user clicks the folded portion
+  by mouse.
+- Add new custom options ~TeX-fold-auto-reveal-commands~ and
+  ~preview-auto-reveal-commands~ which are lists of commands revealing
+  folded or previewed buffer text.
+- Add new custom option ~preview-protect-point~ which determines whether
+  previews generated on top of the current point should be temporarily
+  opened (~nil~ by default).
+- Add new custom option ~preview-leave-open-previews-visible~ which
+  determines if the preview code stays visible once opened.
+- Change the default value of ~TeX-one-master~ in order to recognize the
+  suffix =.ltx= as regular TeX files.
+- Add new custom option ~ConTeXt-paragraph-commands~ containing a list
+  of macros which should begin their own line.
+- Support query and insert of ~mcite~ compatibility macro
+  (=style/biblatex.el=).
+- Support the =\verbatiminput*= macro (=style/verbatim.el=).
+- Add new support file =style/amsrefs.el=.
+
+** Fixed
+
+- Adjust options when processing files with ConTeXt: Remove obsolete
+  =--texutil=, use =--synctex=repeat= and omit =--nonstop= when
+  ~TeX-source-correlate-mode~ is enabled.
+
+* [14.0.4] - 2024-03-31
+
+** Added
+
+- Support completion for many commands described in =clsguide.tex=,
+  =fntguide.tex= and =usrguide.tex=.
+- Provide new custom option ~LaTeX-flymake-chktex-options~ to enable or
+  disable specific warnings of =chktex= backend used by Flymake.
+- Provide new custom option ~TeX-kill-process-without-query~ which
+  controls if user is asked before aborting a running process for a TeX
+  document.
+
+** Fixed
+
+- Improve guessing names for headers used in Imenu.
+
+** Removed
+
+- Revert usage of ~:local~ tag inside ~defcustom~.  This tag isn't
+  handled correctly in Emacs 27.1 and breaks AUCTeX.
+
+* [14.0.3] - 2024-02-20
+
+** Fixed
+
+- Cater for former mode name in customized ~TeX-command-list~.
+- Fix and enhance pseudo-parent mode facility.
+
+* [14.0.2] - 2024-02-09
+
+** Fixed
+
+- Fix [[ELPA:auctex.html][ELPA]] releases.
+
+* [14.0.1] - 2024-02-08
+
+** Added
+
+- AUCTeX changes major mode names.  Its primary purpose is to avoid
+  conflicts with Emacs built-in TeX major modes.  It also improves
+  consistency of the source code.
+  - The overview of the former names and new names are:
+    | Former name               | New name                  |
+    |---------------------------+---------------------------|
+    | ~plain-tex-mode~          | ~plain-TeX-mode~          |
+    | ~latex-mode~              | ~LaTeX-mode~              |
+    | ~doctex-mode~             | ~docTeX-mode~             |
+    | ~texinfo-mode~            | ~Texinfo-mode~            |
+    | ~ams-tex-mode~            | ~AmSTeX-mode~             |
+    | ~japanese-plain-tex-mode~ | ~japanese-plain-TeX-mode~ |
+    | ~japanese-latex-mode~     | ~japanese-LaTeX-mode~     |
+
+    The undocumented modes ~context-en-mode~ and ~context-nl-mode~ were
+    deleted.
+  - We paid much attention to the compatibility and expect that almost
+    no particular treatment on the user side is needed.  For example,
+    the names of the keymaps and mode hooks remain unchanged, and the
+    =mode:= tag in the file local variables in the existing files works
+    with old mode names.  See below for more details
+  - If your Emacs is 29 or newer and you use =desktop.el= to save and
+    restore Emacs sessions, be careful before you update AUCTeX; You
+    should attempt to update only after
+    1. you kill all buffer under former AUCTeX modes which have
+       overlapped name with Emacs built-in TeX modes, and
+    2. you terminate the current Emacs session.
+    The modes with such overlapped name are ~plain-tex-mode~,
+    ~latex-mode~, ~doctex-mode~ and ~texinfo-mode~.  (The above
+    prescription ensures no buffer of such modes is recorded in the
+    desktop file.  Otherwise those buffers would be restored in the
+    built-in modes, not AUCTeX modes, after the update of AUCTeX.)
+  - New mode names are chosen to match the existing variables, so most
+    user customizations as well as the third party libraries would
+    continue to work without modification.  For example, names of
+    keymaps and hooks don't change as stated above.
+    (~AmS-TeX-mode-hook~ is renamed to ~AmSTeX-mode-hook~, but
+    compatibility alias is provided.)
+  - Now ~TeX-add-local-master~ adds entry of new mode names such as
+    #+begin_example
+      %%% Local Variables:
+      %%% mode: LaTeX      <-- not `latex'
+      %%% End:
+    #+end_example
+  - The compatibility with the former mode names with respect to
+    invoking the major mode are retained.
+    1. Former modes which overlap with built-in modes, namely
+       ~plain-tex-mode~, ~latex-mode~, ~doctex-mode~, ~texinfo-mode~ and
+       ~tex-mode~ are handled by redirections; the same override advices
+       as before are continued to used for Emacs<29 while
+       ~major-mode-remap-alist~ is used for Emacs 29 and later.
+       (Therefore, if there are user codes which call ~latex-mode~
+       directly, built-in ~latex-mode~ runs instead of AUCTeX
+       ~LaTeX-mode~ in Emacs 29 and later.)
+
+       These redirections still honor your customization to ~TeX-modes~
+       option.  Thus you are served by built-in ~plain-tex-mode~ and
+       AUCTeX ~LaTeX-mode~ if you exclude ~plain-tex-mode~ from
+       ~TeX-modes~.
+    2. Other former names, e.g. ~context-mode~ and
+       ~japanese-latex-mode~, are handled by aliases such as
+       #+begin_src emacs-lisp
+         (defalias 'context-mode #'ConTeXt-mode)
+       #+end_src
+  - New modes recognize directory local variables prepaired for the
+    former mode name.  For example, directory local variables for
+    ~latex-mode~ are valid in ~LaTeX-mode~ as well.  So you don't have
+    to rewrite every former mode name to the new one in
+    =.dir-locals.el=.
+  - Your abbrevs are preserved.  For example, ~latex-mode-abbrev-table~,
+    if exists, is automatically included as a parent of
+    ~LaTeX-mode-abbrev-table~.
+  - Now all major modes are defined by ~define-derived-mode~, so
+    standard inheritance of keymaps, syntax tables etc. takes place.
+    The inheritance relations are:
+    #+begin_example
+      text-mode      --+-- TeX-mode
+                       +-- Texinfo-mode
+
+      TeX-mode       --+-- plain-TeX-mode
+                       +-- LaTeX-mode
+                       +-- ConTeXt-mode
+
+      plain-TeX-mode --+-- AmSTeX-mode
+                       +-- japanese-plain-TeX-mode
+
+      LaTeX-mode     --+-- docTeX-mode
+                       +-- japanese-LaTeX-mode
+    #+end_example
+
+    These inheritance relations are taken into account for directory
+    local variables in the standard way.  For example, directory local
+    variables for ~LaTeX-mode~ are applied to ~docTeX-mode~ now.
+
+    Note that ~TeX-mode~ isn't meant for use for end users.  It is only
+    meant for the base mode for other major modes.  Its role is to
+    provide base keymap, hook and syntax table under the same name with
+    the former AUCTeX and run the common initialization code.
+
+    Now that all modes have ~text-mode~ as their ancestor, they inherit
+    its keymap and syntax table.  In addition, dir local vars for
+    ~text-mode~ are applied to all AUCTeX major mode.
+
+    However, ~Texinfo-mode~ is exceptional in the following two aspects:
+    1. It doesn't inherit ~text-mode-syntax-table~ because it simply
+       uses built-in mode's ~texinfo-mode-syntax-table~, which is
+       independent of ~text-mode-syntax-table~.  This situation is the
+       same with the former AUCTeX Texinfo mode.
+    2. ~Texinfo-mode-map~ has ~TeX-mode-map~ as its direct parent.  This
+       is the same with the former AUCTeX Texinfo mode.  Now it inherits
+       ~text-mode-map~ indirectly through ~TeX-mode-map~.
+
+  - There are new keymaps, hooks and abbrev tables:
+    ~Texinfo-mode-abbrev-table~, ~japanese-plain-TeX-mode-map~,
+    ~japanese-LaTeX-mode-map~, ~japanese-plain-TeX-mode-hook~,
+    ~japanese-LaTeX-mode-hook~, ~japanese-plain-TeX-mode-abbrev-table~,
+    ~japanese-LaTeX-mode-abbrev-table~.
+
+- AUCTeX now requires GNU Emacs 27.1 or higher.

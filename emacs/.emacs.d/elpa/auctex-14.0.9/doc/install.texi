@@ -1,0 +1,281 @@
+@c This is part of the AUCTeX Manual.
+@c Copyright (C) 1994, 1996, 2003-2007, 2012-2013,
+@c               2015-2024  Free Software Foundation, Inc.
+@c See the file auctex.texi for copying conditions.
+@node Installation
+@chapter Installing @AUCTeX{}
+
+@AUCTeX{} is a package distributed at @acronym{ELPA}, Emacs Lisp Package
+Archive.  To install @AUCTeX{}, simply do @kbd{M-x list-packages
+@key{RET}}, mark the auctex package for installation with @kbd{i}, and
+hit @kbd{x} to execute the installation procedure.  That's all.
+
+Caution.  If you have installed former @AUCTeX{} as regular tarball
+release, uninstall it and delete the initialization codes
+@lisp
+(load "auctex.el" nil t t)
+(load "preview-latex.el" nil t t)
+@end lisp
+@noindent
+in your init file.  Otherwise you'll get into troubles.
+
+@code{use-package} users can use this simple recipe in their
+@code{user-init-file} which essentially does the same as the manual
+installation explained above.
+
+@lisp
+(use-package auctex
+  :ensure t)
+@end lisp
+
+For past @acronym{ELPA} releases, see
+@url{https://elpa.gnu.org/packages/auctex.html}.
+Once the installation is completed, you can skip the rest of this
+section and proceed to @ref{Quick Start}.
+
+@menu
+* Prerequisites::
+* Activating the package::
+* Advice for package providers::
+* Using @AUCTeX{} from @acronym{ELPA}-devel::
+* Using @AUCTeX{} from local Git repo::
+* Customizing::
+@end menu
+
+@node Prerequisites
+@section Prerequisites
+
+@itemize @bullet
+@item GNU Emacs 27.1 or higher
+
+Using @previewlatex{} requires a version of Emacs compiled with image
+support.
+
+@table @b
+@item Windows
+Precompiled versions are available from
+@uref{https://ftp.gnu.org/gnu/emacs/windows/}.
+@item macOS
+For an overview of precompiled versions of Emacs for macOS see for
+example @uref{https://www.emacswiki.org/emacs/EmacsForMacOS}.
+@item GNU/Linux
+Most GNU/Linux distributions nowadays provide a recent variant of Emacs
+via their package repositories.
+@item Self-compiled
+Compiling Emacs yourself requires a C compiler and a number of tools and
+development libraries.  Details are beyond the scope of this manual.
+Instructions for checking out the source code can be found at
+@uref{https://savannah.gnu.org/git/?group=emacs}.
+@end table
+
+@item A working @TeX{} installation
+
+Well, @AUCTeX{} would be pointless without that.
+@previewlatex{} requires Dvips or @command{dvipng} for its operation in @acronym{DVI} mode.
+The default configuration of @AUCTeX{} is tailored for @w{@TeX{} Live}-based
+distributions, but can be adapted easily.
+
+@item A recent Ghostscript
+
+This is needed for operation of @previewlatex{} in both @acronym{DVI}
+and @acronym{PDF} mode.  Ghostscript version 7.07 or newer is required.
+
+@end itemize
+
+For some known issues with various software, see
+@ref{Known problems,,,preview-latex,the @previewlatex{} manual}.
+
+@node Activating the package
+@section Activating the package
+
+You can detect the successful activation of @AUCTeX{} and
+@previewlatex{} in the menus after loading a @LaTeX{} file like
+@file{circ.tex}: @AUCTeX{} then gives you a @samp{Command} menu,
+and @previewlatex{} gives you a @samp{Preview} menu.
+
+For site-wide activation in GNU Emacs, see
+@xref{Advice for package providers}.
+
+Once activated, the modes provided by @AUCTeX{} are used per default for
+all supported file types, namely @code{plain-tex-mode}, @code{latex-mode},
+@code{doctex-mode} and @code{texinfo-mode}.  This might not match your
+preference.  You can have control over which @AUCTeX{} mode is activated
+per file types by @code{TeX-modes} option.  For example, you can use Emacs
+built-in @code{plain-tex-mode} for plain @TeX{} files while you can use
+@AUCTeX{} @code{LaTeX-mode} for @LaTeX{} files.
+
+@defopt TeX-modes
+List of Emacs built-in @TeX{} modes redirected to @AUCTeX{} modes.  If you
+prefer a particular built-in mode over @AUCTeX{} mode, remove it from this
+list.  Type
+@example
+@kbd{M-x customize-option @key{RET} TeX-modes @key{RET}}
+@end example
+@noindent
+to manipulate the contents of @code{TeX-modes}.
+@end defopt
+
+Don't remove @code{tex-mode} from @code{TeX-modes} unless you set
+@code{TeX-modes} empty to disable @AUCTeX{} completely, otherwise it
+results in inconsistent behavior.
+
+On Emacs 29 and later, @AUCTeX{} uses either
+@code{major-mode-remap-defaults} or @code{major-mode-remap-alist} for
+redirection.  But we recommend not to customize them directly because the
+customization code for @code{TeX-modes} takes care of some other
+compatibility issues.
+
+When there is a site-wide installation of @AUCTeX{} and you don't want to
+use it, you can disable it by
+@lisp
+(push '(auctex nil) package-load-list)
+@end lisp
+@noindent
+in your early init file (@pxref{Early Init File,,,emacs}).  (We
+recommend this treatment over setting @code{TeX-modes} to @code{nil},
+because it doesn't leave unused autoloads persisted.)
+
+It is no longer possible to disable the site-wide installation by
+@lisp
+(unload-feature 'tex-site)
+@end lisp
+@noindent
+, so don't use it.  This was the instruction described in former versions
+of this document, but now it causes error.
+
+@node Advice for package providers
+@section Providing @AUCTeX{} as a package
+
+As a package provider, you should make sure that your users will be
+served best according to their intentions, and keep in mind that a
+system might be used by more than one user, with different
+preferences.
+
+There are people that prefer the built-in Emacs modes for editing
+@TeX{} files, in particular plain @TeX{} users.  There are various
+ways to tell @AUCTeX{} even after auto-activation that it should
+not get used, and they are described in
+the @ref{Activating the package, previous node}.
+
+So if you have users that don't want to use the preinstalled @AUCTeX{},
+they can easily get rid of it.  Installing @AUCTeX{} as site-wide
+default is therefore a good choice.
+
+You can install @acronym{ELPA} @AUCTeX{} package under a
+directory listed in @code{package-directory-list} to have site-wide
+default.
+
+@node Using @AUCTeX{} from @acronym{ELPA}-devel
+@section Using @AUCTeX{} from @acronym{ELPA}-devel
+
+It is possible to use the latest development version of @AUCTeX{}
+conveniently as a package installed from @acronym{GNU}-devel
+@acronym{ELPA}.  This package tracks the latest change in @AUCTeX{} Git
+repository and is intended for brave users who want to test the
+distribution and report possible issues.  The following addition to
+@code{user-init-file} instructs Emacs to change the archive @AUCTeX{} is
+installed from:
+@lisp
+(add-to-list 'package-archives
+             '("elpa-devel" . "https://elpa.gnu.org/devel/") t)
+(setq package-archive-priority
+      '(("elpa" . 10)
+        ("elpa-devel" . 5)))
+(setq package-pinned-packages
+      '((auctex . "elpa-devel")))
+@end lisp
+
+@noindent
+In a nutshell, the code adds the new archive to the list of know archives
+under the name @samp{elpa-devel}, gives it a lower priority than the
+regular archive, and instructs Emacs to fetch only @AUCTeX{} from the new
+archive and don't bother with other packages installed.
+
+@node Using @AUCTeX{} from local Git repo
+@section Using @AUCTeX{} from local Git repo
+
+It is also possible to use @AUCTeX{}
+directly from a local Git repository.  Let's assume you have your Git
+repositories under @samp{~/development/}.
+
+First, you have to fetch a copy of the @AUCTeX{} Git repository.  In a
+shell, change directory to @samp{~/development/} and do:
+@example
+git clone https://git.savannah.gnu.org/git/auctex.git
+@end example
+
+Now change directory to @samp{~/development/auctex} and run
+@example
+make
+@end example
+@noindent
+
+Now you have to tell Emacs about the plan.  Put the following code
+in your init file:
+@lisp
+(load "~/development/auctex/auctex-autoloads.el" nil t t)
+(with-eval-after-load 'info
+  (add-to-list 'Info-additional-directory-list
+               "~/development/auctex/doc"))
+@end lisp
+@noindent
+and you're finished.
+
+Note for @samp{use-package} users: you can wrap the above recipe with
+@code{use-package} like this:
+@lisp
+(use-package auctex
+  :init
+  (load "~/development/auctex/auctex-autoloads.el" nil t t)
+  (with-eval-after-load 'info
+    (add-to-list 'Info-additional-directory-list
+                 "~/development/auctex/doc")))
+@end lisp
+
+@node Customizing
+@section Customizing
+@cindex Site initialization
+@cindex Initialization
+@cindex @file{tex-site.el}
+@cindex Personal customization
+@cindex Site customization
+@cindex Customization
+@cindex Customization, personal
+@cindex Customization, site
+Most of the site-specific customization should already have happened
+during installation of @AUCTeX{}.  Any further customization can be
+done with customization buffers directly in Emacs.  Just type @kbd{M-x
+customize-group @key{RET} AUCTeX @key{RET}} to open the customization group for
+@AUCTeX{} or use the menu entries provided in the mode menus.  Editing
+the file @file{tex-site.el} as suggested in former versions of @AUCTeX{}
+should not be done anymore because the installation routine will
+overwrite those changes.
+
+You might check some options with a special significance.  They are
+accessible directly by typing @kbd{M-x customize-option @key{RET} @var{option}
+@key{RET}}.
+
+@defopt TeX-macro-global
+Directories containing the site's @TeX{} style files.
+
+Normally, @AUCTeX{} will only allow you to complete macros and
+environments which are built-in, specified in @AUCTeX{} style files or
+defined by yourself.  If you issue the @kbd{M-x
+TeX-auto-generate-global} command after loading @AUCTeX{}, you will be
+able to complete on all macros available in the standard style files
+used by your document.  To do this, you must set this variable to a list
+of directories where the standard style files are located.  The
+directories will be searched recursively, so there is no reason to list
+subdirectories explicitly.  Automatic configuration will already have
+set the variable for you if it could use the program @command{kpsewhich}.
+In this case you normally don't have to alter anything.
+
+Note that @code{TeX-auto-generate-global} is not so smart and it can
+introduce unexpected side effects as discussed in
+@uref{https://lists.gnu.org/r/auctex/2021-01/msg00037.html}.
+@end defopt
+
+@c Local Variables:
+@c mode: Texinfo
+@c TeX-master: "auctex"
+@c End:

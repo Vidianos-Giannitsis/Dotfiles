@@ -1,5 +1,5 @@
 (general-create-definer my-leader-def
-			  :prefix "SPC")
+			    :prefix "SPC")
 
 (my-leader-def
  :states 'normal
@@ -88,7 +88,8 @@
  "t" 'avy-goto-char-timer
  "l" 'avy-goto-line
  "w" 'avy-goto-word-1
- "W" 'avy-goto-word-0)
+ "W" 'avy-goto-word-0
+ "i" 'avy-isearch)
 
 (general-define-key
  :states 'normal
@@ -178,7 +179,8 @@
  "j" '(dired-jump :which-key "Open dired in the current buffer's directory")
  "d" 'deft
  "w" 'write-file
- "o" 'mediator-open-file)
+ "o" 'mediator-open-file
+ "r" 'recentf-open)
 
 (pretty-hydra-define my/quickmarks-hydra (:color blue :title "Quickmarks")
   ("Emacs Stuff"
@@ -191,13 +193,12 @@
     ("S" (lambda() (interactive)(find-file "~/org-roam-similarity/org-roam-similarity.org")) "Org Roam Similarity Config"))
 
    "University"
-   (("u" (lambda() (interactive)(dired "~/Documents/9o_εξάμηνο")) "University Documents folder")
+   (("p" (lambda() (interactive)(dired "~/Documents/PhD-thesis")) "PhD documents folder")
     ("B" (lambda() (interactive)(find-file "~/Sync/My_Library.bib")) "Master Bibliography file")
     ("o" (lambda() (interactive)(dired "~/Documents/Octave")) "Octave scripts directory")
     ("O" (lambda() (interactive)(dired "~/org_roam/outlines")) "Outlines")
-    ("p" (lambda() (interactive)(dired "~/Documents/7o_εξάμηνο/Σχεδιασμός_Ι/Project/git_repo")))
     ("t" (lambda() (interactive)(dired "~/Documents/9o_εξάμηνο/Masters_Thesis/")) "Thesis")
-    ("C" (lambda() (interactive)(dired "~/Documents/Chemecar")) "Chemecar"))
+    ("C" (lambda() (interactive)(dired "~/Documents/BioRural")) "Biorural Challenge"))
 
    "General Computer Things"
    (("h" (lambda() (interactive)(dired "~")) "Home directory")
@@ -206,6 +207,7 @@
     ("a" (lambda() (interactive)(find-file "~/auth.org")) "Git auth token")
     ("j" (lambda() (interactive)(dired "~/Documents/Julia")) "Julia")
     ("d" (lambda() (interactive)(dired "~/Games/Pokemon_Draft")) "Draft")
+    ("P" (lambda() (interactive)(dired "~/Documents/Personal_docs")) "Personal Docs")
     ("b" (lambda() (interactive)(dired "~/Books")) "Books Directory"))
    ))
 
@@ -245,9 +247,8 @@
     ("T" org-roam-node-find-todos "Find Fleeting Note"))
 
    "References"
-   (("I" isbn-to-bibtex "Get ref from isbn")
-    ("d" doi-utils-add-bibtex-entry-from-doi "Get ref from DOI")
-    ("r" org-roam-ref-find "Find Reference")
+   (("a" zotra-add-entry "Get ref from Zotra")
+    ("r" ebib "Launch Ebib")
     ("C" org-ref-insert-cite-link "Insert Citation (Org-ref)")
     ("c" org-cite-insert "Insert Citation (Org-Cite)")
     ("h" org-ref-insert-link-hydra/body "Org Ref Insert-Link Hydra")
@@ -260,8 +261,7 @@
     ("s" my/org-roam-similarity-hydra/body "Org-roam-similarity commands")
     ("t" my/org-roam-thesis-hydra/body "Org-roam-thesis commands")
     ("D" org-roam-buffer-display-dedicated "Dedicated Org Roam buffer"))
-   )
-  )
+   ))
 
 (general-define-key
  :states 'normal
@@ -301,7 +301,8 @@
  :prefix "SPC w"
  "w" 'define-word
  "p" 'define-word-at-point
- "d" 'dictionary-search)
+ "s" 'dictionary-search
+ "d" 'dictionary-search-dwim)
 
 (general-define-key
  :states 'normal
@@ -379,7 +380,7 @@
  "M-m" 'man)
 
 (general-create-definer minor-leader-def
-      :prefix ",")
+	:prefix ",")
 
     (minor-leader-def
      :states 'normal
@@ -622,8 +623,6 @@
  "h" 'dired-up-directory
  "l" 'dired-find-file
  "H" 'dired-hide-dotfiles-mode
- "y" 'dired-ranger-copy
- "p" 'dired-ranger-paste
  "g s" 'dired-toggle-sudo
  "s" '(:ignore t :which-key "Dired-subtree functions")
  "s i" 'dired-subtree-insert
@@ -648,6 +647,10 @@
 (general-define-key
  :states 'normal
  :keymaps 'ebib-index-mode-map
- "/" 'ebib-jump-to-entry)
+ "/" 'ebib-jump-to-entry
+ "C-u" 'universal-argument
+ "F p" 'ebib-list-recent
+ "n" 'ebib-popup-note
+ "N" 'ebib-search-next)
 
 (provide 'keybindings)

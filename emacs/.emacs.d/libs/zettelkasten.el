@@ -4,23 +4,23 @@
 (use-package org-roam
   :config
   (setq org-roam-directory "~/org_roam/"
-	org-roam-dailies-directory "~/org_roam/daily")
+	   org-roam-dailies-directory "~/org_roam/daily")
 
   (cl-defmethod org-roam-node-directories ((node org-roam-node))
     "Access slot \"directory\" of org-roam-node struct CL-X"
     (if-let ((dirs (file-name-directory (file-relative-name (org-roam-node-file node) org-roam-directory))))
-	(format "(%s)" (car (f-split dirs)))
-      ""))
+	   (format "(%s)" (car (f-split dirs)))
+	 ""))
 
   (cl-defmethod org-roam-node-backlinkscount ((node org-roam-node))
     "Access slot \"backlinks\" of org-roam-node struct CL-X"
     (let* ((count (caar (org-roam-db-query
-			 [:select (funcall count source)
-				  :from links
-				  :where (= dest $s1)
-				  :and (= type "id")]
-			 (org-roam-node-id node)))))
-      (format "[%d]" count)))
+			    [:select (funcall count source)
+				     :from links
+				     :where (= dest $s1)
+				     :and (= type "id")]
+			    (org-roam-node-id node)))))
+	 (format "[%d]" count)))
 
   (cl-defmethod org-roam-node-backlinkscount-number ((node org-roam-node))
     "Access slot \"backlinks\" of org-roam-node struct CL-X. This
@@ -29,31 +29,31 @@
     string. This is to be used in
     `org-roam-node-sort-by-backlinks'"
     (let* ((count (caar (org-roam-db-query
-			 [:select (funcall count source)
-				  :from links
-				  :where (= dest $s1)
-				  :and (= type "id")]
-			 (org-roam-node-id node)))))
-      count))
+			    [:select (funcall count source)
+				     :from links
+				     :where (= dest $s1)
+				     :and (= type "id")]
+			    (org-roam-node-id node)))))
+	 count))
 
   (cl-defmethod org-roam-node-todostate ((node org-roam-node))
     "Modified version of org-roam-node-todo to look a bit better"
     (if-let ((state (org-roam-node-todo node)))
-	(format "Status: %s" state)))
+	   (format "%s: " state)))
 
   (cl-defmethod org-roam-node-buffer ((node org-roam-node))
     "Access slot \"buffer\" of org-roam-node struct CL-X"
     (let ((buffer (get-file-buffer (org-roam-node-file node))))
-      buffer))
+	 buffer))
 
-  (setq org-roam-node-display-template "${title:115} ${backlinkscount:6} ${todostate:20} ${directories:10} ${tags:15}")
+  (setq org-roam-node-display-template "${title:100} ${backlinkscount:6} ${todostate:20} ${directories:10} ${tags:15}")
 
   (add-to-list 'display-buffer-alist
-	       '("\\*org-roam\\*"
-		 (display-buffer-in-direction)
-		 (direction . right)
-		 (window-width . 0.40)
-		 (window-height . fit-window-to-buffer))))
+		  '("\\*org-roam\\*"
+		    (display-buffer-in-direction)
+		    (direction . right)
+		    (window-width . 0.40)
+		    (window-height . fit-window-to-buffer))))
 
 (defun org-roam-buffer-without-latex ()
     "Essentially `org-roam-buffer-toggle' but it ensures latex previews are turned off before toggling the buffer.
@@ -65,7 +65,7 @@
   noticed this issue before. This function solves it."
     (interactive)
     (let ((org-startup-with-latex-preview nil))
-      (org-roam-buffer-toggle)))
+	(org-roam-buffer-toggle)))
 
 (defun org-roam-permanent-note-p (NODE)
   "Check if NODE is at the top level org_roam directory using the
@@ -85,7 +85,7 @@ which can be useful in some cases. That filtered function is
 (defun org-roam-node-poi-or-moc-p (NODE)
   "Check if NODE has the tag POI or the tag MOC. Return t if it does"
   (or (string-equal (car (org-roam-node-tags NODE)) "POI")
-      (string-equal (car (org-roam-node-tags NODE)) "MOC")))
+	(string-equal (car (org-roam-node-tags NODE)) "MOC")))
 
 (defun org-roam-find-permanent-node ()
   "Execute `org-roam-node-find' with the list being filtered to
@@ -97,9 +97,9 @@ function."
   (org-roam-node-find nil nil #'org-roam-permanent-note-p))
 
 (setq bibtex-completion-bibliography
-      '("~/org_roam/My_Library.bib" "~/org_roam/My_Library2.bib")
-      bibtex-completion-pdf-field "File"
-      bibtex-completion-library-path '("~/Sync/Zotero_pdfs"))
+	'("~/org_roam/My_Library.bib" "~/org_roam/My_Library2.bib")
+	bibtex-completion-pdf-field "File"
+	bibtex-completion-library-path '("~/Sync/Zotero_pdfs"))
 
 (setq bibtex-completion-additional-search-fields '(keywords abstract))
 
@@ -109,12 +109,12 @@ function."
  '(("p" ivy-bibtex-open-any "Open pdf, url or DOI")))
 
 (setq bibtex-completion-format-citation-functions
-      '((org-mode . bibtex-completion-format-citation-org-title-link-to-PDF)
-	(latex-mode . bibtex-completion-format-citation-cite)
-	(markdown-mode . bibtex-completion-format-citation-pandoc-citeproc)
-	(python-mode . bibtex-completion-format-citation-sphinxcontrib-bibtex)
-	(rst-mode . bibtex-completion-format-citation-sphinxcontrib-bibtex)
-	(default . bibtex-completion-format-citation-default)))
+	'((org-mode . bibtex-completion-format-citation-org-title-link-to-PDF)
+	  (latex-mode . bibtex-completion-format-citation-cite)
+	  (markdown-mode . bibtex-completion-format-citation-pandoc-citeproc)
+	  (python-mode . bibtex-completion-format-citation-sphinxcontrib-bibtex)
+	  (rst-mode . bibtex-completion-format-citation-sphinxcontrib-bibtex)
+	  (default . bibtex-completion-format-citation-default)))
 
 (require 'oc)
 (require 'oc-csl)
@@ -125,19 +125,95 @@ function."
 (setq org-cite-csl-styles-dir "~/Zotero/styles")
 (setq citeproc-org-default-style-file "~/Zotero/styles/american-chemical-society.csl")
 
+(require 'zotra)
 (setq zotra-backend 'zotra-server
-      zotra-local-server-directory "~/Cloned_Repositories/zotra-server/"
-      zotra-default-bibliography "~/org_roam/My_Library2.bib"
-      zotra-download-attachment-default-directory "~/Sync/Zotero_pdfs")
+	zotra-local-server-directory "~/Cloned_Repositories/zotra-server/"
+	zotra-default-bibliography "~/org_roam/My_Library2.bib"
+	zotra-download-attachment-default-directory "~/Sync/Zotero_pdfs")
 
 (setq citar-bibliography '("~/org_roam/My_Library.bib" "~/org_roam/My_Library2.bib"))
 (setq citar-notes-paths '("~/org_roam/ref"))
+
+(setq ebib-preload-bib-files '("~/org_roam/My_Library.bib" "~/org_roam/My_Library2.bib"))
+(setq ebib-notes-directory "~/org_roam/ref")
+(setq ebib-multiline-major-mode 'org-mode)
+
+(add-hook 'ebib-entry-mode-hook 'visual-line-mode)
+
+(setq ebib-index-columns '(("Title" 60 t)
+			     ("Author/Editor" 40 t)
+			     ("Year" 6 t)
+			     ("Entry Key" 40 t)
+			     ("Note" 10 t)))
+
+(require 'org-ebib)
+
+(setq ebib-citation-description-function 'ebib-create-org-title)
+
+(defun ebib-list-recent (days)
+  "List entries created in the last DAYS days."
+  (interactive "nNumber of days: ")
+  ;; Save the database's current filter, if there is one.
+  (let ((filter (ebib-db-get-filter ebib--cur-db)))
+    (when filter (setq ebib--filters-last-filter filter)))
+  (let*
+	;; Calculate the from-date in Emacs' time format.
+	((date (time-subtract (current-time) (days-to-time days)))
+	 ;; Create a Lisp expression that will function as the filter.
+	 (filter `(ebib--newer-than (quote ,date))))
+    ;; Install it as the current database's filter.
+    (ebib-db-set-filter filter ebib--cur-db)
+    ;; Update the current entry key.
+    (ebib-db-set-current-entry-key (ebib--get-key-at-point) ebib--cur-db)
+    ;; Update the display, so that only filtered entries are visible.
+    (ebib--update-buffers)))
+
+(defun ebib--newer-than (date)
+  "Function for use in filters.
+Return t if the entry being tested is newer than DATE.  DATE must
+be a list of the format returned by `current-time' and is
+compared to the timestamp of the entry being tested.  If the
+entry has no timestamp, or a timestamp that cannot be converted
+into a date representation, return nil."
+  (let ((timestamp (cdr (assoc-string "urldate" ebib-entry))))
+    (when (and timestamp
+	       (setq timestamp (ignore-errors (date-to-time timestamp))))
+      (time-less-p date timestamp))))
+
+(defun org-roam-ebib-collect-marked-nodes ()
+  "Collect the `org-roam-node's of all references marked in ebib.
+
+This function collects the citekeys of all entries that have been marked
+in ebib, a value stored in the function `ebib-db-list-marked-entries'
+and finds the `org-roam-node's related to them."
+  (cl-loop for ref in (ebib-db-list-marked-entries ebib--cur-db)
+	   collect (org-roam-node-from-ref (concat "cite:" ref))))
+
+(defun org-roam-ebib-nodes-find ()
+  "Run `org-roam-node-find' for nodes marked in ebib.
+
+This function uses `org-roam-ebib-collect-marked-nodes' to find a list
+of `org-roam-node's that have been marked in ebib and then essentially
+runs `org-roam-node-find' for them. However, it is implemented via the
+custom function `org-roam-backlinks-roam-node-read*' from my config,
+which accepts a custom list of nodes."
+  (interactive)
+  (find-file (org-roam-node-file (org-roam-backlinks-roam-node-read* (org-roam-ebib-collect-marked-nodes)))))
+
+(defun zetteldesk-add-ebib-marked-nodes ()
+  "Add nodes marked in ebib to the `zetteldesk-desktop'.
+
+This function collects a list of `org-roam-node's via
+`org-roam-ebib-collect-marked-nodes' and adds them to the
+`zetteldesk-desktop' using `zetteldesk-add-node-to-desktop'."
+  (cl-loop for node in (org-roam-ebib-collect-marked-nodes)
+	   do (zetteldesk-add-node-to-desktop node)))
 
 (require 'org-roam-bibtex)
 (org-roam-bibtex-mode 1)
 
 (setq orb-insert-interface 'ivy-bibtex
-      orb-note-actions-interface 'ivy)
+	orb-note-actions-interface 'ivy)
 (setq orb-preformat-keywords '("citekey" "author" "date" "entry-type" "keywords" "url" "file"))
 
 (require 'org-protocol)
@@ -166,9 +242,9 @@ function."
 the number of backlinks. This is the sorting function in
 `org-roam-backlinks-node-find-by-backlinks'"
   (let ((node-a (cdr completion-a))
-	(node-b (cdr completion-b)))
-    (>= (org-roam-node-backlinkscount-number node-a)
-	(org-roam-node-backlinkscount-number node-b))))
+	    (node-b (cdr completion-b)))
+	(>= (org-roam-node-backlinkscount-number node-a)
+	    (org-roam-node-backlinkscount-number node-b))))
 
 (defun org-roam-backlinks-node-find-by-backlinks ()
   "Essentially works like `org-roam-node-find' (although it uses
@@ -189,27 +265,27 @@ instead of most recent nodes. Sorting is done with
   complimentary function to that"
   (org-roam-db-query
    [:select [source dest]
-	    :from links
-	    :where (= dest $s1)
-	    :and (= type "id")]
+		:from links
+		:where (= dest $s1)
+		:and (= type "id")]
    (org-roam-node-id (org-roam-node-at-point))))
 
 (defun org-roam-backlinks-find-files ()
-    "Get all nodes that link to the node at point with the
-    `org-roam-backlink-query' function, find their absolute path
-    and save a list of those paths to the buffer local variable
-    `org-roam-backlinks'.
+	"Get all nodes that link to the node at point with the
+	`org-roam-backlink-query' function, find their absolute path
+	and save a list of those paths to the buffer local variable
+	`org-roam-backlinks'.
 
   With the list, you can act on all those files together. This is
   exceptionally useful with index files as it allows you to do an
   action on all files linked to this index automatically."
-    (interactive)
-    (let ((backlinks (length (org-roam-backlinks-query))))
-      (dotimes (number backlinks)
-	(let* ((id (car (nth number (org-roam-backlinks-query))))
-	       (node (org-roam-node-from-id id)))
-	  (setq-local org-roam-backlinks-files (cons (org-roam-node-file node) org-roam-backlinks-files))))
-      org-roam-backlinks-files))
+	(interactive)
+	(let ((backlinks (length (org-roam-backlinks-query))))
+	  (dotimes (number backlinks)
+	    (let* ((id (car (nth number (org-roam-backlinks-query))))
+		   (node (org-roam-node-from-id id)))
+	      (setq-local org-roam-backlinks-files (cons (org-roam-node-file node) org-roam-backlinks-files))))
+	  org-roam-backlinks-files))
 
 (defun org-roam-backlinks-export-to-latex-pdf ()
   "Export the current buffer and every buffer that mentions it to
@@ -220,14 +296,14 @@ backlinks. Also saves all the pdf names in a variable called
 something like pdftk to merge them into one pdf"
   (interactive)
   (save-current-buffer
-    (let ((backlinks (cons (buffer-file-name) org-roam-backlinks-files))
-	  (org-startup-with-latex-preview nil))
-      (while backlinks
-	(find-file (car backlinks))
-	(org-latex-export-to-pdf)
-	(setq org-roam-backlinks-pdfs
-	      (cons (concat (file-name-sans-extension (car backlinks)) ".pdf") org-roam-backlinks-pdfs))
-	(setq backlinks (cdr backlinks)))))
+	(let ((backlinks (cons (buffer-file-name) org-roam-backlinks-files))
+	      (org-startup-with-latex-preview nil))
+	  (while backlinks
+	    (find-file (car backlinks))
+	    (org-latex-export-to-pdf)
+	    (setq org-roam-backlinks-pdfs
+		  (cons (concat (file-name-sans-extension (car backlinks)) ".pdf") org-roam-backlinks-pdfs))
+	    (setq backlinks (cdr backlinks)))))
   (message "%s" "Done!"))
 
 (defcustom org-roam-backlinks-choices '("View Backlinks" "Go to Node" "Add to Zetteldesk" "Find Similar Nodes" "Quit")
@@ -237,24 +313,24 @@ Check that function's docstring for more info about these.")
 (defun org-roam-backlinks-query* (NODE)
   "Gets the backlinks of NODE with `org-roam-db-query'."
   (org-roam-db-query
-	[:select [source dest]
-		 :from links
-		 :where (= dest $s1)
-		 :and (= type "id")]
-	(org-roam-node-id NODE)))
+	  [:select [source dest]
+		   :from links
+		   :where (= dest $s1)
+		   :and (= type "id")]
+	  (org-roam-node-id NODE)))
 
 (defun org-roam-backlinks-p (SOURCE NODE)
   "Predicate function that checks if NODE is a backlink of SOURCE."
   (let* ((source-id (org-roam-node-id SOURCE))
-	 (backlinks (org-roam-backlinks-query* SOURCE))
-	 (id (org-roam-node-id NODE))
-	 (id-list (list id source-id)))
+	   (backlinks (org-roam-backlinks-query* SOURCE))
+	   (id (org-roam-node-id NODE))
+	   (id-list (list id source-id)))
     (member id-list backlinks)))
 
 (defun org-roam-backlinks-poi-or-moc-p (NODE)
   "Check if NODE has the tag POI or the tag MOC.  Return t if it does."
   (or (string-equal (car (org-roam-node-tags NODE)) "POI")
-      (string-equal (car (org-roam-node-tags NODE)) "MOC")))
+	(string-equal (car (org-roam-node-tags NODE)) "MOC")))
 
 (defun org-roam-backlinks--read-node-backlinks (source)
   "Runs `org-roam-node-read' on the backlinks of SOURCE.
@@ -281,28 +357,28 @@ There is however also the option to add the node to the current
 to extend org-roam and naturally I wanted to include some
 interaction with it in this function."
   (let* ((backlink (org-roam-backlinks--read-node-backlinks node))
-	 (choice (completing-read "What to do with NODE: "
-				  org-roam-backlinks-choices)))
+	   (choice (completing-read "What to do with NODE: "
+				    org-roam-backlinks-choices)))
     (cond
      ((string-equal
-       choice
-       (first org-roam-backlinks-choices))
-      (org-roam-backlinks-node-read backlink))
+	 choice
+	 (first org-roam-backlinks-choices))
+	(org-roam-backlinks-node-read backlink))
      ((string-equal
-       choice
-       (second org-roam-backlinks-choices))
-      (find-file (org-roam-node-file backlink)))
+	 choice
+	 (second org-roam-backlinks-choices))
+	(find-file (org-roam-node-file backlink)))
      ((string-equal
-       choice
-       (third org-roam-backlinks-choices))
-      (zetteldesk-add-node-to-desktop backlink))
+	 choice
+	 (third org-roam-backlinks-choices))
+	(zetteldesk-add-node-to-desktop backlink))
      ((string-equal
-       choice
-       (fourth org-roam-backlinks-choices))
-      (org-roam-similarity-node-find backlink))
+	 choice
+	 (fourth org-roam-backlinks-choices))
+	(org-roam-similarity-node-find backlink))
      ((string-equal
-       choice
-       (fifth org-roam-backlinks-choices))))))
+	 choice
+	 (fifth org-roam-backlinks-choices))))))
 
 (defun org-roam-backlinks-search ()
   "Select an `org-roam-node' and recursively search its backlinks.
@@ -336,7 +412,7 @@ backlinks."
   (setq org-roam-backlinks-selected-nodes '())
   (dotimes (i NUM)
     (let ((node (org-roam-node-read)))
-      (add-to-list 'org-roam-backlinks-selected-nodes node)))
+	(add-to-list 'org-roam-backlinks-selected-nodes node)))
   org-roam-backlinks-selected-nodes)
 
 (defvar org-roam-backlinks-selected-node-backlinks '()
@@ -349,19 +425,19 @@ This list is filled using `org-roam-backlinks-get-node-backlinks'")
   (setq org-roam-backlinks-selected-node-backlinks '())
   (let ((node-list (org-roam-backlinks--select-nodes NUM)))
     (dolist (node node-list)
-      (let ((backlinks (org-roam-backlinks-query* node))
-	    (backlink-ids))
-	(dolist (id backlinks)
-	  (add-to-list 'backlink-ids (car id)))
-	(add-to-list 'org-roam-backlinks-selected-node-backlinks backlink-ids)))
+	(let ((backlinks (org-roam-backlinks-query* node))
+	      (backlink-ids))
+	  (dolist (id backlinks)
+	    (add-to-list 'backlink-ids (car id)))
+	  (add-to-list 'org-roam-backlinks-selected-node-backlinks backlink-ids)))
     org-roam-backlinks-selected-node-backlinks))
 
 (defun org-roam-backlinks-id-intersection (list1 list2)
   "Find intersection of LIST1 and LIST2 using `cl-loop'."
   (cl-loop for id in list1
-	   if (member id list2)
-	   collect id into ids
-	   finally (return ids)))
+	     if (member id list2)
+	     collect id into ids
+	     finally (return ids)))
 
 (defun org-roam-backlinks-get-ids (NUM)
   "Get the ids of all nodes which are backlinks of the selected nodes.
@@ -369,9 +445,9 @@ This list is filled using `org-roam-backlinks-get-node-backlinks'")
 Node selection is done with the underlying function
 `org-roam-backlinks--select-nodes'."
   (let* ((backlink-ids (org-roam-backlinks-get-node-backlinks NUM))
-	 (result (car backlink-ids)))
+	   (result (car backlink-ids)))
     (dolist (ids backlink-ids)
-      (setq result (org-roam-backlinks-id-intersection result ids)))
+	(setq result (org-roam-backlinks-id-intersection result ids)))
     result))
 
 (defun org-roam-backlinks-roam-node-read--completions* (node-list &optional filter-fn sort-fn)
@@ -386,20 +462,20 @@ takes.  FILTER-FN and SORT-FN are the same as in
 `org-roam-node-read--completions'.  The resulting alist is to be
 used with `org-roam-backlinks-roam-node-read*'."
   (let* ((template (org-roam-node--process-display-format org-roam-node-display-template))
-	 (nodes node-list)
-	 (nodes (mapcar (lambda (node)
-			  (org-roam-node-read--to-candidate node template)) nodes))
-	 (nodes (if filter-fn
-		    (cl-remove-if-not
-		     (lambda (n) (funcall filter-fn (cdr n)))
-		     nodes)
-		  nodes))
-	 (sort-fn (or sort-fn
-		      (when org-roam-node-default-sort
-			(intern (concat "org-roam-node-read-sort-by-"
-					(symbol-name org-roam-node-default-sort))))))
-	 (nodes (if sort-fn (seq-sort sort-fn nodes)
-		  nodes)))
+	   (nodes node-list)
+	   (nodes (mapcar (lambda (node)
+			    (org-roam-node-read--to-candidate node template)) nodes))
+	   (nodes (if filter-fn
+		      (cl-remove-if-not
+		       (lambda (n) (funcall filter-fn (cdr n)))
+		       nodes)
+		    nodes))
+	   (sort-fn (or sort-fn
+			(when org-roam-node-default-sort
+			  (intern (concat "org-roam-node-read-sort-by-"
+					  (symbol-name org-roam-node-default-sort))))))
+	   (nodes (if sort-fn (seq-sort sort-fn nodes)
+		    nodes)))
     nodes))
 
 (defun org-roam-backlinks-roam-node-read* (node-list &optional initial-input filter-fn sort-fn require-match prompt)
@@ -415,25 +491,25 @@ them in the way you want easily.
 INITIAL-INPUT, SORT-FN, FILTER-FN, REQUIRE-MATCH, PROMPT are the
 same as in `org-roam-node-read'."
   (let* ((nodes (org-roam-backlinks-roam-node-read--completions* node-list filter-fn sort-fn))
-	 (prompt (or prompt "Node: "))
-	 (node (completing-read
-		prompt
-		(lambda (string pred action)
-		  (if (eq action 'metadata)
-		      `(metadata
-			;; Preserve sorting in the completion UI if a sort-fn is used
-			,@(when sort-fn
-			    '((display-sort-function . identity)
-			      (cycle-sort-function . identity)))
-			(annotation-function
-			 . ,(lambda (title)
-			      (funcall org-roam-node-annotation-function
-				       (get-text-property 0 'node title))))
-			(category . org-roam-node))
-		    (complete-with-action action nodes string pred)))
-		nil require-match initial-input 'org-roam-node-history)))
+	   (prompt (or prompt "Node: "))
+	   (node (completing-read
+		  prompt
+		  (lambda (string pred action)
+		    (if (eq action 'metadata)
+			`(metadata
+			  ;; Preserve sorting in the completion UI if a sort-fn is used
+			  ,@(when sort-fn
+			      '((display-sort-function . identity)
+				(cycle-sort-function . identity)))
+			  (annotation-function
+			   . ,(lambda (title)
+				(funcall org-roam-node-annotation-function
+					 (get-text-property 0 'node title))))
+			  (category . org-roam-node))
+		      (complete-with-action action nodes string pred)))
+		  nil require-match initial-input 'org-roam-node-history)))
     (or (cdr (assoc node nodes))
-	(org-roam-node-create :title node))))
+	  (org-roam-node-create :title node))))
 
 (defun org-roam-backlinks-multi-node-read ()
   "Read a node from intersecting backlinks of multiple nodes.
@@ -450,10 +526,10 @@ argument. This function returns the selected node to be used in
 the higher level functions."
   (interactive)
   (let* ((num (read-number "Number of Nodes: "))
-	 (ids (org-roam-backlinks-get-ids num))
-	 (nodes (cl-loop for id in ids
-			 collect (org-roam-node-from-id id) into nodes
-			 finally (return nodes))))
+	   (ids (org-roam-backlinks-get-ids num))
+	   (nodes (cl-loop for id in ids
+			   collect (org-roam-node-from-id id) into nodes
+			   finally (return nodes))))
     (org-roam-backlinks-roam-node-read* nodes)))
 
 (defun org-roam-backlinks-multi-node-find ()
@@ -489,7 +565,7 @@ its input and not something else. The above function is what
 `org-roam-node-read's sorting uses and it has a special
 formatting."
   (time-less-p (org-roam-node-file-atime NODE1)
-	       (org-roam-node-file-atime NODE2)))
+		   (org-roam-node-file-atime NODE2)))
 
 (defun org-roam-logseq-tag-function (TAG)
   "An implementation of logseq's tagging system in org-roam.
@@ -513,28 +589,28 @@ and insert and org-mode elisp link that runs `switch-to-buffer'
 to switch to the newly-created buffer."
   (interactive "MTag: ")
   (let* ((init-list (org-roam-node-list))
-	 (tagged-nodes (cl-remove-if-not (lambda (NODE)
-					   (member TAG (org-roam-node-tags NODE)))
-					 init-list))
-	 (sorted-nodes (reverse (sort tagged-nodes #'org-roam-node-sort-by-atime)))
-	 (buffer-name (concat "*" TAG "-nodes*"))
-	 (buffer (get-buffer-create buffer-name)))
-    (save-excursion
-      (with-current-buffer buffer
-	(org-mode)
-	(dolist (node sorted-nodes)
-	  (goto-char (point-max))
-	  (newline)
-	  (insert
-	   "#+transclude: "
-	   (org-link-make-string
-	    (concat "id:" (org-roam-node-id node))))
-	   (newline))
-	(org-transclusion-add-all)))
-    (insert
-     (org-link-make-string
-      (concat "elisp:(switch-to-buffer \"" buffer-name "\")")
-      (concat "#" TAG)))))
+	     (tagged-nodes (cl-remove-if-not (lambda (NODE)
+					       (member TAG (org-roam-node-tags NODE)))
+					     init-list))
+	     (sorted-nodes (reverse (sort tagged-nodes #'org-roam-node-sort-by-atime)))
+	     (buffer-name (concat "*" TAG "-nodes*"))
+	     (buffer (get-buffer-create buffer-name)))
+	(save-excursion
+	  (with-current-buffer buffer
+	    (org-mode)
+	    (dolist (node sorted-nodes)
+	      (goto-char (point-max))
+	      (newline)
+	      (insert
+	       "#+transclude: "
+	       (org-link-make-string
+		(concat "id:" (org-roam-node-id node))))
+	       (newline))
+	    (org-transclusion-add-all)))
+	(insert
+	 (org-link-make-string
+	  (concat "elisp:(switch-to-buffer \"" buffer-name "\")")
+	  (concat "#" TAG)))))
 
 (require 'org-similarity)
 
@@ -576,24 +652,24 @@ to switch to the newly-created buffer."
 (setq org-similarity-prefix "- ")
 
 (setq org-todo-keywords
-      '((sequence "INBOX(i)"
-		  "PROCESSING(p)"
-		  "URGENT(u)"
-		  "LOW-PRIORITY(l)"
-		  "WAIT(w)"
-		  "TO-READ(r)"
-		  "|"
-		  "DONE(d)"
-		  )))
+	'((sequence "INBOX(i)"
+		    "PROCESSING(p)"
+		    "URGENT(u)"
+		    "LOW-PRIORITY(l)"
+		    "WAIT(w)"
+		    "TO-READ(r)"
+		    "|"
+		    "DONE(d)"
+		    )))
 
 (setq org-agenda-files
-      '("~/org_roam"
-	"~/org_roam/daily"
-	"~/org_roam/ref"))
+	'("~/org_roam"
+	  "~/org_roam/daily"
+	  "~/org_roam/ref"))
 
 (setq org-journal-dir "~/org_roam/daily"
-      org-journal-file-format "%d-%m-%Y.org"
-      org-journal-time-format "%a, %d/%m-%R")
+	org-journal-file-format "%d-%m-%Y.org"
+	org-journal-time-format "%a, %d/%m-%R")
 
 (add-hook 'org-agenda-mode-hook 'visual-line-mode)
 
@@ -628,9 +704,9 @@ file, as that is that files purpose"
     (when (org-entry-delete (point) "ID"))))
 
 (add-to-list 'org-after-todo-state-change-hook
-	     (lambda ()
-	       (when (equal org-state "DONE")
-		 (org-id-delete-entry))))
+	       (lambda ()
+		 (when (equal org-state "DONE")
+		   (org-id-delete-entry))))
 
 (defun org-roam-node-find-todos ()
   "Filtered view of org-roam-node-find which displays only nodes
@@ -641,23 +717,23 @@ out"
   (org-roam-node-find nil nil #'org-roam-node-todo))
 
 (setq org-roam-capture-templates
-      '(("d" "default" plain "%?" :if-new
-	 (file+head "${slug}-%<%d-%m-%y>.org" "#+title: ${title}
+	   '(("d" "default" plain "%?" :if-new
+	      (file+head "${slug}-%<%d-%m-%y>.org" "#+title: ${title}
 - index ::  
 - tags :: ")
-	 :unnarrowed t
-	 :jump-to-captured t)
+	      :unnarrowed t
+	      :jump-to-captured t)
 
-	("o" "outline" plain "%?" :if-new
-	 (file+head "outlines/${slug}-%<%d-%m-%y>.org" "#+title: ${title}
+	     ("o" "outline" plain "%?" :if-new
+	      (file+head "outlines/${slug}-%<%d-%m-%y>.org" "#+title: ${title}
 #+filetags: outline")
-	 :unnarrowed t
-	 :jump-to-captured t)
+	      :unnarrowed t
+	      :jump-to-captured t)
 
-	("r" "bibliography reference" plain
-	 "%?"
-	 :if-new
-	 (file+head "ref/${citekey}.org" "#+title: ${title}\n
+	     ("r" "bibliography reference" plain
+	      "%?"
+	      :if-new
+	      (file+head "ref/${citekey}.org" "#+title: ${title}\n
 #+filetags: ${entry-type}
 - keywords :: ${keywords}
 - tags :: 
@@ -668,51 +744,51 @@ out"
 :NOTER_DOCUMENT: ${file}  
 :NOTER_PAGE:              
 :END:")
-	 :unnarrowed t
-	 :jump-to-captured t)
+	      :unnarrowed t
+	      :jump-to-captured t)
 
-	("i" "info reference" plain
-	 "%?"
-	 :if-new
-	 (file+head "ref/${slug}.org" "#+title: ${title}\n
+	     ("i" "info reference" plain
+	      "%?"
+	      :if-new
+	      (file+head "ref/${slug}.org" "#+title: ${title}\n
 #+filetags: %:type
 - tags :: \n
 
 [[elisp:(Info-goto-node \"(%:file)%:node\")][Link to Info page]]
-     \n
-     ")
-	 :unnarowed t)
+	  \n
+	  ")
+	      :unnarowed t)
 
-	("e" "elfeed" plain
-	 "%?"
-	 :if-new
-	 (file+head "ref/${slug}.org" "#+title: %:description\n
+	     ("e" "elfeed" plain
+	      "%?"
+	      :if-new
+	      (file+head "ref/${slug}.org" "#+title: %:description\n
 #+filetags: %:type
 - keywords ::
 - tags :: \n\n\n
 
 [[%:link][Link to Elfeed Buffer]]
 [[%:elfeed-entry-link][Link to Web Page]]")
-	 :unnarowed t)
+	      :unnarowed t)
 
-	("t" "thesis" plain "%?" :if-new
-	 (file+head "thesis/${slug}-%<%d-%m-%y>.org" "#+title: ${title}
+	     ("t" "thesis" plain "%?" :if-new
+	      (file+head "thesis/${slug}-%<%d-%m-%y>.org" "#+title: ${title}
 - index ::  
 - tags :: ")
-	 :unnarrowed t
-	 :jump-to-captured t)))
+	      :unnarrowed t
+	      :jump-to-captured t)))
 
 (setq org-roam-capture-ref-templates 
-      '(("r" "ref" entry "* %?" :target
-	 (file+head "ref/${slug}.org" "#+title: ${title}\n
-     #+filetags: 
-      - tags :: \n")
-	 :unnarrowed t
-	 :jump-to-captured t)))
+	   '(("r" "ref" entry "* %?" :target
+	      (file+head "ref/${slug}.org" "#+title: ${title}\n
+	  #+filetags: 
+	   - tags :: \n")
+	      :unnarrowed t
+	      :jump-to-captured t)))
 
 (setq org-roam-dailies-capture-templates
-      '(("d" "default" entry "* %?" :if-new
-	 (file+head "%<%Y-%m-%d>.org" "#+title: %<%Y-%m-%d>\n#+filetags: daily")
-	 :empty-lines 1)))
+	   '(("d" "default" entry "* %?" :if-new
+	      (file+head "%<%Y-%m-%d>.org" "#+title: %<%Y-%m-%d>\n#+filetags: daily")
+	      :empty-lines 1)))
 
 (provide 'zettelkasten)

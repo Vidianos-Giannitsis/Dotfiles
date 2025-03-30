@@ -1,0 +1,8 @@
+# -*- mode: snippet -*-
+# name: julia_source
+# key: \sj
+# --
+#+NAME: $1
+#+BEGIN_SRC julia :tangle ../$2.jl
+$3
+#+END_SRC

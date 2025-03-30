@@ -1,14 +1,14 @@
 (undo-tree-save-format-version . 1)
-"ac3cca510e22e1116ee11609774f06ccf0c8b65b"
-[nil nil nil nil (26263 48775 260419 695000) 0 nil]
-([nil nil ((42643 . 42882) (#("(custom-set-faces
+"d34eea50075549a9d8e3ec5da914191dfe1fc288"
+[nil nil nil nil (26594 49010 677166 261000) 0 nil]
+([nil nil ((43040 . 43279) (#("(custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- )" 0 239 (fontified nil)) . -42643) (42639 . 42641) (#("
-" 0 1 (fontified nil)) . -42639) (40889 . 42640) (#(" " 0 1 (fontified nil)) . 40889) (40859 . 40890) (#("
-" 0 1 (fontified nil)) . -40859) (40778 . 40860) (#(" " 0 1 (fontified nil)) . 40778) (40512 . 40779) (#("(custom-set-variables
+ )" 0 239 (fontified nil)) . -43040) (43036 . 43038) (#("
+" 0 1 (fontified nil)) . -43036) (43036 . 43037) (43001 . 43008) (#(" " 0 1 (fontified nil)) . 43001) (43000 . 43001) (42951 . 42958) (#(" " 0 1 (fontified nil)) . 42951) (42950 . 42951) (42902 . 42909) (#(" " 0 1 (fontified nil)) . 42902) (42901 . 42902) (42854 . 42861) (#(" " 0 1 (fontified nil)) . 42854) (42853 . 42854) (42806 . 42813) (#(" " 0 1 (fontified nil)) . 42806) (42805 . 42806) (42765 . 42772) (#(" " 0 1 (fontified nil)) . 42765) (42764 . 42765) (42715 . 42722) (#(" " 0 1 (fontified nil)) . 42715) (42714 . 42715) (42658 . 42665) (#(" " 0 1 (fontified nil)) . 42658) (42657 . 42658) (42604 . 42611) (#(" " 0 1 (fontified nil)) . 42604) (42603 . 42604) (42547 . 42554) (#(" " 0 1 (fontified nil)) . 42547) (42546 . 42547) (42499 . 42506) (#(" " 0 1 (fontified nil)) . 42499) (42498 . 42499) (42449 . 42456) (#(" " 0 1 (fontified nil)) . 42449) (42448 . 42449) (42401 . 42408) (#(" " 0 1 (fontified nil)) . 42401) (42400 . 42401) (42356 . 42363) (#(" " 0 1 (fontified nil)) . 42356) (42355 . 42356) (42314 . 42321) (#(" " 0 1 (fontified nil)) . 42314) (42313 . 42314) (42261 . 42268) (#(" " 0 1 (fontified nil)) . 42261) (42260 . 42261) (42219 . 42226) (#(" " 0 1 (fontified nil)) . 42219) (42218 . 42219) (42164 . 42171) (#(" " 0 1 (fontified nil)) . 42164) (42163 . 42164) (42120 . 42127) (#(" " 0 1 (fontified nil)) . 42120) (42119 . 42120) (42064 . 42071) (#(" " 0 1 (fontified nil)) . 42064) (42063 . 42064) (42007 . 42014) (#(" " 0 1 (fontified nil)) . 42007) (42006 . 42007) (41960 . 41967) (#(" " 0 1 (fontified nil)) . 41960) (41959 . 41960) (41915 . 41922) (#(" " 0 1 (fontified nil)) . 41915) (41914 . 41915) (41863 . 41870) (#(" " 0 1 (fontified nil)) . 41863) (41862 . 41863) (41806 . 41813) (#(" " 0 1 (fontified nil)) . 41806) (41805 . 41806) (41750 . 41757) (#(" " 0 1 (fontified nil)) . 41750) (41749 . 41750) (41702 . 41709) (#(" " 0 1 (fontified nil)) . 41702) (41701 . 41702) (41653 . 41660) (#(" " 0 1 (fontified nil)) . 41653) (41652 . 41653) (41599 . 41606) (#(" " 0 1 (fontified nil)) . 41599) (41598 . 41599) (41552 . 41559) (#(" " 0 1 (fontified nil)) . 41552) (41551 . 41552) (41502 . 41509) (#(" " 0 1 (fontified nil)) . 41502) (41501 . 41502) (41449 . 41456) (#(" " 0 1 (fontified nil)) . 41449) (41448 . 41449) (41394 . 41401) (#(" " 0 1 (fontified nil)) . 41394) (41393 . 41394) (41341 . 41348) (#(" " 0 1 (fontified nil)) . 41341) (41340 . 41341) (41296 . 41303) (#(" " 0 1 (fontified nil)) . 41296) (41295 . 41296) (41239 . 41246) (#(" " 0 1 (fontified nil)) . 41239) (41238 . 41239) (41184 . 41191) (#(" " 0 1 (fontified nil)) . 41184) (41183 . 41184) (41132 . 41139) (#(" " 0 1 (fontified nil)) . 41132) (41131 . 41132) (41077 . 41084) (#(" " 0 1 (fontified nil)) . 41077) (41076 . 41077) (41019 . 42763) (#(" " 0 1 (fontified nil)) . 41019) (40989 . 41020) (#("
+" 0 1 (fontified nil)) . -40989) (40989 . 40990) (40977 . 40981) (40975 . 40976) (40905 . 40909) (40903 . 40904) (40831 . 40979) (#(" " 0 1 (fontified nil)) . 40831) (40565 . 40832) (#("(custom-set-variables
  ;; custom-set-variables was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
@@ -16,21 +16,62 @@
  '(custom-safe-themes
    '(\"0fffa9669425ff140ff2ae8568c7719705ef33b7a927a0ba7c5e2ffcfac09b75\" default))
  '(package-selected-packages
-   '(evil-collection openwith sequences cl-lib-highlight helm-system-packages async-await popup-complete helm-fuzzy-find evil-space yapfify yaml-mode ws-butler winum which-key web-mode web-beautify vterm volatile-highlights vi-tilde-fringe uuidgen use-package toc-org tagedit spaceline solarized-theme slim-mode scss-mode sass-mode restart-emacs request rainbow-delimiters pyvenv pytest pyenv-mode py-isort pug-mode pspp-mode popwin pip-requirements persp-mode pcre2el paradox org-projectile-helm org-present org-pomodoro org-mime org-download org-bullets open-junk-file neotree move-text mmm-mode markdown-toc magit macrostep lorem-ipsum livid-mode live-py-mode linum-relative link-hint json-mode js2-refactor js-doc intero indent-guide hy-mode hungry-delete htmlize hlint-refactor hl-todo hindent highlight-parentheses highlight-numbers highlight-indentation helm-themes helm-swoop helm-pydoc helm-projectile helm-mode-manager helm-make helm-hoogle helm-flx helm-descbinds helm-css-scss helm-ag haskell-snippets gruvbox-theme google-translate golden-ratio gnuplot gh-md flx-ido fill-column-indicator fancy-battery eyebrowse expand-region exec-path-from-shell evil-visualstar evil-visual-mark-mode evil-unimpaired evil-tutor evil-surround evil-search-highlight-persist evil-numbers evil-nerd-commenter evil-mc evil-matchit evil-lisp-state evil-indent-plus evil-iedit-state evil-exchange evil-escape evil-ediff evil-args evil-anzu eval-sexp-fu emmet-mode elisp-slime-nav dumb-jump diminish define-word cython-mode csv-mode company-ghci company-ghc column-enforce-mode coffee-mode cmm-mode clean-aindent-mode auto-highlight-symbol auto-compile auctex-latexmk anaconda-mode aggressive-indent adaptive-wrap ace-window ace-link ace-jump-helm-line)))" 0 2123 (fontified nil)) . -40512) (t 26263 48689 724282 511000)) nil (26263 48775 260407 402000) 0 nil])
-([nil current ((42654 . 42893) (#("(custom-set-faces
+   '(evil-collection openwith sequences cl-lib-highlight helm-system-packages async-await popup-complete helm-fuzzy-find evil-space yapfify yaml-mode ws-butler winum which-key web-mode web-beautify vterm volatile-highlights vi-tilde-fringe uuidgen use-package toc-org tagedit spaceline solarized-theme slim-mode scss-mode sass-mode restart-emacs request rainbow-delimiters pyvenv pytest pyenv-mode py-isort pug-mode pspp-mode popwin pip-requirements persp-mode pcre2el paradox org-projectile-helm org-present org-pomodoro org-mime org-download org-bullets open-junk-file neotree move-text mmm-mode markdown-toc magit macrostep lorem-ipsum livid-mode live-py-mode linum-relative link-hint json-mode js2-refactor js-doc intero indent-guide hy-mode hungry-delete htmlize hlint-refactor hl-todo hindent highlight-parentheses highlight-numbers highlight-indentation helm-themes helm-swoop helm-pydoc helm-projectile helm-mode-manager helm-make helm-hoogle helm-flx helm-descbinds helm-css-scss helm-ag haskell-snippets gruvbox-theme google-translate golden-ratio gnuplot gh-md flx-ido fill-column-indicator fancy-battery eyebrowse expand-region exec-path-from-shell evil-visualstar evil-visual-mark-mode evil-unimpaired evil-tutor evil-surround evil-search-highlight-persist evil-numbers evil-nerd-commenter evil-mc evil-matchit evil-lisp-state evil-indent-plus evil-iedit-state evil-exchange evil-escape evil-ediff evil-args evil-anzu eval-sexp-fu emmet-mode elisp-slime-nav dumb-jump diminish define-word cython-mode csv-mode company-ghci company-ghc column-enforce-mode coffee-mode cmm-mode clean-aindent-mode auto-highlight-symbol auto-compile auctex-latexmk anaconda-mode aggressive-indent adaptive-wrap ace-window ace-link ace-jump-helm-line)))" 0 2123 (fontified nil)) . -40565) (t 26592 28447 385318 7000)) nil (26594 49010 677154 319000) 0 nil])
+([nil current ((43112 . 43351) (#("(custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- )" 0 239 (fontified nil)) . -42654) (42650 . 42652) (#("
-" 0 1 (fontified nil)) . -42650) (40889 . 42651) (#(" " 0 1 (fontified nil)) . 40889) (40859 . 40890) (#("
-" 0 1 (fontified nil)) . -40859) (40778 . 40860) (#(" " 0 1 (fontified nil)) . 40778) (40512 . 40779) (#("(custom-set-variables
+ )" 0 239 (fontified nil)) . -43112) (43108 . 43110) (#("
+" 0 1 (fontified nil)) . -43108) (43108 . 43109) (43073 . 43080) (#(" " 0 1 (fontified nil)) . 43073) (43072 . 43073) (43023 . 43030) (#(" " 0 1 (fontified nil)) . 43023) (43022 . 43023) (42974 . 42981) (#(" " 0 1 (fontified nil)) . 42974) (42973 . 42974) (42926 . 42933) (#(" " 0 1 (fontified nil)) . 42926) (42925 . 42926) (42878 . 42885) (#(" " 0 1 (fontified nil)) . 42878) (42877 . 42878) (42837 . 42844) (#(" " 0 1 (fontified nil)) . 42837) (42836 . 42837) (42787 . 42794) (#(" " 0 1 (fontified nil)) . 42787) (42786 . 42787) (42730 . 42737) (#(" " 0 1 (fontified nil)) . 42730) (42729 . 42730) (42676 . 42683) (#(" " 0 1 (fontified nil)) . 42676) (42675 . 42676) (42619 . 42626) (#(" " 0 1 (fontified nil)) . 42619) (42618 . 42619) (42571 . 42578) (#(" " 0 1 (fontified nil)) . 42571) (42570 . 42571) (42521 . 42528) (#(" " 0 1 (fontified nil)) . 42521) (42520 . 42521) (42473 . 42480) (#(" " 0 1 (fontified nil)) . 42473) (42472 . 42473) (42428 . 42435) (#(" " 0 1 (fontified nil)) . 42428) (42427 . 42428) (42386 . 42393) (#(" " 0 1 (fontified nil)) . 42386) (42385 . 42386) (42333 . 42340) (#(" " 0 1 (fontified nil)) . 42333) (42332 . 42333) (42291 . 42298) (#(" " 0 1 (fontified nil)) . 42291) (42290 . 42291) (42236 . 42243) (#(" " 0 1 (fontified nil)) . 42236) (42235 . 42236) (42192 . 42199) (#(" " 0 1 (fontified nil)) . 42192) (42191 . 42192) (42136 . 42143) (#(" " 0 1 (fontified nil)) . 42136) (42135 . 42136) (42079 . 42086) (#(" " 0 1 (fontified nil)) . 42079) (42078 . 42079) (42032 . 42039) (#(" " 0 1 (fontified nil)) . 42032) (42031 . 42032) (41987 . 41994) (#(" " 0 1 (fontified nil)) . 41987) (41986 . 41987) (41935 . 41942) (#(" " 0 1 (fontified nil)) . 41935) (41934 . 41935) (41878 . 41885) (#(" " 0 1 (fontified nil)) . 41878) (41877 . 41878) (41822 . 41829) (#(" " 0 1 (fontified nil)) . 41822) (41821 . 41822) (41774 . 41781) (#(" " 0 1 (fontified nil)) . 41774) (41773 . 41774) (41725 . 41732) (#(" " 0 1 (fontified nil)) . 41725) (41724 . 41725) (41671 . 41678) (#(" " 0 1 (fontified nil)) . 41671) (41670 . 41671) (41624 . 41631) (#(" " 0 1 (fontified nil)) . 41624) (41623 . 41624) (41574 . 41581) (#(" " 0 1 (fontified nil)) . 41574) (41573 . 41574) (41521 . 41528) (#(" " 0 1 (fontified nil)) . 41521) (41520 . 41521) (41466 . 41473) (#(" " 0 1 (fontified nil)) . 41466) (41465 . 41466) (41413 . 41420) (#(" " 0 1 (fontified nil)) . 41413) (41412 . 41413) (41368 . 41375) (#(" " 0 1 (fontified nil)) . 41368) (41367 . 41368) (41311 . 41318) (#(" " 0 1 (fontified nil)) . 41311) (41310 . 41311) (41256 . 41263) (#(" " 0 1 (fontified nil)) . 41256) (41255 . 41256) (41204 . 41211) (#(" " 0 1 (fontified nil)) . 41204) (41203 . 41204) (41149 . 41156) (#(" " 0 1 (fontified nil)) . 41149) (41148 . 41149) (41091 . 42835) (#(" " 0 1 (fontified nil)) . 41091) (41061 . 41092) (#("
+" 0 1 (fontified nil)) . -41061) (41061 . 41062) (41049 . 41053) (41047 . 41048) (40977 . 40981) (40975 . 40976) (40905 . 40909) (40903 . 40904) (40831 . 41046) (#(" " 0 1 (fontified nil)) . 40831) (40565 . 40832) (#("(custom-set-variables
  ;; custom-set-variables was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(custom-safe-themes
-   '(\"0fffa9669425ff140ff2ae8568c7719705ef33b7a927a0ba7c5e2ffcfac09b75\" default))
+   '(\"7964b513f8a2bb14803e717e0ac0123f100fb92160dcf4a467f530868ebaae3e\"
+     \"0fffa9669425ff140ff2ae8568c7719705ef33b7a927a0ba7c5e2ffcfac09b75\"
+     default))
  '(package-selected-packages
-   '(lispy evil-collection openwith sequences cl-lib-highlight helm-system-packages async-await popup-complete helm-fuzzy-find evil-space yapfify yaml-mode ws-butler winum which-key web-mode web-beautify vterm volatile-highlights vi-tilde-fringe uuidgen use-package toc-org tagedit spaceline solarized-theme slim-mode scss-mode sass-mode restart-emacs request rainbow-delimiters pyvenv pytest pyenv-mode py-isort pug-mode pspp-mode popwin pip-requirements persp-mode pcre2el paradox org-projectile-helm org-present org-pomodoro org-mime org-download org-bullets open-junk-file neotree move-text mmm-mode markdown-toc magit macrostep lorem-ipsum livid-mode live-py-mode linum-relative link-hint json-mode js2-refactor js-doc intero indent-guide hy-mode hungry-delete htmlize hlint-refactor hl-todo hindent highlight-parentheses highlight-numbers highlight-indentation helm-themes helm-swoop helm-pydoc helm-projectile helm-mode-manager helm-make helm-hoogle helm-flx helm-descbinds helm-css-scss helm-ag haskell-snippets gruvbox-theme google-translate golden-ratio gnuplot gh-md flx-ido fill-column-indicator fancy-battery eyebrowse expand-region exec-path-from-shell evil-visualstar evil-visual-mark-mode evil-unimpaired evil-tutor evil-surround evil-search-highlight-persist evil-numbers evil-nerd-commenter evil-mc evil-matchit evil-lisp-state evil-indent-plus evil-iedit-state evil-exchange evil-escape evil-ediff evil-args evil-anzu eval-sexp-fu emmet-mode elisp-slime-nav dumb-jump diminish define-word cython-mode csv-mode company-ghci company-ghc column-enforce-mode coffee-mode cmm-mode clean-aindent-mode auto-highlight-symbol auto-compile auctex-latexmk anaconda-mode aggressive-indent adaptive-wrap ace-window ace-link ace-jump-helm-line)))" 0 2129 (fontified nil)) . -40512) (t 26263 48775 271008 210000)) nil (26263 48796 418707 463000) 0 nil])
+   '(evil-collection openwith sequences cl-lib-highlight
+		     helm-system-packages async-await popup-complete
+		     helm-fuzzy-find evil-space yapfify yaml-mode
+		     ws-butler winum which-key web-mode web-beautify
+		     vterm volatile-highlights vi-tilde-fringe uuidgen
+		     use-package toc-org tagedit spaceline
+		     solarized-theme slim-mode scss-mode sass-mode
+		     restart-emacs request rainbow-delimiters pyvenv
+		     pytest pyenv-mode py-isort pug-mode pspp-mode
+		     popwin pip-requirements persp-mode pcre2el
+		     paradox org-projectile-helm org-present
+		     org-pomodoro org-mime org-download org-bullets
+		     open-junk-file neotree move-text mmm-mode
+		     markdown-toc magit macrostep lorem-ipsum
+		     livid-mode live-py-mode linum-relative link-hint
+		     json-mode js2-refactor js-doc intero indent-guide
+		     hy-mode hungry-delete htmlize hlint-refactor
+		     hl-todo hindent highlight-parentheses
+		     highlight-numbers highlight-indentation
+		     helm-themes helm-swoop helm-pydoc helm-projectile
+		     helm-mode-manager helm-make helm-hoogle helm-flx
+		     helm-descbinds helm-css-scss helm-ag
+		     haskell-snippets gruvbox-theme google-translate
+		     golden-ratio gnuplot gh-md flx-ido
+		     fill-column-indicator fancy-battery eyebrowse
+		     expand-region exec-path-from-shell
+		     evil-visualstar evil-visual-mark-mode
+		     evil-unimpaired evil-tutor evil-surround
+		     evil-search-highlight-persist evil-numbers
+		     evil-nerd-commenter evil-mc evil-matchit
+		     evil-lisp-state evil-indent-plus evil-iedit-state
+		     evil-exchange evil-escape evil-ediff evil-args
+		     evil-anzu eval-sexp-fu emmet-mode elisp-slime-nav
+		     dumb-jump diminish define-word cython-mode
+		     csv-mode company-ghci company-ghc
+		     column-enforce-mode coffee-mode cmm-mode
+		     clean-aindent-mode auto-highlight-symbol
+		     auto-compile auctex-latexmk anaconda-mode
+		     aggressive-indent adaptive-wrap ace-window
+		     ace-link ace-jump-helm-line)))" 0 2473 (fontified nil)) . -40565) (t 26594 49010 680142 310000)) nil (26594 51885 545855 295000) 0 nil])
 nil

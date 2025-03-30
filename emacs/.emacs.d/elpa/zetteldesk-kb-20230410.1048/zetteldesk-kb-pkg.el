@@ -1,2 +1,0 @@
-;;; Generated package description from zetteldesk-kb.el  -*- no-byte-compile: t -*-
-(define-package "zetteldesk-kb" "20230410.1048" "Keybindings for zetteldesk.el" '((zetteldesk "1.0.1") (hydra "0.15") (major-mode-hydra "0.2") (emacs "24.1")) :commit "1266b7ed67b6236087c5591b28823ddc34058d2f" :authors '(("Vidianos Giannitsis" . "vidianosgiannitsis@gmail.com")) :maintainer '("Vidianos Giannitsis" . "vidianosgiannitsis@gmail.com") :url "https://github.com/Vidianos-Giannitsis/zetteldesk-kb.el")
