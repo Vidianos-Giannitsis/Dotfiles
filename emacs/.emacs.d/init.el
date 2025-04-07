@@ -1227,51 +1227,55 @@ it."
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(custom-safe-themes
-   '("3061706fa92759264751c64950df09b285e3a2d3a9db771e99bcbb2f9b470037"
+   '("00445e6f15d31e9afaa23ed0d765850e9cd5e929be5e8e63b114a3346236c44c"
+     "3061706fa92759264751c64950df09b285e3a2d3a9db771e99bcbb2f9b470037"
      "7964b513f8a2bb14803e717e0ac0123f100fb92160dcf4a467f530868ebaae3e"
      "0fffa9669425ff140ff2ae8568c7719705ef33b7a927a0ba7c5e2ffcfac09b75"
      default))
  '(package-selected-packages
-   '(evil-collection openwith sequences cl-lib-highlight
-		     helm-system-packages async-await popup-complete
-		     helm-fuzzy-find evil-space yapfify yaml-mode
-		     ws-butler winum which-key web-mode web-beautify
-		     vterm volatile-highlights vi-tilde-fringe uuidgen
-		     use-package toc-org tagedit spaceline
-		     solarized-theme slim-mode scss-mode sass-mode
-		     restart-emacs request rainbow-delimiters pyvenv
-		     pytest pyenv-mode py-isort pug-mode pspp-mode
-		     popwin pip-requirements persp-mode pcre2el
-		     paradox org-projectile-helm org-present
-		     org-pomodoro org-mime org-download org-bullets
-		     open-junk-file neotree move-text mmm-mode
-		     markdown-toc magit macrostep lorem-ipsum
-		     livid-mode live-py-mode linum-relative link-hint
-		     json-mode js2-refactor js-doc intero indent-guide
-		     hy-mode hungry-delete htmlize hlint-refactor
-		     hl-todo hindent highlight-parentheses
-		     highlight-numbers highlight-indentation
-		     helm-themes helm-swoop helm-pydoc helm-projectile
-		     helm-mode-manager helm-make helm-hoogle helm-flx
-		     helm-descbinds helm-css-scss helm-ag
-		     haskell-snippets gruvbox-theme google-translate
-		     golden-ratio gnuplot gh-md flx-ido
-		     fill-column-indicator fancy-battery eyebrowse
-		     expand-region exec-path-from-shell
-		     evil-visualstar evil-visual-mark-mode
-		     evil-unimpaired evil-tutor evil-surround
-		     evil-search-highlight-persist evil-numbers
-		     evil-nerd-commenter evil-mc evil-matchit
-		     evil-lisp-state evil-indent-plus evil-iedit-state
-		     evil-exchange evil-escape evil-ediff evil-args
-		     evil-anzu eval-sexp-fu emmet-mode elisp-slime-nav
-		     dumb-jump diminish define-word cython-mode
-		     csv-mode company-ghci company-ghc
-		     column-enforce-mode coffee-mode cmm-mode
-		     clean-aindent-mode auto-highlight-symbol
-		     auto-compile auctex-latexmk anaconda-mode
-		     aggressive-indent adaptive-wrap ace-window
-		     ace-link ace-jump-helm-line)))
+   '(ace-jump-helm-line ace-link ace-window adaptive-wrap
+			aggressive-indent anaconda-mode async-await
+			auctex-latexmk auto-compile
+			auto-highlight-symbol citar-org-node
+			cl-lib-highlight clean-aindent-mode cmm-mode
+			coffee-mode column-enforce-mode company-ghc
+			company-ghci csv-mode cython-mode define-word
+			diminish dumb-jump elisp-slime-nav emmet-mode
+			eval-sexp-fu evil-anzu evil-args
+			evil-collection evil-ediff evil-escape
+			evil-exchange evil-iedit-state
+			evil-indent-plus evil-lisp-state evil-matchit
+			evil-mc evil-nerd-commenter evil-numbers
+			evil-search-highlight-persist evil-space
+			evil-surround evil-tutor evil-unimpaired
+			evil-visual-mark-mode evil-visualstar
+			exec-path-from-shell expand-region eyebrowse
+			fancy-battery fill-column-indicator flx-ido
+			gh-md gnuplot golden-ratio google-translate
+			gruvbox-theme haskell-snippets helm-ag
+			helm-css-scss helm-descbinds helm-flx
+			helm-fuzzy-find helm-hoogle helm-make
+			helm-mode-manager helm-projectile helm-pydoc
+			helm-swoop helm-system-packages helm-themes
+			highlight-indentation highlight-numbers
+			highlight-parentheses hindent hl-todo
+			hlint-refactor htmlize hungry-delete hy-mode
+			indent-guide intero js-doc js2-refactor
+			json-mode link-hint linum-relative
+			live-py-mode livid-mode lorem-ipsum macrostep
+			magit markdown-toc mmm-mode move-text neotree
+			open-junk-file openwith org-bullets
+			org-download org-mime org-pomodoro org-present
+			org-projectile-helm paradox pcre2el persp-mode
+			pip-requirements popup-complete popwin
+			pspp-mode pug-mode py-isort pyenv-mode pytest
+			pyvenv rainbow-delimiters request
+			restart-emacs sass-mode scss-mode sequences
+			slim-mode solarized-theme spaceline tagedit
+			toc-org use-package uuidgen vi-tilde-fringe
+			volatile-highlights vterm web-beautify
+			web-mode which-key winum ws-butler yaml-mode
+			yapfify)))
 
 (custom-set-faces
  ;; custom-set-faces was added by Custom.

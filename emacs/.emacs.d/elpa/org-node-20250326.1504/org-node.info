@@ -1,0 +1,1094 @@
+This is org-node.info, produced by makeinfo version 6.8 from
+org-node.texi.
+
+INFO-DIR-SECTION Emacs
+START-INFO-DIR-ENTRY
+* Org-node: (org-node). Link org-id entries into a network.
+END-INFO-DIR-ENTRY
+
+
+File: org-node.info,  Node: Top,  Next: Background,  Up: (dir)
+
+org-node
+********
+
+* Menu:
+
+* Background::
+* Setup::
+* Backlinks::
+* Misc::
+* Appendix::
+
+— The Detailed Node Listing —
+
+Background
+
+* What's all this::
+* What's a "node"?::
+* Features::
+
+Setup
+
+* Install::
+* Quick start::
+
+Install
+
+* An update broke things?::
+
+Backlinks
+
+* Backlink solution 1 displayed in a separate window::
+* Backlink solution 2 Print inside the file::
+
+Backlink solution 1: displayed in a separate window
+
+* Option 1A Reuse the org-roam buffer::
+* Option 2A Use the new org-node-context buffer::
+
+Backlink solution 2: Print inside the file
+
+* Option 2A Automatic BACKLINKS property::
+* Option 2B Automatic ‘BACKLINKS...END’ drawer: Option 2B Automatic BACKLINKSEND drawer.
+* Option 2C Semi-automatic ‘BACKLINKS...END’ drawer: Option 2C Semi-automatic BACKLINKSEND drawer.
+
+Misc
+
+* Manage org-id-locations::
+* Exclude uninteresting nodes::
+* Org-capture::
+* Completion-at-point::
+* FAQ Any analogue to org-roam-node-display-template?::
+* Grep::
+* Let org-open-at-point detect refs::
+* Limitation TRAMP::
+* Limitation Encryption::
+* Limitation Unique titles::
+* Limitation Org-ref::
+* Toolbox::
+* Experimental Node sequences::
+
+Manage org-id-locations
+
+* Undoing a Roam hack::
+
+Exclude uninteresting nodes
+
+* Limitation ROAM_EXCLUDE::
+
+Experimental: Node sequences
+
+* What are node seqs?::
+
+Appendix
+
+* Appendix I Rosetta stone::
+* Appendix II How to rollback::
+* Appendix III Random tips::
+
+
+
+File: org-node.info,  Node: Background,  Next: Setup,  Prev: Top,  Up: Top
+
+1 Background
+************
+
+* Menu:
+
+* What's all this::
+* What's a "node"?::
+* Features::
+
+
+File: org-node.info,  Node: What's all this,  Next: What's a "node"?,  Up: Background
+
+1.1 What’s all this
+===================
+
+I like org-roam (https://github.com/org-roam/org-roam) but found it too
+slow, so I made quickroam (https://github.com/meedstrom/quickroam).  And
+that idea spun off into this package, a standalone thing.  It may also
+be easier to pick up than org-roam.
+
+   • *If you were using org-roam*, there is nothing to migrate.  You can
+     use both packages.  It’s the same on-disk format: "notes" are
+     identified by their org-id.
+
+     With optional shims, you can even *skip syncing the org-roam DB*
+     and continue using its rich backlinks buffer!
+
+     In pursuit of being "just org-id", this package has no equivalent
+     setting to ‘org-roam-directory’ – it just looks up the
+     ‘org-id-locations’ table.
+
+   • *If you were not using org-roam*, maybe think of it as somewhat
+     like org-recent-headings
+     (https://github.com/alphapapa/org-recent-headings) tooled-up to the
+     extent that you won’t need other methods of browsing, as long as
+     you give IDs to all objects of interest.
+
+     If you were the sort of person to prefer ID-links over file links
+     or any other type of link, you’re in the right place!  Now you can
+     rely on IDs, and—if you want—stop worrying about filenames,
+     directories and subtree hierarchies.  As long as you’ve assigned an
+     ID to a heading or file, you can find it later.
+
+
+File: org-node.info,  Node: What's a "node"?,  Next: Features,  Prev: What's all this,  Up: Background
+
+1.2 What’s a "node"?
+====================
+
+My life can be divided into two periods "*before org-roam*" and "*after
+org-roam*".  I crossed a kind of gap once I got a good way to link
+between my notes.  It’s odd to remember when I just relied on browsing
+subtrees and filesystem directories – what a strange way to work!
+
+   I used to lose track of things I had written, under some forgotten
+heading in a forgotten file in a forgotten directory.  The org-roam
+method let me *find and build on* my own work, instead of recreating it
+all the time (https://en.wikipedia.org/wiki/Cryptomnesia).
+
+   At the core, all the "notetaking packages" (orgrr
+(https://github.com/rtrppl/orgrr)/zk
+(https://github.com/localauthor/zk)/zetteldeft
+(https://github.com/EFLS/zetteldeft)/org-roam
+(https://github.com/org-roam/org-roam)/denote
+(https://github.com/protesilaos/denote)/howm
+(https://github.com/kaorahi/howm)/minaduki
+(https://github.com/kisaragi-hiu/minaduki)/...) try to help you with
+this: make it easy to link between notes and explore them.
+
+   Right off the bat, that imposes two requirements: a method to search
+for notes, since you can’t link to something you can’t search for, and a
+design-choice about what kinds of things should turn up as search hits.
+What’s a "note"?
+
+   Just searching for Org files is too coarse.  Just searching for any
+subtree anywhere brings in too much clutter.
+
+   *Here’s what org-roam invented.*  It turns out that if you limit the
+search-hits to just those files and subtrees you’ve deigned to assign an
+org-id – which roughly maps to _everything you’ve ever thought it was
+worth linking to_ – it filters out the noise excellently.
+
+   Once a subtree has an ID you can link to, it’s a "node" because it
+has joined the wider graph, the network of linked nodes.  I wish the
+English language had more distinct sounds for the words "node" and
+"note", but to clarify, I’ll say "ID-node" when the distinction matters.
+
+
+File: org-node.info,  Node: Features,  Prev: What's a "node"?,  Up: Background
+
+1.3 Features
+============
+
+A comparison of three systems that all permit relying on org-id and
+don’t lock you into the concept of "one-note-per-file".
+
+Feature                            org-roam   org-node             org-super-links (https://github.com/toshism/org-super-links)
+-------------------------------------------------------------------------------------------------------------------------------------
+Backlinks                          yes        yes                  yes
+Node search and insert             yes        yes                  – (suggests org-ql (https://github.com/alphapapa/org-ql))
+Node aliases                       yes        yes                  –
+Node exclusion                     yes        limited              not applicable
+Refile                             yes        yes                  –
+Rich backlinks buffer              yes        yes                  –
+Customize how backlinks shown      yes        yes                  yes
+Reflinks                           yes        yes (as backlinks)   –
+Ref search                         yes        yes (as aliases)     not applicable
+Org 9.5 @citations as refs         yes        yes                  not applicable
+Support org-ref v3                 yes        limited              not applicable
+Support org-ref v2                 yes        –                    not applicable
+Work thru org-roam-capture         yes        yes                  ?
+Work thru org-capture              –          yes                  ?
+Daily-nodes                        yes        yes                  –
+Node sequences                     –          yes                  –
+Show backlinks in same window      –          yes                  yes
+Cooperate with org-super-links     –          yes                  not applicable
+Fix link descriptions              –          yes                  –
+List dead links                    –          yes                  –
+Rename file when title changes     –          yes                  –
+Warn about duplicate titles        –          yes                  –
+Principled "related-section"       –          yes                  yes
+Untitled notes                     –          –                    –
+Support ‘roam:’ links              yes        – (wontfix)          –
+Can have separate note piles       yes        – (wontfix)          not applicable
+Some query-able cache              EmacSQL    hash tables          –
+Async cache rebuild                –          yes                  not applicable
+*Time to cache my 3000 nodes*      *2m 48s*   *0m 01s*             not applicable
+*Time to save file w/ 400 nodes*   *5–10s*    *instant*            ?
+*Time to open minibuffer*          *1–3s*     *instant*            not applicable
+
+
+File: org-node.info,  Node: Setup,  Next: Backlinks,  Prev: Background,  Up: Top
+
+2 Setup
+*******
+
+* Menu:
+
+* Install::
+* Quick start::
+
+
+File: org-node.info,  Node: Install,  Next: Quick start,  Up: Setup
+
+2.1 Install
+===========
+
+Assuming your package manager knows about MELPA
+(https://melpa.org/#/getting-started), add this initfile snippet:
+
+     (use-package org-node
+       :after org
+       :config (org-node-cache-mode))
+
+   If you use org-roam, you _may_ want the following module as well, at
+least during a transition period.  Check its README to make org-node
+work smoothly with org-roam
+(https://github.com/meedstrom/org-node-fakeroam)!
+
+     (use-package org-node-fakeroam
+       :defer)
+
+* Menu:
+
+* An update broke things?::
+
+
+File: org-node.info,  Node: An update broke things?,  Up: Install
+
+2.1.1 An update broke things?
+-----------------------------
+
+See How to rollback
+(https://github.com/meedstrom/org-node#appendix-ii-how-to-rollback) at
+the end of this readme.
+
+
+File: org-node.info,  Node: Quick start,  Prev: Install,  Up: Setup
+
+2.2 Quick start
+===============
+
+If you’re new to these concepts, fear not.  The main things for
+day-to-day operation are two verbs: "find" and "insert".
+
+   Pick some short keys and try them out.
+
+     (keymap-set global-map "M-s M-f" #'org-node-find)
+     (keymap-set org-mode-map "M-s M-i" #'org-node-insert-link)
+
+   To browse config options, type ‘M-x customize-group RET org-node’.
+
+   Final tip: there’s *no separate command* for creating a new node!
+Reuse one of the commands above, and type the name of a node that
+doesn’t exist.
+
+   Try it and see what happens!
+
+
+File: org-node.info,  Node: Backlinks,  Next: Misc,  Prev: Setup,  Up: Top
+
+3 Backlinks
+***********
+
+Backlinks are the butter on the bread that is your notes.  If you’ve
+ever seen a "What links here" section on some webpage, that’s exactly
+what it is.  Imagine seeing that, all the time.  The following sections
+outline two general ways to do so.
+
+* Menu:
+
+* Backlink solution 1 displayed in a separate window::
+* Backlink solution 2 Print inside the file::
+
+
+File: org-node.info,  Node: Backlink solution 1 displayed in a separate window,  Next: Backlink solution 2 Print inside the file,  Up: Backlinks
+
+3.1 Backlink solution 1: displayed in a separate window
+=======================================================
+
+* Menu:
+
+* Option 1A Reuse the org-roam buffer::
+* Option 2A Use the new org-node-context buffer::
+
+
+File: org-node.info,  Node: Option 1A Reuse the org-roam buffer,  Next: Option 2A Use the new org-node-context buffer,  Up: Backlink solution 1 displayed in a separate window
+
+3.1.1 Option 1A: Reuse the org-roam buffer
+------------------------------------------
+
+Believe it or not, it Just Works.  So long as you install
+org-node-fakeroam (https://github.com/meedstrom/org-node-fakeroam) –
+which pulls in org-roam with it – and add to initfiles:
+
+     (org-node-fakeroam-redisplay-mode)
+     (org-node-fakeroam-jit-backlinks-mode) ;; shim so no SQLite needed
+     (org-node-fakeroam-fast-render-mode) ;; perf fixes
+
+     ;; Example keybindings
+     (keymap-set org-mode-map "M-s M-t M-t" #'org-roam-buffer-toggle)
+     (keymap-set org-mode-map "M-s M-t M-d" #'org-roam-buffer-display-dedicated)
+     ;; if your window mgmt style is constantly lose all windows
+     (keymap-set global-map "M-s M-r" #'org-node-fakeroam-show-buffer)
+
+
+File: org-node.info,  Node: Option 2A Use the new org-node-context buffer,  Prev: Option 1A Reuse the org-roam buffer,  Up: Backlink solution 1 displayed in a separate window
+
+3.1.2 Option 2A: Use the new org-node-context buffer
+----------------------------------------------------
+
+Org-node ships a complete rewrite of the org-roam buffer.
+
+   Add to initfiles:
+
+     (org-node-context-follow-mode)
+
+     ;; Example keybindings
+     (keymap-set org-mode-map "M-s M-t" #'org-node-context-toggle)
+     ;; if your window mgmt style is constantly lose all windows
+     (keymap-set global-map "M-s M-r" #'org-node-context-raise)
+
+
+File: org-node.info,  Node: Backlink solution 2 Print inside the file,  Prev: Backlink solution 1 displayed in a separate window,  Up: Backlinks
+
+3.2 Backlink solution 2: Print inside the file
+==============================================
+
+I rarely have the screen space to display a backlink buffer.  Because it
+needs my active involvement to keep visible, I go long periods seeing no
+backlinks.
+
+   A complementary solution, which can also stand alone, is to have the
+backlinks _written into_ the file, on an Org property line or in a
+drawer.
+
+* Menu:
+
+* Option 2A Automatic BACKLINKS property::
+* Option 2B Automatic ‘BACKLINKS...END’ drawer: Option 2B Automatic BACKLINKSEND drawer.
+* Option 2C Semi-automatic ‘BACKLINKS...END’ drawer: Option 2C Semi-automatic BACKLINKSEND drawer.
+
+
+File: org-node.info,  Node: Option 2A Automatic BACKLINKS property,  Next: Option 2B Automatic BACKLINKSEND drawer,  Up: Backlink solution 2 Print inside the file
+
+3.2.1 Option 2A: Automatic ‘:BACKLINKS:’ property
+-------------------------------------------------
+
+Add to initfiles:
+
+     (setq org-node-backlink-do-drawers nil)
+     (org-node-backlink-mode)
+
+   For a first-time run, type ‘M-x org-node-backlink-mass-update-props’.
+(Don’t worry if you change your mind; undo with ‘M-x
+org-node-backlink-mass-delete-props’.)
+
+   NOTE 1: To be clear, this mode never generates new IDs.  That’s your
+own business.  This only adds/edits ‘:BACKLINKS:’ properties.
+
+   That also means that *not all links create a backlink,* only links
+located in an entry that has an ID.  After all, there must be something
+to link back to.
+
+   NOTE 2: People who prefer to hard-wrap text, instead of enabling
+‘visual-line-mode’ or similar, may prefer Option 2B.
+
+
+File: org-node.info,  Node: Option 2B Automatic BACKLINKSEND drawer,  Next: Option 2C Semi-automatic BACKLINKSEND drawer,  Prev: Option 2A Automatic BACKLINKS property,  Up: Backlink solution 2 Print inside the file
+
+3.2.2 Option 2B: Automatic ‘:BACKLINKS:...:END:’ drawer
+-------------------------------------------------------
+
+Same as Option 2A, but uses a multiline drawer.
+
+   For a first-time run, type ‘M-x
+org-node-backlink-mass-update-drawers’.  (Don’t worry if you change your
+mind; undo with ‘M-x org-node-mass-delete-drawers’.)
+
+   Then add to initfiles:
+
+     (org-node-backlink-mode)
+
+
+File: org-node.info,  Node: Option 2C Semi-automatic BACKLINKSEND drawer,  Prev: Option 2B Automatic BACKLINKSEND drawer,  Up: Backlink solution 2 Print inside the file
+
+3.2.3 Option 2C: Semi-automatic ‘:BACKLINKS:...:END:’ drawer
+------------------------------------------------------------
+
+If you were previously using org-super-links
+(https://github.com/toshism/org-super-links), you can continue letting
+it manage them, and leave org-node out of the matter.
+
+   Just add to initfiles:
+
+     (add-hook 'org-node-insert-link-hook
+               #'org-super-links-convert-link-to-super)
+
+   Now, you have some bonus tools:
+
+   • 1.  You can list any dead forward-links to fix them manually:
+
+     ‘M-x org-node-list-dead-links’
+
+   • 2.  You can add all missing backlinks in bulk:
+
+     ‘M-x org-node-backlink-mass-update-drawers’
+
+   The second command may be useful as a starting point if you’re new to
+org-super-links, pre-populating the notes you already have.
+
+   However, when you have pre-existing drawers... *MAKE A FULL BACKUP*
+before trying it!
+
+   Org-node has a different usage in mind than org-super-links.  You may
+be accustomed to having old manually formatted and sorted drawers.
+
+   Running aforementioned command *may re-sort your backlinks and
+re-format their appearance into something you don’t want*; double-check
+the following options:
+
+   • ‘org-node-backlink-drawer-sorter’
+   • ‘org-node-backlink-drawer-formatter’
+
+   Finally, lines without a proper Org link like ‘[[id:foo][bar]]’ are
+*deleted*, which would mean *destroying any timestamp within.*
+
+
+File: org-node.info,  Node: Misc,  Next: Appendix,  Prev: Backlinks,  Up: Top
+
+4 Misc
+******
+
+* Menu:
+
+* Manage org-id-locations::
+* Exclude uninteresting nodes::
+* Org-capture::
+* Completion-at-point::
+* FAQ Any analogue to org-roam-node-display-template?::
+* Grep::
+* Let org-open-at-point detect refs::
+* Limitation TRAMP::
+* Limitation Encryption::
+* Limitation Unique titles::
+* Limitation Org-ref::
+* Toolbox::
+* Experimental Node sequences::
+
+
+File: org-node.info,  Node: Manage org-id-locations,  Next: Exclude uninteresting nodes,  Up: Misc
+
+4.1 Manage org-id-locations
+===========================
+
+Ever run into "ID not found" situations?  Org-node gives you an extra
+way to feed data to org-id, as I find clumsy the built-in options
+(http://edstrom.dev/wjwrl/taking-ownership-of-org-id).
+
+   Example setting:
+
+     (setq org-node-extra-id-dirs
+           '("~/org/"
+             "~/Syncthing/"
+             "/mnt/stuff/"))
+
+   Do a ‘M-x org-node-reset’ and see if it can find your notes now.
+
+* Menu:
+
+* Undoing a Roam hack::
+
+
+File: org-node.info,  Node: Undoing a Roam hack,  Up: Manage org-id-locations
+
+4.1.1 Undoing a Roam hack
+-------------------------
+
+If you have org-roam loaded, but no longer update the DB, opening a link
+can sometimes send you to an outdated file path due to a line in
+org-roam-id.el
+(https://github.com/org-roam/org-roam/blob/2a630476b3d49d7106f582e7f62b515c62430714/org-roam-id.el#L91)
+that causes org-id to _preferentially_ look up the org-roam DB instead
+of org-id’s own table!
+
+   Either revert that with the following snippet, or if the extension
+org-node-fakeroam (https://github.com/meedstrom/org-node-fakeroam)
+covers your needs, simply delete the DB (normally located at
+"~/.emacs.d/org-roam.db").
+
+     ;; Undo a Roam override
+     (with-eval-after-load 'org-roam-id
+       (org-link-set-parameters
+        ;; This was default value at least from Org 9.1 to 9.7+
+        "id" :follow #'org-id-open :store #'org-id-store-link-maybe))
+
+
+File: org-node.info,  Node: Exclude uninteresting nodes,  Next: Org-capture,  Prev: Manage org-id-locations,  Up: Misc
+
+4.2 Exclude uninteresting nodes
+===============================
+
+One user had over a thousand project-nodes, but only just began to do a
+knowledge base, and wished to avoid seeing the project nodes.
+
+   This could work by—for example—excluding anything tagged "project" or
+perhaps anything that has a TODO state.  This excludes both:
+
+     (setq org-node-filter-fn
+           (lambda (node)
+             (not
+              (or (org-node-get-todo node)
+                  (member "project" (org-node-get-tags node))
+                  (assoc "ROAM_EXCLUDE" (org-node-get-properties node))))))
+
+   Or you could go with a whitelist approach, to show only nodes from a
+certain directory we’ll call "my-personal-wiki":
+
+     (setq org-node-filter-fn
+           (lambda (node)
+             (and (string-search "/my-personal-wiki/" (org-node-get-file node))
+                  (not (assoc "ROAM_EXCLUDE" (org-node-get-properties node))))))
+
+   (NB: if you don’t know what ‘ROAM_EXCLUDE’ is, feel free to omit that
+clause)
+
+* Menu:
+
+* Limitation ROAM_EXCLUDE::
+
+
+File: org-node.info,  Node: Limitation ROAM_EXCLUDE,  Up: Exclude uninteresting nodes
+
+4.2.1 Limitation: ‘ROAM_EXCLUDE’
+--------------------------------
+
+Let’s say you have a big archive file, fulla IDs, and you want all the
+nodes within out of sight.
+
+   Putting a ‘:ROAM_EXCLUDE: t’ at the top won’t do it, because unlike
+in org-roam, *child ID nodes of an excluded node are not excluded!*  The
+‘org-node-filter-fn’ applies its ruleset to each node in isolation.
+
+   However, nodes in isolation do still have inherited tags.  So you can
+exploit that, or the outline path or file name.
+
+   It works well for me to filter out any file or directory that happens
+to contain "archive" in the name:
+
+     (setq org-node-filter-fn
+           (lambda (node)
+             (not (string-search "archive" (org-node-get-file node)))))
+
+   Or put something like ‘#+filetags: :hide_node:’ at the top of each
+file, and set:
+
+     (setq org-node-filter-fn
+           (lambda (node)
+             (not (member "hide_node" (org-node-get-tags node)))))
+
+
+File: org-node.info,  Node: Org-capture,  Next: Completion-at-point,  Prev: Exclude uninteresting nodes,  Up: Misc
+
+4.3 Org-capture
+===============
+
+You may have heard that org-roam has a set of meta-capture templates:
+the ‘org-roam-capture-templates’.
+
+   People who understand the magic of capture templates, they may take
+this in stride.  Me, I never felt confident using a second-order
+abstraction over an already leaky abstraction.
+
+   Can we just use vanilla org-capture?  That’d be less scary.  The
+answer is yes!
+
+   The secret sauce is ‘(function org-node-capture-target)’:
+
+     (setq org-capture-templates
+           '(("i" "Capture into ID node"
+              plain (function org-node-capture-target) nil
+              :empty-lines-after 1)
+
+             ("j" "Jump to ID node"
+              plain (function org-node-capture-target) nil
+              :jump-to-captured t
+              :immediate-finish t)
+
+             ;; Sometimes handy after `org-node-insert-link', to
+             ;; make a stub you plan to fill in later, without
+             ;; leaving the current buffer for now
+             ("s" "Make quick stub ID node"
+              plain (function org-node-capture-target) nil
+              :immediate-finish t)))
+
+   With that done, you can optionally configure the everyday commands
+‘org-node-find’ & ‘org-node-insert-link’ to outsource to org-capture
+when they try to create new nodes:
+
+     (setq org-node-creation-fn #'org-capture)
+
+   That last optional functionality may be confusing if I describe it –
+better you give it a spin and see if you like.
+
+
+File: org-node.info,  Node: Completion-at-point,  Next: FAQ Any analogue to org-roam-node-display-template?,  Prev: Org-capture,  Up: Misc
+
+4.4 Completion-at-point
+=======================
+
+To complete words at point into known node titles:
+
+     (org-node-complete-at-point-mode)
+     (setq org-roam-completion-everywhere nil) ;; Prevent Roam's variant
+
+
+File: org-node.info,  Node: FAQ Any analogue to org-roam-node-display-template?,  Next: Grep,  Prev: Completion-at-point,  Up: Misc
+
+4.5 FAQ: Any analogue to ‘org-roam-node-display-template’?
+==========================================================
+
+To customize how the nodes look in the minibuffer, configure
+‘org-node-affixation-fn’:
+
+     M-x customize-variable RET org-node-affixation-fn
+
+   A related option is ‘org-node-alter-candidates’, which lets you match
+against the annotations as well as the title:
+
+     (setq org-node-alter-candidates t)
+
+
+File: org-node.info,  Node: Grep,  Next: Let org-open-at-point detect refs,  Prev: FAQ Any analogue to org-roam-node-display-template?,  Up: Misc
+
+4.6 Grep
+========
+
+If you have Ripgrep installed on the computer, and Consult
+(https://github.com/minad/consult) installed on Emacs, you can use this
+command to grep across all your Org files at any time.
+
+     (keymap-set global-map "M-s M-g" #'org-node-grep)
+
+   This can be a power tool for mass edits.  Say you want to rename some
+Org tag ‘:math:’ to ‘:Math:’ absolutely everywhere.  Then you could
+follow a procedure such as:
+
+  1. Use ‘org-node-grep’ and type ‘:math:’
+  2. Use ‘embark-export’ (from package Embark
+     (https://github.com/oantolin/embark))
+  3. Use ‘wgrep-change-to-wgrep-mode’ (from package wgrep
+     (https://github.com/mhayashi1120/Emacs-wgrep))
+  4. Do a query-replace (‘M-%’) to replace all ‘:math:’ with ‘:Math:’
+  5. Type ‘C-c C-c’ to apply the changes
+
+
+File: org-node.info,  Node: Let org-open-at-point detect refs,  Next: Limitation TRAMP,  Prev: Grep,  Up: Misc
+
+4.7 Let org-open-at-point detect refs
+=====================================
+
+(For background, consult the docstring of ‘org-node-link-types’.)
+
+   Say there’s a link to a web URL, and you’ve forgotten you also have a
+node listing that exact URL in its ‘ROAM_REFS’ property.
+
+   Wouldn’t it be nice if, clicking on that link, you automatically
+visit that node first instead of being sent to the web?  Here you go:
+
+     (add-hook 'org-open-at-point-functions
+               #'org-node-try-visit-ref-node)
+
+
+File: org-node.info,  Node: Limitation TRAMP,  Next: Limitation Encryption,  Prev: Let org-open-at-point detect refs,  Up: Misc
+
+4.8 Limitation: TRAMP
+=====================
+
+Working with files over TRAMP is unsupported for now.  Org-node tries to
+be very fast, often nulling ‘file-name-handler-alist’, which TRAMP
+needs.
+
+   The best way to change this is to file an issue
+(https://github.com/meedstrom/org-node/issues) to show you care :-)
+
+
+File: org-node.info,  Node: Limitation Encryption,  Next: Limitation Unique titles,  Prev: Limitation TRAMP,  Up: Misc
+
+4.9 Limitation: Encryption
+==========================
+
+Encrypted nodes probably won’t be found.  As with TRAMP, file an issue.
+
+
+File: org-node.info,  Node: Limitation Unique titles,  Next: Limitation Org-ref,  Prev: Limitation Encryption,  Up: Misc
+
+4.10 Limitation: Unique titles
+==============================
+
+If two ID-nodes exist with the same title, one of them disappears from
+minibuffer completions.
+
+   That’s just the nature of completion.  Much can be said for embracing
+the uniqueness constraint, and org-node will print messages about
+collisions.
+
+   Anyway... there’s a workaround.  Assuming you leave
+‘org-node-affixation-fn’ at its default setting, adding this to
+initfiles tends to do the trick:
+
+     (setq org-node-alter-candidates t)
+
+   This lets you match against the node outline path and not only the
+title, which resolves most conflicts given that the most likely source
+of conflict is subheadings in disparate files, that happen to be named
+the same.  Some people
+(https://fosstodon.org/@nickanderson/112249581810196258) make this trick
+part of their workflow.
+
+   NB: for users of ‘org-node-complete-at-point-mode’, this workaround
+won’t help those completions.  With some luck you’ll rarely insert the
+wrong link, but it’s worth being aware.  (#62
+(https://github.com/meedstrom/org-node/issues/62))
+
+
+File: org-node.info,  Node: Limitation Org-ref,  Next: Toolbox,  Prev: Limitation Unique titles,  Up: Misc
+
+4.11 Limitation: Org-ref
+========================
+
+Org-node supports the Org 9.5 @citations, but not fully the aftermarket
+org-ref (https://github.com/jkitchin/org-ref) &citations that emulate
+LaTeX look-and-feel, because it would double the time taken by ‘M-x
+org-node-reset’.
+
+   What works is bracketed Org-ref v3 citations that start with "cite",
+e.g.  ‘[[citep:...]]’, ‘[[citealt:...]]’, ‘[[citeauthor:...]]’, since
+org-node-parser.el is able to pick them up for free.
+
+   What doesn’t work is e.g.  ‘[[bibentry:...]]’ since it doesn’t start
+with "cite", nor plain ‘citep:...’ since it is not wrapped in brackets.
+
+   If you need more of Org-ref, you have at least two options:
+
+   • Use org-roam - see discussions on boosting its performance here
+     (https://org-roam.discourse.group/t/rewriting-org-roam-node-list-for-speed-it-is-not-sqlite/3475/92)
+     and here
+     (https://org-roam.discourse.group/t/improving-performance-of-node-find-et-al/3326/33)
+
+   • Get your elbows dirty and try to revive the archived branch
+     "orgref" (https://github.com/meedstrom/org-node/branches), see
+     relevant commit
+     (https://github.com/meedstrom/org-node/commit/90b0e503ac75428a5d3ca6a4c8c51b5e075064d3).
+
+
+File: org-node.info,  Node: Toolbox,  Next: Experimental Node sequences,  Prev: Limitation Org-ref,  Up: Misc
+
+4.12 Toolbox
+============
+
+Basic commands:
+
+   • ‘org-node-find’
+   • ‘org-node-insert-link’
+   • ‘org-node-insert-transclusion’
+   • ‘org-node-insert-transclusion-as-subtree’
+   • ‘org-node-visit-random’
+   • ‘org-node-refile’
+   • ‘org-node-context-raise’
+   • ‘org-node-context-toggle’
+   • ‘org-node-seq-dispatch’
+        • Browse node series – see README
+   • ‘org-node-extract-subtree’
+        • A bizarro counterpart to ‘org-roam-extract-subtree’.  Export
+          the subtree at point into a file-level node, *leave a link in
+          the outline parent of where the subtree was*, and show the new
+          file as current buffer.
+   • ‘org-node-nodeify-entry’
+        • (Trivial) Give an ID to the subtree at point, and run the hook
+          ‘org-node-creation-hook’
+   • ‘org-node-insert-heading’
+        • (Trivial) Shortcut for ‘org-insert-heading’ +
+          ‘org-node-nodeify-entry’
+   • ‘org-node-grep’
+        • (Requires consult (https://github.com/minad/consult)) Grep
+          across all known Org files.
+
+   Rarer commands:
+
+   • ‘org-node-rewrite-links-ask’
+        • Look for link descriptions that got out of sync with the
+          corresponding node title, then prompt at each link to update
+          it
+
+   • ‘org-node-rename-file-by-title’
+        • Auto-rename the file based on the current ‘#+title’ or first
+          heading
+             • Can be run manually or placed on ‘after-save-hook’!  When
+               run as a hook, it is conservative, doing nothing until
+               you configure ‘org-node-renames-allowed-dirs’.
+             • *Please note* that if your filenames have datestamp
+               prefixes, like org-roam’s default behavior of making
+               filenames such as ‘20240831143302-node_title.org’, it is
+               important to get ‘org-node-datestamp-format’ right or it
+               *may clobber a pre-existing datestamp*.
+
+               A message is printed about the rename, but it’s easy to
+               miss.
+
+   • ‘org-node-list-dead-links’
+        • List links where the destination ID could not be found
+
+   • ‘org-node-lint-all-files’
+        • Can help you fix a broken setup: it runs org-lint on all known
+          files and generates a report of Org syntax problems, for you
+          to correct manually.
+
+          Org-node assumes all files have valid syntax
+          (https://github.com/meedstrom/org-node/issues/8#issuecomment-2101316447),
+          but many of the reported problems are survivable.
+
+   • ‘org-node-list-reflinks’
+        • List all links that aren’t ‘id:’ links.  Also includes
+          citations, even though they are technically not links.
+
+   • ‘org-node-list-feedback-arcs’
+        • (Requires GNU R, with R packages stringr, readr and igraph)
+
+          Explore feedback arcs
+          (https://en.wikipedia.org/wiki/Feedback_arc_set) in your ID
+          link network.  Can work as a sort of occasional QA routine
+          (https://edstrom.dev/zvjjm/slipbox-workflow#ttqyc).
+
+   • ‘org-node-rename-asset-and-rewrite-links’
+        • Interactively rename an asset such as an image file and try to
+          update all Org links to them.  Requires wgrep
+          (https://github.com/mhayashi1120/Emacs-wgrep).
+             • NOTE: It prompts you for a certain root directory, and
+               then only looks for links in there, and in sub and
+               sub-subdirectories and so on – but won’t find a link
+               elsewhere.
+
+               Like if you have Org files under /mnt linking to assets
+               in /home, then those links won’t be updated.  Or if you
+               choose ~/org/some-subdir as the root directory, then
+               links in ~/org/file.org will not update.  So choose ~/org
+               as the root even if you are renaming something in a
+               subdir.
+
+   Rarer commands for org-node-backlink-mode:
+
+   • ‘org-node-backlink-mass-update-drawers’
+   • ‘org-node-backlink-mass-update-props’
+   • ‘org-node-backlink-mass-delete-drawers’
+   • ‘org-node-backlink-mass-delete-props’
+   • ‘org-node-backlink-fix-buffer’
+
+
+File: org-node.info,  Node: Experimental Node sequences,  Prev: Toolbox,  Up: Misc
+
+4.13 Experimental: Node sequences
+=================================
+
+Do you already know about "daily-notes"?  Then get started with a
+keybinding such as:
+
+     (keymap-set global-map "M-s M-s" #'org-node-seq-dispatch)
+
+   and configure ‘org-node-seq-defs’.  See wiki
+(https://github.com/meedstrom/org-node/wiki/Configuring-node-sequences)
+for premade examples.
+
+* Menu:
+
+* What are node seqs?::
+
+
+File: org-node.info,  Node: What are node seqs?,  Up: Experimental Node sequences
+
+4.13.1 What are node seqs?
+--------------------------
+
+It’s easiest to explain node sequences if we use "daily-notes" (aka
+"dailies") as an example.
+
+   Org-roam’s idea of a "daily-note" is the same as an org-journal
+(https://github.com/bastibe/org-journal) entry: a file/entry where the
+title is just today’s date.
+
+   You don’t need software for that basic idea, only to make it extra
+convenient to navigate them and jump back and forth in the series.
+
+   Thus, fundamentally, any "journal" or "dailies" software are just
+operating on a sorted series to navigate through.  A node sequence.  You
+could have sequences for, let’s say, historical events, Star Trek
+episodes, your school curriculum...
+
+
+File: org-node.info,  Node: Appendix,  Prev: Misc,  Up: Top
+
+5 Appendix
+**********
+
+* Menu:
+
+* Appendix I Rosetta stone::
+* Appendix II How to rollback::
+* Appendix III Random tips::
+
+
+File: org-node.info,  Node: Appendix I Rosetta stone,  Next: Appendix II How to rollback,  Up: Appendix
+
+5.1 Appendix I: Rosetta stone
+=============================
+
+API cheatsheet between org-roam and org-node.
+
+Action                                      org-roam                              org-node
+--------------------------------------------------------------------------------------------------------------------------------------------
+Get ID near point                           ‘(org-roam-id-at-point)’              ‘(org-entry-get-with-inheritance "ID")’
+Get node at point                           ‘(org-roam-node-at-point)’            ‘(org-node-at-point)’
+Prompt user to pick a node                  ‘(org-roam-node-read)’                ‘(org-node-read)’
+Get node by ID                                                                    ‘(org-node-by-id ID)’
+Get list of files                           ‘(org-roam-list-files)’               ‘(org-node-list-files)’
+Get backlink objects                        ‘(org-roam-backlinks-get NODE)’       ‘(org-node-get-id-links-to NODE)’
+Get reflink objects                         ‘(org-roam-reflinks-get NODE)’        ‘(org-node-get-reflinks-to NODE)’
+Get title                                   ‘(org-roam-node-title NODE)’          ‘(org-node-get-title NODE)’
+Get title of file where NODE is             ‘(org-roam-node-file-title NODE)’     ‘(org-node-get-file-title NODE)’
+Get title _or_ name of file where NODE is                                         ‘(org-node-get-file-title-or-basename NODE)’
+Get full path to file where NODE is         ‘(org-roam-node-file NODE)’           ‘(org-node-get-file NODE)’
+Get ID                                      ‘(org-roam-node-id NODE)’             ‘(org-node-get-id NODE)’
+Get tags                                    ‘(org-roam-node-tags NODE)’           ‘(org-node-get-tags NODE)’
+Get tags (local only)                                                             ‘(org-node-get-tags-local NODE)’
+Get tags (inherited only)                                                         ‘(org-node-get-tags-inherited NODE)’
+Get outline level                           ‘(org-roam-node-level NODE)’          ‘(org-node-get-level NODE)’
+Get whether this is a subtree               ‘(=< 0 (org-roam-node-level NODE))’   ‘(org-node-is-subtree NODE)’
+Get char position                           ‘(org-roam-node-point NODE)’          ‘(org-node-get-pos NODE)’
+Get line number                                                                   ‘(org-node-get-lnum NODE)’
+Get properties                              ‘(org-roam-node-properties NODE)’     ‘(org-node-get-properties NODE)’
+Get subtree TODO state                      ‘(org-roam-node-todo NODE)’           ‘(org-node-get-todo NODE)’
+Get subtree SCHEDULED                       ‘(org-roam-node-scheduled NODE)’      ‘(org-node-get-scheduled NODE)’
+Get subtree DEADLINE                        ‘(org-roam-node-deadline NODE)’       ‘(org-node-get-deadline NODE)’
+Get subtree priority                        ‘(org-roam-node-priority NODE)’       ‘(org-node-get-priority NODE)’
+Get outline-path                            ‘(org-roam-node-olp NODE)’            ‘(org-node-get-olp NODE)’
+Get ‘ROAM_REFS’                             ‘(org-roam-node-refs NODE)’           ‘(org-node-get-refs NODE)’
+Get ‘ROAM_ALIASES’                          ‘(org-roam-node-aliases NODE)’        ‘(org-node-get-aliases NODE)’
+Get ‘ROAM_EXCLUDE’                                                                ‘(assoc "ROAM_EXCLUDE" (org-node-get-properties NODE))’
+Get nodes in a file                                                               ‘(org-node-get-nodes-in-files FILES)’
+Ensure fresh data                           ‘(org-roam-db-sync)’                  ‘(org-node-cache-ensure t t)’
+
+
+File: org-node.info,  Node: Appendix II How to rollback,  Next: Appendix III Random tips,  Prev: Appendix I Rosetta stone,  Up: Appendix
+
+5.2 Appendix II: How to rollback
+================================
+
+Instructions to downgrade to an older version
+(https://github.com/meedstrom/org-node/tags), let’s say 1.6.2.
+
+   With Quelpa (https://github.com/quelpa/quelpa):
+     (use-package org-node
+       :quelpa (org-node :fetcher github :repo "meedstrom/org-node"
+                         :branch "v1.6"))
+
+   With vc-use-package (https://github.com/slotThe/vc-use-package) on
+Emacs 29:
+     (use-package org-node
+       :vc (:fetcher github :repo "meedstrom/org-node"
+            :branch "v1.6"))
+
+   With built-in ‘:vc’ on Emacs 30+ (but note default value of
+‘use-package-vc-prefer-newest’ means you never update, since it is not
+aware of Git tags):
+     (use-package org-node
+       :vc (:url "https://github.com/meedstrom/org-node"
+            :branch "v1.6"))
+
+   With Elpaca (https://github.com/progfolio/elpaca) as follows.  Note
+that recipe changes only take effect after you do ‘M-x elpaca-delete’
+and it re-clones – the idea is that Elpaca users will prefer to do it
+manually.
+
+     (use-package org-node
+       :ensure (:fetcher github :repo "meedstrom/org-node"
+                :branch "v1.6"))
+
+   ...Elpaca can also target an exact version tag.  Package manager of
+the future, it is:
+
+     (use-package org-node
+       :ensure (:fetcher github :repo "meedstrom/org-node"
+                :tag "1.6.2"))
+
+   With Straight (https://github.com/radian-software/straight.el):
+
+     (use-package org-node
+       :straight (org-node :type git :host github :repo "meedstrom/org-node"
+                           :branch "v1.6"))
+
+
+File: org-node.info,  Node: Appendix III Random tips,  Prev: Appendix II How to rollback,  Up: Appendix
+
+5.3 Appendix III: Random tips
+=============================
+
+Org-roam shipped the optional ‘(require '=org-roam-export)’, a patch to
+fix ‘id:’ links in HTML export.
+
+   Good news, upstream fixed the root of the issue in 5e9953fa0!  Update
+Org to 9.7+, then set
+
+     (setq org-html-prefer-user-labels t)
+
+
+
+Tag Table:
+Node: Top201
+Node: Background1692
+Node: What's all this1861
+Node: What's a "node"?3355
+Node: Features5429
+Node: Setup8327
+Node: Install8466
+Node: An update broke things?9071
+Node: Quick start9317
+Node: Backlinks9971
+Node: Backlink solution 1 displayed in a separate window10436
+Node: Option 1A Reuse the org-roam buffer10797
+Node: Option 2A Use the new org-node-context buffer11735
+Node: Backlink solution 2 Print inside the file12363
+Node: Option 2A Automatic BACKLINKS property13161
+Node: Option 2B Automatic BACKLINKSEND drawer14130
+Node: Option 2C Semi-automatic BACKLINKSEND drawer14745
+Node: Misc16361
+Node: Manage org-id-locations16813
+Node: Undoing a Roam hack17406
+Node: Exclude uninteresting nodes18356
+Node: Limitation ROAM_EXCLUDE19541
+Node: Org-capture20598
+Node: Completion-at-point22202
+Node: FAQ Any analogue to org-roam-node-display-template?22558
+Node: Grep23129
+Node: Let org-open-at-point detect refs24104
+Node: Limitation TRAMP24737
+Node: Limitation Encryption25185
+Node: Limitation Unique titles25437
+Node: Limitation Org-ref26657
+Node: Toolbox28013
+Node: Experimental Node sequences32460
+Node: What are node seqs?32947
+Node: Appendix33742
+Node: Appendix I Rosetta stone33928
+Node: Appendix II How to rollback37980
+Node: Appendix III Random tips39730
+
+End Tag Table
+
+
+Local Variables:
+coding: utf-8
+End:

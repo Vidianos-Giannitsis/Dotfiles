@@ -215,7 +215,8 @@
   ("Backlinks"
    (("f" org-roam-backlinks-node-find-by-backlinks "Find node, Sorted by Backlink Count")
     ("s" org-roam-backlinks-search-from-moc-or-poi "Search for Backlinks by MOCs and POIs")
-    ("S" org-roam-backlinks-search "Search for Backlinks"))))
+    ("S" org-roam-backlinks-search "Search for Backlinks")
+    ("r" org-roam-backlinks-find-ref-nodes "Search for Reference Backlinks"))))
 
 (pretty-hydra-define my/org-roam-similarity-hydra (:color blue :title "Org Roam Similarity")
   ("Org-roam functions"
@@ -461,10 +462,10 @@
  :states 'normal
  :keymaps 'org-mode-map
  :prefix ", r"
- "i" 'org-roam-node-insert
+ "I" 'org-roam-node-insert
  "a" 'org-roam-alias-add
  "f" 'org-roam-init-fleeting-note
- "I" 'org-id-get-create
+ "i" 'org-roam-node-insert-permanent
  "d" 'org-id-delete-entry
  "r" 'org-roam-ref-add
  "b" 'org-roam-backlink-files)

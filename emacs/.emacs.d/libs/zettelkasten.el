@@ -96,6 +96,11 @@ function."
   (interactive)
   (org-roam-node-find nil nil #'org-roam-permanent-note-p))
 
+(defun org-roam-node-insert-permanent ()
+  "Run `org-roam-node-insert' for permanent nodes."
+  (interactive)
+  (org-roam-node-insert #'org-roam-permanent-note-p))
+
 (setq bibtex-completion-bibliography
 	'("~/org_roam/My_Library.bib" "~/org_roam/My_Library2.bib")
 	bibtex-completion-pdf-field "File"
@@ -213,6 +218,45 @@ This function collects a list of `org-roam-node's via
 `zetteldesk-desktop' using `zetteldesk-add-node-to-desktop'."
   (cl-loop for node in (org-roam-ebib-collect-marked-nodes)
 	   do (zetteldesk-add-node-to-desktop node)))
+
+(setq ebib-reading-list-file "~/org_roam/ref/reading_list_for_literature-05-04-25.org"
+      ebib-reading-list-todo-marker "TO-READ"
+      ebib-reading-list-template "* %M %T\n:PROPERTIES:\n%K\n:END:\n%C, %D\n"
+      ebib-reading-list-template-specifiers '((75 . ebib-reading-list-create-org-identifier)
+					      (84 . ebib-create-org-title) (77 . ebib-reading-list-todo-marker)
+					      (76 . ebib-create-org-link) (70 . ebib-create-org-file-link)
+					      (68 . ebib-create-org-doi-link) (85 . ebib-create-org-url-link)
+					      (67 . ebib-create-org-cite)))
+
+(define-skeleton reading-list-skeleton
+  "This skeleton inserts a link to the parent file of the reading list.
+
+This is used when initializing new reading list items. I don't like
+having orphaned nodes in org-roam, so at worst, each entry will just
+point to the parent node, while others may be added at will."
+  ""
+  "- tags :: [[id:6dd3d267-42f6-499d-8005-945e2c7cd4f8][Reading List for Literature]]")
+(defun ebib-init-reading-list-node ()
+  "Initialize reading list item as an org-roam node."
+  (org-id-get-create)
+  (evil-open-below 1)
+  (reading-list-skeleton))
+
+(add-hook 'ebib-reading-list-new-item-hook 'ebib-init-reading-list-node)
+(add-hook 'ebib-reading-list-new-item-hook (lambda () (find-file ebib-reading-list-file)))
+
+(defun org-roam-node-to-read-p (NODE)
+  "Predicate testing if NODE has a specific TODO entry.
+
+The TODO entry tested is TO-READ, which is the predicate I use for items
+in my ebib reading list."
+  (let ((todostate (org-roam-node-todo NODE)))
+    (string-equal todostate "TO-READ")))
+
+(defun org-roam-node-find-to-read ()
+  "Run `org-roam-node-find' for entries with TO-READ."
+  (interactive)
+  (org-roam-node-find nil nil #'org-roam-node-to-read-p))
 
 (require 'org-roam-bibtex)
 (org-roam-bibtex-mode 1)
@@ -342,6 +386,32 @@ Check that function's docstring for more info about these.")
 The predicate used as `org-roam-node-read''s filter-fn is
 `org-roam-backlinks-p'."
   (org-roam-node-read nil (apply-partially #'org-roam-backlinks-p source)))
+
+(defun org-roam-backlinks-ref-p (SOURCE NODE)
+  "Extension of `org-roam-backlinks-p' for ref files.
+
+The original function is a predicate checking if NODE is a backlink of
+SOURCE. This version does that, but also only returns t if NODE is in
+the ref directory (is a reference node)."
+  (let* ((source-id (org-roam-node-id SOURCE))
+	   (backlinks (org-roam-backlinks-query* SOURCE))
+	   (id (org-roam-node-id NODE))
+	   (id-list (list id source-id)))
+    (and (member id-list backlinks)
+	 (string-equal (org-roam-node-directories NODE) "(ref)"))))
+
+(defun org-roam-backlinks--read-node-ref-backlinks (source)
+    "Runs `org-roam-node-read' on the ref backlinks of SOURCE.
+  The predicate used as `org-roam-node-read''s filter-fn is
+  `org-roam-ref-backlinks-p'."
+    (org-roam-node-read nil (apply-partially #'org-roam-backlinks-ref-p source)))
+
+(defun org-roam-backlinks-find-ref-nodes ()
+  "Prompt for a node and return all it's ref backlinks."
+  (interactive)
+  (let* ((node (org-roam-node-read))
+	 (backlink (org-roam-backlinks--read-node-ref-backlinks node)))
+    (find-file (org-roam-node-file backlink))))
 
 (defun org-roam-backlinks-node-read (node)
   "Read a NODE and run `org-roam-backlinks--read-node-backlinks'.
@@ -722,78 +792,78 @@ out"
   (org-roam-node-find nil nil #'org-roam-node-todo))
 
 (setq org-roam-capture-templates
-	   '(("d" "default" plain "%?" :if-new
-	      (file+head "${slug}-%<%d-%m-%y>.org" "#+title: ${title}
-- index ::  
-- tags :: ")
-	      :unnarrowed t
-	      :jump-to-captured t)
+      '(("d" "default" plain "%?" :if-new
+  	 (file+head "${slug}-%<%d-%m-%y>.org" "#+title: ${title}
+  - index ::  
+  - tags :: ")
+  	 :unnarrowed t
+  	 :jump-to-captured t)
 
-	     ("o" "outline" plain "%?" :if-new
-	      (file+head "outlines/${slug}-%<%d-%m-%y>.org" "#+title: ${title}
-#+filetags: outline")
-	      :unnarrowed t
-	      :jump-to-captured t)
+  	("o" "outline" plain "%?" :if-new
+  	 (file+head "outlines/${slug}-%<%d-%m-%y>.org" "#+title: ${title}
+  #+filetags: outline")
+  	 :unnarrowed t
+  	 :jump-to-captured t)
 
-	     ("r" "bibliography reference" plain
-	      "%?"
-	      :if-new
-	      (file+head "ref/${citekey}.org" "#+title: ${title}\n
-#+filetags: ${entry-type}
-- keywords :: ${keywords}
-- tags :: 
+  	("r" "bibliography reference" plain
+  	 "%?"
+  	 :if-new
+  	 (file+head "ref/${citekey}.org" "#+title: ${title}\n
+  #+filetags: ${entry-type}
+  - keywords :: ${keywords}
+  - tags :: 
 
-* Analysis of ${entry-type} by ${author}
-:PROPERTIES:
-:URL: ${url}
-:NOTER_DOCUMENT: ${file}  
-:NOTER_PAGE:              
-:END:")
-	      :unnarrowed t
-	      :jump-to-captured t)
+  * Analysis of ${entry-type} by ${author}
+  :PROPERTIES:
+  :URL: ${url}
+  :NOTER_DOCUMENT: ${file}  
+  :NOTER_PAGE:              
+  :END:")
+  	 :unnarrowed t
+  	 :jump-to-captured t)
 
-	     ("i" "info reference" plain
-	      "%?"
-	      :if-new
-	      (file+head "ref/${slug}.org" "#+title: ${title}\n
-#+filetags: %:type
-- tags :: \n
+  	("i" "info reference" plain
+  	 "%?"
+  	 :if-new
+  	 (file+head "ref/${slug}.org" "#+title: ${title}\n
+  #+filetags: %:type
+  - tags :: \n
 
-[[elisp:(Info-goto-node \"(%:file)%:node\")][Link to Info page]]
-	  \n
-	  ")
-	      :unnarowed t)
+  [[elisp:(Info-goto-node \"(%:file)%:node\")][Link to Info page]]
+  	  \n
+  	  ")
+  	 :unnarowed t)
 
-	     ("e" "elfeed" plain
-	      "%?"
-	      :if-new
-	      (file+head "ref/${slug}.org" "#+title: %:description\n
-#+filetags: %:type
-- keywords ::
-- tags :: \n\n\n
+  	("e" "elfeed" plain
+  	 "%?"
+  	 :if-new
+  	 (file+head "ref/${slug}.org" "#+title: %:description\n
+  +filetags: %:type
+  - keywords ::
+  - tags :: \n\n\n
 
-[[%:link][Link to Elfeed Buffer]]
-[[%:elfeed-entry-link][Link to Web Page]]")
-	      :unnarowed t)
+  [[%:link][Link to Elfeed Buffer]]
+  [[%:elfeed-entry-link][Link to Web Page]]")
+  	 :unnarowed t)
 
-	     ("t" "thesis" plain "%?" :if-new
-	      (file+head "thesis/${slug}-%<%d-%m-%y>.org" "#+title: ${title}
-- index ::  
-- tags :: ")
-	      :unnarrowed t
-	      :jump-to-captured t)))
+  	("t" "thesis" plain "%?" :if-new
+  	 (file+head "thesis/${slug}-%<%d-%m-%y>.org" "#+title: ${title}
+  - index ::  
+  - tags :: ")
+  	 :unnarrowed t
+  	 :jump-to-captured t)))
 
 (setq org-roam-capture-ref-templates 
-	   '(("r" "ref" entry "* %?" :target
-	      (file+head "ref/${slug}.org" "#+title: ${title}\n
-	  #+filetags: 
-	   - tags :: \n")
-	      :unnarrowed t
-	      :jump-to-captured t)))
+      '(("r" "ref" entry "* %?" :target
+  	 (file+head "ref/${slug}.org" "#+title: ${title}\n
+  	  #+filetags: 
+  	   - tags :: \n")
+  	 :unnarrowed t
+  	 :jump-to-captured t)))
 
 (setq org-roam-dailies-capture-templates
-	   '(("d" "default" entry "* %?" :if-new
-	      (file+head "%<%Y-%m-%d>.org" "#+title: %<%Y-%m-%d>\n#+filetags: daily")
-	      :empty-lines 1)))
+      '(("d" "default" entry "* %?" :if-new
+  	 (file+head "%<%Y-%m-%d>.org" "#+title: %<%Y-%m-%d>\n#+filetags: daily")
+  	 :empty-lines 1)))
 
 (provide 'zettelkasten)
