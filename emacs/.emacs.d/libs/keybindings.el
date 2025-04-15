@@ -253,7 +253,8 @@
     ("C" org-ref-insert-cite-link "Insert Citation (Org-ref)")
     ("c" org-cite-insert "Insert Citation (Org-Cite)")
     ("h" org-ref-insert-link-hydra/body "Org Ref Insert-Link Hydra")
-    ("B" org-ref-bibtex-hydra/body "Org Ref Bibtex Hydra"))
+    ("B" org-ref-bibtex-hydra/body "Org Ref Bibtex Hydra")
+    ("R" org-roam-create-node-from-reading-list))
 
    "General Org Roam Commands"
    (("G" org-roam-ui-mode "Open the Org Roam UI")

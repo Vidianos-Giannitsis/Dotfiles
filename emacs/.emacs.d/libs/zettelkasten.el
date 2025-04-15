@@ -4,23 +4,23 @@
 (use-package org-roam
   :config
   (setq org-roam-directory "~/org_roam/"
-	   org-roam-dailies-directory "~/org_roam/daily")
+	org-roam-dailies-directory "~/org_roam/daily")
 
   (cl-defmethod org-roam-node-directories ((node org-roam-node))
     "Access slot \"directory\" of org-roam-node struct CL-X"
     (if-let ((dirs (file-name-directory (file-relative-name (org-roam-node-file node) org-roam-directory))))
-	   (format "(%s)" (car (f-split dirs)))
-	 ""))
+	(format "(%s)" (car (f-split dirs)))
+      ""))
 
   (cl-defmethod org-roam-node-backlinkscount ((node org-roam-node))
     "Access slot \"backlinks\" of org-roam-node struct CL-X"
     (let* ((count (caar (org-roam-db-query
-			    [:select (funcall count source)
-				     :from links
-				     :where (= dest $s1)
-				     :and (= type "id")]
-			    (org-roam-node-id node)))))
-	 (format "[%d]" count)))
+			 [:select (funcall count source)
+				  :from links
+				  :where (= dest $s1)
+				  :and (= type "id")]
+			 (org-roam-node-id node)))))
+      (format "[%d]" count)))
 
   (cl-defmethod org-roam-node-backlinkscount-number ((node org-roam-node))
     "Access slot \"backlinks\" of org-roam-node struct CL-X. This
@@ -29,31 +29,41 @@
     string. This is to be used in
     `org-roam-node-sort-by-backlinks'"
     (let* ((count (caar (org-roam-db-query
-			    [:select (funcall count source)
-				     :from links
-				     :where (= dest $s1)
-				     :and (= type "id")]
-			    (org-roam-node-id node)))))
-	 count))
+			 [:select (funcall count source)
+				  :from links
+				  :where (= dest $s1)
+				  :and (= type "id")]
+			 (org-roam-node-id node)))))
+      count))
 
   (cl-defmethod org-roam-node-todostate ((node org-roam-node))
     "Modified version of org-roam-node-todo to look a bit better"
     (if-let ((state (org-roam-node-todo node)))
-	   (format "%s: " state)))
+	(format "%s: " state)))
 
   (cl-defmethod org-roam-node-buffer ((node org-roam-node))
     "Access slot \"buffer\" of org-roam-node struct CL-X"
     (let ((buffer (get-file-buffer (org-roam-node-file node))))
-	 buffer))
+      buffer))
+
+  (cl-defmethod org-roam-node-printprio ((node org-roam-node))
+    "Access slot "priority" of org-roam-node struct CL-X.
+
+This works the same as org-roam-node-priority' but does pretty printing
+to be used in a special org-roam-node-display-template' found in the
+function org-roam-create-node-from-reading-list'."
+    (if-let (priority (org-roam-node-priority node))
+	(format "(Priority: %s)" (char-to-string priority))
+      ""))
 
   (setq org-roam-node-display-template "${title:100} ${backlinkscount:6} ${todostate:20} ${directories:10} ${tags:15}")
 
   (add-to-list 'display-buffer-alist
-		  '("\\*org-roam\\*"
-		    (display-buffer-in-direction)
-		    (direction . right)
-		    (window-width . 0.40)
-		    (window-height . fit-window-to-buffer))))
+	       '("\\*org-roam\\*"
+		 (display-buffer-in-direction)
+		 (direction . right)
+		 (window-width . 0.40)
+		 (window-height . fit-window-to-buffer))))
 
 (defun org-roam-buffer-without-latex ()
     "Essentially `org-roam-buffer-toggle' but it ensures latex previews are turned off before toggling the buffer.
@@ -100,6 +110,13 @@ function."
   "Run `org-roam-node-insert' for permanent nodes."
   (interactive)
   (org-roam-node-insert #'org-roam-permanent-note-p))
+
+(defun org-roam-sort-by-priority (completion-a completion-b)
+  "Sort nodes by their priority."
+  (let* ((node-a (cdr completion-a))
+     (node-b (cdr completion-b)))
+    (< (org-roam-node-priority node-a)
+       (org-roam-node-priority node-b))))
 
 (setq bibtex-completion-bibliography
 	'("~/org_roam/My_Library.bib" "~/org_roam/My_Library2.bib")
@@ -199,6 +216,7 @@ functions, such as `org-roam-ebib-nodes-find'."
 	   collect (org-roam-node-from-ref (concat "cite:" ref)) into nodes
 	   finally return (cl-remove-if nil nodes)))
 
+
 (defun org-roam-ebib-nodes-find ()
   "Run `org-roam-node-find' for nodes marked in ebib.
 
@@ -240,10 +258,16 @@ point to the parent node, while others may be added at will."
   "Initialize reading list item as an org-roam node."
   (org-id-get-create)
   (evil-open-below 1)
+  (org-priority)
   (reading-list-skeleton))
 
 (add-hook 'ebib-reading-list-new-item-hook 'ebib-init-reading-list-node)
 (add-hook 'ebib-reading-list-new-item-hook (lambda () (find-file ebib-reading-list-file)))
+
+(defun org-roam-ebib-node-p (NODE)
+  "Predicate for nodes with the ebib tag which have priority."
+  (and (string-equal (car (org-roam-node-tags NODE)) "ebib")
+       (org-roam-node-priority NODE)))
 
 (defun org-roam-node-to-read-p (NODE)
   "Predicate testing if NODE has a specific TODO entry.
@@ -257,6 +281,26 @@ in my ebib reading list."
   "Run `org-roam-node-find' for entries with TO-READ."
   (interactive)
   (org-roam-node-find nil nil #'org-roam-node-to-read-p))
+
+(defun org-roam-create-node-from-reading-list ()
+  "Create an org-roam-node' from the ebib-reading-list.
+
+First, the function prompts for a node that has the tag ebib, while
+having sorted those functions by their priority, to show the most
+important papers first. This uses org-roam-node-read' with the filter
+function org-roam-ebib-node' and the sorting function
+`org-roam-sort-by-priority'. Then, it collects the citekey of that
+reference and creates a new org roam node from that.
+
+Note that this function makes a lot of assumptions that are only true
+for my ebib configuration, therefore, without also using that, this will
+be a quite disfunctional function."
+  (interactive)
+  (let* ((org-roam-node-display-template "${title:120} ${printprio:14}")
+     (node (org-roam-node-read nil #'org-roam-ebib-node-p #'org-roam-sort-by-priority))
+     (citekey (save-excursion (org-roam-node-open node)
+             (substring (car (org--property-local-values "REF" t)) 5))))
+    (orb--new-note citekey)))
 
 (require 'org-roam-bibtex)
 (org-roam-bibtex-mode 1)
