@@ -17,7 +17,7 @@
       '(("l" "log" plain "%?" :if-new
 	 (file+head "thesis/log-%<%d-%m-%y>.org" "#+title: Log for %<%d-%m-%y>
 #+filetags: LOG
-- tags :: [[id:7e72e352-fffd-46f8-ab55-5adee534302a][Ενζυμική Υδρόλυση Αποβλήτων Τροφών και Παραγωγή Βιοαερίου μέσω Αναερόβιας Χώνευσης]] , ")
+- tags :: [[id:9110b0cd-3517-49ba-a7a4-77f825ca1542][Protein Harvesting via Membrane Crystallization - BioGENTLE Project - PhD]] , ")
 	 :unnarrowed t
 	 :jump-to-captured t
 	 :immediate-finish t)
@@ -25,10 +25,17 @@
 	("m" "measurements" plain "%?" :if-new
 	 (file+head "thesis/measurements-%<%d-%m-%y>.org" "#+title: Measurements for %<%d-%m-%y>
 #+filetags: Measurements
-- tags :: [[id:7e72e352-fffd-46f8-ab55-5adee534302a][Ενζυμική Υδρόλυση Αποβλήτων Τροφών και Παραγωγή Βιοαερίου μέσω Αναερόβιας Χώνευσης]] , ")
+- tags :: [[id:9110b0cd-3517-49ba-a7a4-77f825ca1542][Protein Harvesting via Membrane Crystallization - BioGENTLE Project - PhD]] , ")
 	 :unnarrowed t
 	 :jump-to-captured t
-	 :immediate-finish t)))
+	 :immediate-finish t)
+
+	("n" "note" plain "%?" :if-new
+	 (file+head "thesis/note-%<%d-%m-%y>.org" "#+title: 
+- index :: [[id:9110b0cd-3517-49ba-a7a4-77f825ca1542][Protein Harvesting via Membrane Crystallization - BioGENTLE Project - PhD]] ,
+- tags ::  ")
+	 :unnarrowed t
+	 :jump-to-captured t)))
 
 ;; -- Org-roam-capture style functions --
 (defun org-roam-thesis-capture-log ()
@@ -54,6 +61,19 @@ to this it is immediately completed."
   (org-roam-capture- :node (org-roam-node-create)
 		     :templates org-roam-thesis-templates
 		     :keys "m"))
+
+(defun org-roam-thesis-capture-note ()
+  "Capture an administrative note for my PhD.
+
+The template used is the note template from
+`org-roam-thesis-templates' which is essentially the default
+template but saving on the thesis folder. `org-roam-capture-' is
+used to not require template selection for this, as has been done
+for the other `org-roam-thesis-capture' functions."
+  (interactive)
+  (org-roam-capture- :node (org-roam-node-create)
+		     :templates org-roam-thesis-templates
+		     :keys "n"))
 
 ;; -- Predicates for filtering --
 (defun org-roam-thesis-directory-p (NODE)
@@ -83,7 +103,7 @@ docstring."
   (when (org-roam-thesis-log-p node)
     (let ((day (string-to-number (substring (org-roam-node-title node) 8 10)))
 	  (month (string-to-number (substring (org-roam-node-title node) 11 13)))
-	  (year (string-to-number (substring (org-roam-node-title node) 14 16))))
+	  (year (string-to-number (concat "20" (substring (org-roam-node-title node) 14 16)))))
       (encode-time (list 0 0 0 day month year)))))
 
 (defun org-roam-thesis-parse-measurements-time (node)
@@ -96,7 +116,7 @@ docstring."
   (when (org-roam-thesis-measurements-p node)
     (let ((day (string-to-number (substring (org-roam-node-title node) 17 19)))
 	  (month (string-to-number (substring (org-roam-node-title node) 20 22)))
-	  (year (string-to-number (substring (org-roam-node-title node) 23 25))))
+	  (year (string-to-number (concat "20" (substring (org-roam-node-title node) 23 25)))))
       (encode-time (list 0 0 0 day month year)))))
 
 (defun org-roam-thesis-sort-by-log-time (completion-a completion-b)

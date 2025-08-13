@@ -96,9 +96,9 @@ var favorites = [
     ],
     [ "Draft League",
       [
-	  ["JJDL Doc", "https://docs.google.com/spreadsheets/d/1QbjD_jqq_643EwEWxh4dDLaOwXKWZ6-ypXdmrRLuxAU/edit?gid=1008590874#gid=1008590874", "jj"],
-	  ["MGDL Doc", "https://docs.google.com/spreadsheets/d/1VKD45WdA4XbukBrKSq3PD3ZUrK-ag9LFvzmQT_pOFck/edit?gid=0#gid=0", "mgdl"],
-	  ["89Goals Doc", "https://docs.google.com/spreadsheets/d/1Kd_pb-HK7cLG5_dqlxZZ03SCin0D_8lA2Dj7npWQpJw/edit?gid=426331160#gid=426331160", "89g"],
+	  ["JJDL Doc", "https://docs.google.com/spreadsheets/d/1ZI9H9YBQlP0CczkXPsO8NziYGMYrZllsUAzVMWeakJE/edit?gid=1008590874#gid=1008590874", "jj"],
+	  ["TFC Master Doc", "https://docs.google.com/spreadsheets/d/1Z_wr5YCWKmhtSh9RHFqer0tyntsTCRv9NhVoxuxAVgg/edit?gid=880479587#gid=880479587", "tfc"],
+	  ["TFC Prep Doc", "https://docs.google.com/spreadsheets/d/1kDWmN5ama2QsuE6WVaiItqU-YbNQwHFZp3ma5nrtEik/edit?gid=359842964#gid=359842964", "tfcp"],
 	  ["Techno Prep Doc", "https://docs.google.com/spreadsheets/d/14RJij-bQA8fHorJzyh2w9HedpbgUhTYP2UiqasM9Ba0/edit#gid=359842964", "tpd"],
 	  ["TeamHawk Prep Doc", "https://docs.google.com/spreadsheets/d/1wM7kwLVnemo4TKX2nPLJmSaCRgDqiSyffcdszLPrYPM/edit#gid=439174144", "hpd"],
 	  ["RR Showdown", "https://play.radicalred.net/", "rrs"],
@@ -110,15 +110,14 @@ var favorites = [
 
     [ "Other",
       [
-	  ["Darebee", "https://darebee.com/", "d"],
 	  ["MIT Comp Thinking", "https://computationalthinking.mit.edu/Fall24/", "mit"],
 	  ["CRNN Examples", "https://github.com/DENG-MIT/CRNN?tab=readme-ov-file", "crnn"],
 	  ["Raindrop", "https://app.raindrop.io/my/0", "rd"],
 	  ["Hex Color Codes", "https://www.color-hex.com/", "ch"],
 	  ["Word Counter", "https://wordcounter.net/", "wc"],
 	  ["ChatGPT", "https://chatgpt.com/", "gpt"],
-	  ["FFXIII-LR Sequel", "https://archive.org/details/manga_Final_Fantasy_XIII_Reminiscence_Tracer_of_Memories/Final%20Fantasy%20XIII%20-%20Reminiscence%20-%20Tracer%20of%20Memories%20-%20Chapter%2000%20-%20Prologue/", "lr"],
-	  ["FFXIII - Side Characters", "https://docs.google.com/document/d/1TqAq_CpKTp3anFU3fmwoVLFWVYyY0_yYrmv7nVnZ0lU/edit?tab=t.0", "ffsc"],
+	  ["Gemini", "https://gemini.google.com/u/1/app", "gem"],
+	  ["Skyscanner", "https://www.skyscanner.net/", "sky"],
 	  ["Detexify", "https://detexify.kirelabs.org/classify.html", "dt"]
       ]
     ],

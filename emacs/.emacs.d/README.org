@@ -136,7 +136,7 @@ This includes:
   (setq backup-directory-alist `(("." . ,(expand-file-name "tmp/backups/" user-emacs-directory))))
   (make-directory (expand-file-name "tmp/auto-saves/" user-emacs-directory) t)
   (setq auto-save-list-file-prefix (expand-file-name "tmp/auto-saves/sessions/" user-emacs-directory)
-	auto-save-file-name-transforms `((".*" ,(expand-file-name "tmp/auto-saves/" user-emacs-directory) t)))
+  	auto-save-file-name-transforms `((".*" ,(expand-file-name "tmp/auto-saves/" user-emacs-directory) t)))
 
   (require 'dash-functional)
   (require 'helpful)
@@ -145,8 +145,8 @@ This includes:
     :ensure t
     :init (doom-modeline-mode 1)
     :config (setq doom-modeline-minor-modes nil
-		  doom-modeline-enable-word-count t
-		  doom-modeline-modal-icon t))
+  		  doom-modeline-enable-word-count t
+  		  doom-modeline-modal-icon t))
 
   (defalias 'yes-or-no-p 'y-or-n-p)
 
@@ -158,12 +158,14 @@ This includes:
 
   (if (daemonp)
       (add-hook 'after-make-frame-functions
-		(lambda (frame)
-		  (setq doom-modeline-icon t)
-		  (with-selected-frame frame
-		    (set-font-faces))))
+  		(lambda (frame)
+  		  (setq doom-modeline-icon t)
+  		  (with-selected-frame frame
+  		    (set-font-faces))))
     (set-font-faces))
 
+  (setq split-height-threshold nil)
+  (setq split-width-threshold 80)
   (setq default-input-method "greek")
 
   (setq use-dialog-box nil)
@@ -492,7 +494,7 @@ This enables:
 	     (list (openwith-make-extension-regexp
 		    '("xbm" "pbm" "pgm" "ppm" "pnm"
 		      "gif" "bmp" "tif"))
-		   "sxiv"
+		   "nsxiv"
 		   '(file))
 	     (list (openwith-make-extension-regexp
 		    '("mph"))

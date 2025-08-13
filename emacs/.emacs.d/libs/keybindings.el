@@ -1,9 +1,9 @@
 (general-create-definer my-leader-def
-			    :prefix "SPC")
+  :prefix "SPC")
 
 (my-leader-def
- :states 'normal
- :keymaps 'override
+  :states 'normal
+  :keymaps 'override
   "!" 'shell-command
   "P" 'package-install
   "o" '(inferior-octave :which-key "octave")
@@ -193,7 +193,7 @@
     ("S" (lambda() (interactive)(find-file "~/org-roam-similarity/org-roam-similarity.org")) "Org Roam Similarity Config"))
 
    "University"
-   (("p" (lambda() (interactive)(dired "~/Documents/PhD-thesis")) "PhD documents folder")
+   (("p" (lambda() (interactive)(dired "~/PhD-thesis")) "PhD documents folder")
     ("B" (lambda() (interactive)(find-file "~/Sync/My_Library.bib")) "Master Bibliography file")
     ("o" (lambda() (interactive)(dired "~/Documents/Octave")) "Octave scripts directory")
     ("O" (lambda() (interactive)(dired "~/org_roam/outlines")) "Outlines")
@@ -240,8 +240,8 @@
 
 (pretty-hydra-define my/roam-ref-hydra (:color blue :title "Org Roam and Org Ref")
   ("Org-roam-node-find and its filters"
-   (("f" org-roam-node-find "org-roam-node-find")
-    ("i" (lambda () (interactive)(find-file "~/org_roam/index.org")) "Master index file for org_roam")
+   (("f" org-roam-node-find-no-readinglist "Find Note (No Reading List)")
+    ("F" org-roam-node-find "Find Note")
     ("l" ivy-bibtex-with-notes "Find Literature Note")
     ("p" org-roam-find-permanent-node "Find Permanent Note")
     ("b" my/roam-backlinks-hydra/body "Backlinks Hydra")
@@ -249,12 +249,18 @@
 
    "References"
    (("a" zotra-add-entry "Get ref from Zotra")
-    ("r" ebib "Launch Ebib")
-    ("C" org-ref-insert-cite-link "Insert Citation (Org-ref)")
-    ("c" org-cite-insert "Insert Citation (Org-Cite)")
+    ("C" org-ref-insert-cite-link "Org-ref citation")
+    ("c" org-cite-insert "Org-cite citation")
     ("h" org-ref-insert-link-hydra/body "Org Ref Insert-Link Hydra")
-    ("B" org-ref-bibtex-hydra/body "Org Ref Bibtex Hydra")
-    ("R" org-roam-create-node-from-reading-list))
+    ("B" org-ref-bibtex-hydra/body "Org Ref Bibtex Hydra"))
+
+   "Ebib"
+   (("r" ebib "Launch Ebib")
+    ("R" org-roam-create-node-from-reading-list "Create Node from reading list")
+    ("e" org-roam-ebib-nodes-find "Find nodes from ebib")
+    ("d" org-roam-reading-list-remove-entry "Remove entry from reading list")
+    ("P" org-roam-reading-list-change-entry-priority "Change entry priority")
+    )
 
    "General Org Roam Commands"
    (("G" org-roam-ui-mode "Open the Org Roam UI")
@@ -654,6 +660,10 @@
  "F p" 'ebib-list-recent
  "n" 'ebib-popup-note
  "N" 'ebib-search-next
- "U" 'ebib-mark-all-entries)
+ "U" 'ebib-mark-all-entries
+ "A" 'ebib-edit-annote
+ "O" 'ebib-open-phd-dependent-databases
+ "D" 'ebib-close-databases-no-confirm
+ "S" 'ebib-save-all-databases)
 
 (provide 'keybindings)

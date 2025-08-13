@@ -47,13 +47,13 @@
       buffer))
 
   (cl-defmethod org-roam-node-printprio ((node org-roam-node))
-    "Access slot "priority" of org-roam-node struct CL-X.
+    "Access slot \"priority\" of org-roam-node struct CL-X.
 
 This works the same as org-roam-node-priority' but does pretty printing
 to be used in a special org-roam-node-display-template' found in the
 function org-roam-create-node-from-reading-list'."
-    (if-let (priority (org-roam-node-priority node))
-	(format "(Priority: %s)" (char-to-string priority))
+    (if-let* ((priority (org-roam-node-priority node)))
+	(format "(Priority %s)" (char-to-string priority))
       ""))
 
   (setq org-roam-node-display-template "${title:100} ${backlinkscount:6} ${todostate:20} ${directories:10} ${tags:15}")
@@ -114,7 +114,7 @@ function."
 (defun org-roam-sort-by-priority (completion-a completion-b)
   "Sort nodes by their priority."
   (let* ((node-a (cdr completion-a))
-     (node-b (cdr completion-b)))
+	 (node-b (cdr completion-b)))
     (< (org-roam-node-priority node-a)
        (org-roam-node-priority node-b))))
 
@@ -148,15 +148,15 @@ function."
 (setq citeproc-org-default-style-file "~/Zotero/styles/american-chemical-society.csl")
 
 (require 'zotra)
-(setq zotra-backend 'zotra-server
-	zotra-local-server-directory "~/Cloned_Repositories/zotra-server/"
-	zotra-default-bibliography "~/org_roam/My_Library2.bib"
-	zotra-download-attachment-default-directory "~/Sync/Zotero_pdfs")
+(setq zotra-local-server-directory "~/Cloned_Repositories/zotra-server/"
+      zotra-default-bibliography "~/org_roam/My_Library2.bib"
+      zotra-download-attachment-default-directory "~/Sync/Zotero_pdfs")
 
 (setq citar-bibliography '("~/org_roam/My_Library.bib" "~/org_roam/My_Library2.bib"))
 (setq citar-notes-paths '("~/org_roam/ref"))
 
-(setq ebib-preload-bib-files '("~/org_roam/My_Library.bib" "~/org_roam/My_Library2.bib"))
+(require 'ebib)
+(setq ebib-preload-bib-files '("~/org_roam/My_Library.bib" "~/org_roam/My_Library2.bib" "~/org_roam/phd_literature_1.bib"))
 (setq ebib-notes-directory "~/org_roam/ref")
 (setq ebib-multiline-major-mode 'org-mode)
 
@@ -171,6 +171,11 @@ function."
 (require 'org-ebib)
 
 (setq ebib-citation-description-function 'ebib-create-org-title)
+
+(defun ebib-edit-annote ()
+  "Edit annote field of entry."
+  (interactive)
+  (ebib-edit-field "annote"))
 
 (defun ebib-list-recent (days)
   "List entries created in the last DAYS days."
@@ -202,6 +207,54 @@ into a date representation, return nil."
 	       (setq timestamp (ignore-errors (date-to-time timestamp))))
       (time-less-p date timestamp))))
 
+(setq ebib-database-path "~/org_roam/ref/"
+      dependent-database-list '("membrane_distillation.bib" "osmotic_distillation.bib" "membrane_crystallization.bib" "solution_crystallization.bib" "electric_field_crystallization.bib" "membrane_fabrication.bib" "crystallization_theory.bib" "computational_crystallization.bib" "conductive_membranes.bib" "reviews.bib" "books.bib"))
+
+(defun ebib-open-phd-dependent-databases ()
+  "Open bib files from `dependent-database-list'.
+
+This function uses an internal function,
+`ebib--load-bibtex-file-internal', therefore, it acts as a background
+process. For this reason, it prints a message after complete execution."
+  (interactive)
+  (dolist (database dependent-database-list)
+    (let ((database-path (concat ebib-database-path database)))
+      (ebib--load-bibtex-file-internal database-path)))
+  (print "Databases Opened!"))
+
+(defun ebib-close-databases (&optional N)
+  "Closes the first N active ebib databases.
+
+If not given a number N, it assumes the length of
+`dependent-database-list', as the initial implementation of this
+function is for closing all databases in that list together.
+
+This has to be run from the ebib buffer as it is too complex to close
+the files properly if not using `ebib-close-database'"
+  (interactive)
+  (ebib-save-all-databases)
+  (if N
+      (dotimes (foo N) (ebib-close-database))
+    (let ((loop-num (length dependent-database-list)))
+      (dotimes (foo loop-num) (ebib-close-database)))))
+
+(defmacro without-yes-or-no (&rest body)
+  "Force `yes-or-no-p' & `y-or-n-p' in the body to return t."
+  (declare (indent 1))
+  `(cl-letf (((symbol-function 'yes-or-no-p) (lambda (&rest _) t))
+             ((symbol-function 'y-or-n-p) (lambda (&rest _) t)))
+    ,@body))
+
+(defun ebib-close-databases-no-confirm ()
+  "Run `ebib-close-databases' without confirmation.
+
+Normally, the function `ebib-close-database' will prompt for
+confirmation before closing. Since this is not a destructive operation,
+when you want to run this multiple times, it may be of interest to not
+ask for confirmation, which is the goal of this function."
+  (interactive)
+  (without-yes-or-no (ebib-close-databases)))
+
 (defun org-roam-ebib-collect-marked-nodes ()
   "Collect the `org-roam-node's of all references marked in ebib.
 
@@ -215,7 +268,6 @@ functions, such as `org-roam-ebib-nodes-find'."
   (cl-loop for ref in (ebib-db-list-marked-entries ebib--cur-db)
 	   collect (org-roam-node-from-ref (concat "cite:" ref)) into nodes
 	   finally return (cl-remove-if nil nodes)))
-
 
 (defun org-roam-ebib-nodes-find ()
   "Run `org-roam-node-find' for nodes marked in ebib.
@@ -239,7 +291,7 @@ This function collects a list of `org-roam-node's via
 
 (setq ebib-reading-list-file "~/org_roam/ref/reading_list_for_literature-05-04-25.org"
       ebib-reading-list-todo-marker "TO-READ"
-      ebib-reading-list-template "* %M %T\n:PROPERTIES:\n%K\n:END:\n%C, %D\n"
+      ebib-reading-list-template "* %M %T\n:PROPERTIES:\n%K\n:REF: %C\n:END:\n%D\n"
       ebib-reading-list-template-specifiers '((75 . ebib-reading-list-create-org-identifier)
 					      (84 . ebib-create-org-title) (77 . ebib-reading-list-todo-marker)
 					      (76 . ebib-create-org-link) (70 . ebib-create-org-file-link)
@@ -269,11 +321,15 @@ point to the parent node, while others may be added at will."
   (and (string-equal (car (org-roam-node-tags NODE)) "ebib")
        (org-roam-node-priority NODE)))
 
+(defun org-roam-node-not-readinglist-p (NODE)
+  "Filter NODE which is not part of the reading list."
+  (not (org-roam-ebib-node-p NODE)))
+
 (defun org-roam-node-to-read-p (NODE)
   "Predicate testing if NODE has a specific TODO entry.
 
 The TODO entry tested is TO-READ, which is the predicate I use for items
-in my ebib reading list."
+in my ebib reading list, but rarely for other things as well."
   (let ((todostate (org-roam-node-todo NODE)))
     (string-equal todostate "TO-READ")))
 
@@ -281,6 +337,15 @@ in my ebib reading list."
   "Run `org-roam-node-find' for entries with TO-READ."
   (interactive)
   (org-roam-node-find nil nil #'org-roam-node-to-read-p))
+
+(defun org-roam-node-find-no-readinglist ()
+  "Run `org-roam-node-find' but filters out TO-READ items."
+  (interactive)
+  (org-roam-node-find nil nil #'org-roam-node-not-readinglist-p))
+
+(defun org-roam-node-read-readinglist ()
+  "Read reading list items and sort them by priority."
+  (org-roam-node-read nil #'org-roam-ebib-node-p #'org-roam-sort-by-priority))
 
 (defun org-roam-create-node-from-reading-list ()
   "Create an org-roam-node' from the ebib-reading-list.
@@ -296,11 +361,36 @@ Note that this function makes a lot of assumptions that are only true
 for my ebib configuration, therefore, without also using that, this will
 be a quite disfunctional function."
   (interactive)
-  (let* ((org-roam-node-display-template "${title:120} ${printprio:14}")
-     (node (org-roam-node-read nil #'org-roam-ebib-node-p #'org-roam-sort-by-priority))
-     (citekey (save-excursion (org-roam-node-open node)
-             (substring (car (org--property-local-values "REF" t)) 5))))
+  (let* ((org-roam-node-display-template "${title:140} ${printprio:14}")
+	 (node (org-roam-node-read-readinglist))
+	 (citekey (save-excursion (org-roam-node-open node)
+				  (substring (car (org--property-local-values "REF" t)) 5))))
     (orb--new-note citekey)))
+
+(defun org-roam-reading-list-remove-entry ()
+  "Remove entry from the ebib-reading-list.
+
+This is done by setting its org-todo' state to DONE, which based on how
+this system is set up, also removes it from the org-roam database. Then,
+run evil-save-and-close' on the reading list file."
+  (interactive)
+  (let* ((org-roam-node-display-template "${title:140} ${printprio:14}")
+     (node (org-roam-node-read-readinglist)))
+    (save-excursion (org-roam-node-open node)
+            (org-todo 'done)
+            (evil-save-and-close (buffer-file-name)))))
+
+(defun org-roam-reading-list-change-entry-priority ()
+  "Change priority of entry from the ebib-reading-list.
+
+This is done by running `org-priority' on the stated
+org-roam-node. Then, run evil-save-and-close' on the reading list file."
+  (interactive)
+  (let* ((org-roam-node-display-template "${title:140} ${printprio:14}")
+     (node (org-roam-node-read-readinglist)))
+    (save-excursion (org-roam-node-open node)
+            (org-priority)
+            (evil-save-and-close (buffer-file-name)))))
 
 (require 'org-roam-bibtex)
 (org-roam-bibtex-mode 1)
@@ -838,14 +928,14 @@ out"
 (setq org-roam-capture-templates
       '(("d" "default" plain "%?" :if-new
   	 (file+head "${slug}-%<%d-%m-%y>.org" "#+title: ${title}
-  - index ::  
-  - tags :: ")
+- index ::  
+- tags :: ")
   	 :unnarrowed t
   	 :jump-to-captured t)
 
   	("o" "outline" plain "%?" :if-new
   	 (file+head "outlines/${slug}-%<%d-%m-%y>.org" "#+title: ${title}
-  #+filetags: outline")
+#+filetags: outline")
   	 :unnarrowed t
   	 :jump-to-captured t)
 
@@ -853,16 +943,16 @@ out"
   	 "%?"
   	 :if-new
   	 (file+head "ref/${citekey}.org" "#+title: ${title}\n
-  #+filetags: ${entry-type}
-  - keywords :: ${keywords}
-  - tags :: 
+#+filetags: ${entry-type}
+- keywords :: ${keywords}
+- tags :: 
 
-  * Analysis of ${entry-type} by ${author}
-  :PROPERTIES:
-  :URL: ${url}
-  :NOTER_DOCUMENT: ${file}  
-  :NOTER_PAGE:              
-  :END:")
+* Analysis of ${entry-type} by ${author}
+:PROPERTIES:
+:URL: ${url}
+:NOTER_DOCUMENT: ${file}  
+:NOTER_PAGE:              
+:END:")
   	 :unnarrowed t
   	 :jump-to-captured t)
 
@@ -870,10 +960,10 @@ out"
   	 "%?"
   	 :if-new
   	 (file+head "ref/${slug}.org" "#+title: ${title}\n
-  #+filetags: %:type
-  - tags :: \n
+#+filetags: %:type
+- tags :: \n
 
-  [[elisp:(Info-goto-node \"(%:file)%:node\")][Link to Info page]]
+[[elisp:(Info-goto-node \"(%:file)%:node\")][Link to Info page]]
   	  \n
   	  ")
   	 :unnarowed t)
@@ -882,18 +972,18 @@ out"
   	 "%?"
   	 :if-new
   	 (file+head "ref/${slug}.org" "#+title: %:description\n
-  +filetags: %:type
-  - keywords ::
-  - tags :: \n\n\n
++filetags: %:type
+- keywords ::
+- tags :: \n\n\n
 
-  [[%:link][Link to Elfeed Buffer]]
-  [[%:elfeed-entry-link][Link to Web Page]]")
-  	 :unnarowed t)
+[[%:link][Link to Elfeed Buffer]]
+[[%:elfeed-entry-link][Link to Web Page]]")
+	 :unnarowed t)
 
-  	("t" "thesis" plain "%?" :if-new
-  	 (file+head "thesis/${slug}-%<%d-%m-%y>.org" "#+title: ${title}
-  - index ::  
-  - tags :: ")
+	("t" "thesis" plain "%?" :if-new
+	 (file+head "thesis/${slug}-%<%d-%m-%y>.org" "#+title: ${title}
+- index ::  
+- tags :: ")
   	 :unnarrowed t
   	 :jump-to-captured t)))
 
