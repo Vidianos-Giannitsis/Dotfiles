@@ -299,7 +299,7 @@ implemented with the `bookmark-selector-launcher' macro."
 (show-paren-mode 1)
 (electric-pair-mode 1)
 (setq wolfram-alpha-app-id "U9PERG-KTPL49AWA2")
-(global-undo-tree-mode 1)
+(add-hook 'text-mode-hook 'undo-tree-mode)
 
 (require 'calfw-git)
 (require 'calfw-org)
@@ -316,7 +316,7 @@ implemented with the `bookmark-selector-launcher' macro."
 		    '(file))
 	     (list (openwith-make-extension-regexp
 		    '("xbm" "pbm" "pgm" "ppm" "pnm"
-		      "gif" "bmp" "tif"))
+		      "gif" "bmp"))
 		   "nsxiv"
 		   '(file))
 	     (list (openwith-make-extension-regexp
@@ -1036,11 +1036,6 @@ it."
 
 (require 'ox-word)
 (require 'org-show)
-
-(require 'scimax-autoformat-abbrev)
-(add-hook 'org-mode-hook #'(lambda ()
-			      scimax-abbrev-mode
-			      scimax-autoformat-mode))
 
 (defun doi-utils-add-entry-from-elfeed-entry ()
   "Add elfeed entry to bibtex."

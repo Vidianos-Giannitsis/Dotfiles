@@ -464,7 +464,7 @@ This enables:
 + When adding a bracket or quote add its pair as well for quicker editing.
 + When the cursor is on one bracket, highlight its matching bracket.
 + Setting my wolfram alpha ID for use in emacs which allows me to query the website from inside Emacs
-+ Activating undo-tree-mode everywhere.
++ Enable undo-tree mode on all modes that derive from text mode (undo doesn't matter in other types of buffers).
 + Calfw is a calendar app for Emacs. Calfw-git allows you to see your git commit history inside of calfw while calfw-org shows org-todos in a calendar interface.
 + Audio files, obscure image files and MS/Libre Office documents don't open properly inside Emacs. I set up openwith to open them with external files.
 + Loading projectile, to remind me to play around with it some day.
@@ -476,7 +476,7 @@ This enables:
     (show-paren-mode 1)
     (electric-pair-mode 1)
     (setq wolfram-alpha-app-id "U9PERG-KTPL49AWA2")
-    (global-undo-tree-mode 1)
+    (add-hook 'text-mode-hook 'undo-tree-mode)
 
     (require 'calfw-git)
     (require 'calfw-org)
@@ -484,42 +484,42 @@ This enables:
     (use-package openwith
       :config
       (setq openwith-associations
-	    (list
-	     (list (openwith-make-extension-regexp
-		    '("mpg" "mpeg" "mp3" "mp4"
-		      "avi" "wmv" "wav" "mov" "flv"
-		      "ogm" "ogg" "mkv"))
-		    "mpv"
-		    '(file))
-	     (list (openwith-make-extension-regexp
-		    '("xbm" "pbm" "pgm" "ppm" "pnm"
-		      "gif" "bmp" "tif"))
-		   "nsxiv"
-		   '(file))
-	     (list (openwith-make-extension-regexp
-		    '("mph"))
-		   "comsol"
-		   '(file))
-	     (list (openwith-make-extension-regexp
-		    '("aup"))
-		   "audacity"
-		   '(file))
-	     (list (openwith-make-extension-regexp
-		    '("xopp"))
-		   "xournalpp"
-		   '(file))
-	     (list (openwith-make-extension-regexp
-		    '("docx" "doc" "xlsx" "xls" "ppt" "odt" "ods"))
-		   "libreoffice"
-		   '(file))))
-	    (openwith-mode 1))
+    	    (list
+    	     (list (openwith-make-extension-regexp
+    		    '("mpg" "mpeg" "mp3" "mp4"
+    		      "avi" "wmv" "wav" "mov" "flv"
+    		      "ogm" "ogg" "mkv"))
+    		    "mpv"
+    		    '(file))
+    	     (list (openwith-make-extension-regexp
+    		    '("xbm" "pbm" "pgm" "ppm" "pnm"
+    		      "gif" "bmp"))
+    		   "nsxiv"
+    		   '(file))
+    	     (list (openwith-make-extension-regexp
+    		    '("mph"))
+    		   "comsol"
+    		   '(file))
+    	     (list (openwith-make-extension-regexp
+    		    '("aup"))
+    		   "audacity"
+    		   '(file))
+    	     (list (openwith-make-extension-regexp
+    		    '("xopp"))
+    		   "xournalpp"
+    		   '(file))
+    	     (list (openwith-make-extension-regexp
+    		    '("docx" "doc" "xlsx" "xls" "ppt" "odt" "ods"))
+    		   "libreoffice"
+    		   '(file))))
+    	    (openwith-mode 1))
 
     (use-package projectile
       :ensure t
       :init
       (projectile-mode +1)
       :bind (:map projectile-mode-map
-		  ("M-p" . projectile-command-map)))
+    		  ("M-p" . projectile-command-map)))
 
     (setq flyspell-default-dictionary "greek")
 
@@ -1407,18 +1407,6 @@ Org reveal is a tool for making reveal.js presentations with org-mode. I am tryi
   (require 'scimax-jupyter)
   
 #+END_SRC
-
-** Abbreviations & Spellchecking
-   I just import the entire autoformat library and enable two minor modes from it
-#+BEGIN_SRC elisp :tangle init.el
-  
-  (require 'scimax-autoformat-abbrev)
-  (add-hook 'org-mode-hook #'(lambda ()
-			      scimax-abbrev-mode
-			      scimax-autoformat-mode))
-  
-#+END_SRC
-
 
 ** Elfeed
    I want a more personalised elfeed config rather than what scimax uses, but there are some functions in the scimax elfeed config such as the one that grabs the doi of an article in your rss feed and adds it to a your .bib file using doi-utils and org-ref. That will be useful once I start using rss more so I would like to add them to my config

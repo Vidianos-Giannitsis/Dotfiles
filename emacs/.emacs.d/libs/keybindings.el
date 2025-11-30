@@ -231,12 +231,14 @@
 (pretty-hydra-define my/org-roam-thesis-hydra (:color blue :title "Org Roam Thesis")
   ("Capture Functions"
    (("l" org-roam-thesis-capture-log "Capture Log File")
-    ("m" org-roam-thesis-capture-measurements "Capture Measurements File"))
+    ("m" org-roam-thesis-capture-measurements "Capture Measurements File")
+    ("n" org-roam-thesis-capture-note "Capture Administrative Note"))
 
    "Find Node"
    (("f" org-roam-thesis-node-find "Find thesis file")
     ("L" org-roam-thesis-log-find "Find log file")
-    ("M" org-roam-thesis-measurements-find "Find measurements file"))))
+    ("M" org-roam-thesis-measurements-find "Find measurements file")
+    ("i" org-roam-thesis-node-insert "Insert thesis file"))))
 
 (pretty-hydra-define my/roam-ref-hydra (:color blue :title "Org Roam and Org Ref")
   ("Org-roam-node-find and its filters"

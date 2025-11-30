@@ -161,6 +161,11 @@ back."
   (interactive)
   (org-roam-node-find nil nil #'org-roam-thesis-directory-p))
 
+(defun org-roam-thesis-node-insert ()
+  "Run `org-roam-node-insert' in the 'thesis' directory."
+  (interactive)
+  (org-roam-node-insert #'org-roam-thesis-directory-p))
+
 (defun org-roam-thesis-log-find ()
   "Run `org-roam-node-find' for thesis log files.
 

@@ -96,7 +96,7 @@ var favorites = [
     ],
     [ "Draft League",
       [
-	  ["JJDL Doc", "https://docs.google.com/spreadsheets/d/1ZI9H9YBQlP0CczkXPsO8NziYGMYrZllsUAzVMWeakJE/edit?gid=1008590874#gid=1008590874", "jj"],
+	  ["JJDL Doc", "https://docs.google.com/spreadsheets/d/1Pgb3BdoCbHsPEYXfLSKNmQXM7cS9lusFy7R2YKd5Iv0/edit?gid=1743598889#gid=1743598889", "jj"],
 	  ["TFC Master Doc", "https://docs.google.com/spreadsheets/d/1Z_wr5YCWKmhtSh9RHFqer0tyntsTCRv9NhVoxuxAVgg/edit?gid=880479587#gid=880479587", "tfc"],
 	  ["TFC Prep Doc", "https://docs.google.com/spreadsheets/d/1kDWmN5ama2QsuE6WVaiItqU-YbNQwHFZp3ma5nrtEik/edit?gid=359842964#gid=359842964", "tfcp"],
 	  ["Techno Prep Doc", "https://docs.google.com/spreadsheets/d/14RJij-bQA8fHorJzyh2w9HedpbgUhTYP2UiqasM9Ba0/edit#gid=359842964", "tpd"],

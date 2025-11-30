@@ -286,6 +286,7 @@ which accepts a custom list of nodes."
 This function collects a list of `org-roam-node's via
 `org-roam-ebib-collect-marked-nodes' and adds them to the
 `zetteldesk-desktop' using `zetteldesk-add-node-to-desktop'."
+  (interactive)
   (cl-loop for node in (org-roam-ebib-collect-marked-nodes)
 	   do (zetteldesk-add-node-to-desktop node)))
 
